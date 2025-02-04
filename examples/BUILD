@@ -13,7 +13,7 @@ cc_binary(
     name = "main",
     srcs = ["main.cc"],
     deps = [
-        "//lib/api:vertex",
         "//lib/internal:object",
+        "//lib/internal:vertex",
     ],
 )
