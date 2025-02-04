@@ -1,4 +1,10 @@
+#include <iostream>
+#include <string>
+#include <vector>
+
 #include "raylib/include/raylib.h"
+
+#include "absl/strings/str_join.h"
 
 //------------------------------------------------------------------------------------
 // Program main entry point
@@ -40,5 +46,9 @@ int main(void)
     CloseWindow();        // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
 
+    std::vector<std::string> v = {"foo", "bar", "baz"};
+    std::string s = absl::StrJoin(v, "-");
+
+    std::cout << "Joined string: " << s << "\n";
     return 0;
 }

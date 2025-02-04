@@ -5,5 +5,6 @@ cc_binary(
   srcs = ["simple_window.cc"],
   deps = [
     "//raylib:raylib",
+    "@abseil-cpp//absl/strings",
   ],
 )
