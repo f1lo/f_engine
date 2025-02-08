@@ -1,12 +1,12 @@
 #include "lib/internal/object.h"
 
 #include "absl/log/log.h"
-#include "vertex.h"
+#include "shape.h"
 
 namespace lib {
 namespace internal {
 
-using ::lib::internal::Vertex;
+using ::lib::internal::Point;
 
 void Object::LogState() {
   for (const auto &[x, y]: hit_box_vertices_) {

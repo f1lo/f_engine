@@ -14,6 +14,5 @@ cc_binary(
     srcs = ["main.cc"],
     deps = [
         "//lib/internal:object",
-        "//lib/internal:vertex",
     ],
 )

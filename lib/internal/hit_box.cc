@@ -1,83 +1,95 @@
 #include "lib/internal/hit_box.h"
 
+#include <memory>
 #include <vector>
 
+#include "absl/log/log.h"
 #include "absl/status/statusor.h"
+#include "absl/types/span.h"
+#include "shape.h"
 
 namespace lib {
 namespace internal {
 
-using ::lib::internal::Vertex;
-
 namespace {
-
-bool clockwise(const Vertex &a, const Vertex &b, const Vertex &c) {
-  // Avoid overflow.
-  return static_cast<long long>(a.x) * (b.y - c.y) +
-             static_cast<long long>(b.x) * (c.y - a.y) +
-             static_cast<long long>(c.x) * (a.y - b.y) <
-         0;
-}
-
-bool counter_clockwise(const Vertex &a, const Vertex &b, const Vertex &c) {
-  // Avoid overflow.
-  return static_cast<long long>(a.x) * (b.y - c.y) +
-             static_cast<long long>(b.x) * (c.y - a.y) +
-             static_cast<long long>(c.x) * (a.y - b.y) >
-         0;
-}
-
 /*
  * Constructs convex hull from provided vertices.
  * Returns vertices which are necessary to construct a convex hull.
  */
-std::vector<Vertex> construct_convex_hull(std::vector<Vertex> vertices) {
+std::vector<Point> ConstructConvexHull(std::vector<Point> vertices) {
   if (vertices.size() == 1)
     return {vertices[0]};
 
   std::sort(
       vertices.begin(), vertices.end(),
-      [](const Vertex &a, const Vertex &b) { return a.x <= b.x && a.y < b.y; });
-  Vertex point_1 = vertices[0];
-  Vertex point_2 = vertices.back();
-  std::vector<Vertex> up, down;
+      [](const Point &a, const Point &b) { return a.x <= b.x && a.y < b.y; });
+  Point point_1 = vertices[0];
+  Point point_2 = vertices.back();
+  std::vector<Point> up, down;
   up.push_back(point_1);
   down.push_back(point_1);
   for (size_t i = 1; i < vertices.size(); ++i) {
-    if (i == vertices.size() - 1 || clockwise(point_1, vertices[i], point_2)) {
+    if (i == vertices.size() - 1 || Clockwise(point_1, vertices[i], point_2)) {
       while (up.size() >= 2 &&
-             !clockwise(up[up.size() - 2], up[up.size() - 1], vertices[i]))
+             !Clockwise(up[up.size() - 2], up[up.size() - 1], vertices[i]))
         up.pop_back();
       up.push_back(vertices[i]);
     }
     if (i == vertices.size() - 1 ||
-        counter_clockwise(point_1, vertices[i], point_2)) {
+        CounterClockwise(point_1, vertices[i], point_2)) {
       while (down.size() >= 2 &&
-             !counter_clockwise(down[down.size() - 2], down[down.size() - 1],
-                                vertices[i]))
+             !CounterClockwise(down[down.size() - 2], down[down.size() - 1],
+                               vertices[i]))
         down.pop_back();
       down.push_back(vertices[i]);
     }
   }
 
-  std::vector<Vertex> hull_vertices;
-  for (auto i: up)
+  std::vector<Point> hull_vertices;
+  for (const auto &i: up)
     hull_vertices.push_back(i);
   for (size_t i = down.size() - 2; i > 0; --i)
     hull_vertices.push_back(down[i]);
 
   return hull_vertices;
 }
+
+/*
+ * Checks if the given vertices make a rectangle.
+ * Assumes clockwise or counterclockwise order.
+ */
+bool IsRectangle(absl::Span<const Point> vertices) {
+  if (vertices.size() != 4) {
+    return false;
+  }
+
+  // Check for dot product between vector of the potential rectangle - if there
+  // is 90-degree angle they should be 0.
+  //              side_2
+  //        |----------------|
+  //        |                |
+  // side_1 |                | side_3
+  //        |----------------|
+  // vertices[0]  side_4
+
+  const Line side_1{vertices[0], vertices[1]};
+  const Line side_4{vertices[0], vertices[3]};
+  const Line side_2{vertices[1], vertices[2]};
+  const Line side_3{vertices[3], vertices[2]};
+
+  return side_1.MakeVector().ScalarProduct(side_4.MakeVector()) == 0 &&
+         side_2.MakeVector().ScalarProduct(side_3.MakeVector()) == 0;
+}
 } // namespace
 
-absl::StatusOr<HitBox> HitBox::CreateHitBox(std::vector<Vertex> &&vertices) {
+absl::StatusOr<HitBox> HitBox::CreateHitBox(std::vector<Point> &&vertices) {
   if (vertices.empty()) {
     return absl::InvalidArgumentError(
         "empty vertex set while constructing a hit box");
   }
   const size_t old_size = vertices.size();
-  std::vector<Vertex> normalized_vertices =
-      construct_convex_hull(std::move(vertices));
+  const std::vector<Point> normalized_vertices =
+      ConstructConvexHull(std::move(vertices));
   // Some of the vertices have been discarded.
   if (old_size > normalized_vertices.size()) {
     return absl::InvalidArgumentError(
@@ -90,25 +102,61 @@ absl::StatusOr<HitBox> HitBox::CreateHitBox(std::vector<Vertex> &&vertices) {
                                "while constructing a convex hull.");
   }
 
-  Type type;
   switch (normalized_vertices.size()) {
     case 1:
-      type = Type::POINT;
+      return HitBox(std::make_unique<Point>(Point{normalized_vertices[0].x,
+                                                  normalized_vertices[0].y}),
+                    ShapeType::POINT);
     case 2:
-      type = Type::LINE;
+      return HitBox(
+          std::make_unique<Line>(
+              Line{Point{normalized_vertices[0].x, normalized_vertices[0].y},
+                   Point{normalized_vertices[1].x, normalized_vertices[1].y}}),
+          ShapeType::LINE);
+    case 4:
+      // Check if it is a rectangle.
+      // TODO(f1lo): Move `IsRectangle` to a rectangle struct and make it a
+      // class.
+      if (IsRectangle(normalized_vertices)) {
+        return HitBox(
+            std::make_unique<Rectangle>(Rectangle{
+                {normalized_vertices[0].x, normalized_vertices[0].y},
+                {normalized_vertices[1].x, normalized_vertices[1].y},
+                {normalized_vertices[2].x, normalized_vertices[2].y},
+                {normalized_vertices[3].x, normalized_vertices[3].y}}),
+            ShapeType::RECTANGLE);
+      }
+      return absl::UnimplementedError("got 4 vertices but no rectangle");
     default:
-      type = Type::POLYGON;
+      return absl::UnimplementedError(
+          "only points, lines, rectangles and circles are supported");
   }
-  return HitBox(std::move(normalized_vertices), type);
 }
 
-bool HitBox::Collides(const HitBox &other) {
-  /*
-   * TODO(f1lo): Implement.
-   */
-  return true;
+bool HitBox::CollidesWith(const HitBox &other) const {
+  switch (other.shape_type_) {
+    // Potentially unsafe if not careful.
+    case ShapeType::POINT:
+      return this->shape_->Collides(*dynamic_cast<Point *>(other.shape_.get()));
+      break;
+    case ShapeType::LINE:
+      return this->shape_->Collides(*dynamic_cast<Line *>(other.shape_.get()));
+      break;
+    case ShapeType::RECTANGLE:
+      return this->shape_->Collides(
+          *dynamic_cast<Rectangle *>(other.shape_.get()));
+      break;
+    case ShapeType::CIRCLE:
+      return this->shape_->Collides(
+          *dynamic_cast<Circle *>(other.shape_.get()));
+      break;
+    default:
+      // This should never happen.
+      // `StatusOr` can be returned here, but it could hurt performance.
+      LOG(ERROR) << "HitBox::CollidesWith: invalid shape type";
+      return false;
+  }
 }
-
 
 } // namespace internal
 } // namespace lib
