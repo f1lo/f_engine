@@ -3,6 +3,7 @@
 #include <cmath>
 #include <limits>
 #include <sys/stat.h>
+#include "absl/log/log.h"
 
 namespace lib {
 namespace internal {
@@ -72,14 +73,38 @@ int Line::ScalarProduct(const Line &other) const {
 
 // LINE COLLISION.
 bool Line::Collides(const Point &point) const { return point.Collides(*this); }
+// TODO(f1lo): This is incorrectly handling lines which extend each other.
 bool Line::Collides(const Line &other_line) const {
   return CounterClockwise(this->a, other_line.a, other_line.b) !=
              CounterClockwise(this->b, other_line.a, other_line.b) &&
          CounterClockwise(this->a, this->b, other_line.a) !=
              CounterClockwise(this->a, this->b, other_line.b);
 }
-bool Line::Collides(const Rectangle &rectangle) const {}
-bool Line::Collides(const Circle &circle) const {}
+bool Line::Collides(const Rectangle &rectangle) const {
+  // Check intersection with individual edges first.
+  // Note rectangle vertices should be ordered.
+  if (this->Collides(Line(rectangle.a, rectangle.b)) ||
+      this->Collides(Line(rectangle.b, rectangle.c)) ||
+      this->Collides(Line(rectangle.c, rectangle.d)) ||
+      this->Collides(Line(rectangle.d, rectangle.a))) {
+    return true;
+  }
+
+  // If edges did not intersect the only case remaining is that the vertices of
+  // the line are inside rectangle.
+  bool vert_a_collides = this->a.Collides(rectangle);
+  bool vert_b_collides = this->b.Collides(rectangle);
+  // At this point either both of the vertices are inside the rectangle or none
+  // of them.
+  if (vert_a_collides ^ vert_b_collides) {
+    LOG(ERROR) << "Line::Collides() segment points mismatch";
+    return false;
+  }
+  return this->a.Collides(rectangle) && this->b.Collides(rectangle);
+}
+bool Line::Collides(const Circle &circle) const {
+  return this->a.Collides(circle) || this->b.Collides(circle);
+}
 
 // RECTANGLE COLLISION.
 bool Rectangle::Collides(const Point &point) const {

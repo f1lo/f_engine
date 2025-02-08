@@ -9,7 +9,9 @@ cc_library(
     name = "shape",
     srcs = ["shape.cc"],
     hdrs = ["shape.h"],
-    deps = [],
+    deps = [
+        "@abseil-cpp//absl/log:log",
+    ],
 )
 
 cc_library(

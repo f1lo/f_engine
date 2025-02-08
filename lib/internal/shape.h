@@ -62,6 +62,8 @@ struct Line final : Shape {
   Point b;
 };
 
+// TODO(f1lo): Make this a class and make sure that invariants hold. i.e.
+// ordered vertices and 90 degree angles.
 struct Rectangle final : Shape {
   bool Collides(const Point &point) const override;
   bool Collides(const Line &line) const override;
