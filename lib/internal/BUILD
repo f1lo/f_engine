@@ -6,20 +6,11 @@ package(default_visibility = [
 ])
 
 cc_library(
-    name = "shape",
-    srcs = ["shape.cc"],
-    hdrs = ["shape.h"],
-    deps = [
-        "@abseil-cpp//absl/log:log",
-    ],
-)
-
-cc_library(
     name = "hit_box",
     srcs = ["hit_box.cc"],
     hdrs = ["hit_box.h"],
     deps = [
-        ":shape",
+        "//lib/internal/geometry:shape",
         "@abseil-cpp//absl/log",
         "@abseil-cpp//absl/status:statusor",
         "@abseil-cpp//absl/types:span",
@@ -31,7 +22,7 @@ cc_test(
     srcs = ["hit_box_test.cc"],
     deps = [
         ":hit_box",
-        ":shape",
+        "//lib/internal/geometry:shape",
         "@abseil-cpp//absl/status:statusor",
         "@googletest//:gtest",
         "@googletest//:gtest_main",
@@ -43,17 +34,7 @@ cc_library(
     srcs = ["object.cc"],
     hdrs = ["object.h"],
     deps = [
-        ":shape",
+        "//lib/internal/geometry:shape",
         "@abseil-cpp//absl/log:log",
-    ],
-)
-
-cc_test(
-    name = "shape_test",
-    srcs = ["shape_test.cc"],
-    deps = [
-        ":shape",
-        "@googletest//:gtest",
-        "@googletest//:gtest_main",
     ],
 )

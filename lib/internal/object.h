@@ -4,7 +4,7 @@
 #include <utility>
 #include <vector>
 
-#include "shape.h"
+#include "geometry/shape.h"
 
 namespace lib {
 namespace internal {

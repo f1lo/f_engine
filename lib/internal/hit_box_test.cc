@@ -20,8 +20,8 @@ public:
           HitBoxOrDie(HitBox::CreateHitBox({Point{-2, -6}, Point{-2, 6}}))),
       parallel_line_(
           HitBoxOrDie(HitBox::CreateHitBox({Point{-4, -6}, Point{8, 0}}))),
-      rectangle_(HitBoxOrDie(HitBox::CreateHitBox(
-          {Point{-4, -6}, Point{8, 0}, Point{4, 8}, Point{-8, 2}}))),
+      rectangle_(HitBoxOrDie(
+          HitBox::CreateHitBox({{-5, 4}, {-5, -1}, {6, -1}, {6, 4}}))),
       circle_(HitBoxOrDie(HitBox::CreateHitBox(Point{2, 2}, 3))) {}
 
 protected:
@@ -74,7 +74,7 @@ TEST_F(HitBoxTest, ConvexHullCreationOk) {
 
 TEST_F(HitBoxTest, RectangleHullCreationOk) {
   const absl::StatusOr<HitBox> hit_box =
-      HitBox::CreateHitBox({{-8, 2}, {4, 8}, {-4, -6}, {8, 0}});
+      HitBox::CreateHitBox({{0, 0}, {1, 1}, {0, 1}, {1, 0}});
 
   EXPECT_TRUE(hit_box.ok());
 }
@@ -93,133 +93,228 @@ TEST_F(HitBoxTest, NonRectangleUnimplemented) {
   EXPECT_EQ(hit_box.status().code(), absl::StatusCode::kUnimplemented);
 }
 
-TEST_F(HitBoxTest, PointsCollide) {
-  EXPECT_TRUE(this->point_.CollidesWith(this->point_));
+TEST_F(HitBoxTest, RectangleNotAligned) {
+  const absl::StatusOr<HitBox> hit_box = HitBox::CreateHitBox(
+      {Point{-4, -6}, Point{8, 0}, Point{4, 8}, Point{-8, 2}});
+
+  EXPECT_EQ(hit_box.status().code(), absl::StatusCode::kUnimplemented);
 }
 
+TEST_F(HitBoxTest, PointsCollide) { EXPECT_TRUE(point_.CollidesWith(point_)); }
+
 TEST_F(HitBoxTest, PointsDoNotMatch) {
-  EXPECT_FALSE(this->point_.CollidesWith(this->different_point_));
+  EXPECT_FALSE(point_.CollidesWith(different_point_));
 }
 
 TEST_F(HitBoxTest, PointOnLine) {
   const HitBox point_on_line = HitBoxOrDie(HitBox::CreateHitBox({{0, 6}}));
 
-  EXPECT_TRUE(this->line_.CollidesWith(point_on_line));
-  EXPECT_TRUE(point_on_line.CollidesWith(this->line_));
+  EXPECT_TRUE(line_.CollidesWith(point_on_line));
+  EXPECT_TRUE(point_on_line.CollidesWith(line_));
 }
 
 TEST_F(HitBoxTest, PointOnLineVertex) {
   const HitBox point_on_line = HitBoxOrDie(HitBox::CreateHitBox({{4, 8}}));
 
-  EXPECT_TRUE(this->line_.CollidesWith(point_on_line));
-  EXPECT_TRUE(point_on_line.CollidesWith(this->line_));
+  EXPECT_TRUE(line_.CollidesWith(point_on_line));
+  EXPECT_TRUE(point_on_line.CollidesWith(line_));
 }
 
 
 TEST_F(HitBoxTest, PointNotOnLine) {
   const HitBox point = HitBoxOrDie(HitBox::CreateHitBox({{4, 9}}));
 
-  EXPECT_FALSE(this->line_.CollidesWith(point));
-  EXPECT_FALSE(point.CollidesWith(this->line_));
+  EXPECT_FALSE(line_.CollidesWith(point));
+  EXPECT_FALSE(point.CollidesWith(line_));
 }
 
 TEST_F(HitBoxTest, PointInRectangle) {
   const HitBox point = HitBoxOrDie(HitBox::CreateHitBox({{0, 0}}));
 
-  EXPECT_TRUE(this->rectangle_.CollidesWith(point));
-  EXPECT_TRUE(point.CollidesWith(this->rectangle_));
+  EXPECT_TRUE(rectangle_.CollidesWith(point));
+  EXPECT_TRUE(point.CollidesWith(rectangle_));
 }
 
 TEST_F(HitBoxTest, PointOnRectangleBorder) {
-  const HitBox point = HitBoxOrDie(HitBox::CreateHitBox({{0, 6}}));
+  const HitBox point = HitBoxOrDie(HitBox::CreateHitBox({{-2, -1}}));
 
-  EXPECT_TRUE(this->rectangle_.CollidesWith(point));
-  EXPECT_TRUE(point.CollidesWith(this->rectangle_));
+  EXPECT_TRUE(rectangle_.CollidesWith(point));
+  EXPECT_TRUE(point.CollidesWith(rectangle_));
 }
 
 TEST_F(HitBoxTest, PointOutsideRectangle) {
   const HitBox point = HitBoxOrDie(HitBox::CreateHitBox({{0, -5}}));
 
-  EXPECT_FALSE(this->rectangle_.CollidesWith(point));
-  EXPECT_FALSE(point.CollidesWith(this->rectangle_));
+  EXPECT_FALSE(rectangle_.CollidesWith(point));
+  EXPECT_FALSE(point.CollidesWith(rectangle_));
 }
 
 
 TEST_F(HitBoxTest, PointInCircle) {
   const HitBox point = HitBoxOrDie(HitBox::CreateHitBox({{4, 2}}));
 
-  EXPECT_TRUE(this->circle_.CollidesWith(point));
-  EXPECT_TRUE(point.CollidesWith(this->circle_));
+  EXPECT_TRUE(circle_.CollidesWith(point));
+  EXPECT_TRUE(point.CollidesWith(circle_));
 }
 
 TEST_F(HitBoxTest, PointOnCircleBorder) {
   const HitBox point = HitBoxOrDie(HitBox::CreateHitBox({{5, 2}}));
 
-  EXPECT_TRUE(this->circle_.CollidesWith(point));
-  EXPECT_TRUE(point.CollidesWith(this->circle_));
+  EXPECT_TRUE(circle_.CollidesWith(point));
+  EXPECT_TRUE(point.CollidesWith(circle_));
 }
 
 TEST_F(HitBoxTest, PointOutsidenCircle) {
   const HitBox point = HitBoxOrDie(HitBox::CreateHitBox({{2, 6}}));
 
-  EXPECT_FALSE(this->circle_.CollidesWith(point));
-  EXPECT_FALSE(point.CollidesWith(this->circle_));
+  EXPECT_FALSE(circle_.CollidesWith(point));
+  EXPECT_FALSE(point.CollidesWith(circle_));
 }
 
 TEST_F(HitBoxTest, LinesCross) {
   const HitBox line_a = HitBoxOrDie(HitBox::CreateHitBox({{-8, 2}, {4, 8}}));
   const HitBox line_b = HitBoxOrDie(HitBox::CreateHitBox({{-6, 4}, {-2, 2}}));
 
-  EXPECT_TRUE(this->line_.CollidesWith(this->intersecting_line_));
+  EXPECT_TRUE(line_.CollidesWith(intersecting_line_));
   EXPECT_TRUE(line_a.CollidesWith(line_b));
 }
 
 TEST_F(HitBoxTest, LinesParallel) {
-  EXPECT_FALSE(this->line_.CollidesWith(this->parallel_line_));
+  EXPECT_FALSE(line_.CollidesWith(parallel_line_));
 }
 
 TEST_F(HitBoxTest, LinesCollidesWithRectangle) {
   const HitBox line = HitBoxOrDie(HitBox::CreateHitBox({{-6, 4}, {-2, 2}}));
 
-  EXPECT_TRUE(line.CollidesWith(this->rectangle_));
-  EXPECT_TRUE(this->rectangle_.CollidesWith(line));
+  EXPECT_TRUE(line.CollidesWith(rectangle_));
+  EXPECT_TRUE(rectangle_.CollidesWith(line));
 }
 
 TEST_F(HitBoxTest, LineInsideRectangle) {
   const HitBox line = HitBoxOrDie(HitBox::CreateHitBox({{-2, 2}, {2, 0}}));
 
-  EXPECT_TRUE(line.CollidesWith(this->rectangle_));
-  EXPECT_TRUE(this->rectangle_.CollidesWith(line));
+  EXPECT_TRUE(line.CollidesWith(rectangle_));
+  EXPECT_TRUE(rectangle_.CollidesWith(line));
 }
 
 TEST_F(HitBoxTest, LineOutsideRectangle) {
   const HitBox line = HitBoxOrDie(HitBox::CreateHitBox({{-1, 6}, {-4, 5}}));
 
-  EXPECT_FALSE(line.CollidesWith(this->rectangle_));
-  EXPECT_FALSE(this->rectangle_.CollidesWith(line));
+  EXPECT_FALSE(line.CollidesWith(rectangle_));
+  EXPECT_FALSE(rectangle_.CollidesWith(line));
 }
 
 TEST_F(HitBoxTest, LineCrossesCircle) {
   const HitBox line = HitBoxOrDie(HitBox::CreateHitBox({{0, -1}, {2, 0}}));
 
-  EXPECT_TRUE(line.CollidesWith(this->circle_));
-  EXPECT_TRUE(this->circle_.CollidesWith(line));
+  EXPECT_TRUE(line.CollidesWith(circle_));
+  EXPECT_TRUE(circle_.CollidesWith(line));
 }
 
 TEST_F(HitBoxTest, LineInsideCircle) {
   const HitBox line = HitBoxOrDie(HitBox::CreateHitBox({{2, 0}, {4, 4}}));
 
-  EXPECT_TRUE(line.CollidesWith(this->circle_));
-  EXPECT_TRUE(this->circle_.CollidesWith(line));
+  EXPECT_TRUE(line.CollidesWith(circle_));
+  EXPECT_TRUE(circle_.CollidesWith(line));
+}
+
+TEST_F(HitBoxTest, LinePassesThroughCircle) {
+  const HitBox line = HitBoxOrDie(HitBox::CreateHitBox({{-5, 4}, {6, 4}}));
+
+  EXPECT_TRUE(line.CollidesWith(circle_));
+  EXPECT_TRUE(circle_.CollidesWith(line));
 }
 
 TEST_F(HitBoxTest, LineOutsideCircle) {
   const HitBox line = HitBoxOrDie(HitBox::CreateHitBox({{-1, 0}, {2, -2}}));
+  const HitBox line_x = HitBoxOrDie(HitBox::CreateHitBox({{0, 6}, {3, 6}}));
+  const HitBox line_y = HitBoxOrDie(HitBox::CreateHitBox({{6, 0}, {6, 3}}));
 
-  EXPECT_FALSE(line.CollidesWith(this->circle_));
-  EXPECT_FALSE(this->circle_.CollidesWith(line));
+  EXPECT_FALSE(line.CollidesWith(circle_));
+  EXPECT_FALSE(line_x.CollidesWith(circle_));
+  EXPECT_FALSE(line_y.CollidesWith(circle_));
+  EXPECT_FALSE(circle_.CollidesWith(line));
+  EXPECT_FALSE(circle_.CollidesWith(line_x));
+  EXPECT_FALSE(circle_.CollidesWith(line_y));
 }
 
+TEST_F(HitBoxTest, LineTouchesCircle) {
+  const HitBox line_x = HitBoxOrDie(HitBox::CreateHitBox({{0, 5}, {3, 5}}));
+  const HitBox line_y = HitBoxOrDie(HitBox::CreateHitBox({{5, 0}, {5, 3}}));
+
+  EXPECT_TRUE(circle_.CollidesWith(line_x));
+  EXPECT_TRUE(circle_.CollidesWith(line_y));
+  EXPECT_TRUE(line_x.CollidesWith(circle_));
+  EXPECT_TRUE(line_y.CollidesWith(circle_));
+}
+
+
+TEST_F(HitBoxTest, RectanglesIntersect) {
+  const HitBox rectangle =
+      HitBoxOrDie(HitBox::CreateHitBox({{-4, 1}, {-7, 1}, {-4, -2}, {-7, -2}}));
+
+  EXPECT_TRUE(rectangle_.CollidesWith(rectangle));
+}
+
+TEST_F(HitBoxTest, RectanglesDoNotIntersect) {
+  const HitBox rectangle =
+      HitBoxOrDie(HitBox::CreateHitBox({{2, 5}, {4, 5}, {2, 11}, {4, 11}}));
+
+  EXPECT_FALSE(rectangle_.CollidesWith(rectangle));
+}
+
+TEST_F(HitBoxTest, RectanglesTouchSinglePoint) {
+  const HitBox rectangle = HitBoxOrDie(
+      HitBox::CreateHitBox({{-7, -3}, {-7, -1}, {-5, -1}, {-5, -3}}));
+
+  EXPECT_TRUE(rectangle_.CollidesWith(rectangle));
+}
+
+TEST_F(HitBoxTest, RectanglesTouchSide) {
+  const HitBox rectangle = HitBoxOrDie(
+      HitBox::CreateHitBox({{-7, -3}, {-7, -1}, {-3, -1}, {-3, -3}}));
+
+  EXPECT_TRUE(rectangle_.CollidesWith(rectangle));
+}
+
+TEST_F(HitBoxTest, CircleCenterInsideRectangle) {
+  EXPECT_TRUE(circle_.CollidesWith(rectangle_));
+}
+
+TEST_F(HitBoxTest, CircleCenterOutsideRectangleButIntersects) {
+  const HitBox circle = HitBox::CreateHitBox({3, 6}, 3);
+  const HitBox rectangle_touches =
+      HitBoxOrDie(HitBox::CreateHitBox({{2, -1}, {4, -3}, {4, -1}, {2, -3}}));
+  const HitBox rectangle_intersects =
+      HitBoxOrDie(HitBox::CreateHitBox({{-1, -1}, {-1, 0}, {0, -1}, {0, 0}}));
+
+  EXPECT_TRUE(rectangle_.CollidesWith(circle));
+  EXPECT_TRUE(circle.CollidesWith(rectangle_));
+  EXPECT_TRUE(rectangle_touches.CollidesWith(circle_));
+  EXPECT_TRUE(circle_.CollidesWith(rectangle_touches));
+  EXPECT_TRUE(rectangle_intersects.CollidesWith(circle_));
+  EXPECT_TRUE(circle_.CollidesWith(rectangle_intersects));
+}
+
+TEST_F(HitBoxTest, CirclesCollide) {
+  const HitBox circle = HitBox::CreateHitBox({4, 5}, 1);
+  const HitBox circle_touches = HitBox::CreateHitBox({7, 2}, 2);
+  const HitBox circle_inside = HitBox::CreateHitBox({4, 2}, 1);
+
+  EXPECT_TRUE(circle_.CollidesWith(circle));
+  EXPECT_TRUE(circle_.CollidesWith(circle_touches));
+  EXPECT_TRUE(circle_.CollidesWith(circle_inside));
+}
+
+TEST_F(HitBoxTest, CirclesDoNotCollide) {
+  const HitBox circle = HitBox::CreateHitBox({4, 6}, 1);
+  const HitBox circle_touches = HitBox::CreateHitBox({7, 2}, 1);
+  const HitBox circle_inside = HitBox::CreateHitBox({1, -2}, 1);
+
+  EXPECT_FALSE(circle_.CollidesWith(circle));
+  EXPECT_FALSE(circle_.CollidesWith(circle_touches));
+  EXPECT_FALSE(circle_.CollidesWith(circle_inside));
+}
 } // namespace
 } // namespace internal
 } // namespace lib

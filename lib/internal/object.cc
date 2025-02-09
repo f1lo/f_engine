@@ -1,7 +1,7 @@
 #include "lib/internal/object.h"
 
 #include "absl/log/log.h"
-#include "shape.h"
+#include "geometry/shape.h"
 
 namespace lib {
 namespace internal {

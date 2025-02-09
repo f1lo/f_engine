@@ -1,4 +1,4 @@
-#include "lib/internal/shape.h"
+#include "shape.h"
 
 #include "gmock/gmock-matchers.h"
 #include "gtest/gtest.h"

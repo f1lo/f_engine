@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "absl/status/statusor.h"
-#include "shape.h"
+#include "geometry/shape.h"
 
 namespace lib {
 namespace internal {

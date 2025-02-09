@@ -1,8 +1,10 @@
-#ifndef LIB_INTERNAL_SHAPE_H
-#define LIB_INTERNAL_SHAPE_H
+#ifndef LIB_INTERNAL_GEOMETRY_SHAPE_H
+#define LIB_INTERNAL_GEOMETRY_SHAPE_H
 
 #include <cstdint>
 #include <memory>
+
+#include "vec.h"
 
 namespace lib {
 namespace internal {
@@ -35,7 +37,7 @@ struct Point final : Shape {
    */
   [[nodiscard]] bool IsLowerLeft(const Point &other) const;
   [[nodiscard]] double Distance(const Point &other) const;
-  [[nodiscard]] int ScalarProduct(const Point &other) const;
+  Point Move(const Vector &direction) const;
 
   int x;
   int y;
@@ -49,14 +51,10 @@ struct Line final : Shape {
 
   Line(Point a, Point b) : a(std::move(a)), b(std::move(b)) {}
   // Transforms a line into normalized vector towards (0, 0).
-  [[nodiscard]] Point MakeVector() const {
+  [[nodiscard]] Vector MakeVector() const {
     return {this->b.x - this->a.x, this->b.y - this->a.y};
   }
   [[nodiscard]] bool IsOnLine(const Point &p) const;
-  /*
-   * Returns scalar product of two vectors.
-   */
-  [[nodiscard]] int ScalarProduct(const Line &other) const;
 
   Point a;
   Point b;
@@ -98,4 +96,4 @@ bool CounterClockwise(const Point &a, const Point &b, const Point &c);
 } // namespace internal
 } // namespace lib
 
-#endif // LIB_INTERNAL_SHAPE_H
+#endif // LIB_INTERNAL_GEOMETRY_SHAPE_H

@@ -34,9 +34,9 @@ bool Point::Collides(const Point &other_point) const {
 }
 bool Point::Collides(const Line &line) const { return line.IsOnLine(*this); }
 bool Point::Collides(const Rectangle &rectangle) const {
-  const Point a = Line(rectangle.a, *this).MakeVector();
-  const Point b = Line(rectangle.a, rectangle.b).MakeVector();
-  const Point c = Line(rectangle.a, rectangle.d).MakeVector();
+  const Vector a = Line(rectangle.a, *this).MakeVector();
+  const Vector b = Line(rectangle.a, rectangle.b).MakeVector();
+  const Vector c = Line(rectangle.a, rectangle.d).MakeVector();
 
   return (0 <= a.ScalarProduct(b) &&
           a.ScalarProduct(b) <= b.ScalarProduct(b)) &&
@@ -54,10 +54,6 @@ double Point::Distance(const Point &other) const {
   return sqrt(square(this->x - other.x) + square(this->y - other.y));
 }
 
-int Point::ScalarProduct(const Point &other) const {
-  return this->x * other.x + this->y * other.y;
-}
-
 bool Line::IsOnLine(const Point &p) const {
   // Check if it is on the infinite line first.
   if ((a.x - p.x) * (p.y - b.y) != (p.x - b.x) * (a.y - p.y)) {
@@ -66,9 +62,6 @@ bool Line::IsOnLine(const Point &p) const {
 
   return std::abs(a.Distance(p) + b.Distance(p) - a.Distance(b)) <
          std::numeric_limits<double>::epsilon();
-}
-int Line::ScalarProduct(const Line &other) const {
-  return (other.a.x - this->a.x) + this->b.y * other.b.y;
 }
 
 // LINE COLLISION.
@@ -103,7 +96,31 @@ bool Line::Collides(const Rectangle &rectangle) const {
   return this->a.Collides(rectangle) && this->b.Collides(rectangle);
 }
 bool Line::Collides(const Circle &circle) const {
-  return this->a.Collides(circle) || this->b.Collides(circle);
+  // If one of the points is inside circle collision has happened.
+  if (this->a.Collides(circle) || this->b.Collides(circle)) {
+    return true;
+  }
+
+  // Project the vector connecting one of the point of the line to the center
+  // onto the line itself.
+  // Iff this projection falls inside the line AND the distance from the center
+  // to the projected point on the line is less than or equal to the circle
+  // radius.
+  const Vector line_vector = this->MakeVector();
+  const Vector line_point_to_circle_center_vector =
+      Line(this->a, circle.a).MakeVector();
+  const Vector projection =
+      line_vector.Project(line_point_to_circle_center_vector);
+  // `line_vector` and `projection` always face the same direction, if length of
+  // `projection` is shorter it means projected point falls onto the line.
+  if (projection.Length() > line_vector.Length()) {
+    return false;
+  }
+  // Now the only think left to check is distance.
+  // If the distance from the circle center to the line is less than the radius
+  // segment intersects the circle.
+  return line_point_to_circle_center_vector.Square() - projection.Square() <=
+         circle.r * circle.r;
 }
 
 // RECTANGLE COLLISION.
@@ -113,8 +130,45 @@ bool Rectangle::Collides(const Point &point) const {
 bool Rectangle::Collides(const Line &line) const {
   return line.Collides(*this);
 }
-bool Rectangle::Collides(const Rectangle &other_rectangle) const {}
-bool Rectangle::Collides(const Circle &circle) const {}
+bool Rectangle::Collides(const Rectangle &other_rectangle) const {
+  int rect_a_x1 = this->a.x;
+  int rect_a_x2 = this->c.x;
+  int rect_a_y1 = this->a.y;
+  int rect_a_y2 = this->c.y;
+  if (rect_a_x1 > rect_a_x2) {
+    std::swap(rect_a_x1, rect_a_x2);
+  }
+  if (rect_a_y1 > rect_a_y2) {
+    std::swap(rect_a_y1, rect_a_y2);
+  }
+
+  int rect_b_x1 = other_rectangle.a.x;
+  int rect_b_x2 = other_rectangle.c.x;
+  int rect_b_y1 = other_rectangle.a.y;
+  int rect_b_y2 = other_rectangle.c.y;
+  if (rect_b_x1 > rect_b_x2) {
+    std::swap(rect_b_x1, rect_b_x2);
+  }
+  if (rect_b_y1 > rect_b_y2) {
+    std::swap(rect_b_y1, rect_b_y2);
+  }
+
+  return rect_a_x1 <= rect_b_x2 && rect_a_x2 >= rect_b_x1 &&
+         rect_a_y1 <= rect_b_y2 && rect_a_y2 >= rect_b_y1;
+}
+
+bool Rectangle::Collides(const Circle &circle) const {
+  // Check if the center is inside rectangle.
+  if (this->Collides(circle.a)) {
+    return true;
+  }
+
+  // Otherwise check for circle collision with the rectangle sides one by one.
+  return circle.Collides(Line(this->a, this->b)) ||
+         circle.Collides(Line(this->b, this->c)) ||
+         circle.Collides(Line(this->c, this->d)) ||
+         circle.Collides(Line(this->d, this->a));
+}
 
 // CIRCLE COLLISION.
 bool Circle::Collides(const Point &point) const {
@@ -124,7 +178,9 @@ bool Circle::Collides(const Line &line) const { return line.Collides(*this); }
 bool Circle::Collides(const Rectangle &rectangle) const {
   return rectangle.Collides(*this);
 }
-bool Circle::Collides(const Circle &other_circle) const {}
+bool Circle::Collides(const Circle &other_circle) const {
+  return this->a.Distance(other_circle.a) <= this->r + other_circle.r;
+}
 
 
 } // namespace internal

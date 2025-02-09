@@ -6,7 +6,7 @@
 #include "absl/log/log.h"
 #include "absl/status/statusor.h"
 #include "absl/types/span.h"
-#include "shape.h"
+#include "geometry/shape.h"
 
 namespace lib {
 namespace internal {
@@ -20,9 +20,10 @@ std::vector<Point> ConstructConvexHull(std::vector<Point> vertices) {
   if (vertices.size() == 1)
     return {vertices[0]};
 
-  std::sort(
-      vertices.begin(), vertices.end(),
-      [](const Point &a, const Point &b) { return a.x <= b.x && a.y < b.y; });
+  std::sort(vertices.begin(), vertices.end(),
+            [](const Point &a, const Point &b) {
+              return a.x < b.x || (a.x == b.x && a.y < b.y);
+            });
   Point point_1 = vertices[0];
   Point point_2 = vertices.back();
   std::vector<Point> up, down;
@@ -57,8 +58,9 @@ std::vector<Point> ConstructConvexHull(std::vector<Point> vertices) {
 /*
  * Checks if the given vertices make a rectangle.
  * Assumes clockwise or counterclockwise order.
+ * For now only allows rectangles which are aligned to the X, Y axis.
  */
-bool IsRectangle(absl::Span<const Point> vertices) {
+bool IsAxisAlignedRectangle(absl::Span<const Point> vertices) {
   if (vertices.size() != 4) {
     return false;
   }
@@ -77,8 +79,18 @@ bool IsRectangle(absl::Span<const Point> vertices) {
   const Line side_2{vertices[1], vertices[2]};
   const Line side_3{vertices[3], vertices[2]};
 
-  return side_1.MakeVector().ScalarProduct(side_4.MakeVector()) == 0 &&
-         side_2.MakeVector().ScalarProduct(side_3.MakeVector()) == 0;
+  // Not a rectangle.
+  if (side_1.MakeVector().ScalarProduct(side_4.MakeVector()) != 0 ||
+      side_2.MakeVector().ScalarProduct(side_3.MakeVector()) != 0) {
+    return false;
+  }
+
+  // All the vector coordinates has to be 0 for the rectangle to be axis
+  // aligned.
+  return side_1.MakeVector().IsAxisAligned() &&
+         side_2.MakeVector().IsAxisAligned() &&
+         side_3.MakeVector().IsAxisAligned() &&
+         side_4.MakeVector().IsAxisAligned();
 }
 } // namespace
 
@@ -117,7 +129,7 @@ absl::StatusOr<HitBox> HitBox::CreateHitBox(std::vector<Point> &&vertices) {
       // Check if it is a rectangle.
       // TODO(f1lo): Move `IsRectangle` to a rectangle struct and make it a
       // class.
-      if (IsRectangle(normalized_vertices)) {
+      if (IsAxisAlignedRectangle(normalized_vertices)) {
         return HitBox(
             std::make_unique<Rectangle>(Rectangle{
                 {normalized_vertices[0].x, normalized_vertices[0].y},
@@ -126,7 +138,8 @@ absl::StatusOr<HitBox> HitBox::CreateHitBox(std::vector<Point> &&vertices) {
                 {normalized_vertices[3].x, normalized_vertices[3].y}}),
             ShapeType::RECTANGLE);
       }
-      return absl::UnimplementedError("got 4 vertices but no rectangle");
+      return absl::UnimplementedError(
+          "got 4 vertices but no axis aligned rectangle");
     default:
       return absl::UnimplementedError(
           "only points, lines, rectangles and circles are supported");
