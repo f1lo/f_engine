@@ -1,7 +1,8 @@
 load("@rules_cc//cc:defs.bzl", "cc_library")
 
 package(default_visibility = [
-    "//lib/internal:__pkg__",
+    "//lib/api:__subpackages__",
+    "//lib/internal:__subpackages__",
 ])
 
 cc_library(
@@ -26,6 +27,7 @@ cc_library(
     hdrs = ["shape.h"],
     deps = [
         ":vec",
+        "//raylib",
         "@abseil-cpp//absl/log:log",
     ],
 )

@@ -19,6 +19,7 @@ struct Shape {
   virtual bool Collides(const Line &line) const = 0;
   virtual bool Collides(const Rectangle &rectangle) const = 0;
   virtual bool Collides(const Circle &circle) const = 0;
+  virtual void Draw() const = 0;
 
   virtual ~Shape() = default;
 };
@@ -28,8 +29,10 @@ struct Point final : Shape {
   bool Collides(const Line &line) const override;
   bool Collides(const Rectangle &rectangle) const override;
   bool Collides(const Circle &circle) const override;
+  void Draw() const override;
 
   Point(const int x, const int y) : x(x), y(y) {}
+  explicit Point(std::pair<int, int> p) : x(p.first), y(p.second) {}
   bool operator==(const Point &v) const { return x == v.x && y == v.y; }
   /*
    * Returns true if current point is located on the lower-left side of the
@@ -37,7 +40,6 @@ struct Point final : Shape {
    */
   [[nodiscard]] bool IsLowerLeft(const Point &other) const;
   [[nodiscard]] double Distance(const Point &other) const;
-  Point Move(const Vector &direction) const;
 
   int x;
   int y;
@@ -48,6 +50,7 @@ struct Line final : Shape {
   bool Collides(const Line &other_line) const override;
   bool Collides(const Rectangle &rectangle) const override;
   bool Collides(const Circle &circle) const override;
+  void Draw() const override;
 
   Line(Point a, Point b) : a(std::move(a)), b(std::move(b)) {}
   // Transforms a line into normalized vector towards (0, 0).
@@ -67,6 +70,7 @@ struct Rectangle final : Shape {
   bool Collides(const Line &line) const override;
   bool Collides(const Rectangle &other_rectangle) const override;
   bool Collides(const Circle &circle) const override;
+  void Draw() const override;
 
   Rectangle(Point a, Point b, Point c, Point d) :
       a(std::move(a)), b(std::move(b)), c(std::move(c)), d(std::move(d)) {}
@@ -82,8 +86,9 @@ struct Circle final : Shape {
   bool Collides(const Line &line) const override;
   bool Collides(const Rectangle &rectangle) const override;
   bool Collides(const Circle &other_circle) const override;
+  void Draw() const override;
 
-  Circle(Point a, uint32_t r) : a(std::move(a)), r(r) {}
+  Circle(Point a, const uint32_t r) : a(std::move(a)), r(r) {}
 
   Point a;
   uint32_t r;

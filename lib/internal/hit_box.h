@@ -19,6 +19,7 @@ public:
   static absl::StatusOr<HitBox> CreateHitBox(std::vector<Point> &&vertices);
 
   bool CollidesWith(const HitBox &other) const;
+  void Draw() const;
 
 private:
   // TODO(f1lo): Cannot see a better way for now but there has to be. Try to
@@ -27,7 +28,7 @@ private:
   // updated.
   enum class ShapeType { POINT, LINE, RECTANGLE, CIRCLE };
 
-  explicit HitBox(std::unique_ptr<Shape> shape, const ShapeType type) :
+  HitBox(std::unique_ptr<Shape> shape, const ShapeType type) :
       shape_(std::move(shape)), shape_type_(type) {}
 
   std::unique_ptr<Shape> shape_;

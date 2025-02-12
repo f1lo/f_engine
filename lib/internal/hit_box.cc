@@ -171,5 +171,8 @@ bool HitBox::CollidesWith(const HitBox &other) const {
   }
 }
 
+void HitBox::Draw() const { shape_->Draw(); }
+
+
 } // namespace internal
 } // namespace lib

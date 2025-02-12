@@ -13,6 +13,7 @@ cc_binary(
     name = "main",
     srcs = ["main.cc"],
     deps = [
-        "//lib/internal:object",
+        "//lib/api:game_context",
+        "//lib/api:player_controllable_object",
     ],
 )

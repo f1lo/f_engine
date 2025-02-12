@@ -1,3 +1,5 @@
+#include "raylib/include/raylib.h"
+
 #include "shape.h"
 
 #include <cmath>
@@ -26,6 +28,16 @@ bool CounterClockwise(const Point &a, const Point &b, const Point &c) {
              static_cast<long long>(b.x) * (c.y - a.y) +
              static_cast<long long>(c.x) * (a.y - b.y) >
          0;
+}
+
+// Draw methods.
+void Point::Draw() const { DrawPixel(x, y, RED); }
+void Line::Draw() const { DrawLine(a.x, a.y, b.x, b.y, RED); }
+void Rectangle::Draw() const {
+  DrawRectangleLines(a.x, a.y, /*width=*/c.x - b.x, /*height*/ b.y - a.y, RED);
+}
+void Circle::Draw() const {
+  DrawCircleLines(a.x, a.y, /*radius*/ static_cast<float>(r), RED);
 }
 
 // POINT COLLISION

@@ -1,25 +1,17 @@
 #ifndef LIB_INTERNAL_OBJECT_H
 #define LIB_INTERNAL_OBJECT_H
 
-#include <utility>
-#include <vector>
-
-#include "geometry/shape.h"
-
 namespace lib {
 namespace internal {
 
 class Object {
 public:
-  explicit Object(std::vector<Point> &&hit_box_vertices) :
-      hit_box_vertices_(std::move(hit_box_vertices)) {}
-  void LogState();
+  virtual ~Object() = default;
 
-private:
-  std::vector<Point> hit_box_vertices_;
+  virtual void Move(int pos_x, int pos_y) = 0;
+  virtual void Draw() = 0;
 };
 } // namespace internal
 } // namespace lib
-
 
 #endif // LIB_INTERNAL_OBJECT_H

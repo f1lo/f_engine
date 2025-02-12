@@ -1,9 +1,14 @@
 load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
 
 package(default_visibility = [
-    "//api:__pkg__",
-    "//examples:__pkg__",
+    "//examples:__subpackages__",
+    "//lib/api:__subpackages__",
 ])
+
+cc_library(
+    name = "object",
+    srcs = ["object.h"],
+)
 
 cc_library(
     name = "hit_box",
@@ -26,15 +31,5 @@ cc_test(
         "@abseil-cpp//absl/status:statusor",
         "@googletest//:gtest",
         "@googletest//:gtest_main",
-    ],
-)
-
-cc_library(
-    name = "object",
-    srcs = ["object.cc"],
-    hdrs = ["object.h"],
-    deps = [
-        "//lib/internal/geometry:shape",
-        "@abseil-cpp//absl/log:log",
     ],
 )
