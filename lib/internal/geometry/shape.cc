@@ -2,10 +2,9 @@
 
 #include "shape.h"
 
+#include "absl/log/log.h"
 #include <cmath>
 #include <limits>
-#include <sys/stat.h>
-#include "absl/log/log.h"
 
 namespace lib {
 namespace internal {
@@ -128,7 +127,7 @@ bool Line::Collides(const Circle &circle) const {
   if (projection.Length() > line_vector.Length()) {
     return false;
   }
-  // Now the only think left to check is distance.
+  // Now the only thing left is to check is distance.
   // If the distance from the circle center to the line is less than the radius
   // segment intersects the circle.
   return line_point_to_circle_center_vector.Square() - projection.Square() <=
@@ -193,7 +192,6 @@ bool Circle::Collides(const Rectangle &rectangle) const {
 bool Circle::Collides(const Circle &other_circle) const {
   return this->a.Distance(other_circle.a) <= this->r + other_circle.r;
 }
-
 
 } // namespace internal
 } // namespace lib

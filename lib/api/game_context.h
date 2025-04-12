@@ -17,7 +17,7 @@ class GameContext {
 public:
   static GameContext &Create() {
     static bool init_window = []() {
-      InitWindow(1200, 2000, "");
+      InitWindow(800, 450, "abc");
       return IsWindowReady();
     }();
     QCHECK(init_window);
