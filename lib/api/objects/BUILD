@@ -37,9 +37,6 @@ cc_library(
     deps = [
         "//lib/api/objects:object",
         "//lib/api/objects:object_utils",
-        "//lib/internal:hit_box",
-        "//lib/internal/geometry:shape",
-        "@abseil-cpp//absl/log:check",
     ],
 )
 
@@ -50,5 +47,20 @@ cc_library(
     visibility = ["//visibility:private"],
     deps = [
         "//lib/api/objects:object",
+        "//lib/internal:hit_box",
+        "//lib/internal/geometry:shape",
+        "//raylib",
+        "@abseil-cpp//absl/log:check",
+    ],
+)
+
+cc_library(
+    name = "static_object",
+    srcs = ["static_object.cc"],
+    hdrs = ["static_object.h"],
+    deps = [
+        "//lib/api/objects:object",
+        "//lib/api/objects:object_utils",
+        "@abseil-cpp//absl/container:flat_hash_map",
     ],
 )

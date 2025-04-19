@@ -1,7 +1,6 @@
 #ifndef LIB_API_LEVEL_H
 #define LIB_API_LEVEL_H
 
-#include <iterator>
 #include <list>
 #include <memory>
 
@@ -24,6 +23,8 @@ class Level {
     objects_.push_back(std::move(object));
     abilities_.push_back({});
   }
+
+  void AddScreenObjects();
 
   const std::list<std::unique_ptr<objects::Object>>& objects() const {
     return objects_;

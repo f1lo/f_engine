@@ -15,14 +15,15 @@ namespace api {
 
 class Game {
  public:
-  static Game& Create(std::list<std::unique_ptr<Level>> levels) {
+  static Game& Create() {
     static bool init_window = []() {
       InitWindow(1000, 1000, "abc");
+      // ToggleBorderlessWindowed();
       return IsWindowReady();
     }();
     QCHECK(init_window);
 
-    static Game game(std::move(levels));
+    static Game game;
     return game;
   }
 
@@ -32,10 +33,12 @@ class Game {
 
   int screen_width() const { return GetScreenWidth(); }
   int screen_height() const { return GetScreenHeight(); }
+  void set_levels(std::list<std::unique_ptr<Level>> levels) {
+    levels_ = std::move(levels);
+  }
 
  private:
-  explicit Game(std::list<std::unique_ptr<Level>> levels)
-      : levels_(std::move(levels)) {}
+  explicit Game() = default;
 
   std::list<std::unique_ptr<Level>> levels_;
 };

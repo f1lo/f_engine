@@ -3,39 +3,15 @@
 #include <list>
 #include <memory>
 #include <optional>
+#include <vector>
 
-#include "absl/log/check.h"
+#include "absl/container/flat_hash_map.h"
 #include "lib/api/objects/object.h"
 #include "lib/api/objects/object_utils.h"
-#include "lib/internal/geometry/shape.h"
-#include "lib/internal/hit_box.h"
 
 namespace lib {
 namespace api {
 namespace objects {
-
-using internal::HitBox;
-using internal::Point;
-
-namespace {
-HitBox CreateHitBoxOrDie(const std::vector<std::pair<int, int>>& vertices) {
-  // Convert pairs to Points.
-  std::vector<Point> points;
-  points.reserve(vertices.size());
-  for (const auto& [x, y] : vertices) {
-    points.emplace_back(x, y);
-  }
-
-  absl::StatusOr<HitBox> hit_box = HitBox::CreateHitBox(std::move(points));
-  CHECK(hit_box.ok()) << "HitBox::CreateHitBox() failed " << hit_box.status();
-
-  return *std::move(hit_box);
-}
-
-HitBox CreateCircle(const int x, const int y, const uint32_t radius) {
-  return HitBox::CreateHitBox(Point{x, y}, radius);
-}
-}  // namespace
 
 MovableObject::MovableObject(
     const Kind kind, const MovableObjectOpts options,
@@ -93,6 +69,18 @@ void MovableObject::ApplyPendingUpdate(const PendingUpdate& update) {
   }
   if (update.velocity_y.has_value()) {
     velocity_y_ = *update.velocity_y;
+  }
+  if (update.velocity_x_add.has_value()) {
+    velocity_x_ += *update.velocity_x_add;
+  }
+  if (update.velocity_y_add.has_value()) {
+    velocity_y_ += *update.velocity_y_add;
+  }
+  if (update.velocity_x_multiply.has_value()) {
+    velocity_x_ *= *update.velocity_x_multiply;
+  }
+  if (update.velocity_y_multiply.has_value()) {
+    velocity_y_ *= *update.velocity_y_multiply;
   }
 }
 

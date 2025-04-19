@@ -3,6 +3,7 @@
 
 #include <list>
 #include <memory>
+#include <optional>
 
 #include "absl/container/flat_hash_map.h"
 #include "absl/functional/any_invocable.h"
@@ -25,12 +26,26 @@ class Object {
 
     std::optional<int> velocity_x;
     std::optional<int> velocity_y;
+    std::optional<int> velocity_x_add;
+    std::optional<int> velocity_y_add;
+
+    std::optional<float> velocity_x_multiply;
+    std::optional<float> velocity_y_multiply;
   };
 
-  enum class Kind { UNSET, PLAYER, ENEMY, PROJECTILE };
+  enum class Kind {
+    UNSET,
+    PLAYER,
+    ENEMY,
+    ABILITY,
+    SCREEN_LEFT,
+    SCREEN_RIGHT,
+    SCREEN_TOP,
+    SCREEN_BOTTOM,
+  };
 
-  typedef absl::AnyInvocable<PendingUpdate(const Object& to_update,
-                                           const Object& other) const>
+  typedef absl::AnyInvocable<std::optional<PendingUpdate>(
+      const Object& to_update, const Object& other) const>
       CollisionCallback;
 
   explicit Object(
@@ -47,11 +62,11 @@ class Object {
   virtual void Update(
       const std::list<std::unique_ptr<Object>>& other_objects) = 0;
   virtual void Draw() const = 0;
-  virtual void ApplyPendingUpdate(const PendingUpdate& other) = 0;
+  virtual void ApplyPendingUpdate(const PendingUpdate& update) = 0;
+  bool CollideWith(const Object& other) const;
 
   Kind kind() const { return kind_; }
   bool deleted() const { return deleted_; }
-  const internal::HitBox& hit_box() const { return hit_box_; }
   const Opts& options() const { return options_; }
   const absl::flat_hash_map<Kind, CollisionCallback>&
   object_collision_callbacks() const {
@@ -62,6 +77,7 @@ class Object {
   internal::HitBox& mutable_hit_box() { return hit_box_; }
   Opts& mutable_options() { return options_; }
   void set_deleted(bool deleted) { deleted_ = deleted; }
+  const internal::HitBox& hit_box() const { return hit_box_; }
 
  private:
   Kind kind_;
