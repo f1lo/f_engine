@@ -5,24 +5,25 @@ package(default_visibility = [
 ])
 
 cc_library(
-    name = "player_controllable_object",
-    srcs = ["player_controllable_object.cc"],
-    hdrs = ["player_controllable_object.h"],
+    name = "game",
+    srcs = ["game.cc"],
+    hdrs = ["game.h"],
     deps = [
-        "//lib/internal:hit_box",
-        "//lib/internal:object",
-        "//lib/internal/geometry:shape",
+        "//lib/api:level",
+        "//lib/api/objects:object",
+        "//raylib",
         "@abseil-cpp//absl/log:check",
-        "@abseil-cpp//absl/status:statusor",
     ],
 )
 
 cc_library(
-    name = "game_context",
-    srcs = ["game_context.cc"],
-    hdrs = ["game_context.h"],
+    name = "level",
+    srcs = ["level.cc"],
+    hdrs = ["level.h"],
     deps = [
-        "//lib/internal:object",
+        "//lib/api/abilities:ability",
+        "//lib/api/objects:movable_object",
+        "//lib/api/objects:object",
         "//raylib",
         "@abseil-cpp//absl/log:check",
     ],

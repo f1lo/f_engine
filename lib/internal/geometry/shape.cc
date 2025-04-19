@@ -2,18 +2,23 @@
 
 #include "shape.h"
 
-#include "absl/log/log.h"
+#include <absl/strings/internal/str_format/extension.h>
+
 #include <cmath>
+#include <iostream>
 #include <limits>
+#include "absl/log/log.h"
 
 namespace lib {
 namespace internal {
 
 namespace {
-int square(const int &a) { return a * a; }
-} // namespace
+int square(const int& a) {
+  return a * a;
+}
+}  // namespace
 
-bool Clockwise(const Point &a, const Point &b, const Point &c) {
+bool Clockwise(const Point& a, const Point& b, const Point& c) {
   // Avoid overflow.
   return static_cast<long long>(a.x) * (b.y - c.y) +
              static_cast<long long>(b.x) * (c.y - a.y) +
@@ -21,7 +26,7 @@ bool Clockwise(const Point &a, const Point &b, const Point &c) {
          0;
 }
 
-bool CounterClockwise(const Point &a, const Point &b, const Point &c) {
+bool CounterClockwise(const Point& a, const Point& b, const Point& c) {
   // Avoid overflow.
   return static_cast<long long>(a.x) * (b.y - c.y) +
              static_cast<long long>(b.x) * (c.y - a.y) +
@@ -30,8 +35,12 @@ bool CounterClockwise(const Point &a, const Point &b, const Point &c) {
 }
 
 // Draw methods.
-void Point::Draw() const { DrawPixel(x, y, RED); }
-void Line::Draw() const { DrawLine(a.x, a.y, b.x, b.y, RED); }
+void Point::Draw() const {
+  DrawPixel(x, y, RED);
+}
+void Line::Draw() const {
+  DrawLine(a.x, a.y, b.x, b.y, RED);
+}
 void Rectangle::Draw() const {
   DrawRectangleLines(a.x, a.y, /*width=*/c.x - b.x, /*height*/ b.y - a.y, RED);
 }
@@ -39,12 +48,40 @@ void Circle::Draw() const {
   DrawCircleLines(a.x, a.y, /*radius*/ static_cast<float>(r), RED);
 }
 
+// Move methods.
+void Point::Move(int x, int y) {
+  this->x += x;
+  this->y += y;
+}
+void Line::Move(int x, int y) {
+  this->a.x += x;
+  this->a.y += y;
+  this->b.x += x;
+  this->b.y += y;
+}
+void Rectangle::Move(int x, int y) {
+  this->a.x += x;
+  this->a.y += y;
+  this->b.x += x;
+  this->b.y += y;
+  this->c.x += x;
+  this->c.y += y;
+  this->d.x += x;
+  this->d.y += y;
+}
+void Circle::Move(int x, int y) {
+  this->a.x += x;
+  this->a.y += y;
+}
+
 // POINT COLLISION
-bool Point::Collides(const Point &other_point) const {
+bool Point::Collides(const Point& other_point) const {
   return *this == other_point;
 }
-bool Point::Collides(const Line &line) const { return line.IsOnLine(*this); }
-bool Point::Collides(const Rectangle &rectangle) const {
+bool Point::Collides(const Line& line) const {
+  return line.IsOnLine(*this);
+}
+bool Point::Collides(const Rectangle& rectangle) const {
   const Vector a = Line(rectangle.a, *this).MakeVector();
   const Vector b = Line(rectangle.a, rectangle.b).MakeVector();
   const Vector c = Line(rectangle.a, rectangle.d).MakeVector();
@@ -53,19 +90,19 @@ bool Point::Collides(const Rectangle &rectangle) const {
           a.ScalarProduct(b) <= b.ScalarProduct(b)) &&
          (0 <= a.ScalarProduct(c) && a.ScalarProduct(c) <= c.ScalarProduct(c));
 }
-bool Point::Collides(const Circle &circle) const {
+bool Point::Collides(const Circle& circle) const {
   return static_cast<double>(circle.r) >= this->Distance(circle.a);
 }
 
-bool Point::IsLowerLeft(const Point &other) const {
+bool Point::IsLowerLeft(const Point& other) const {
   return this->x <= other.x && this->y < other.y;
 }
 
-double Point::Distance(const Point &other) const {
+double Point::Distance(const Point& other) const {
   return sqrt(square(this->x - other.x) + square(this->y - other.y));
 }
 
-bool Line::IsOnLine(const Point &p) const {
+bool Line::IsOnLine(const Point& p) const {
   // Check if it is on the infinite line first.
   if ((a.x - p.x) * (p.y - b.y) != (p.x - b.x) * (a.y - p.y)) {
     return false;
@@ -76,15 +113,17 @@ bool Line::IsOnLine(const Point &p) const {
 }
 
 // LINE COLLISION.
-bool Line::Collides(const Point &point) const { return point.Collides(*this); }
+bool Line::Collides(const Point& point) const {
+  return point.Collides(*this);
+}
 // TODO(f1lo): This is incorrectly handling lines which extend each other.
-bool Line::Collides(const Line &other_line) const {
+bool Line::Collides(const Line& other_line) const {
   return CounterClockwise(this->a, other_line.a, other_line.b) !=
              CounterClockwise(this->b, other_line.a, other_line.b) &&
          CounterClockwise(this->a, this->b, other_line.a) !=
              CounterClockwise(this->a, this->b, other_line.b);
 }
-bool Line::Collides(const Rectangle &rectangle) const {
+bool Line::Collides(const Rectangle& rectangle) const {
   // Check intersection with individual edges first.
   // Note rectangle vertices should be ordered.
   if (this->Collides(Line(rectangle.a, rectangle.b)) ||
@@ -106,7 +145,7 @@ bool Line::Collides(const Rectangle &rectangle) const {
   }
   return this->a.Collides(rectangle) && this->b.Collides(rectangle);
 }
-bool Line::Collides(const Circle &circle) const {
+bool Line::Collides(const Circle& circle) const {
   // If one of the points is inside circle collision has happened.
   if (this->a.Collides(circle) || this->b.Collides(circle)) {
     return true;
@@ -135,13 +174,13 @@ bool Line::Collides(const Circle &circle) const {
 }
 
 // RECTANGLE COLLISION.
-bool Rectangle::Collides(const Point &point) const {
+bool Rectangle::Collides(const Point& point) const {
   return point.Collides(*this);
 }
-bool Rectangle::Collides(const Line &line) const {
+bool Rectangle::Collides(const Line& line) const {
   return line.Collides(*this);
 }
-bool Rectangle::Collides(const Rectangle &other_rectangle) const {
+bool Rectangle::Collides(const Rectangle& other_rectangle) const {
   int rect_a_x1 = this->a.x;
   int rect_a_x2 = this->c.x;
   int rect_a_y1 = this->a.y;
@@ -168,7 +207,7 @@ bool Rectangle::Collides(const Rectangle &other_rectangle) const {
          rect_a_y1 <= rect_b_y2 && rect_a_y2 >= rect_b_y1;
 }
 
-bool Rectangle::Collides(const Circle &circle) const {
+bool Rectangle::Collides(const Circle& circle) const {
   // Check if the center is inside rectangle.
   if (this->Collides(circle.a)) {
     return true;
@@ -182,16 +221,18 @@ bool Rectangle::Collides(const Circle &circle) const {
 }
 
 // CIRCLE COLLISION.
-bool Circle::Collides(const Point &point) const {
+bool Circle::Collides(const Point& point) const {
   return point.Collides(*this);
 }
-bool Circle::Collides(const Line &line) const { return line.Collides(*this); }
-bool Circle::Collides(const Rectangle &rectangle) const {
+bool Circle::Collides(const Line& line) const {
+  return line.Collides(*this);
+}
+bool Circle::Collides(const Rectangle& rectangle) const {
   return rectangle.Collides(*this);
 }
-bool Circle::Collides(const Circle &other_circle) const {
+bool Circle::Collides(const Circle& other_circle) const {
   return this->a.Distance(other_circle.a) <= this->r + other_circle.r;
 }
 
-} // namespace internal
-} // namespace lib
+}  // namespace internal
+}  // namespace lib

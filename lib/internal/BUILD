@@ -6,11 +6,6 @@ package(default_visibility = [
 ])
 
 cc_library(
-    name = "object",
-    srcs = ["object.h"],
-)
-
-cc_library(
     name = "hit_box",
     srcs = ["hit_box.cc"],
     hdrs = ["hit_box.h"],

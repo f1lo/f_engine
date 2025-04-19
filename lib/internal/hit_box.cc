@@ -151,18 +151,14 @@ bool HitBox::CollidesWith(const HitBox &other) const {
     // Potentially unsafe if not careful.
     case ShapeType::POINT:
       return this->shape_->Collides(*dynamic_cast<Point *>(other.shape_.get()));
-      break;
     case ShapeType::LINE:
       return this->shape_->Collides(*dynamic_cast<Line *>(other.shape_.get()));
-      break;
     case ShapeType::RECTANGLE:
       return this->shape_->Collides(
           *dynamic_cast<Rectangle *>(other.shape_.get()));
-      break;
     case ShapeType::CIRCLE:
       return this->shape_->Collides(
           *dynamic_cast<Circle *>(other.shape_.get()));
-      break;
     default:
       // This should never happen.
       // `StatusOr` can be returned here, but it could hurt performance.
