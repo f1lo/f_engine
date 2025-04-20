@@ -16,27 +16,6 @@ namespace objects {
 using internal::HitBox;
 using internal::Point;
 
-std::optional<Object::PendingUpdate> ExecuteUpdates(
-    const Object& object_to_update,
-    const std::list<std::unique_ptr<Object>>& other_objects) {
-  for (const auto& other_object : other_objects) {
-    // No collision - skip.
-    if (!object_to_update.CollideWith(*other_object.get())) {
-      continue;
-    }
-    // No collision callback provided - skip.
-    const auto callback = object_to_update.object_collision_callbacks().find(
-        other_object->kind());
-    if (callback == object_to_update.object_collision_callbacks().end()) {
-      continue;
-    }
-    // Exit after first collision.
-    return callback->second(object_to_update, *other_object.get());
-  }
-
-  return std::nullopt;
-}
-
 HitBox CreateHitBoxOrDie(const std::vector<std::pair<int, int>>& vertices) {
   // Convert pairs to Points.
   std::vector<Point> points;

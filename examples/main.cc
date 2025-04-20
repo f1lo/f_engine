@@ -22,96 +22,85 @@ using lib::api::objects::Object;
 using lib::api::objects::PlayerControllableObject;
 using lib::api::objects::StaticObject;
 
-std::optional<Object::PendingUpdate> LeftScreenCollisionCallback(
-    const Object& to_update, const Object& other) {
-  Object::PendingUpdate update = {
-      .deleted = false,
-      .is_hit_box_active = true,
-      .velocity_x = std::nullopt,
-      .velocity_y = std::nullopt,
-      .velocity_x_add = std::nullopt,
-      .velocity_y_add = std::nullopt,
-      .velocity_x_multiply = -1,
-      .velocity_y_multiply = 1,
-  };
-  return update;
-}
+constexpr int kPlayerWidth = 200;
+constexpr int kPlayerHeight = 30;
+constexpr int kScreenOffset = 10;
+constexpr int kBrickWidth = 130;
+constexpr int kBrickHeight = 30;
 
-std::optional<Object::PendingUpdate> RightScreenCollisionCallback(
-    const Object& to_update, const Object& other) {
-  Object::PendingUpdate update = {
-      .deleted = false,
-      .is_hit_box_active = true,
-      .velocity_x = std::nullopt,
-      .velocity_y = std::nullopt,
-      .velocity_x_add = std::nullopt,
-      .velocity_y_add = std::nullopt,
-      .velocity_x_multiply = -1,
-      .velocity_y_multiply = 1,
-  };
-  return update;
-}
+std::vector<std::unique_ptr<StaticObject>> GenerateBricks(int brick_width,
+                                                          int brick_height,
+                                                          int screen_width,
+                                                          int screen_height,
+                                                          int num_brick_lines) {
+  std::vector<std::unique_ptr<StaticObject>> bricks;
+  int usable_space = screen_width - 2 * kScreenOffset;
+  int brick_offset_close =
+      usable_space - brick_width * (usable_space / brick_width);
+  int brick_offset_far = brick_offset_close + brick_width / 2;
+  int right_limit = kScreenOffset + usable_space;
 
-std::optional<Object::PendingUpdate> TopScreenCollisionCallback(
-    const Object& to_update, const Object& other) {
-  Object::PendingUpdate update = {
-      .deleted = false,
-      .is_hit_box_active = true,
-      .velocity_x = std::nullopt,
-      .velocity_y = std::nullopt,
-      .velocity_x_add = std::nullopt,
-      .velocity_y_add = std::nullopt,
-      .velocity_x_multiply = 1,
-      .velocity_y_multiply = -1,
-  };
-  return update;
-}
+  if (screen_height / 2 < num_brick_lines * brick_height) {
+    std::cout << "Too many brick lines!\n";
+    return {};
+  }
 
-std::optional<Object::PendingUpdate> BottomScreenCollisionCallback(
-    const Object& to_update, const Object& other) {
-  Object::PendingUpdate update = {
-      .deleted = false,
-      .is_hit_box_active = true,
-      .velocity_x = std::nullopt,
-      .velocity_y = std::nullopt,
-      .velocity_x_add = std::nullopt,
-      .velocity_y_add = std::nullopt,
-      .velocity_x_multiply = 1,
-      .velocity_y_multiply = -1,
-  };
-  return update;
+  for (int i = 0; i < num_brick_lines; i++) {
+    int x = (i % 2 == 0) ? brick_offset_close : brick_offset_far;
+    int y = kScreenOffset + (i + 1) * brick_height;
+    while (x + brick_width <= right_limit) {
+      std::unique_ptr<StaticObject> brick = std::make_unique<StaticObject>(
+          Object::Kind::ENEMY,
+          StaticObject::StaticObjectOpts(/*is_hit_box_active*/ true,
+                                         /*should_draw_hitbox*/ true),
+          std::vector<std::pair<int, int>>({{x, y},
+                                            {x, y - brick_height},
+                                            {x + brick_width, y - brick_height},
+                                            {x + brick_width, y}}));
+      bricks.emplace_back(std::move(brick));
+      x += brick_width;
+    }
+  }
+
+  return std::move(bricks);
 }
 
 int main() {
-  Game& game = Game::Create();
+  Game& game = Game::Create(/*width=*/1500, /*height=*/1000, "Breakout",
+                            /*full_screen=*/false);
 
-  std::unique_ptr<MoveAbility> ability_a = std::make_unique<MoveAbility>(
-      Ability::AbilityOpts(/*cooldown_sec*/ 0), kKeyA, -5, 0);
-  std::unique_ptr<MoveAbility> ability_d = std::make_unique<MoveAbility>(
-      Ability::AbilityOpts(/*cooldown_sec*/ 0), kKeyD, 5, 0);
-  std::unique_ptr<MoveAbility> ability_w = std::make_unique<MoveAbility>(
-      Ability::AbilityOpts(/*cooldown_sec*/ 0), kKeyS, 0, 5);
-  std::unique_ptr<MoveAbility> ability_s = std::make_unique<MoveAbility>(
-      Ability::AbilityOpts(/*cooldown_sec*/ 0), kKeyW, 0, -5);
+  MoveAbility::MoveAbilityOpts opts = MoveAbility::MoveAbilityOpts(
+      {.cooldown_sec = 0}, /*should_hold=*/true, /*velocity_x=*/8,
+      /*velocity_y=*/0, kKeyA, kKeyD, kKeyW, kKeyS);
+  std::unique_ptr<MoveAbility> ability_move =
+      std::make_unique<MoveAbility>(opts);
 
-  absl::flat_hash_map<Object::Kind, Object::CollisionCallback> callbacks;
-  callbacks[Object::Kind::SCREEN_LEFT] = LeftScreenCollisionCallback;
-  callbacks[Object::Kind::SCREEN_RIGHT] = RightScreenCollisionCallback;
-  callbacks[Object::Kind::SCREEN_TOP] = TopScreenCollisionCallback;
-  callbacks[Object::Kind::SCREEN_BOTTOM] = BottomScreenCollisionCallback;
   std::unique_ptr<Object> player = std::make_unique<PlayerControllableObject>(
       Object::Kind::PLAYER,
       PlayerControllableObject::PlayerControllableObjectOpts(true, true, 0, 0),
-      std::move(callbacks), std::make_pair(250, 250), 20);
+      std::vector<std::pair<int, int>>(
+          {{game.screen_width() / 2 - kPlayerWidth / 2,
+            game.screen_height() - kScreenOffset},
+           {game.screen_width() / 2 - kPlayerWidth / 2,
+            game.screen_height() - kPlayerHeight - kScreenOffset},
+           {game.screen_width() / 2 + kPlayerWidth / 2,
+            game.screen_height() - kPlayerHeight - kScreenOffset},
+           {game.screen_width() / 2 + kPlayerWidth / 2,
+            game.screen_height() - kScreenOffset}}));
 
   std::list<std::unique_ptr<Ability>> abilities;
-  abilities.push_back(std::move(ability_a));
-  abilities.push_back(std::move(ability_d));
-  abilities.push_back(std::move(ability_s));
-  abilities.push_back(std::move(ability_w));
+  abilities.push_back(std::move(ability_move));
   std::unique_ptr<Level> level = std::make_unique<Level>();
   level->add_object_and_abilities(std::move(player), std::move(abilities));
   level->AddScreenObjects();
+
+  std::vector<std::unique_ptr<StaticObject>> bricks =
+      GenerateBricks(kBrickWidth, kBrickHeight, game.screen_width(),
+                     game.screen_height(), /*num_brick_lines=*/5);
+  for (auto& brick : bricks) {
+    level->add_object(std::move(brick));
+  }
+
   std::list<std::unique_ptr<Level>> levels;
   levels.push_back(std::move(level));
 

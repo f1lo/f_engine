@@ -35,20 +35,14 @@ void Level::CleanUpOrDie() {
 void Level::Run() {
   while (!WindowShouldClose()) {
     BeginDrawing();
-    ClearBackground(RAYWHITE);
+    ClearBackground();
 
     CleanUpOrDie();
     auto object_it = objects_.begin();
     auto ability_it = abilities_.begin();
     while (object_it != objects_.end() && ability_it != abilities_.end()) {
       for (const auto& ability : *ability_it) {
-        auto [update, spawned_object] = ability->MaybeUse();
-        if (update.has_value()) {
-          object_it->get()->ApplyPendingUpdate(*update);
-        }
-        if (spawned_object) {
-          // TODO(f1lo): Implement.
-        }
+        ability->MaybeUseModifyUser(*object_it->get());
       }
 
       object_it->get()->Update(objects());
@@ -67,20 +61,16 @@ void Level::AddScreenObjects() {
   int screen_height = GetScreenHeight();
   std::unique_ptr<StaticObject> screen_left = std::make_unique<StaticObject>(
       Object::Kind::SCREEN_LEFT, StaticObject::StaticObjectOpts(true, true),
-      absl::flat_hash_map<Object::Kind, Object::CollisionCallback>(),
       std::vector({std::make_pair(0, 0), std::make_pair(0, screen_height)}));
   std::unique_ptr<StaticObject> screen_right = std::make_unique<StaticObject>(
       Object::Kind::SCREEN_RIGHT, StaticObject::StaticObjectOpts(true, true),
-      absl::flat_hash_map<Object::Kind, Object::CollisionCallback>(),
       std::vector({std::make_pair(screen_width, 0),
                    std::make_pair(screen_width, screen_height)}));
   std::unique_ptr<StaticObject> screen_top = std::make_unique<StaticObject>(
       Object::Kind::SCREEN_TOP, StaticObject::StaticObjectOpts(true, true),
-      absl::flat_hash_map<Object::Kind, Object::CollisionCallback>(),
       std::vector({std::make_pair(0, 0), std::make_pair(screen_width, 0)}));
   std::unique_ptr<StaticObject> screen_bottom = std::make_unique<StaticObject>(
       Object::Kind::SCREEN_BOTTOM, StaticObject::StaticObjectOpts(true, true),
-      absl::flat_hash_map<Object::Kind, Object::CollisionCallback>(),
       std::vector({std::make_pair(0, screen_height),
                    std::make_pair(screen_width, screen_height)}));
 

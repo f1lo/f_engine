@@ -12,10 +12,6 @@ namespace lib {
 namespace api {
 namespace objects {
 
-std::optional<Object::PendingUpdate> ExecuteUpdates(
-    const Object& object_to_update,
-    const std::list<std::unique_ptr<Object>>& other_objects);
-
 internal::HitBox CreateCircle(int x, int y, uint32_t radius);
 
 internal::HitBox CreateHitBoxOrDie(

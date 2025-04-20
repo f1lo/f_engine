@@ -24,26 +24,29 @@ class MovableObject : public Object {
     int velocity_y = 0;
   };
 
-  MovableObject(
-      Kind kind, MovableObjectOpts options,
-      absl::flat_hash_map<Kind, CollisionCallback> object_collision_callbacks,
-      const std::vector<std::pair<int, int>>& hit_box_vertices);
+  MovableObject(Kind kind, MovableObjectOpts options,
+                const std::vector<std::pair<int, int>>& hit_box_vertices);
 
-  MovableObject(
-      Kind kind, MovableObjectOpts options,
-      absl::flat_hash_map<Kind, CollisionCallback> object_collision_callbacks,
-      std::pair<int, int> hit_box_center, uint32_t hit_box_radius);
+  MovableObject(Kind kind, MovableObjectOpts options,
+                std::pair<int, int> hit_box_center, uint32_t hit_box_radius);
 
   void Update(const std::list<std::unique_ptr<Object>>& other_objects) override;
   void Draw() const override;
-  void ApplyPendingUpdate(const PendingUpdate& update) override;
+  void set_velocity(int velocity_x, int velocity_y) {
+    velocity_x_ = velocity_x;
+    velocity_y_ = velocity_y;
+  }
 
  protected:
-  void Move(int velocity_x, int velocity_y);
+  bool OnCollisionCallback(const Object& other_object) override;
+  void Move();
+  void ResetLastMove();
 
  private:
   int velocity_x_;
   int velocity_y_;
+  int last_velocity_x_ = 0;
+  int last_velocity_y_ = 0;
 };
 }  // namespace objects
 }  // namespace api

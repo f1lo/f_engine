@@ -5,6 +5,7 @@
 
 #include <list>
 #include <memory>
+#include <string>
 
 #include "absl/log/check.h"
 #include "lib/api/level.h"
@@ -15,10 +16,14 @@ namespace api {
 
 class Game {
  public:
-  static Game& Create() {
-    static bool init_window = []() {
-      InitWindow(1000, 1000, "abc");
-      // ToggleBorderlessWindowed();
+  static Game& Create(int width, int height, const std::string& title,
+                      bool full_screen) {
+    static bool init_window = [width, height, title, full_screen]() {
+      InitWindow(width, height, title.c_str());
+
+      if (full_screen) {
+        ToggleBorderlessWindowed();
+      }
       return IsWindowReady();
     }();
     QCHECK(init_window);

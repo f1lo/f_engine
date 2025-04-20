@@ -7,7 +7,7 @@ namespace api {
 
 void Game::Run() {
   // TODO(f1lo): Implement more levels.
-  SetTargetFPS(60);
+  SetTargetFPS(90);
   levels_.begin()->get()->Run();
   CloseWindow();
 }

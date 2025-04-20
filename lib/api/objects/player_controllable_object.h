@@ -13,7 +13,7 @@ namespace lib {
 namespace api {
 namespace objects {
 
-class PlayerControllableObject final : public MovableObject {
+class PlayerControllableObject : public MovableObject {
  public:
   struct PlayerControllableObjectOpts : MovableObjectOpts {
     PlayerControllableObjectOpts(bool is_hit_box_active,
@@ -25,15 +25,12 @@ class PlayerControllableObject final : public MovableObject {
 
   PlayerControllableObject(
       Kind kind, PlayerControllableObjectOpts options,
-      absl::flat_hash_map<Kind, CollisionCallback> object_collision_callbacks,
       const std::vector<std::pair<int, int>>& hit_box_vertices);
-  PlayerControllableObject(
-      Kind kind, PlayerControllableObjectOpts options,
-      absl::flat_hash_map<Kind, CollisionCallback> object_collision_callbacks,
-      std::pair<int, int> hit_box_center, uint32_t hit_box_radius);
+  PlayerControllableObject(Kind kind, PlayerControllableObjectOpts options,
+                           std::pair<int, int> hit_box_center,
+                           uint32_t hit_box_radius);
 
-  // void PlayerControllableObject::Update(
-  //     const std::list<std::unique_ptr<Object>>& other_objects) override;
+  void Update(const std::list<std::unique_ptr<Object>>& other_objects) override;
   void Draw() const override;
 };
 

@@ -1,5 +1,3 @@
-#include "raylib/include/raylib.h"
-
 #include <iostream>
 #include <string>
 
@@ -7,20 +5,31 @@
 #include "absl/functional/any_invocable.h"
 #include "absl/strings/str_join.h"
 
+class A {
+ public:
+  virtual void print() = 0;
+};
+
+class B : public A {
+ public:
+  void print() override { std::cout << "B" << std::endl; }
+};
+
+class C : public B {
+ public:
+  void print() override { std::cout << "C" << std::endl; }
+  void work(A* x) {
+    if (this == x) {
+      std::cout << "TRUE" << std::endl;
+    } else {
+      std::cout << "FALSE" << std::endl;
+    }
+  };
+};
+
 int main() {
-  static bool init_window = []() {
-    InitWindow(1000, 1000, "abc");
-    return IsWindowReady();
-  }();
-  std::cout << init_window << std::endl;
-
-  SetTargetFPS(60);
-  while (!WindowShouldClose()) {
-    BeginDrawing();
-    ClearBackground(RAYWHITE);
-    DrawCircleLines(250, 250, /*radius*/ static_cast<float>(20), RED);
-    EndDrawing();
-  }
-
-  CloseWindow();
+  A* b = new B();
+  C* c = new C();
+  c->work(b);
+  c->work(c);
 }

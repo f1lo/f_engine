@@ -18,7 +18,6 @@ using internal::Point;
 
 PlayerControllableObject::PlayerControllableObject(
     const Kind kind, const PlayerControllableObjectOpts options,
-    absl::flat_hash_map<Kind, CollisionCallback> object_collision_callbacks,
     const std::vector<std::pair<int, int>>& hit_box_vertices)
     : MovableObject(
           kind,
@@ -26,11 +25,10 @@ PlayerControllableObject::PlayerControllableObject(
                             /*should_draw_hit_box=*/options.should_draw_hit_box,
                             /*velocity_x=*/options.velocity_x,
                             /*velocity_y=*/options.velocity_y),
-          std::move(object_collision_callbacks), hit_box_vertices) {}
+          hit_box_vertices) {}
 
 PlayerControllableObject::PlayerControllableObject(
     const Kind kind, const PlayerControllableObjectOpts options,
-    absl::flat_hash_map<Kind, CollisionCallback> object_collision_callbacks,
     const std::pair<int, int> hit_box_center, const uint32_t hit_box_radius)
     : MovableObject(
           kind,
@@ -38,8 +36,7 @@ PlayerControllableObject::PlayerControllableObject(
                             /*should_draw_hit_box=*/options.should_draw_hit_box,
                             /*velocity_x=*/options.velocity_x,
                             /*velocity_y=*/options.velocity_y),
-          std::move(object_collision_callbacks), hit_box_center,
-          hit_box_radius) {}
+          hit_box_center, hit_box_radius) {}
 
 // Assumes `BeginDrawing` has been called.
 void PlayerControllableObject::Draw() const {
@@ -50,8 +47,13 @@ void PlayerControllableObject::Draw() const {
   hit_box().Draw();
 }
 
-// void PlayerControllableObject::Update(
-//     const std::list<std::unique_ptr<Object>>& other_objects) {}
+void PlayerControllableObject::Update(
+    const std::list<std::unique_ptr<Object>>& other_objects) {
+  Move();
+  if (UpdateInternal(other_objects)) {
+    this->ResetLastMove();
+  }
+}
 
 }  // namespace objects
 }  // namespace api

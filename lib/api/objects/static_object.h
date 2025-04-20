@@ -19,19 +19,17 @@ class StaticObject : public Object {
         : Opts(is_hit_box_active, should_draw_hit_box) {}
   };
 
-  StaticObject(
-      Kind kind, StaticObjectOpts options,
-      absl::flat_hash_map<Kind, CollisionCallback> object_collision_callbacks,
-      const std::vector<std::pair<int, int>>& hit_box_vertices);
+  StaticObject(Kind kind, StaticObjectOpts options,
+               const std::vector<std::pair<int, int>>& hit_box_vertices);
 
-  StaticObject(
-      Kind kind, StaticObjectOpts options,
-      absl::flat_hash_map<Kind, CollisionCallback> object_collision_callbacks,
-      std::pair<int, int> hit_box_center, uint32_t hit_box_radius);
+  StaticObject(Kind kind, StaticObjectOpts options,
+               std::pair<int, int> hit_box_center, uint32_t hit_box_radius);
 
   void Update(const std::list<std::unique_ptr<Object>>& other_objects) override;
   void Draw() const override;
-  void ApplyPendingUpdate(const PendingUpdate& update) override;
+
+ private:
+  bool OnCollisionCallback(const Object& other_object) override;
 };
 }  // namespace objects
 }  // namespace api

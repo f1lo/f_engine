@@ -11,6 +11,7 @@ cc_library(
     deps = [
         "//lib/api/objects:movable_object",
         "//lib/api/objects:object",
+        "@abseil-cpp//absl/log",
     ],
 )
 

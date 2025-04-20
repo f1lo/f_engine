@@ -1,11 +1,9 @@
 #ifndef LIB_API_ABILITIES_ABILITY_H
 #define LIB_API_ABILITIES_ABILITY_H
 
-#include <memory>
-#include <optional>
-
 #include "lib/api/objects/movable_object.h"
 #include "lib/api/objects/object.h"
+#include "raylib/include/raylib.h"
 
 namespace lib {
 namespace api {
@@ -20,35 +18,47 @@ class Ability {
   explicit Ability(AbilityOpts opts) : opts_(opts) {}
   virtual ~Ability() = default;
 
-  virtual std::pair<std::optional<objects::Object::PendingUpdate>,
-                    std::unique_ptr<objects::MovableObject>>
-  MaybeUse() = 0;
+  virtual void MaybeUseModifyUser(objects::Object& user) = 0;
+
+  void update_last_used() { last_used_sec_ = GetTime(); }
 
  protected:
   bool IsOnCooldown() const;
 
  private:
   AbilityOpts opts_;
-  int last_used_sec_ = 0;
+  double last_used_sec_ = 0;
 };
 
 class MoveAbility : public Ability {
  public:
-  MoveAbility(const AbilityOpts opts, int bound_key, int velocity_x,
-              int velocity_y)
-      : Ability(opts),
-        bound_key_(bound_key),
-        velocity_x_(velocity_x),
-        velocity_y_(velocity_y) {}
+  struct MoveAbilityOpts : AbilityOpts {
+    MoveAbilityOpts(AbilityOpts opts, bool should_hold, int velocity_x,
+                    int velocity_y, int key_left, int key_right, int key_top,
+                    int key_bottom)
+        : AbilityOpts(opts),
+          should_hold(should_hold),
+          velocity_x(velocity_x),
+          velocity_y(velocity_y),
+          key_left(key_left),
+          key_right(key_right),
+          key_top(key_top),
+          key_bottom(key_bottom) {}
+    bool should_hold;
+    int velocity_x;
+    int velocity_y;
+    int key_left;
+    int key_right;
+    int key_top;
+    int key_bottom;
+  };
+  explicit MoveAbility(const MoveAbilityOpts& opts)
+      : Ability({opts.cooldown_sec}), opts_(opts) {}
 
-  std::pair<std::optional<objects::Object::PendingUpdate>,
-            std::unique_ptr<objects::MovableObject>>
-  MaybeUse() override;
+  void MaybeUseModifyUser(objects::Object& user) override;
 
  private:
-  int bound_key_;
-  int velocity_x_;
-  int velocity_y_;
+  MoveAbilityOpts opts_;
 };
 
 }  // namespace abilities
