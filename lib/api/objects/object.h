@@ -6,6 +6,15 @@
 
 #include "lib/internal/hit_box.h"
 
+typedef uint32_t Kind;
+
+static constexpr Kind PLAYER = std::numeric_limits<uint32_t>::max() - 1;
+static constexpr Kind ENEMY = std::numeric_limits<uint32_t>::max() - 2;
+static constexpr Kind SCREEN_LEFT = std::numeric_limits<uint32_t>::max() - 3;
+static constexpr Kind SCREEN_RIGHT = std::numeric_limits<uint32_t>::max() - 4;
+static constexpr Kind SCREEN_TOP = std::numeric_limits<uint32_t>::max() - 5;
+static constexpr Kind SCREEN_BOTTOM = std::numeric_limits<uint32_t>::max() - 6;
+
 namespace lib {
 namespace api {
 namespace objects {
@@ -15,17 +24,6 @@ class Object {
   struct Opts {
     bool is_hit_box_active;
     bool should_draw_hit_box;
-  };
-
-  enum class Kind {
-    UNSET,
-    PLAYER,
-    ENEMY,
-    ABILITY,
-    SCREEN_LEFT,
-    SCREEN_RIGHT,
-    SCREEN_TOP,
-    SCREEN_BOTTOM,
   };
 
   explicit Object(const Kind kind, const Opts options, internal::HitBox hit_box)

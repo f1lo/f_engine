@@ -21,7 +21,7 @@ class Level {
 
   void add_object(std::unique_ptr<objects::Object> object) {
     objects_.push_back(std::move(object));
-    abilities_.push_back({});
+    abilities_.emplace_back();
   }
 
   void AddScreenObjects();

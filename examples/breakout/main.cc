@@ -2,14 +2,15 @@
 #include <memory>
 #include <optional>
 
+#include "examples/breakout/player_pad.h"
 #include "lib/api/abilities/ability.h"
 #include "lib/api/abilities/keys.h"
 #include "lib/api/game.h"
 #include "lib/api/level.h"
 #include "lib/api/objects/object.h"
-#include "lib/api/objects/player_controllable_object.h"
 #include "lib/api/objects/static_object.h"
 
+using breakout::PlayerPad;
 using lib::api::Game;
 using lib::api::Level;
 using lib::api::abilities::Ability;
@@ -18,15 +19,17 @@ using lib::api::abilities::kKeyD;
 using lib::api::abilities::kKeyS;
 using lib::api::abilities::kKeyW;
 using lib::api::abilities::MoveAbility;
+using lib::api::objects::MovableObject;
 using lib::api::objects::Object;
-using lib::api::objects::PlayerControllableObject;
 using lib::api::objects::StaticObject;
 
-constexpr int kPlayerWidth = 200;
-constexpr int kPlayerHeight = 30;
+constexpr int kPlayerWidth = 300;
+constexpr int kPlayerHeight = 25;
 constexpr int kScreenOffset = 10;
 constexpr int kBrickWidth = 130;
 constexpr int kBrickHeight = 30;
+constexpr int kBallSpeed = 10;
+constexpr int kBallRadius = 20;
 
 std::vector<std::unique_ptr<StaticObject>> GenerateBricks(int brick_width,
                                                           int brick_height,
@@ -50,7 +53,7 @@ std::vector<std::unique_ptr<StaticObject>> GenerateBricks(int brick_width,
     int y = kScreenOffset + (i + 1) * brick_height;
     while (x + brick_width <= right_limit) {
       std::unique_ptr<StaticObject> brick = std::make_unique<StaticObject>(
-          Object::Kind::ENEMY,
+          ENEMY,
           StaticObject::StaticObjectOpts(/*is_hit_box_active*/ true,
                                          /*should_draw_hitbox*/ true),
           std::vector<std::pair<int, int>>({{x, y},
@@ -75,18 +78,10 @@ int main() {
   std::unique_ptr<MoveAbility> ability_move =
       std::make_unique<MoveAbility>(opts);
 
-  std::unique_ptr<Object> player = std::make_unique<PlayerControllableObject>(
-      Object::Kind::PLAYER,
-      PlayerControllableObject::PlayerControllableObjectOpts(true, true, 0, 0),
-      std::vector<std::pair<int, int>>(
-          {{game.screen_width() / 2 - kPlayerWidth / 2,
-            game.screen_height() - kScreenOffset},
-           {game.screen_width() / 2 - kPlayerWidth / 2,
-            game.screen_height() - kPlayerHeight - kScreenOffset},
-           {game.screen_width() / 2 + kPlayerWidth / 2,
-            game.screen_height() - kPlayerHeight - kScreenOffset},
-           {game.screen_width() / 2 + kPlayerWidth / 2,
-            game.screen_height() - kScreenOffset}}));
+  std::unique_ptr<Object> player = std::make_unique<PlayerPad>(
+      game.screen_width(), game.screen_height(), kBallSpeed, kBallSpeed,
+      kBallRadius, kPlayerWidth, kPlayerHeight,
+      MovableObject::MovableObjectOpts(true, true, 0, 0));
 
   std::list<std::unique_ptr<Ability>> abilities;
   abilities.push_back(std::move(ability_move));

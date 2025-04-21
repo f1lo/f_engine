@@ -29,7 +29,9 @@ class C : public B {
 
 int main() {
   A* b = new B();
-  C* c = new C();
-  c->work(b);
-  c->work(c);
+  A* c = new C();
+  std::cout << ((dynamic_cast<B*>(c) == nullptr) ? "null" : "cast")
+            << std::endl;
+  std::cout << ((dynamic_cast<B*>(b) == nullptr) ? "null" : "cast")
+            << std::endl;
 }

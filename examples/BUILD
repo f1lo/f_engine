@@ -10,17 +10,3 @@ cc_binary(
         "@abseil-cpp//absl/strings",
     ],
 )
-
-cc_binary(
-    name = "main",
-    srcs = ["main.cc"],
-    deps = [
-        "//lib/api:game",
-        "//lib/api:level",
-        "//lib/api/abilities:ability",
-        "//lib/api/abilities:keys",
-        "//lib/api/objects:movable_object",
-        "//lib/api/objects:object",
-        "//lib/api/objects:player_controllable_object",
-    ],
-)

@@ -38,7 +38,9 @@ class MovableObject : public Object {
   }
 
  protected:
-  bool OnCollisionCallback(const Object& other_object) override;
+  int velocity_x() const { return velocity_x_; }
+  int velocity_y() const { return velocity_y_; }
+
   void Move();
   void ResetLastMove();
 

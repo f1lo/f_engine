@@ -21,7 +21,7 @@ std::vector<Point> ConstructConvexHull(std::vector<Point> vertices) {
     return {vertices[0]};
 
   std::sort(vertices.begin(), vertices.end(),
-            [](const Point &a, const Point &b) {
+            [](const Point& a, const Point& b) {
               return a.x < b.x || (a.x == b.x && a.y < b.y);
             });
   Point point_1 = vertices[0];
@@ -47,7 +47,7 @@ std::vector<Point> ConstructConvexHull(std::vector<Point> vertices) {
   }
 
   std::vector<Point> hull_vertices;
-  for (const auto &i: up)
+  for (const auto& i : up)
     hull_vertices.push_back(i);
   for (size_t i = down.size() - 2; i > 0; --i)
     hull_vertices.push_back(down[i]);
@@ -92,9 +92,9 @@ bool IsAxisAlignedRectangle(absl::Span<const Point> vertices) {
          side_3.MakeVector().IsAxisAligned() &&
          side_4.MakeVector().IsAxisAligned();
 }
-} // namespace
+}  // namespace
 
-absl::StatusOr<HitBox> HitBox::CreateHitBox(std::vector<Point> &&vertices) {
+absl::StatusOr<HitBox> HitBox::CreateHitBox(std::vector<Point>&& vertices) {
   if (vertices.empty()) {
     return absl::InvalidArgumentError(
         "empty vertex set while constructing a hit box");
@@ -110,8 +110,9 @@ absl::StatusOr<HitBox> HitBox::CreateHitBox(std::vector<Point> &&vertices) {
         "the wrong order or do not form a convex hull");
   }
   if (old_size < normalized_vertices.size()) {
-    return absl::InternalError("THIS SHOULD NEVER HAPPEN - vertices added "
-                               "while constructing a convex hull.");
+    return absl::InternalError(
+        "THIS SHOULD NEVER HAPPEN - vertices added "
+        "while constructing a convex hull.");
   }
 
   switch (normalized_vertices.size()) {
@@ -146,19 +147,18 @@ absl::StatusOr<HitBox> HitBox::CreateHitBox(std::vector<Point> &&vertices) {
   }
 }
 
-bool HitBox::CollidesWith(const HitBox &other) const {
+bool HitBox::CollidesWith(const HitBox& other) const {
   switch (other.shape_type_) {
     // Potentially unsafe if not careful.
     case ShapeType::POINT:
-      return this->shape_->Collides(*dynamic_cast<Point *>(other.shape_.get()));
+      return this->shape_->Collides(*static_cast<Point*>(other.shape_.get()));
     case ShapeType::LINE:
-      return this->shape_->Collides(*dynamic_cast<Line *>(other.shape_.get()));
+      return this->shape_->Collides(*static_cast<Line*>(other.shape_.get()));
     case ShapeType::RECTANGLE:
       return this->shape_->Collides(
-          *dynamic_cast<Rectangle *>(other.shape_.get()));
+          *static_cast<Rectangle*>(other.shape_.get()));
     case ShapeType::CIRCLE:
-      return this->shape_->Collides(
-          *dynamic_cast<Circle *>(other.shape_.get()));
+      return this->shape_->Collides(*static_cast<Circle*>(other.shape_.get()));
     default:
       // This should never happen.
       // `StatusOr` can be returned here, but it could hurt performance.
@@ -167,8 +167,9 @@ bool HitBox::CollidesWith(const HitBox &other) const {
   }
 }
 
-void HitBox::Draw() const { shape_->Draw(); }
+void HitBox::Draw() const {
+  shape_->Draw();
+}
 
-
-} // namespace internal
-} // namespace lib
+}  // namespace internal
+}  // namespace lib

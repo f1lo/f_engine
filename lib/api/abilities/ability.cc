@@ -18,6 +18,7 @@ bool Ability::IsOnCooldown() const {
 
 void MoveAbility::MaybeUseModifyUser(Object& user) {
   // Generally move should have no cooldown - so ignore it.
+  // TODO(f1lo): Move the cast in individual statements.
   auto* cast_user = dynamic_cast<MovableObject*>(&user);
   CHECK(cast_user) << " ability user is not of correct type.";
   if (opts_.should_hold) {

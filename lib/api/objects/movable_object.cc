@@ -60,25 +60,6 @@ void MovableObject::Draw() const {
   hit_box().Draw();
 }
 
-bool MovableObject::OnCollisionCallback(const Object& other_object) {
-  switch (other_object.kind()) {
-    case Kind::SCREEN_LEFT:
-      velocity_x_ *= -1;
-      return true;
-    case Kind::SCREEN_RIGHT:
-      velocity_x_ *= -1;
-      return true;
-    case Kind::SCREEN_BOTTOM:
-      velocity_y_ *= -1;
-      return true;
-    case Kind::SCREEN_TOP:
-      velocity_y_ *= -1;
-      return true;
-    default:
-      return false;
-  }
-}
-
 }  // namespace objects
 }  // namespace api
 }  // namespace lib

@@ -35,7 +35,7 @@ void Level::CleanUpOrDie() {
 void Level::Run() {
   while (!WindowShouldClose()) {
     BeginDrawing();
-    ClearBackground();
+    ClearBackground(RAYWHITE);
 
     CleanUpOrDie();
     auto object_it = objects_.begin();
@@ -60,17 +60,17 @@ void Level::AddScreenObjects() {
   int screen_width = GetScreenWidth();
   int screen_height = GetScreenHeight();
   std::unique_ptr<StaticObject> screen_left = std::make_unique<StaticObject>(
-      Object::Kind::SCREEN_LEFT, StaticObject::StaticObjectOpts(true, true),
+      SCREEN_LEFT, StaticObject::StaticObjectOpts(true, false),
       std::vector({std::make_pair(0, 0), std::make_pair(0, screen_height)}));
   std::unique_ptr<StaticObject> screen_right = std::make_unique<StaticObject>(
-      Object::Kind::SCREEN_RIGHT, StaticObject::StaticObjectOpts(true, true),
+      SCREEN_RIGHT, StaticObject::StaticObjectOpts(true, false),
       std::vector({std::make_pair(screen_width, 0),
                    std::make_pair(screen_width, screen_height)}));
   std::unique_ptr<StaticObject> screen_top = std::make_unique<StaticObject>(
-      Object::Kind::SCREEN_TOP, StaticObject::StaticObjectOpts(true, true),
+      SCREEN_TOP, StaticObject::StaticObjectOpts(true, false),
       std::vector({std::make_pair(0, 0), std::make_pair(screen_width, 0)}));
   std::unique_ptr<StaticObject> screen_bottom = std::make_unique<StaticObject>(
-      Object::Kind::SCREEN_BOTTOM, StaticObject::StaticObjectOpts(true, true),
+      SCREEN_BOTTOM, StaticObject::StaticObjectOpts(true, false),
       std::vector({std::make_pair(0, screen_height),
                    std::make_pair(screen_width, screen_height)}));
 
