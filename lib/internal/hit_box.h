@@ -12,15 +12,15 @@ namespace internal {
 
 class HitBox {
  public:
-  static HitBox CreateHitBox(Point center, const uint32_t radius) {
-    return HitBox(std::make_unique<Circle>(Circle{std::move(center), radius}),
-                  ShapeType::CIRCLE);
+  static HitBox CreateHitBox(Point center, const double radius) {
+    return {std::make_unique<Circle>(Circle{std::move(center), radius}),
+            ShapeType::CIRCLE};
   }
-  static absl::StatusOr<HitBox> CreateHitBox(std::vector<Point>&& vertices);
+  static absl::StatusOr<HitBox> CreateHitBox(std::vector<Point> vertices);
 
-  bool CollidesWith(const HitBox& other) const;
+  [[nodiscard]] bool CollidesWith(const HitBox& other) const;
   void Draw() const;
-  void Move(int x, int y) { shape_->Move(x, y); }
+  void Move(const double x, const double y) const { shape_->Move(x, y); }
 
  private:
   // TODO(f1lo): Cannot see a better way for now but there has to be. Try to

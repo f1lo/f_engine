@@ -33,8 +33,8 @@ class Ability {
 class MoveAbility : public Ability {
  public:
   struct MoveAbilityOpts : AbilityOpts {
-    MoveAbilityOpts(AbilityOpts opts, bool should_hold, int velocity_x,
-                    int velocity_y, int key_left, int key_right, int key_top,
+    MoveAbilityOpts(AbilityOpts opts, bool should_hold, double velocity_x,
+                    double velocity_y, int key_left, int key_right, int key_top,
                     int key_bottom)
         : AbilityOpts(opts),
           should_hold(should_hold),
@@ -45,8 +45,8 @@ class MoveAbility : public Ability {
           key_top(key_top),
           key_bottom(key_bottom) {}
     bool should_hold;
-    int velocity_x;
-    int velocity_y;
+    double velocity_x;
+    double velocity_y;
     int key_left;
     int key_right;
     int key_top;

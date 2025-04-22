@@ -12,10 +12,10 @@ namespace lib {
 namespace api {
 namespace objects {
 
-internal::HitBox CreateCircle(int x, int y, uint32_t radius);
+internal::HitBox CreateCircle(double x, double y, double radius);
 
 internal::HitBox CreateHitBoxOrDie(
-    const std::vector<std::pair<int, int>>& vertices);
+    const std::vector<std::pair<double, double>>& vertices);
 }  // namespace objects
 }  // namespace api
 }  // namespace lib

@@ -11,20 +11,20 @@ namespace {
 using ::testing::HasSubstr;
 
 class HitBoxTest : public ::testing::Test {
-public:
-  HitBoxTest() :
-      point_(HitBoxOrDie(HitBox::CreateHitBox({Point{0, 0}}))),
-      different_point_(HitBoxOrDie(HitBox::CreateHitBox({Point{1, 3}}))),
-      line_(HitBoxOrDie(HitBox::CreateHitBox({Point{-8, 2}, Point{4, 8}}))),
-      intersecting_line_(
-          HitBoxOrDie(HitBox::CreateHitBox({Point{-2, -6}, Point{-2, 6}}))),
-      parallel_line_(
-          HitBoxOrDie(HitBox::CreateHitBox({Point{-4, -6}, Point{8, 0}}))),
-      rectangle_(HitBoxOrDie(
-          HitBox::CreateHitBox({{-5, 4}, {-5, -1}, {6, -1}, {6, 4}}))),
-      circle_(HitBoxOrDie(HitBox::CreateHitBox(Point{2, 2}, 3))) {}
+ public:
+  HitBoxTest()
+      : point_(HitBoxOrDie(HitBox::CreateHitBox({Point{0, 0}}))),
+        different_point_(HitBoxOrDie(HitBox::CreateHitBox({Point{1, 3}}))),
+        line_(HitBoxOrDie(HitBox::CreateHitBox({Point{-8, 2}, Point{4, 8}}))),
+        intersecting_line_(
+            HitBoxOrDie(HitBox::CreateHitBox({Point{-2, -6}, Point{-2, 6}}))),
+        parallel_line_(
+            HitBoxOrDie(HitBox::CreateHitBox({Point{-4, -6}, Point{8, 0}}))),
+        rectangle_(HitBoxOrDie(
+            HitBox::CreateHitBox({{-5, 4}, {-5, -1}, {6, -1}, {6, 4}}))),
+        circle_(HitBoxOrDie(HitBox::CreateHitBox(Point{2, 2}, 3))) {}
 
-protected:
+ protected:
   static HitBox HitBoxOrDie(absl::StatusOr<HitBox> hit_box) {
     if (!hit_box.ok()) {
       std::abort();
@@ -100,7 +100,9 @@ TEST_F(HitBoxTest, RectangleNotAligned) {
   EXPECT_EQ(hit_box.status().code(), absl::StatusCode::kUnimplemented);
 }
 
-TEST_F(HitBoxTest, PointsCollide) { EXPECT_TRUE(point_.CollidesWith(point_)); }
+TEST_F(HitBoxTest, PointsCollide) {
+  EXPECT_TRUE(point_.CollidesWith(point_));
+}
 
 TEST_F(HitBoxTest, PointsDoNotMatch) {
   EXPECT_FALSE(point_.CollidesWith(different_point_));
@@ -119,7 +121,6 @@ TEST_F(HitBoxTest, PointOnLineVertex) {
   EXPECT_TRUE(line_.CollidesWith(point_on_line));
   EXPECT_TRUE(point_on_line.CollidesWith(line_));
 }
-
 
 TEST_F(HitBoxTest, PointNotOnLine) {
   const HitBox point = HitBoxOrDie(HitBox::CreateHitBox({{4, 9}}));
@@ -148,7 +149,6 @@ TEST_F(HitBoxTest, PointOutsideRectangle) {
   EXPECT_FALSE(rectangle_.CollidesWith(point));
   EXPECT_FALSE(point.CollidesWith(rectangle_));
 }
-
 
 TEST_F(HitBoxTest, PointInCircle) {
   const HitBox point = HitBoxOrDie(HitBox::CreateHitBox({{4, 2}}));
@@ -248,7 +248,6 @@ TEST_F(HitBoxTest, LineTouchesCircle) {
   EXPECT_TRUE(line_y.CollidesWith(circle_));
 }
 
-
 TEST_F(HitBoxTest, RectanglesIntersect) {
   const HitBox rectangle =
       HitBoxOrDie(HitBox::CreateHitBox({{-4, 1}, {-7, 1}, {-4, -2}, {-7, -2}}));
@@ -315,6 +314,6 @@ TEST_F(HitBoxTest, CirclesDoNotCollide) {
   EXPECT_FALSE(circle_.CollidesWith(circle_touches));
   EXPECT_FALSE(circle_.CollidesWith(circle_inside));
 }
-} // namespace
-} // namespace internal
-} // namespace lib
+}  // namespace
+}  // namespace internal
+}  // namespace lib

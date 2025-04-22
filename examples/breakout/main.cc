@@ -49,17 +49,18 @@ std::vector<std::unique_ptr<StaticObject>> GenerateBricks(int brick_width,
   }
 
   for (int i = 0; i < num_brick_lines; i++) {
-    int x = (i % 2 == 0) ? brick_offset_close : brick_offset_far;
-    int y = kScreenOffset + (i + 1) * brick_height;
+    double x = (i % 2 == 0) ? brick_offset_close : brick_offset_far;
+    double y = kScreenOffset + (i + 1) * brick_height;
     while (x + brick_width <= right_limit) {
       std::unique_ptr<StaticObject> brick = std::make_unique<StaticObject>(
           ENEMY,
           StaticObject::StaticObjectOpts(/*is_hit_box_active*/ true,
                                          /*should_draw_hitbox*/ true),
-          std::vector<std::pair<int, int>>({{x, y},
-                                            {x, y - brick_height},
-                                            {x + brick_width, y - brick_height},
-                                            {x + brick_width, y}}));
+          std::vector<std::pair<double, double>>(
+              {{x, y},
+               {x, y - brick_height},
+               {x + brick_width, y - brick_height},
+               {x + brick_width, y}}));
       bricks.emplace_back(std::move(brick));
       x += brick_width;
     }

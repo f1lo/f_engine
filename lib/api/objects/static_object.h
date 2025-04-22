@@ -20,10 +20,10 @@ class StaticObject : public Object {
   };
 
   StaticObject(Kind kind, StaticObjectOpts options,
-               const std::vector<std::pair<int, int>>& hit_box_vertices);
+               const std::vector<std::pair<double, double>>& hit_box_vertices);
 
   StaticObject(Kind kind, StaticObjectOpts options,
-               std::pair<int, int> hit_box_center, uint32_t hit_box_radius);
+               std::pair<double, double> hit_box_center, double hit_box_radius);
 
   void Update(const std::list<std::unique_ptr<Object>>& other_objects) override;
   void Draw() const override;

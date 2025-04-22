@@ -22,8 +22,8 @@ void MoveAbility::MaybeUseModifyUser(Object& user) {
   auto* cast_user = dynamic_cast<MovableObject*>(&user);
   CHECK(cast_user) << " ability user is not of correct type.";
   if (opts_.should_hold) {
-    int vel_x = 0;
-    int vel_y = 0;
+    double vel_x = 0;
+    double vel_y = 0;
     if (IsKeyDown(opts_.key_left)) {
       vel_x -= opts_.velocity_x;
     }

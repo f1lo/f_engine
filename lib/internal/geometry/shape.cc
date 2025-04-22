@@ -13,53 +13,49 @@ namespace lib {
 namespace internal {
 
 namespace {
-int square(const int& a) {
+double square(const double& a) {
   return a * a;
 }
 }  // namespace
 
 bool Clockwise(const Point& a, const Point& b, const Point& c) {
-  // Avoid overflow.
-  return static_cast<long long>(a.x) * (b.y - c.y) +
-             static_cast<long long>(b.x) * (c.y - a.y) +
-             static_cast<long long>(c.x) * (a.y - b.y) <
-         0;
+  return a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y) < 0;
 }
 
 bool CounterClockwise(const Point& a, const Point& b, const Point& c) {
-  // Avoid overflow.
-  return static_cast<long long>(a.x) * (b.y - c.y) +
-             static_cast<long long>(b.x) * (c.y - a.y) +
-             static_cast<long long>(c.x) * (a.y - b.y) >
-         0;
+  return a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y) > 0;
 }
 
 // Draw methods.
 void Point::Draw() const {
-  DrawPixel(x, y, RED);
+  // Unsafe cast.
+  DrawPixelV(Vector2(static_cast<float>(x), static_cast<float>(y)), RED);
 }
 void Line::Draw() const {
-  DrawLine(a.x, a.y, b.x, b.y, RED);
+  // Unsafe cast.
+  DrawLineV(Vector2(static_cast<float>(a.x), static_cast<float>(a.y)),
+            Vector2(static_cast<float>(b.x), static_cast<float>(b.y)), RED);
 }
 void Rectangle::Draw() const {
-  DrawRectangleLines(a.x, a.y, /*width=*/c.x - b.x, /*height*/ b.y - a.y, RED);
+  DrawRectangleLines(b.x, b.y, /*width=*/c.x - b.x, /*height*/ a.y - b.y, RED);
 }
 void Circle::Draw() const {
-  DrawCircleLines(a.x, a.y, /*radius*/ static_cast<float>(r), RED);
+  DrawCircleLinesV(Vector2(static_cast<float>(a.x), static_cast<float>(a.y)),
+                   /*radius*/ static_cast<float>(r), RED);
 }
 
 // Move methods.
-void Point::Move(int x, int y) {
+void Point::Move(double x, double y) {
   this->x += x;
   this->y += y;
 }
-void Line::Move(int x, int y) {
+void Line::Move(double x, double y) {
   this->a.x += x;
   this->a.y += y;
   this->b.x += x;
   this->b.y += y;
 }
-void Rectangle::Move(int x, int y) {
+void Rectangle::Move(double x, double y) {
   this->a.x += x;
   this->a.y += y;
   this->b.x += x;
@@ -69,7 +65,7 @@ void Rectangle::Move(int x, int y) {
   this->d.x += x;
   this->d.y += y;
 }
-void Circle::Move(int x, int y) {
+void Circle::Move(double x, double y) {
   this->a.x += x;
   this->a.y += y;
 }
@@ -91,7 +87,7 @@ bool Point::Collides(const Rectangle& rectangle) const {
          (0 <= a.ScalarProduct(c) && a.ScalarProduct(c) <= c.ScalarProduct(c));
 }
 bool Point::Collides(const Circle& circle) const {
-  return static_cast<double>(circle.r) >= this->Distance(circle.a);
+  return circle.r >= this->Distance(circle.a);
 }
 
 bool Point::IsLowerLeft(const Point& other) const {
@@ -135,11 +131,9 @@ bool Line::Collides(const Rectangle& rectangle) const {
 
   // If edges did not intersect the only case remaining is that the vertices of
   // the line are inside rectangle.
-  bool vert_a_collides = this->a.Collides(rectangle);
-  bool vert_b_collides = this->b.Collides(rectangle);
   // At this point either both of the vertices are inside the rectangle or none
   // of them.
-  if (vert_a_collides ^ vert_b_collides) {
+  if (this->a.Collides(rectangle) ^ this->b.Collides(rectangle)) {
     LOG(ERROR) << "Line::Collides() segment points mismatch";
     return false;
   }
@@ -181,30 +175,8 @@ bool Rectangle::Collides(const Line& line) const {
   return line.Collides(*this);
 }
 bool Rectangle::Collides(const Rectangle& other_rectangle) const {
-  int rect_a_x1 = this->a.x;
-  int rect_a_x2 = this->c.x;
-  int rect_a_y1 = this->a.y;
-  int rect_a_y2 = this->c.y;
-  if (rect_a_x1 > rect_a_x2) {
-    std::swap(rect_a_x1, rect_a_x2);
-  }
-  if (rect_a_y1 > rect_a_y2) {
-    std::swap(rect_a_y1, rect_a_y2);
-  }
-
-  int rect_b_x1 = other_rectangle.a.x;
-  int rect_b_x2 = other_rectangle.c.x;
-  int rect_b_y1 = other_rectangle.a.y;
-  int rect_b_y2 = other_rectangle.c.y;
-  if (rect_b_x1 > rect_b_x2) {
-    std::swap(rect_b_x1, rect_b_x2);
-  }
-  if (rect_b_y1 > rect_b_y2) {
-    std::swap(rect_b_y1, rect_b_y2);
-  }
-
-  return rect_a_x1 <= rect_b_x2 && rect_a_x2 >= rect_b_x1 &&
-         rect_a_y1 <= rect_b_y2 && rect_a_y2 >= rect_b_y1;
+  return this->a.x <= other_rectangle.c.x && this->c.x >= other_rectangle.a.x &&
+         this->a.y >= other_rectangle.c.y && this->c.y <= other_rectangle.a.y;
 }
 
 bool Rectangle::Collides(const Circle& circle) const {

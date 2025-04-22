@@ -28,6 +28,7 @@ cc_library(
     deps = [
         ":vec",
         "//raylib",
+        "@abseil-cpp//absl/log:check",
         "@abseil-cpp//absl/log:log",
     ],
 )

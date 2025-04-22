@@ -8,25 +8,25 @@
 
 namespace breakout {
 
-constexpr int kPadOffset = 10;
-constexpr int kBallOffset = 3;
+constexpr double kPadOffset = 10;
+constexpr double kBallOffset = 3;
 
 class PlayerPad final : public lib::api::objects::MovableObject {
  public:
-  PlayerPad(int screen_width, int screen_height, int ball_speed_x,
-            int ball_speed_y, uint32_t ball_radius, int player_width,
-            int player_height, MovableObjectOpts options)
-      : MovableObject(
-            PLAYER, options,
-            {{
-                 (screen_width - player_width) / 2,
-                 screen_height - kPadOffset,
-             },
-             {(screen_width - player_width) / 2,
-              screen_height - kPadOffset - player_height},
-             {(screen_width + player_width) / 2,
-              screen_height - kPadOffset - player_height},
-             {(screen_width + player_width) / 2, screen_height - kPadOffset}}),
+  PlayerPad(double screen_width, double screen_height, double ball_speed_x,
+            double ball_speed_y, double ball_radius, double player_width,
+            double player_height, MovableObjectOpts options)
+      : MovableObject(PLAYER, options,
+                      {{
+                           (screen_width - player_width) / 2.0,
+                           screen_height - kPadOffset,
+                       },
+                       {(screen_width - player_width) / 2.0,
+                        screen_height - kPadOffset - player_height},
+                       {(screen_width + player_width) / 2.0,
+                        screen_height - kPadOffset - player_height},
+                       {(screen_width + player_width) / 2.0,
+                        screen_height - kPadOffset}}),
         screen_width_(screen_width),
         screen_height_(screen_height),
         ball_speed_x_(ball_speed_x),
@@ -52,13 +52,13 @@ class PlayerPad final : public lib::api::objects::MovableObject {
   bool OnCollisionCallback(const Object& other_object) override;
 
  private:
-  int screen_width_;
-  int screen_height_;
-  int ball_speed_x_;
-  int ball_speed_y_;
-  uint32_t ball_radius_;
-  int player_width_;
-  int player_height_;
+  double screen_width_;
+  double screen_height_;
+  double ball_speed_x_;
+  double ball_speed_y_;
+  double ball_radius_;
+  double player_width_;
+  double player_height_;
   std::unique_ptr<Ball> ball_;
 };
 

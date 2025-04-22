@@ -5,7 +5,6 @@
 #include <optional>
 
 #include "absl/log/check.h"
-#include "lib/api/objects/object.h"
 #include "lib/internal/geometry/shape.h"
 #include "lib/internal/hit_box.h"
 
@@ -16,7 +15,8 @@ namespace objects {
 using internal::HitBox;
 using internal::Point;
 
-HitBox CreateHitBoxOrDie(const std::vector<std::pair<int, int>>& vertices) {
+HitBox CreateHitBoxOrDie(
+    const std::vector<std::pair<double, double>>& vertices) {
   // Convert pairs to Points.
   std::vector<Point> points;
   points.reserve(vertices.size());
@@ -30,7 +30,7 @@ HitBox CreateHitBoxOrDie(const std::vector<std::pair<int, int>>& vertices) {
   return *std::move(hit_box);
 }
 
-HitBox CreateCircle(const int x, const int y, const uint32_t radius) {
+HitBox CreateCircle(const double x, const double y, const double radius) {
   return HitBox::CreateHitBox(Point{x, y}, radius);
 }
 

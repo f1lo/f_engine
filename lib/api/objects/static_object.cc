@@ -14,15 +14,15 @@ namespace objects {
 
 StaticObject::StaticObject(
     const Kind kind, const StaticObjectOpts options,
-    const std::vector<std::pair<int, int>>& hit_box_vertices)
+    const std::vector<std::pair<double, double>>& hit_box_vertices)
     : Object(kind,
              {.is_hit_box_active = options.is_hit_box_active,
               .should_draw_hit_box = options.should_draw_hit_box},
              CreateHitBoxOrDie(hit_box_vertices)) {}
 
 StaticObject::StaticObject(const Kind kind, const StaticObjectOpts options,
-                           const std::pair<int, int> hit_box_center,
-                           const uint32_t hit_box_radius)
+                           const std::pair<double, double> hit_box_center,
+                           const double hit_box_radius)
     : Object(kind,
              {.is_hit_box_active = options.is_hit_box_active,
               .should_draw_hit_box = options.should_draw_hit_box},

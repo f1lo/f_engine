@@ -16,7 +16,7 @@ namespace {
  * Constructs convex hull from provided vertices.
  * Returns vertices which are necessary to construct a convex hull.
  */
-std::vector<Point> ConstructConvexHull(std::vector<Point> vertices) {
+std::vector<Point> ConstructConvexHull(std::vector<Point>& vertices) {
   if (vertices.size() == 1)
     return {vertices[0]};
 
@@ -94,14 +94,13 @@ bool IsAxisAlignedRectangle(absl::Span<const Point> vertices) {
 }
 }  // namespace
 
-absl::StatusOr<HitBox> HitBox::CreateHitBox(std::vector<Point>&& vertices) {
+absl::StatusOr<HitBox> HitBox::CreateHitBox(std::vector<Point> vertices) {
   if (vertices.empty()) {
     return absl::InvalidArgumentError(
         "empty vertex set while constructing a hit box");
   }
   const size_t old_size = vertices.size();
-  const std::vector<Point> normalized_vertices =
-      ConstructConvexHull(std::move(vertices));
+  const std::vector<Point> normalized_vertices = ConstructConvexHull(vertices);
   // Some of the vertices have been discarded.
   if (old_size > normalized_vertices.size()) {
     return absl::InvalidArgumentError(
@@ -133,9 +132,7 @@ absl::StatusOr<HitBox> HitBox::CreateHitBox(std::vector<Point>&& vertices) {
       if (IsAxisAlignedRectangle(normalized_vertices)) {
         return HitBox(
             std::make_unique<Rectangle>(Rectangle{
-                {normalized_vertices[0].x, normalized_vertices[0].y},
                 {normalized_vertices[1].x, normalized_vertices[1].y},
-                {normalized_vertices[2].x, normalized_vertices[2].y},
                 {normalized_vertices[3].x, normalized_vertices[3].y}}),
             ShapeType::RECTANGLE);
       }
