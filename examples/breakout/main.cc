@@ -2,6 +2,7 @@
 #include <memory>
 #include <optional>
 
+#include "examples/breakout/ball_ability.h"
 #include "examples/breakout/player_pad.h"
 #include "lib/api/abilities/ability.h"
 #include "lib/api/abilities/keys.h"
@@ -28,7 +29,8 @@ constexpr int kPlayerHeight = 25;
 constexpr int kScreenOffset = 10;
 constexpr int kBrickWidth = 130;
 constexpr int kBrickHeight = 30;
-constexpr int kBallSpeed = 10;
+constexpr int kBallVelocityX = 7;
+constexpr int kBallVelocityY = -7;
 constexpr int kBallRadius = 20;
 
 std::vector<std::unique_ptr<StaticObject>> GenerateBricks(int brick_width,
@@ -79,14 +81,17 @@ int main() {
       /*velocity_y=*/0, kKeyA, kKeyD, kKeyW, kKeyS);
   std::unique_ptr<MoveAbility> ability_move =
       std::make_unique<MoveAbility>(opts);
+  std::unique_ptr<breakout::BallAbility> ability_ball =
+      std::make_unique<breakout::BallAbility>(lib::api::abilities::kKeySpace);
 
   std::unique_ptr<Object> player = std::make_unique<PlayerPad>(
-      game.screen_width(), game.screen_height(), kBallSpeed, kBallSpeed,
-      kBallRadius, kPlayerWidth, kPlayerHeight,
+      game.screen_width(), game.screen_height(), kBallRadius, kPlayerWidth,
+      kPlayerHeight, kBallVelocityX, kBallVelocityY,
       MovableObject::MovableObjectOpts(true, true, 0, 0));
 
   std::list<std::unique_ptr<Ability>> abilities;
   abilities.push_back(std::move(ability_move));
+  abilities.push_back(std::move(ability_ball));
   std::unique_ptr<Level> level = std::make_unique<Level>();
   level->add_object_and_abilities(std::move(player), std::move(abilities));
   level->AddScreenObjects();

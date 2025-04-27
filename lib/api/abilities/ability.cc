@@ -3,7 +3,8 @@
 #include <optional>
 
 #include "absl/log/check.h"
-#include "raylib/include/raylib.h"
+// ReSharper disable once CppUnusedIncludeDirective
+#include "lib/api/abilities/keys.h"
 
 namespace lib {
 namespace api {
@@ -24,32 +25,32 @@ void MoveAbility::MaybeUseModifyUser(Object& user) {
   if (opts_.should_hold) {
     double vel_x = 0;
     double vel_y = 0;
-    if (IsKeyDown(opts_.key_left)) {
+    if (IsDown(opts_.key_left)) {
       vel_x -= opts_.velocity_x;
     }
-    if (IsKeyDown(opts_.key_right)) {
+    if (IsDown(opts_.key_right)) {
       vel_x += opts_.velocity_x;
     }
-    if (IsKeyDown(opts_.key_top)) {
+    if (IsDown(opts_.key_top)) {
       vel_y -= opts_.velocity_y;
     }
-    if (IsKeyDown(opts_.key_bottom)) {
+    if (IsDown(opts_.key_bottom)) {
       vel_y += opts_.velocity_y;
     }
     cast_user->set_velocity(vel_x, vel_y);
     return;
   }
 
-  if (IsKeyPressed(opts_.key_left)) {
+  if (IsPressed(opts_.key_left)) {
     cast_user->set_velocity(-opts_.velocity_x, 0);
   }
-  if (IsKeyPressed(opts_.key_right)) {
+  if (IsPressed(opts_.key_right)) {
     cast_user->set_velocity(opts_.velocity_x, 0);
   }
-  if (IsKeyPressed(opts_.key_top)) {
+  if (IsPressed(opts_.key_top)) {
     cast_user->set_velocity(0, -opts_.velocity_y);
   }
-  if (IsKeyPressed(opts_.key_bottom)) {
+  if (IsPressed(opts_.key_bottom)) {
     cast_user->set_velocity(0, opts_.velocity_y);
   }
 }

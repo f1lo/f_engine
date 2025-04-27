@@ -17,4 +17,10 @@ void PlayerPad::Draw() const {
   ball_->Draw();
 }
 
+void PlayerPad::Update(
+    const std::list<std::unique_ptr<Object>>& other_objects) {
+  MovableObject::Update(other_objects);
+  ball_->Update(other_objects);
+}
+
 }  // namespace breakout

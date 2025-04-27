@@ -9,6 +9,7 @@ cc_library(
     srcs = ["ability.cc"],
     hdrs = ["ability.h"],
     deps = [
+        "//lib/api/abilities:keys",
         "//lib/api/objects:movable_object",
         "//lib/api/objects:object",
         "@abseil-cpp//absl/log",

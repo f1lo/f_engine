@@ -7,12 +7,22 @@ namespace lib {
 namespace api {
 namespace abilities {
 
-constexpr int kKeyD = KEY_D;
-constexpr int kKeyS = KEY_S;
-constexpr int kKeyA = KEY_A;
-constexpr int kKeyW = KEY_W;
-constexpr int kKeySpace = KEY_SPACE;
-constexpr int kKeyEscape = KEY_ESCAPE;
+typedef int Button;
+
+constexpr Button kKeyD = KEY_D;
+constexpr Button kKeyS = KEY_S;
+constexpr Button kKeyA = KEY_A;
+constexpr Button kKeyW = KEY_W;
+constexpr Button kKeySpace = KEY_SPACE;
+constexpr Button kKeyEscape = KEY_ESCAPE;
+
+inline bool IsPressed(const Button button) {
+  return IsKeyPressed(button);
+}
+
+inline bool IsDown(const Button button) {
+  return IsKeyDown(button);
+}
 
 }  // namespace abilities
 }  // namespace api

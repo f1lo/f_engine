@@ -1,6 +1,7 @@
 #ifndef LIB_API_ABILITIES_ABILITY_H
 #define LIB_API_ABILITIES_ABILITY_H
 
+#include "lib/api/abilities/keys.h"
 #include "lib/api/objects/movable_object.h"
 #include "lib/api/objects/object.h"
 #include "raylib/include/raylib.h"
@@ -15,7 +16,7 @@ class Ability {
     uint32_t cooldown_sec;
   };
 
-  explicit Ability(AbilityOpts opts) : opts_(opts) {}
+  explicit Ability(const AbilityOpts opts) : opts_(opts) {}
   virtual ~Ability() = default;
 
   virtual void MaybeUseModifyUser(objects::Object& user) = 0;
@@ -23,7 +24,7 @@ class Ability {
   void update_last_used() { last_used_sec_ = GetTime(); }
 
  protected:
-  bool IsOnCooldown() const;
+  [[nodiscard]] bool IsOnCooldown() const;
 
  private:
   AbilityOpts opts_;
@@ -34,8 +35,8 @@ class MoveAbility : public Ability {
  public:
   struct MoveAbilityOpts : AbilityOpts {
     MoveAbilityOpts(AbilityOpts opts, bool should_hold, double velocity_x,
-                    double velocity_y, int key_left, int key_right, int key_top,
-                    int key_bottom)
+                    double velocity_y, Button key_left, Button key_right,
+                    Button key_top, Button key_bottom)
         : AbilityOpts(opts),
           should_hold(should_hold),
           velocity_x(velocity_x),
@@ -47,10 +48,10 @@ class MoveAbility : public Ability {
     bool should_hold;
     double velocity_x;
     double velocity_y;
-    int key_left;
-    int key_right;
-    int key_top;
-    int key_bottom;
+    Button key_left;
+    Button key_right;
+    Button key_top;
+    Button key_bottom;
   };
   explicit MoveAbility(const MoveAbilityOpts& opts)
       : Ability({opts.cooldown_sec}), opts_(opts) {}

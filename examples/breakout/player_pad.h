@@ -13,9 +13,9 @@ constexpr double kBallOffset = 3;
 
 class PlayerPad final : public lib::api::objects::MovableObject {
  public:
-  PlayerPad(double screen_width, double screen_height, double ball_speed_x,
-            double ball_speed_y, double ball_radius, double player_width,
-            double player_height, MovableObjectOpts options)
+  PlayerPad(double screen_width, double screen_height, double ball_radius,
+            double player_width, double player_height, double ball_velocity_x,
+            double ball_velocity_y, MovableObjectOpts options)
       : MovableObject(PLAYER, options,
                       {{
                            (screen_width - player_width) / 2.0,
@@ -29,11 +29,11 @@ class PlayerPad final : public lib::api::objects::MovableObject {
                         screen_height - kPadOffset}}),
         screen_width_(screen_width),
         screen_height_(screen_height),
-        ball_speed_x_(ball_speed_x),
-        ball_speed_y_(ball_speed_y),
         ball_radius_(ball_radius),
         player_width_(player_width),
-        player_height_(player_height) {
+        player_height_(player_height),
+        ball_velocity_x_(ball_velocity_x),
+        ball_velocity_y_(ball_velocity_y) {
     ball_ = std::make_unique<Ball>(
         BALL,
         MovableObjectOpts(/*is_hit_box_active=*/true,
@@ -47,6 +47,11 @@ class PlayerPad final : public lib::api::objects::MovableObject {
   }
 
   void Draw() const override;
+  void Update(const std::list<std::unique_ptr<Object>>& other_objects) override;
+
+  [[nodiscard]] Ball& ball() const { return *ball_; }
+  [[nodiscard]] double ball_velocity_x() const { return ball_velocity_x_; }
+  [[nodiscard]] double ball_velocity_y() const { return ball_velocity_y_; }
 
  protected:
   bool OnCollisionCallback(const Object& other_object) override;
@@ -54,11 +59,11 @@ class PlayerPad final : public lib::api::objects::MovableObject {
  private:
   double screen_width_;
   double screen_height_;
-  double ball_speed_x_;
-  double ball_speed_y_;
   double ball_radius_;
   double player_width_;
   double player_height_;
+  double ball_velocity_x_;
+  double ball_velocity_y_;
   std::unique_ptr<Ball> ball_;
 };
 
