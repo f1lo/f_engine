@@ -3,6 +3,7 @@
 #include <memory>
 #include <vector>
 
+#include "absl/log/check.h"
 #include "absl/log/log.h"
 #include "absl/status/statusor.h"
 #include "absl/types/span.h"
@@ -80,8 +81,8 @@ bool IsAxisAlignedRectangle(absl::Span<const Point> vertices) {
   const Line side_3{vertices[3], vertices[2]};
 
   // Not a rectangle.
-  if (side_1.MakeVector().ScalarProduct(side_4.MakeVector()) != 0 ||
-      side_2.MakeVector().ScalarProduct(side_3.MakeVector()) != 0) {
+  if (side_1.MakeVector().DotProduct(side_4.MakeVector()) != 0 ||
+      side_2.MakeVector().DotProduct(side_3.MakeVector()) != 0) {
     return false;
   }
 
@@ -92,6 +93,70 @@ bool IsAxisAlignedRectangle(absl::Span<const Point> vertices) {
          side_3.MakeVector().IsAxisAligned() &&
          side_4.MakeVector().IsAxisAligned();
 }
+
+enum class LineOrientation { ON_LINE, DOWN, UP };
+
+LineOrientation PointOrientation(double x, double y, double b) {
+  double line_y = -x + b;
+  if (abs(line_y - y) <= eps) {
+    return LineOrientation::ON_LINE;
+  }
+  return line_y < y ? LineOrientation::DOWN : LineOrientation::UP;
+}
+
+// y = k * x + b.
+// If the degree is 45, k = -1. Hence, returning a single value b.
+// y = -x + b.
+// b = x + y.
+double Build45DegreeLine(double x, double y) {
+  return x + y;
+}
+
+std::pair<double, double> ReflectFromRectangle(const Rectangle& rec,
+                                               const Vector& v, double center_x,
+                                               double center_y) {
+  double a = Build45DegreeLine(rec.a.x, rec.a.y);
+  double b = Build45DegreeLine(rec.b.x, rec.b.y);
+  double c = Build45DegreeLine(rec.c.x, rec.c.y);
+  double d = Build45DegreeLine(rec.d.x, rec.d.y);
+  // Check if the reflection happened on the vertex of a rectangle.
+  if (PointOrientation(center_x, center_y, a) == LineOrientation::ON_LINE ||
+      PointOrientation(center_x, center_y, b) == LineOrientation::ON_LINE ||
+      PointOrientation(center_x, center_y, c) == LineOrientation::ON_LINE ||
+      PointOrientation(center_x, center_y, d) == LineOrientation::ON_LINE) {
+    return {-v.x, -v.y};
+  }
+
+  // Reflected from (rec.a, rec.d) line.
+  if (PointOrientation(center_x, center_y, a) == LineOrientation::DOWN &&
+      PointOrientation(center_x, center_y, d) == LineOrientation::DOWN) {
+    const Vector w = Line(rec.a, rec.d).Reflect(v);
+    return {w.x, w.y};
+  }
+  // Reflected from (rec.b, rec.c) line.
+  if (PointOrientation(center_x, center_y, b) == LineOrientation::UP &&
+      PointOrientation(center_x, center_y, c) == LineOrientation::UP) {
+    const Vector w = Line(rec.b, rec.c).Reflect(v);
+    return {w.x, w.y};
+  }
+  // Reflected from (rec.a, rec.b) line.
+  if (PointOrientation(center_x, center_y, a) == LineOrientation::UP &&
+      PointOrientation(center_x, center_y, b) == LineOrientation::DOWN) {
+    Vector w = Line(rec.a, rec.b).Reflect(v);
+    return {w.x, w.y};
+  }
+  // Reflected from (rec.c, rec.d) line.
+  if (PointOrientation(center_x, center_y, c) == LineOrientation::DOWN &&
+      PointOrientation(center_x, center_y, d) == LineOrientation::UP) {
+    Vector w = Line(rec.c, rec.d).Reflect(v);
+    return {w.x, w.y};
+  }
+
+  // Should be unreachable.
+  CHECK(false) << "Unreachable code.";
+  return {};
+}
+
 }  // namespace
 
 absl::StatusOr<HitBox> HitBox::CreateHitBox(std::vector<Point> vertices) {
@@ -142,7 +207,7 @@ absl::StatusOr<HitBox> HitBox::CreateHitBox(std::vector<Point> vertices) {
       return absl::UnimplementedError(
           "only points, lines, rectangles and circles are supported");
   }
-}
+}  // namespace
 
 bool HitBox::CollidesWith(const HitBox& other) const {
   switch (other.shape_type_) {
@@ -161,6 +226,26 @@ bool HitBox::CollidesWith(const HitBox& other) const {
       // `StatusOr` can be returned here, but it could hurt performance.
       LOG(ERROR) << "HitBox::CollidesWith: invalid shape type";
       return false;
+  }
+}
+
+std::pair<double, double> HitBox::Reflect(const HitBox& other, double x,
+                                          double y) const {
+  CHECK(shape_type_ == ShapeType::LINE || shape_type_ == ShapeType::RECTANGLE)
+      << "Reflection is only implemented from Line or Rectangle.";
+  const Vector v = {x, y};
+  switch (shape_type_) {
+    // Potentially unsafe if not careful.
+    case ShapeType::LINE:
+      const Vector reflected = static_cast<Line*>(shape_.get())->Reflect(v);
+      return {reflected.x, reflected.y};
+    case ShapeType::RECTANGLE:
+      return ReflectFromRectangle(*static_cast<Rectangle*>(shape_.get()), v,
+                                  other.shape_->center_x,
+                                  other.shape_->center_y);
+    default:
+      CHECK(false) << "HitBox::Reflect: invalid shape type";
+      return {};
   }
 }
 

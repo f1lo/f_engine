@@ -2,12 +2,15 @@
 
 #include "shape.h"
 
-#include <absl/strings/internal/str_format/extension.h>
+#include <absl/strings/str_format.h>
 
 #include <cmath>
 #include <iostream>
 #include <limits>
+
+#include "absl/log/check.h"
 #include "absl/log/log.h"
+#include "absl/strings/internal/str_format/extension.h"
 
 namespace lib {
 namespace internal {
@@ -42,6 +45,16 @@ void Rectangle::Draw() const {
 void Circle::Draw() const {
   DrawCircleLinesV(Vector2(static_cast<float>(a.x), static_cast<float>(a.y)),
                    /*radius*/ static_cast<float>(r), RED);
+}
+
+Vector Line::Reflect(const Vector& vec) const {
+  CHECK(axis_aligned != Aligned::NOT)
+      << "Line::Reflect not implemented for non axis-aligned lines";
+  if (axis_aligned == Aligned::X) {
+    return {vec.x, -vec.y};
+  }
+
+  return {-vec.x, vec.y};
 }
 
 // Move methods.
@@ -82,9 +95,8 @@ bool Point::Collides(const Rectangle& rectangle) const {
   const Vector b = Line(rectangle.a, rectangle.b).MakeVector();
   const Vector c = Line(rectangle.a, rectangle.d).MakeVector();
 
-  return (0 <= a.ScalarProduct(b) &&
-          a.ScalarProduct(b) <= b.ScalarProduct(b)) &&
-         (0 <= a.ScalarProduct(c) && a.ScalarProduct(c) <= c.ScalarProduct(c));
+  return (0 <= a.DotProduct(b) && a.DotProduct(b) <= b.DotProduct(b)) &&
+         (0 <= a.DotProduct(c) && a.DotProduct(c) <= c.DotProduct(c));
 }
 bool Point::Collides(const Circle& circle) const {
   return circle.r >= this->Distance(circle.a);
@@ -104,8 +116,7 @@ bool Line::IsOnLine(const Point& p) const {
     return false;
   }
 
-  return std::abs(a.Distance(p) + b.Distance(p) - a.Distance(b)) <
-         std::numeric_limits<double>::epsilon();
+  return std::abs(a.Distance(p) + b.Distance(p) - a.Distance(b)) < eps;
 }
 
 // LINE COLLISION.

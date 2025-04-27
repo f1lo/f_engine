@@ -35,6 +35,9 @@ class Object {
       const std::list<std::unique_ptr<Object>>& other_objects) = 0;
   virtual void Draw() const = 0;
 
+  [[nodiscard]] std::pair<double, double> Reflect(const Object& other, double x,
+                                                  double y) const;
+
   Kind kind() const { return kind_; }
   bool deleted() const { return deleted_; }
   const Opts& options() const { return options_; }

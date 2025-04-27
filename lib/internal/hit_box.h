@@ -19,6 +19,8 @@ class HitBox {
   static absl::StatusOr<HitBox> CreateHitBox(std::vector<Point> vertices);
 
   [[nodiscard]] bool CollidesWith(const HitBox& other) const;
+  [[nodiscard]] std::pair<double, double> Reflect(const HitBox& other, double x,
+                                                  double y) const;
   void Draw() const;
   void Move(const double x, const double y) const { shape_->Move(x, y); }
 

@@ -9,6 +9,9 @@ cc_library(
     name = "vec",
     srcs = ["vec.cc"],
     hdrs = ["vec.h"],
+    deps = [
+        "@abseil-cpp//absl/log:check",
+    ],
 )
 
 cc_test(

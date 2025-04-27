@@ -18,6 +18,16 @@ bool Object::CollidesWith(const Object& other) const {
   return hit_box_.CollidesWith(other.hit_box_);
 }
 
+std::pair<double, double> Object::Reflect(const Object& other, double x,
+                                          double y) const {
+  // Hitbox not present or object deleted.
+  if (deleted() || !options().is_hit_box_active) {
+    return {x, y};
+  }
+
+  return hit_box_.Reflect(other.hit_box_, x, y);
+}
+
 bool Object::UpdateInternal(
     const std::list<std::unique_ptr<Object>>& other_objects) {
   for (const auto& other_object : other_objects) {

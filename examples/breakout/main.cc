@@ -39,7 +39,8 @@ std::vector<std::unique_ptr<StaticObject>> GenerateBricks(int brick_width,
   std::vector<std::unique_ptr<StaticObject>> bricks;
   int usable_space = screen_width - 2 * kScreenOffset;
   int brick_offset_close =
-      usable_space - brick_width * (usable_space / brick_width);
+      (usable_space - brick_width * (usable_space / brick_width)) / 2 +
+      kScreenOffset;
   int brick_offset_far = brick_offset_close + brick_width / 2;
   int right_limit = kScreenOffset + usable_space;
 
