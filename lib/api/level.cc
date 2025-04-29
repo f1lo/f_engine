@@ -60,20 +60,28 @@ void Level::AddScreenObjects() {
   int screen_width = GetScreenWidth();
   int screen_height = GetScreenHeight();
   std::unique_ptr<StaticObject> screen_left = std::make_unique<StaticObject>(
-      SCREEN_LEFT, StaticObject::StaticObjectOpts(true, false),
+      SCREEN_LEFT,
+      StaticObject::StaticObjectOpts(/*is_hit_box_active=*/true,
+                                     /*should_draw_hit_box=*/false),
       std::vector({std::make_pair<double, double>(0, 0),
                    std::make_pair<double, double>(0, screen_height)}));
   std::unique_ptr<StaticObject> screen_right = std::make_unique<StaticObject>(
-      SCREEN_RIGHT, StaticObject::StaticObjectOpts(true, false),
+      SCREEN_RIGHT,
+      StaticObject::StaticObjectOpts(/*is_hit_box_active=*/true,
+                                     /*should_draw_hit_box=*/false),
       std::vector(
           {std::make_pair<double, double>(screen_width, 0),
            std::make_pair<double, double>(screen_width, screen_height)}));
   std::unique_ptr<StaticObject> screen_top = std::make_unique<StaticObject>(
-      SCREEN_TOP, StaticObject::StaticObjectOpts(true, false),
+      SCREEN_TOP,
+      StaticObject::StaticObjectOpts(/*is_hit_box_active=*/true,
+                                     /*should_draw_hit_box=*/false),
       std::vector({std::make_pair<double, double>(0, 0),
                    std::make_pair<double, double>(screen_width, 0)}));
   std::unique_ptr<StaticObject> screen_bottom = std::make_unique<StaticObject>(
-      SCREEN_BOTTOM, StaticObject::StaticObjectOpts(true, false),
+      SCREEN_BOTTOM,
+      StaticObject::StaticObjectOpts(/*is_hit_box_active=*/true,
+                                     /*should_draw_hit_box=*/false),
       std::vector(
           {std::make_pair<double, double>(0, screen_height),
            std::make_pair<double, double>(screen_width, screen_height)}));

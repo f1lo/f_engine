@@ -1,7 +1,7 @@
-#include "raylib/include/raylib.h"
+#ifndef LIB_API_ABILITIES_KEYS_H
+#define LIB_API_ABILITIES_KEYS_H
 
-#ifndef LIB_API_ABILITIES_keys_H
-#define LIB_API_ABILITIES_keys_H
+#include "raylib/include/raylib.h"
 
 namespace lib {
 namespace api {
@@ -28,4 +28,4 @@ inline bool IsDown(const Button button) {
 }  // namespace api
 }  // namespace lib
 
-#endif  // LIB_API_ABILITIES_keys_H
+#endif  // LIB_API_ABILITIES_KEYS_H

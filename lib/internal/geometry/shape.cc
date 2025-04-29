@@ -3,6 +3,7 @@
 #include "shape.h"
 
 #include <absl/strings/str_format.h>
+#include <corecrt_io.h>
 
 #include <cmath>
 #include <iostream>
@@ -156,26 +157,15 @@ bool Line::Collides(const Circle& circle) const {
     return true;
   }
 
-  // Project the vector connecting one of the point of the line to the center
-  // onto the line itself.
-  // Iff this projection falls inside the line AND the distance from the center
-  // to the projected point on the line is less than or equal to the circle
-  // radius.
-  const Vector line_vector = this->MakeVector();
-  const Vector line_point_to_circle_center_vector =
-      Line(this->a, circle.a).MakeVector();
-  const Vector projection =
-      line_vector.Project(line_point_to_circle_center_vector);
-  // `line_vector` and `projection` always face the same direction, if length of
-  // `projection` is shorter it means projected point falls onto the line.
-  if (projection.Length() > line_vector.Length()) {
+  double t =
+      ((circle.a.x - a.x) * (b.x - a.x) + (circle.a.y - a.y) * (b.y - a.y)) /
+      ((b.x - a.x) * (b.x - a.x) + (b.y - a.y) * (b.y - a.y));
+  if (t < 0 || t > 1) {
     return false;
   }
-  // Now the only thing left is to check is distance.
-  // If the distance from the circle center to the line is less than the radius
-  // segment intersects the circle.
-  return line_point_to_circle_center_vector.Square() - projection.Square() <=
-         circle.r * circle.r;
+
+  Point closest = Point{a.x + t * (b.x - a.x), a.y + t * (b.y - a.y)};
+  return closest.Distance(circle.a) - eps <= circle.r;
 }
 
 // RECTANGLE COLLISION.

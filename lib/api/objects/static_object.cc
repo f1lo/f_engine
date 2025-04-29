@@ -42,7 +42,7 @@ void StaticObject::Draw() const {
   hit_box().Draw();
 }
 
-bool StaticObject::OnCollisionCallback(const Object& other_object) {
+bool StaticObject::OnCollisionCallback(Object& other_object) {
   // TODO(f1lo): Implement.
   return false;
 }

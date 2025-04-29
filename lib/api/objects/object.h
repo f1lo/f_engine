@@ -38,17 +38,17 @@ class Object {
   [[nodiscard]] std::pair<double, double> Reflect(const Object& other, double x,
                                                   double y) const;
 
-  Kind kind() const { return kind_; }
-  bool deleted() const { return deleted_; }
-  const Opts& options() const { return options_; }
+  [[nodiscard]] Kind kind() const { return kind_; }
+  [[nodiscard]] bool deleted() const { return deleted_; }
+  void set_deleted(bool deleted) { deleted_ = deleted; }
+  [[nodiscard]] const Opts& options() const { return options_; }
 
  protected:
-  virtual bool OnCollisionCallback(const Object& other_object) = 0;
+  virtual bool OnCollisionCallback(Object& other_object) = 0;
   bool UpdateInternal(const std::list<std::unique_ptr<Object>>& other_objects);
 
   internal::HitBox& mutable_hit_box() { return hit_box_; }
   Opts& mutable_options() { return options_; }
-  void set_deleted(bool deleted) { deleted_ = deleted; }
   const internal::HitBox& hit_box() const { return hit_box_; }
 
  private:

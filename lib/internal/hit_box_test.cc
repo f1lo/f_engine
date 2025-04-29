@@ -305,6 +305,22 @@ TEST_F(HitBoxTest, CirclesCollide) {
   EXPECT_TRUE(circle_.CollidesWith(circle_inside));
 }
 
+TEST_F(HitBoxTest, CircleLineNoCollision) {
+  const HitBox circle = HitBox::CreateHitBox({10, 3}, 3);
+  const HitBox line = HitBoxOrDie(HitBox::CreateHitBox({{0, 0}, {7, 0}}));
+
+  EXPECT_FALSE(circle.CollidesWith(line));
+  EXPECT_FALSE(line.CollidesWith(circle));
+}
+
+TEST_F(HitBoxTest, CircleLineNoCollision2) {
+  const HitBox circle = HitBox::CreateHitBox({6, 3}, 2);
+  const HitBox line = HitBoxOrDie(HitBox::CreateHitBox({{0, 0}, {7, 0}}));
+
+  EXPECT_FALSE(circle.CollidesWith(line));
+  EXPECT_FALSE(line.CollidesWith(circle));
+}
+
 TEST_F(HitBoxTest, CirclesDoNotCollide) {
   const HitBox circle = HitBox::CreateHitBox({4, 6}, 1);
   const HitBox circle_touches = HitBox::CreateHitBox({7, 2}, 1);
@@ -314,6 +330,16 @@ TEST_F(HitBoxTest, CirclesDoNotCollide) {
   EXPECT_FALSE(circle_.CollidesWith(circle_touches));
   EXPECT_FALSE(circle_.CollidesWith(circle_inside));
 }
+
+TEST_F(HitBoxTest, CircleRectangleDoesNotCollide) {
+  const HitBox circle = HitBox::CreateHitBox({1443, 179}, 20);
+  const HitBox rectangle = HitBoxOrDie(HitBox::CreateHitBox(
+      {{1205, 160}, {1205, 130}, {1335, 130}, {1335, 160}}));
+
+  EXPECT_FALSE(circle.CollidesWith(rectangle));
+  EXPECT_FALSE(rectangle.CollidesWith(circle));
+}
+
 }  // namespace
 }  // namespace internal
 }  // namespace lib

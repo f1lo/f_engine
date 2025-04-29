@@ -6,6 +6,7 @@ cc_binary(
     deps = [
         "//examples/breakout:ball",
         "//examples/breakout:ball_ability",
+        "//examples/breakout:brick",
         "//examples/breakout:player_pad",
         "//lib/api:game",
         "//lib/api:level",
@@ -31,8 +32,10 @@ cc_library(
     srcs = ["ball.cc"],
     hdrs = ["ball.h"],
     deps = [
+        "//examples/breakout:brick",
         "//lib/api/objects:movable_object",
         "//lib/api/objects:object",
+        "//lib/api/objects:static_object",
     ],
 )
 
@@ -45,5 +48,15 @@ cc_library(
         "//examples/breakout:player_pad",
         "//lib/api/abilities:ability",
         "//lib/api/abilities:keys",
+    ],
+)
+
+cc_library(
+    name = "brick",
+    srcs = ["brick.cc"],
+    hdrs = ["brick.h"],
+    deps = [
+        "//lib/api/objects:object",
+        "//lib/api/objects:static_object",
     ],
 )

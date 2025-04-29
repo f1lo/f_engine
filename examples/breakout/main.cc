@@ -2,15 +2,19 @@
 #include <memory>
 #include <optional>
 
+#include "examples/breakout/ball.h"
 #include "examples/breakout/ball_ability.h"
+#include "examples/breakout/brick.h"
 #include "examples/breakout/player_pad.h"
 #include "lib/api/abilities/ability.h"
 #include "lib/api/abilities/keys.h"
 #include "lib/api/game.h"
 #include "lib/api/level.h"
+#include "lib/api/objects/movable_object.h"
 #include "lib/api/objects/object.h"
 #include "lib/api/objects/static_object.h"
 
+using breakout::BrickObject;
 using breakout::PlayerPad;
 using lib::api::Game;
 using lib::api::Level;
@@ -33,12 +37,12 @@ constexpr int kBallVelocityX = 7;
 constexpr int kBallVelocityY = -7;
 constexpr int kBallRadius = 20;
 
-std::vector<std::unique_ptr<StaticObject>> GenerateBricks(int brick_width,
-                                                          int brick_height,
-                                                          int screen_width,
-                                                          int screen_height,
-                                                          int num_brick_lines) {
-  std::vector<std::unique_ptr<StaticObject>> bricks;
+std::vector<std::unique_ptr<BrickObject>> GenerateBricks(int brick_width,
+                                                         int brick_height,
+                                                         int screen_width,
+                                                         int screen_height,
+                                                         int num_brick_lines) {
+  std::vector<std::unique_ptr<BrickObject>> bricks;
   int usable_space = screen_width - 2 * kScreenOffset;
   int brick_offset_close =
       (usable_space - brick_width * (usable_space / brick_width)) / 2 +
@@ -55,7 +59,7 @@ std::vector<std::unique_ptr<StaticObject>> GenerateBricks(int brick_width,
     double x = (i % 2 == 0) ? brick_offset_close : brick_offset_far;
     double y = kScreenOffset + (i + 1) * brick_height;
     while (x + brick_width <= right_limit) {
-      std::unique_ptr<StaticObject> brick = std::make_unique<StaticObject>(
+      std::unique_ptr<BrickObject> brick = std::make_unique<BrickObject>(
           ENEMY,
           StaticObject::StaticObjectOpts(/*is_hit_box_active*/ true,
                                          /*should_draw_hitbox*/ true),
@@ -86,17 +90,32 @@ int main() {
 
   std::unique_ptr<Object> player = std::make_unique<PlayerPad>(
       game.screen_width(), game.screen_height(), kBallRadius, kPlayerWidth,
-      kPlayerHeight, kBallVelocityX, kBallVelocityY,
-      MovableObject::MovableObjectOpts(true, true, 0, 0));
+      kPlayerHeight,
+      MovableObject::MovableObjectOpts(/*is_hit_box_active=*/true,
+                                       /*should_draw_hit_box=*/true, 0, 0));
 
-  std::list<std::unique_ptr<Ability>> abilities;
-  abilities.push_back(std::move(ability_move));
-  abilities.push_back(std::move(ability_ball));
+  std::list<std::unique_ptr<Ability>> player_abilities;
+  player_abilities.push_back(std::move(ability_move));
+  std::unique_ptr<breakout::Ball> ball = std::make_unique<breakout::Ball>(
+      breakout::BALL,
+      MovableObject::MovableObjectOpts(
+          /*is_hit_box_active=*/true,
+          /*should_draw_hit_box=*/true, /*velocity_x=*/0,
+          /*velocity_y=*/0),
+      /*hit_box_center=*/
+      std::make_pair(game.screen_width() / 2,
+                     game.screen_height() - breakout::kPadOffset -
+                         kPlayerHeight - breakout::kBallOffset - kBallRadius),
+      kBallRadius, kBallVelocityX, kBallVelocityY);
+  std::list<std::unique_ptr<Ability>> ball_abilities;
+  ball_abilities.push_back(std::move(ability_ball));
   std::unique_ptr<Level> level = std::make_unique<Level>();
-  level->add_object_and_abilities(std::move(player), std::move(abilities));
+  level->add_object_and_abilities(std::move(player),
+                                  std::move(player_abilities));
+  level->add_object_and_abilities(std::move(ball), std::move(ball_abilities));
   level->AddScreenObjects();
 
-  std::vector<std::unique_ptr<StaticObject>> bricks =
+  std::vector<std::unique_ptr<BrickObject>> bricks =
       GenerateBricks(kBrickWidth, kBrickHeight, game.screen_width(),
                      game.screen_height(), /*num_brick_lines=*/5);
   for (auto& brick : bricks) {

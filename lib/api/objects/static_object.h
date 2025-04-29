@@ -29,7 +29,7 @@ class StaticObject : public Object {
   void Draw() const override;
 
  private:
-  bool OnCollisionCallback(const Object& other_object) override;
+  bool OnCollisionCallback(Object& other_object) override;
 };
 }  // namespace objects
 }  // namespace api
