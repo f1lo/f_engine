@@ -357,7 +357,7 @@ TEST_F(HitBoxTest, RectangleReflectionTop2) {
   const Vector speed = {10, 20};
 
   EXPECT_EQ(rectangle.Reflect(circle, speed.x, speed.y),
-            std::make_pair(speed.x, -speed.y));
+            std::make_pair(-speed.x, speed.y));
 }
 
 }  // namespace
