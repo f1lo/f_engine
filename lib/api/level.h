@@ -26,7 +26,8 @@ class Level {
 
   void AddScreenObjects();
 
-  const std::list<std::unique_ptr<objects::Object>>& objects() const {
+  [[nodiscard]] const std::list<std::unique_ptr<objects::Object>>& objects()
+      const {
     return objects_;
   }
   void Run();

@@ -17,7 +17,9 @@ bool Ball::OnCollisionCallback(Object& other_object) {
     // TODO(f1lo): Die in this case.
     case SCREEN_BOTTOM:
     case PLAYER:
-      set_velocity(velocity_x(), -velocity_y());
+      reflected_velocity =
+          other_object.Reflect(*this, velocity_x(), velocity_y());
+      set_velocity(reflected_velocity.first, reflected_velocity.second);
       return true;
     case ENEMY:
       reflected_velocity =

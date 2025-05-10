@@ -26,16 +26,16 @@ void MoveAbility::MaybeUseModifyUser(Object& user) {
     double vel_x = 0;
     double vel_y = 0;
     if (IsDown(opts_.key_left)) {
-      vel_x -= opts_.velocity_x;
+      vel_x = -opts_.velocity_x;
     }
     if (IsDown(opts_.key_right)) {
-      vel_x += opts_.velocity_x;
+      vel_x = opts_.velocity_x;
     }
     if (IsDown(opts_.key_top)) {
-      vel_y -= opts_.velocity_y;
+      vel_y = -opts_.velocity_y;
     }
     if (IsDown(opts_.key_bottom)) {
-      vel_y += opts_.velocity_y;
+      vel_y = opts_.velocity_y;
     }
     cast_user->set_velocity(vel_x, vel_y);
     return;

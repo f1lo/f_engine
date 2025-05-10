@@ -96,29 +96,30 @@ bool IsAxisAlignedRectangle(absl::Span<const Point> vertices) {
 
 enum class LineOrientation { ON_LINE, DOWN, UP };
 
-LineOrientation PointOrientation(double x, double y, double b) {
-  double line_y = -x + b;
+LineOrientation PointOrientation(double x, double y,
+                                 const std::pair<double, double> line) {
+  double line_y = line.first * x + line.second;
   if (abs(line_y - y) <= eps) {
     return LineOrientation::ON_LINE;
   }
   return line_y < y ? LineOrientation::DOWN : LineOrientation::UP;
 }
 
-// y = k * x + b.
-// If the degree is 45, k = -1. Hence, returning a single value b.
-// y = -x + b.
-// b = x + y.
-double Build45DegreeLine(double x, double y) {
-  return x + y;
+std::pair<double, double> Build45DegreeLine(double x, double y) {
+  return {-1, x + y};
+}
+
+std::pair<double, double> Build135DegreeLine(double x, double y) {
+  return {1, y - x};
 }
 
 std::pair<double, double> ReflectFromRectangle(const Rectangle& rec,
                                                const Vector& v, double center_x,
                                                double center_y) {
-  double a = Build45DegreeLine(rec.a.x, rec.a.y);
-  double b = Build45DegreeLine(rec.b.x, rec.b.y);
-  double c = Build45DegreeLine(rec.c.x, rec.c.y);
-  double d = Build45DegreeLine(rec.d.x, rec.d.y);
+  const std::pair<double, double> a = Build45DegreeLine(rec.a.x, rec.a.y);
+  const std::pair<double, double> b = Build135DegreeLine(rec.b.x, rec.b.y);
+  const std::pair<double, double> c = Build45DegreeLine(rec.c.x, rec.c.y);
+  const std::pair<double, double> d = Build135DegreeLine(rec.d.x, rec.d.y);
   // Check if the reflection happened on the vertex of a rectangle.
   if (PointOrientation(center_x, center_y, a) == LineOrientation::ON_LINE ||
       PointOrientation(center_x, center_y, b) == LineOrientation::ON_LINE ||
@@ -153,6 +154,10 @@ std::pair<double, double> ReflectFromRectangle(const Rectangle& rec,
   }
 
   // Should be unreachable.
+  LOG(WARNING) << rec.a.x << " " << rec.a.y << ", " << rec.b.x << " " << rec.b.y
+               << ", " << rec.c.x << " " << rec.c.y << ", " << rec.d.x << " "
+               << rec.d.y;
+  LOG(WARNING) << center_x << " " << center_y;
   CHECK(false) << "Unreachable code.";
   return {};
 }
@@ -241,8 +246,8 @@ std::pair<double, double> HitBox::Reflect(const HitBox& other, double x,
       return {reflected.x, reflected.y};
     case ShapeType::RECTANGLE:
       return ReflectFromRectangle(*static_cast<Rectangle*>(shape_.get()), v,
-                                  other.shape_->center_x,
-                                  other.shape_->center_y);
+                                  other.shape_->center_x(),
+                                  other.shape_->center_y());
     default:
       CHECK(false) << "HitBox::Reflect: invalid shape type";
       return {};

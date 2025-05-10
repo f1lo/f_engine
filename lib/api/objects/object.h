@@ -41,9 +41,9 @@ class Object {
   [[nodiscard]] Kind kind() const { return kind_; }
   [[nodiscard]] bool deleted() const { return deleted_; }
   void set_deleted(bool deleted) { deleted_ = deleted; }
-  [[nodiscard]] const Opts& options() const { return options_; }
 
  protected:
+  [[nodiscard]] const Opts& options() const { return options_; }
   virtual bool OnCollisionCallback(Object& other_object) = 0;
   bool UpdateInternal(const std::list<std::unique_ptr<Object>>& other_objects);
 
