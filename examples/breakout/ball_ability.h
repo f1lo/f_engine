@@ -2,7 +2,6 @@
 #define EXAMPLES_BREAKOUT_BALL_ABILITY_H
 
 #include "lib/api/abilities/ability.h"
-// ReSharper disable once CppUnusedIncludeDirective
 #include "lib/api/abilities/keys.h"
 #include "lib/api/objects/object.h"
 

@@ -9,19 +9,20 @@ bool Ball::OnCollisionCallback(Object& other_object) {
   std::pair<double, double> reflected_velocity;
   BrickObject* cast_brick;
   switch (other_object.kind()) {
-    case SCREEN_LEFT:
-    case SCREEN_RIGHT:
+    case kScreenLeft:
+    case kScreenRight:
       set_velocity(-velocity_x(), velocity_y());
       return true;
-    case SCREEN_TOP:
+    case kScreenTop:
     // TODO(f1lo): Die in this case.
-    case SCREEN_BOTTOM:
-    case PLAYER:
+    case kScreenBottom:
+      set_has_touched_bottom();
+    case kPlayer:
       reflected_velocity =
           other_object.Reflect(*this, velocity_x(), velocity_y());
       set_velocity(reflected_velocity.first, reflected_velocity.second);
       return true;
-    case ENEMY:
+    case kEnemy:
       reflected_velocity =
           other_object.Reflect(*this, velocity_x(), velocity_y());
       set_velocity(reflected_velocity.first, reflected_velocity.second);

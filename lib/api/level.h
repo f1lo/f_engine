@@ -10,8 +10,16 @@
 namespace lib {
 namespace api {
 
+typedef uint32_t LevelId;
+
+static constexpr LevelId kExitLevel = std::numeric_limits<uint32_t>::max() - 1;
+
 class Level {
  public:
+  explicit Level(const LevelId id) : id_(id) {}
+
+  virtual ~Level() = default;
+
   void add_object_and_abilities(
       std::unique_ptr<objects::Object> object,
       std::list<std::unique_ptr<abilities::Ability>> abilities) {
@@ -30,11 +38,15 @@ class Level {
       const {
     return objects_;
   }
-  void Run();
+  LevelId Run();
+  [[nodiscard]] LevelId id() const { return id_; }
 
  private:
+  [[nodiscard]] virtual LevelId MaybeChangeLevel() const = 0;
+
   void CleanUpOrDie();
 
+  LevelId id_;
   std::list<std::unique_ptr<objects::Object>> objects_;
   std::list<std::list<std::unique_ptr<abilities::Ability>>> abilities_;
 };

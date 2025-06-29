@@ -1,7 +1,6 @@
 #include "examples/breakout/ball_ability.h"
 
 #include "examples/breakout/ball.h"
-#include "examples/breakout/player_pad.h"
 #include "lib/api/abilities/keys.h"
 
 namespace breakout {

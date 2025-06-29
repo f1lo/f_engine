@@ -7,6 +7,7 @@ cc_binary(
         "//examples/breakout:ball",
         "//examples/breakout:ball_ability",
         "//examples/breakout:brick",
+        "//examples/breakout:level_main",
         "//examples/breakout:player_pad",
         "//lib/api:game",
         "//lib/api:level",
@@ -58,5 +59,15 @@ cc_library(
     deps = [
         "//lib/api/objects:object",
         "//lib/api/objects:static_object",
+    ],
+)
+
+cc_library(
+    name = "level_main",
+    srcs = ["level_main.cc"],
+    hdrs = ["level_main.h"],
+    deps = [
+        "//examples/breakout:ball",
+        "//lib/api:level",
     ],
 )

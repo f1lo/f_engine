@@ -4,3 +4,5 @@ bazel-out
 bazel-testlogs
 .clwb/
 test/
+examples/BUILD
+examples/main.cc

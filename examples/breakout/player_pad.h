@@ -13,7 +13,7 @@ class PlayerPad final : public lib::api::objects::MovableObject {
   PlayerPad(double screen_width, double screen_height, double ball_radius,
             double player_width, double player_height,
             MovableObjectOpts options)
-      : MovableObject(PLAYER, options,
+      : MovableObject(kPlayer, options,
                       {{
                            (screen_width - player_width) / 2.0,
                            screen_height - kPadOffset,

@@ -8,12 +8,12 @@
 
 typedef uint32_t Kind;
 
-static constexpr Kind PLAYER = std::numeric_limits<uint32_t>::max() - 1;
-static constexpr Kind ENEMY = std::numeric_limits<uint32_t>::max() - 2;
-static constexpr Kind SCREEN_LEFT = std::numeric_limits<uint32_t>::max() - 3;
-static constexpr Kind SCREEN_RIGHT = std::numeric_limits<uint32_t>::max() - 4;
-static constexpr Kind SCREEN_TOP = std::numeric_limits<uint32_t>::max() - 5;
-static constexpr Kind SCREEN_BOTTOM = std::numeric_limits<uint32_t>::max() - 6;
+static constexpr Kind kPlayer = std::numeric_limits<uint32_t>::max() - 1;
+static constexpr Kind kEnemy = std::numeric_limits<uint32_t>::max() - 2;
+static constexpr Kind kScreenLeft = std::numeric_limits<uint32_t>::max() - 3;
+static constexpr Kind kScreenRight = std::numeric_limits<uint32_t>::max() - 4;
+static constexpr Kind kScreenTop = std::numeric_limits<uint32_t>::max() - 5;
+static constexpr Kind kScreenBottom = std::numeric_limits<uint32_t>::max() - 6;
 
 namespace lib {
 namespace api {
@@ -49,15 +49,14 @@ class Object {
 
   internal::HitBox& mutable_hit_box() { return hit_box_; }
   Opts& mutable_options() { return options_; }
-  const internal::HitBox& hit_box() const { return hit_box_; }
+  [[nodiscard]] const internal::HitBox& hit_box() const { return hit_box_; }
 
  private:
-  bool CollidesWith(const Object& other) const;
+  [[nodiscard]] bool CollidesWith(const Object& other) const;
 
   Kind kind_;
   Opts options_;
   internal::HitBox hit_box_;
-
   bool deleted_ = false;
 };
 

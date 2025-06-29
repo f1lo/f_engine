@@ -5,11 +5,12 @@
 namespace lib {
 namespace api {
 
-void Game::Run() {
+void Game::Run() const {
   // TODO(f1lo): Implement more levels.
   SetTargetFPS(90);
-  levels_.begin()->get()->Run();
-  CloseWindow();
+  if (levels_.begin()->get()->Run() == kExitLevel) {
+    CloseWindow();
+  }
 }
 
 }  // namespace api

@@ -5,6 +5,7 @@
 #include "examples/breakout/ball.h"
 #include "examples/breakout/ball_ability.h"
 #include "examples/breakout/brick.h"
+#include "examples/breakout/level_main.h"
 #include "examples/breakout/player_pad.h"
 #include "lib/api/abilities/ability.h"
 #include "lib/api/abilities/keys.h"
@@ -15,6 +16,7 @@
 #include "lib/api/objects/static_object.h"
 
 using breakout::BrickObject;
+using breakout::LevelMain;
 using breakout::PlayerPad;
 using lib::api::Game;
 using lib::api::Level;
@@ -60,7 +62,7 @@ std::vector<std::unique_ptr<BrickObject>> GenerateBricks(int brick_width,
     double y = kScreenOffset + (i + 1) * brick_height;
     while (x + brick_width <= right_limit) {
       std::unique_ptr<BrickObject> brick = std::make_unique<BrickObject>(
-          ENEMY,
+          kEnemy,
           StaticObject::StaticObjectOpts(/*is_hit_box_active*/ true,
                                          /*should_draw_hitbox*/ true),
           std::vector<std::pair<double, double>>(
@@ -97,7 +99,6 @@ int main() {
   std::list<std::unique_ptr<Ability>> player_abilities;
   player_abilities.push_back(std::move(ability_move));
   std::unique_ptr<breakout::Ball> ball = std::make_unique<breakout::Ball>(
-      breakout::BALL,
       MovableObject::MovableObjectOpts(
           /*is_hit_box_active=*/true,
           /*should_draw_hit_box=*/true, /*velocity_x=*/0,
@@ -109,7 +110,7 @@ int main() {
       kBallRadius, kBallVelocityX, kBallVelocityY);
   std::list<std::unique_ptr<Ability>> ball_abilities;
   ball_abilities.push_back(std::move(ability_ball));
-  std::unique_ptr<Level> level = std::make_unique<Level>();
+  std::unique_ptr<LevelMain> level = std::make_unique<LevelMain>(1, ball.get());
   level->add_object_and_abilities(std::move(player),
                                   std::move(player_abilities));
   level->add_object_and_abilities(std::move(ball), std::move(ball_abilities));

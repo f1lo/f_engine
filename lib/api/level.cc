@@ -32,8 +32,9 @@ void Level::CleanUpOrDie() {
   }
 }
 
-void Level::Run() {
-  while (!WindowShouldClose()) {
+LevelId Level::Run() {
+  LevelId changed_id = id_;
+  while (changed_id == id_) {
     BeginDrawing();
     ClearBackground(RAYWHITE);
 
@@ -53,33 +54,36 @@ void Level::Run() {
     }
 
     EndDrawing();
+
+    changed_id = MaybeChangeLevel();
   }
+  return changed_id;
 }
 
 void Level::AddScreenObjects() {
   int screen_width = GetScreenWidth();
   int screen_height = GetScreenHeight();
   std::unique_ptr<StaticObject> screen_left = std::make_unique<StaticObject>(
-      SCREEN_LEFT,
+      kScreenLeft,
       StaticObject::StaticObjectOpts(/*is_hit_box_active=*/true,
                                      /*should_draw_hit_box=*/false),
       std::vector({std::make_pair<double, double>(0, 0),
                    std::make_pair<double, double>(0, screen_height)}));
   std::unique_ptr<StaticObject> screen_right = std::make_unique<StaticObject>(
-      SCREEN_RIGHT,
+      kScreenRight,
       StaticObject::StaticObjectOpts(/*is_hit_box_active=*/true,
                                      /*should_draw_hit_box=*/false),
       std::vector(
           {std::make_pair<double, double>(screen_width, 0),
            std::make_pair<double, double>(screen_width, screen_height)}));
   std::unique_ptr<StaticObject> screen_top = std::make_unique<StaticObject>(
-      SCREEN_TOP,
+      kScreenTop,
       StaticObject::StaticObjectOpts(/*is_hit_box_active=*/true,
                                      /*should_draw_hit_box=*/false),
       std::vector({std::make_pair<double, double>(0, 0),
                    std::make_pair<double, double>(screen_width, 0)}));
   std::unique_ptr<StaticObject> screen_bottom = std::make_unique<StaticObject>(
-      SCREEN_BOTTOM,
+      kScreenBottom,
       StaticObject::StaticObjectOpts(/*is_hit_box_active=*/true,
                                      /*should_draw_hit_box=*/false),
       std::vector(

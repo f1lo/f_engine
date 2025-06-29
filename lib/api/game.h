@@ -34,7 +34,7 @@ class Game {
 
   Game(const Game& other) = delete;
 
-  void Run();
+  void Run() const;
 
   int screen_width() const { return GetScreenWidth(); }
   int screen_height() const { return GetScreenHeight(); }

@@ -5,8 +5,8 @@
 
 namespace breakout {
 bool PlayerPad::OnCollisionCallback(Object& other_object) {
-  if (other_object.kind() == SCREEN_LEFT ||
-      other_object.kind() == SCREEN_RIGHT) {
+  if (other_object.kind() == kScreenLeft ||
+      other_object.kind() == kScreenRight) {
     set_velocity(-velocity_x(), velocity_y());
     return true;
   }
