@@ -1,9 +1,7 @@
 #ifndef LIB_INTERNAL_GEOMETRY_VEC_H
 #define LIB_INTERNAL_GEOMETRY_VEC_H
 
-#include <iostream>
-#include <limits>
-#include <ostream>
+#include <cmath>
 
 namespace lib {
 namespace internal {

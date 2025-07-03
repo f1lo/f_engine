@@ -17,6 +17,7 @@
 
 using breakout::BrickObject;
 using breakout::LevelMain;
+using breakout::LevelMainBuilder;
 using breakout::PlayerPad;
 using lib::api::Game;
 using lib::api::Level;
@@ -110,21 +111,21 @@ int main() {
       kBallRadius, kBallVelocityX, kBallVelocityY);
   std::list<std::unique_ptr<Ability>> ball_abilities;
   ball_abilities.push_back(std::move(ability_ball));
-  std::unique_ptr<LevelMain> level = std::make_unique<LevelMain>(1, ball.get());
-  level->add_object_and_abilities(std::move(player),
-                                  std::move(player_abilities));
-  level->add_object_and_abilities(std::move(ball), std::move(ball_abilities));
-  level->AddScreenObjects();
+  LevelMainBuilder level_builder = LevelMainBuilder(ball.get());
+  level_builder.SetId(1)
+      .AddObjectAndAbilities(std::move(player), std::move(player_abilities))
+      .AddObjectAndAbilities(std::move(ball), std::move(ball_abilities))
+      .WithScreenObjects();
 
   std::vector<std::unique_ptr<BrickObject>> bricks =
       GenerateBricks(kBrickWidth, kBrickHeight, game.screen_width(),
                      game.screen_height(), /*num_brick_lines=*/5);
   for (auto& brick : bricks) {
-    level->add_object(std::move(brick));
+    level_builder.AddObject(std::move(brick));
   }
 
   std::list<std::unique_ptr<Level>> levels;
-  levels.push_back(std::move(level));
+  levels.push_back(std::move(level_builder.Build()));
 
   game.set_levels(std::move(levels));
   game.Run();

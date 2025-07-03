@@ -2,9 +2,6 @@
 
 #include "shape.h"
 
-#include <absl/strings/str_format.h>
-#include <corecrt_io.h>
-
 #include <cmath>
 #include <iostream>
 #include <limits>
@@ -12,6 +9,7 @@
 #include "absl/log/check.h"
 #include "absl/log/log.h"
 #include "absl/strings/internal/str_format/extension.h"
+#include "absl/strings/str_format.h"
 
 namespace lib {
 namespace internal {

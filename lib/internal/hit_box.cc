@@ -242,8 +242,10 @@ std::pair<double, double> HitBox::Reflect(const HitBox& other, double x,
   switch (shape_type_) {
     // Potentially unsafe if not careful.
     case ShapeType::LINE:
-      const Vector reflected = static_cast<Line*>(shape_.get())->Reflect(v);
-      return {reflected.x, reflected.y};
+      {
+        const Vector reflected = static_cast<Line*>(shape_.get())->Reflect(v);
+        return {reflected.x, reflected.y};
+      }
     case ShapeType::RECTANGLE:
       return ReflectFromRectangle(*static_cast<Rectangle*>(shape_.get()), v,
                                   other.shape_->center_x(),

@@ -12,7 +12,7 @@ using lib::api::abilities::IsPressed;
 using lib::api::abilities::kKeyEscape;
 
 LevelId LevelMain::MaybeChangeLevel() const {
-  if (IsPressed(kKeyEscape) || ball_.has_touched_bottom()) {
+  if (IsPressed(kKeyEscape) || ball_->has_touched_bottom()) {
     return kExitLevel;
   }
 

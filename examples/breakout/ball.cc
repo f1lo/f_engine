@@ -14,9 +14,11 @@ bool Ball::OnCollisionCallback(Object& other_object) {
       set_velocity(-velocity_x(), velocity_y());
       return true;
     case kScreenTop:
-    // TODO(f1lo): Die in this case.
+      set_velocity(velocity_x(), -velocity_y());
+      return true;
     case kScreenBottom:
       set_has_touched_bottom();
+      return true;
     case kPlayer:
       reflected_velocity =
           other_object.Reflect(*this, velocity_x(), velocity_y());
