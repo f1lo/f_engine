@@ -17,16 +17,18 @@ typedef uint32_t LevelId;
 static constexpr LevelId kInvalidLevel =
     std::numeric_limits<uint32_t>::max() - 1;
 static constexpr LevelId kExitLevel = std::numeric_limits<uint32_t>::max() - 2;
+static constexpr LevelId kTitleScreenLevel =
+    std::numeric_limits<uint32_t>::max() - 3;
+static constexpr LevelId kFirstLevel = std::numeric_limits<uint32_t>::max() - 4;
 
 template <typename LevelT>
 class LevelBuilder {
  public:
-  explicit LevelBuilder() { level_ = std::make_unique<LevelT>(); }
-
-  LevelBuilder& SetId(const LevelId id) {
-    level_->id_ = id;
-    return *this;
+  virtual ~LevelBuilder() = default;
+  explicit LevelBuilder(const LevelId id) {
+    level_ = std::make_unique<LevelT>(id);
   }
+
   LevelBuilder& AddObjectAndAbilities(
       std::unique_ptr<objects::Object> object,
       std::list<std::unique_ptr<abilities::Ability>> abilities) {
@@ -84,7 +86,7 @@ class LevelBuilder {
         .AddObject(std::move(screen_bottom));
   }
 
-  std::unique_ptr<LevelT> Build() { return std::move(level_); }
+  virtual std::unique_ptr<LevelT> Build() { return std::move(level_); }
 
  protected:
   std::unique_ptr<LevelT> level_;
@@ -92,7 +94,6 @@ class LevelBuilder {
 
 class Level {
  public:
-  Level() = default;
   virtual ~Level() = default;
 
   LevelId Run();
@@ -104,7 +105,10 @@ class Level {
   void CleanUpOrDie();
   [[nodiscard]] virtual LevelId MaybeChangeLevel() const = 0;
 
-  LevelId id_ = kInvalidLevel;
+  LevelId id_;
+
+ protected:
+  explicit Level(const LevelId id) : id_(id) {}
   // This separation is required so that cyclic dependency is not introduced
   // between Object and Ability classes.
   std::list<std::unique_ptr<objects::Object>> objects_;

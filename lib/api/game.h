@@ -7,6 +7,7 @@
 #include <memory>
 #include <string>
 
+#include "absl/container/flat_hash_map.h"
 #include "absl/log/check.h"
 #include "lib/api/level.h"
 #include "lib/api/objects/object.h"
@@ -38,14 +39,18 @@ class Game {
 
   int screen_width() const { return GetScreenWidth(); }
   int screen_height() const { return GetScreenHeight(); }
-  void set_levels(std::list<std::unique_ptr<Level>> levels) {
-    levels_ = std::move(levels);
+  void add_level(std::unique_ptr<Level> level) {
+    CHECK(levels_.find(level->id()) == levels_.end())
+        << "Level " << level->id() << " already exists.";
+    levels_[level->id()] = std::move(level);
   }
+  void set_debug_mode(const bool debug_mode) { debug_mode_ = debug_mode; }
 
  private:
   explicit Game() = default;
 
-  std::list<std::unique_ptr<Level>> levels_;
+  absl::flat_hash_map<LevelId, std::unique_ptr<Level>> levels_;
+  bool debug_mode_ = false;
 };
 
 }  // namespace api

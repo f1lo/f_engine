@@ -15,7 +15,8 @@ namespace objects {
 class StaticObject : public Object {
  public:
   struct StaticObjectOpts : Opts {
-    StaticObjectOpts(bool is_hit_box_active, bool should_draw_hit_box)
+    StaticObjectOpts(const bool is_hit_box_active,
+                     const bool should_draw_hit_box)
         : Opts(is_hit_box_active, should_draw_hit_box) {}
   };
 

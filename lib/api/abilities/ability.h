@@ -1,10 +1,11 @@
 #ifndef LIB_API_ABILITIES_ABILITY_H
 #define LIB_API_ABILITIES_ABILITY_H
 
+#include "raylib/include/raylib.h"
+
 #include "lib/api/abilities/keys.h"
 #include "lib/api/objects/movable_object.h"
 #include "lib/api/objects/object.h"
-#include "raylib/include/raylib.h"
 
 namespace lib {
 namespace api {
@@ -34,9 +35,10 @@ class Ability {
 class MoveAbility : public Ability {
  public:
   struct MoveAbilityOpts : AbilityOpts {
-    MoveAbilityOpts(AbilityOpts opts, bool should_hold, double velocity_x,
-                    double velocity_y, Button key_left, Button key_right,
-                    Button key_top, Button key_bottom)
+    MoveAbilityOpts(const AbilityOpts opts, const bool should_hold,
+                    const double velocity_x, const double velocity_y,
+                    const Button key_left, const Button key_right,
+                    const Button key_top, const Button key_bottom)
         : AbilityOpts(opts),
           should_hold(should_hold),
           velocity_x(velocity_x),

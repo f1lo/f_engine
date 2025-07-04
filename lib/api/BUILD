@@ -12,6 +12,7 @@ cc_library(
         "//lib/api:level",
         "//lib/api/objects:object",
         "//raylib",
+        "@abseil-cpp//absl/container:flat_hash_map",
         "@abseil-cpp//absl/log:check",
     ],
 )
@@ -28,5 +29,19 @@ cc_library(
         "//raylib",
         "@abseil-cpp//absl/container:flat_hash_map",
         "@abseil-cpp//absl/log:check",
+    ],
+)
+
+cc_library(
+    name = "title_screen_level",
+    srcs = ["title_screen_level.cc"],
+    hdrs = ["title_screen_level.h"],
+    deps = [
+        "//lib/api:level",
+        "//lib/api/abilities:ability",
+        "//lib/api/abilities:click_ability",
+        "//lib/api/objects:object",
+        "//lib/api/objects:static_object",
+        "//raylib",
     ],
 )

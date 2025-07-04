@@ -8,6 +8,7 @@ namespace breakout {
 
 class LevelMain final : public lib::api::Level {
  public:
+  explicit LevelMain(const lib::api::LevelId id) : Level(id) {}
   ~LevelMain() override = default;
 
   [[nodiscard]] lib::api::LevelId MaybeChangeLevel() const override;
@@ -19,7 +20,10 @@ class LevelMain final : public lib::api::Level {
 
 class LevelMainBuilder : public lib::api::LevelBuilder<LevelMain> {
  public:
-  explicit LevelMainBuilder(const Ball* ball) { level_->ball_ = ball; }
+  explicit LevelMainBuilder(const lib::api::LevelId id, const Ball* ball)
+      : LevelBuilder(id) {
+    level_->ball_ = ball;
+  }
 };
 
 }  // namespace breakout

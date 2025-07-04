@@ -111,8 +111,9 @@ int main() {
       kBallRadius, kBallVelocityX, kBallVelocityY);
   std::list<std::unique_ptr<Ability>> ball_abilities;
   ball_abilities.push_back(std::move(ability_ball));
-  LevelMainBuilder level_builder = LevelMainBuilder(ball.get());
-  level_builder.SetId(1)
+  LevelMainBuilder level_builder =
+      LevelMainBuilder(/*id=*/lib::api::kTitleScreenLevel, ball.get());
+  level_builder
       .AddObjectAndAbilities(std::move(player), std::move(player_abilities))
       .AddObjectAndAbilities(std::move(ball), std::move(ball_abilities))
       .WithScreenObjects();
@@ -123,10 +124,6 @@ int main() {
   for (auto& brick : bricks) {
     level_builder.AddObject(std::move(brick));
   }
-
-  std::list<std::unique_ptr<Level>> levels;
-  levels.push_back(std::move(level_builder.Build()));
-
-  game.set_levels(std::move(levels));
+  game.add_level(std::move(level_builder.Build()));
   game.Run();
 }

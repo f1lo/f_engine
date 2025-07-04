@@ -14,6 +14,8 @@ static constexpr Kind kScreenLeft = std::numeric_limits<uint32_t>::max() - 3;
 static constexpr Kind kScreenRight = std::numeric_limits<uint32_t>::max() - 4;
 static constexpr Kind kScreenTop = std::numeric_limits<uint32_t>::max() - 5;
 static constexpr Kind kScreenBottom = std::numeric_limits<uint32_t>::max() - 6;
+static constexpr Kind kMousePointer = std::numeric_limits<uint32_t>::max() - 7;
+static constexpr Kind kButton = std::numeric_limits<uint32_t>::max() - 8;
 
 namespace lib {
 namespace api {
@@ -27,7 +29,11 @@ class Object {
   };
 
   explicit Object(const Kind kind, const Opts options, internal::HitBox hit_box)
-      : kind_(kind), options_(options), hit_box_(std::move(hit_box)) {}
+      : kind_(kind),
+        options_(options),
+        hit_box_(std::move(hit_box)),
+        deleted_(false),
+        clicked_(false) {}
 
   virtual ~Object() = default;
 
@@ -37,10 +43,13 @@ class Object {
 
   [[nodiscard]] std::pair<double, double> Reflect(const Object& other, double x,
                                                   double y) const;
+  [[nodiscard]] bool CollidesWith(const Object& other) const;
 
   [[nodiscard]] Kind kind() const { return kind_; }
   [[nodiscard]] bool deleted() const { return deleted_; }
-  void set_deleted(bool deleted) { deleted_ = deleted; }
+  [[nodiscard]] bool clicked() const { return clicked_; }
+  void set_deleted(const bool deleted) { deleted_ = deleted; }
+  void set_clicked(const bool clicked) { clicked_ = clicked; }
 
  protected:
   [[nodiscard]] const Opts& options() const { return options_; }
@@ -52,12 +61,11 @@ class Object {
   [[nodiscard]] const internal::HitBox& hit_box() const { return hit_box_; }
 
  private:
-  [[nodiscard]] bool CollidesWith(const Object& other) const;
-
   Kind kind_;
   Opts options_;
   internal::HitBox hit_box_;
-  bool deleted_ = false;
+  bool deleted_;
+  bool clicked_;
 };
 
 }  // namespace objects

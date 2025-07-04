@@ -1,16 +1,21 @@
 #include "raylib/include/raylib.h"
 
+#include "absl/log/check.h"
 #include "lib/api/game.h"
 
 namespace lib {
 namespace api {
 
 void Game::Run() const {
-  // TODO(f1lo): Implement more levels.
   SetTargetFPS(90);
-  if (levels_.begin()->get()->Run() == kExitLevel) {
-    CloseWindow();
+  LevelId current_level = kTitleScreenLevel;
+  while (current_level != kExitLevel) {
+    auto level_it = levels_.find(current_level);
+    CHECK(level_it != levels_.end())
+        << "Level " << current_level << " does not exist.";
+    current_level = level_it->second->Run();
   }
+  CloseWindow();
 }
 
 }  // namespace api
