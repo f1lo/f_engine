@@ -13,7 +13,7 @@ namespace api {
 namespace objects {
 
 MovableObject::MovableObject(
-    const Kind kind, const MovableObjectOpts options,
+    const Kind kind, const MovableObjectOpts& options,
     const std::vector<std::pair<double, double>>& hit_box_vertices)
     : Object(kind,
              {.is_hit_box_active = options.is_hit_box_active,
@@ -22,7 +22,7 @@ MovableObject::MovableObject(
       velocity_x_(options.velocity_x),
       velocity_y_(options.velocity_y) {}
 
-MovableObject::MovableObject(const Kind kind, const MovableObjectOpts options,
+MovableObject::MovableObject(const Kind kind, const MovableObjectOpts& options,
                              const std::pair<double, double> hit_box_center,
                              const double hit_box_radius)
     : Object(kind,

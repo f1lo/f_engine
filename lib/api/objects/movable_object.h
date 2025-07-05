@@ -24,10 +24,10 @@ class MovableObject : public Object {
     double velocity_y = 0;
   };
 
-  MovableObject(Kind kind, MovableObjectOpts options,
+  MovableObject(Kind kind, const MovableObjectOpts& options,
                 const std::vector<std::pair<double, double>>& hit_box_vertices);
 
-  MovableObject(Kind kind, MovableObjectOpts options,
+  MovableObject(Kind kind, const MovableObjectOpts& options,
                 std::pair<double, double> hit_box_center,
                 double hit_box_radius);
 
