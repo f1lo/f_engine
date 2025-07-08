@@ -24,6 +24,9 @@ class HitBox {
   void Draw() const;
   void Move(const double x, const double y) const { shape_->Move(x, y); }
 
+  double center_x() const { return shape_->center_x(); }
+  double center_y() const { return shape_->center_y(); }
+
  private:
   // TODO(f1lo): Cannot see a better way for now but there has to be. Try to
   // make this type agnostic.

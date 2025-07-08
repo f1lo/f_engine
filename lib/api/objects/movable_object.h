@@ -1,11 +1,13 @@
 #ifndef LIB_API_OBJECTS_MOVABLE_OBJECT_H
 #define LIB_API_OBJECTS_MOVABLE_OBJECT_H
 
+#include "raylib/include/raylib.h"
+
 #include <list>
 #include <memory>
+#include <optional>
 #include <vector>
 
-#include "absl/container/flat_hash_map.h"
 #include "lib/api/objects/object.h"
 
 namespace lib {
@@ -15,13 +17,16 @@ namespace objects {
 class MovableObject : public Object {
  public:
   struct MovableObjectOpts : Opts {
-    MovableObjectOpts(bool is_hit_box_active, bool should_draw_hit_box,
-                      double velocity_x, double velocity_y)
+    MovableObjectOpts(const bool is_hit_box_active,
+                      const bool should_draw_hit_box, const bool attach_camera,
+                      const double velocity_x, const double velocity_y)
         : Opts(is_hit_box_active, should_draw_hit_box),
+          attach_camera(attach_camera),
           velocity_x(velocity_x),
           velocity_y(velocity_y) {}
-    double velocity_x = 0;
-    double velocity_y = 0;
+    double velocity_x;
+    double velocity_y;
+    bool attach_camera;
   };
 
   MovableObject(Kind kind, const MovableObjectOpts& options,
@@ -46,10 +51,14 @@ class MovableObject : public Object {
   void ResetLastMove();
 
  private:
+  void BindCamera(double object_center_x, double object_center_y);
+
   double velocity_x_;
   double velocity_y_;
   double last_velocity_x_ = 0.0;
   double last_velocity_y_ = 0.0;
+
+  std::optional<Camera2D> camera_;
 };
 }  // namespace objects
 }  // namespace api

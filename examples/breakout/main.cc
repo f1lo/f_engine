@@ -94,16 +94,16 @@ int main() {
   std::unique_ptr<Object> player = std::make_unique<PlayerPad>(
       game.screen_width(), game.screen_height(), kBallRadius, kPlayerWidth,
       kPlayerHeight,
-      MovableObject::MovableObjectOpts(/*is_hit_box_active=*/true,
-                                       /*should_draw_hit_box=*/true, 0, 0));
+      MovableObject::MovableObjectOpts(
+          /*is_hit_box_active=*/true, /*should_draw_hit_box=*/true,
+          /*attach_camera=*/false, /*velocity_x=*/0, /*velocity_y=*/0));
 
   std::list<std::unique_ptr<Ability>> player_abilities;
   player_abilities.push_back(std::move(ability_move));
   std::unique_ptr<breakout::Ball> ball = std::make_unique<breakout::Ball>(
       MovableObject::MovableObjectOpts(
-          /*is_hit_box_active=*/true,
-          /*should_draw_hit_box=*/true, /*velocity_x=*/0,
-          /*velocity_y=*/0),
+          /*is_hit_box_active=*/true, /*should_draw_hit_box=*/true,
+          /*attach_camera=*/false, /*velocity_x=*/0, /*velocity_y=*/0),
       /*hit_box_center=*/
       std::make_pair(game.screen_width() / 2,
                      game.screen_height() - breakout::kPadOffset -

@@ -35,6 +35,7 @@ cc_library(
     deps = [
         "//g_1:player",
         "//lib/api:level",
+        "//lib/api/abilities:ability",
         "//lib/api/abilities:keys",
     ],
 )

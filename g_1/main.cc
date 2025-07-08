@@ -12,7 +12,7 @@ int main(int argc, char** argv) {
 
   lib::api::Game& game =
       lib::api::Game::Create(/*width=*/1500, /*height=*/1000, "g_1",
-                             /*full_screen=*/false);
+                             /*full_screen=*/true);
 
   game.add_level(g_1::MakeTitleScreenLevel(game.screen_width(),
                                            game.screen_height(),

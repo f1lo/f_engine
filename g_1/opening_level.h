@@ -2,6 +2,7 @@
 #define G_1_OPENING_LEVEL_H
 
 #include "g_1/player.h"
+#include "lib/api/abilities/ability.h"
 #include "lib/api/level.h"
 
 namespace g_1 {
@@ -21,10 +22,9 @@ class OpeningLevelBuilder : public lib::api::LevelBuilder<OpeningLevel> {
  public:
   explicit OpeningLevelBuilder(const lib::api::LevelId id) : LevelBuilder(id) {}
 
-  OpeningLevelBuilder& SetPlayer(const Player* player) {
-    level_->player_ = player;
-    return *this;
-  }
+  OpeningLevelBuilder& AddPlayerAndAbilities(
+      std::unique_ptr<Player> player,
+      std::list<std::unique_ptr<lib::api::abilities::Ability>> abilities);
 };
 
 }  // namespace g_1

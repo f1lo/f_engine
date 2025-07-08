@@ -22,6 +22,7 @@ cc_library(
     deps = [
         "//lib/api/objects:object",
         "//lib/api/objects:object_utils",
+        "//raylib",
     ],
 )
 

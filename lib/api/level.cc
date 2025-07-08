@@ -2,6 +2,9 @@
 
 #include "lib/api/level.h"
 
+#include <optional>
+
+#include "absl/log/check.h"
 #include "lib/api/abilities/ability.h"
 #include "lib/api/objects/movable_object.h"
 #include "lib/api/objects/static_object.h"
@@ -37,6 +40,10 @@ LevelId Level::Run() {
     ClearBackground(RAYWHITE);
     CleanUpOrDie();
 
+    if (camera_object_ != nullptr) {
+      BeginMode2D(Camera());
+    }
+
     auto object_it = objects_.begin();
     auto ability_it = abilities_.begin();
     while (object_it != objects_.end() && ability_it != abilities_.end()) {
@@ -51,10 +58,21 @@ LevelId Level::Run() {
       ++ability_it;
     }
 
+    if (camera_object_ != nullptr) {
+      EndMode2D();
+    }
     EndDrawing();
     changed_id = MaybeChangeLevel();
   }
   return changed_id;
 }
+
+Camera2D& Level::Camera() {
+  camera_.target.x = static_cast<float>(camera_object_->center_x());
+  camera_.target.y = static_cast<float>(camera_object_->center_y());
+
+  return camera_;
+}
+
 }  // namespace api
 }  // namespace lib

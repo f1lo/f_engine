@@ -59,6 +59,19 @@ void MovableObject::Draw() const {
   hit_box().Draw();
 }
 
+void MovableObject::BindCamera(const double object_center_x,
+                               const double object_center_y) {
+  camera_ = Camera2D{
+      .offset = {.x = 0.0f, .y = 0.0f},
+      .target = {.x = static_cast<float>(object_center_x),
+                 .y = static_cast<float>(object_center_y)},
+      .rotation = 0.0f,
+      .zoom = 1.0f,
+  };
+
+  // BeginMode2D(camera_.value());
+}
+
 }  // namespace objects
 }  // namespace api
 }  // namespace lib

@@ -23,12 +23,13 @@ constexpr int kButtonLengthX = 400;
 constexpr int kButtonLengthY = 100;
 constexpr int kOffsetBetweenButtons = 50;
 
-constexpr double kPlayerSpeedX = 7.0;
-constexpr double kPlayerSpeedY = 7.0;
+constexpr double kPlayerSpeedX = 4.5;
+constexpr double kPlayerSpeedY = 4.5;
 
+constexpr int kPlayerX = 0;
+constexpr int kPlayerY = 0;
 constexpr float kPlayerWidth = 20;
 constexpr float kPlayerHeight = 20;
-constexpr float kPlayerOffset = 20;
 
 namespace g_1 {
 namespace {
@@ -43,20 +44,19 @@ using lib::api::objects::MovableObject;
 using lib::api::objects::Object;
 using lib::api::objects::StaticObject;
 
-std::unique_ptr<Player> MakePlayer(int screen_width, int screen_height,
-                                   bool debug_mode) {
+std::unique_ptr<Player> MakePlayer(const bool debug_mode) {
   return std::make_unique<Player>(
       /*kind=*/kPlayer,
       /*options=*/
       MovableObject::MovableObjectOpts(
           /*is_hit_box_active*/ true, /*should_draw_hitbox*/ debug_mode,
-          kPlayerSpeedX, kPlayerSpeedY), /*hit_box_vertices=*/
+          /*attach_camera=*/true, kPlayerSpeedX,
+          kPlayerSpeedY), /*hit_box_vertices=*/
       std::vector<std::pair<double, double>>(
-          {{kPlayerOffset, screen_height - kPlayerOffset},
-           {kPlayerOffset, screen_height - kPlayerOffset - kPlayerHeight},
-           {kPlayerOffset + kPlayerWidth, screen_height - kPlayerOffset},
-           {kPlayerOffset + kPlayerWidth,
-            screen_height - kPlayerOffset - kPlayerHeight}}));
+          {{kPlayerX, kPlayerY},
+           {kPlayerX, kPlayerY + kPlayerHeight},
+           {kPlayerX + kPlayerWidth, kPlayerY},
+           {kPlayerX + kPlayerWidth, kPlayerY + kPlayerHeight}}));
 }
 
 std::list<std::unique_ptr<Ability>> MakePlayerAbilities() {
@@ -67,19 +67,52 @@ std::list<std::unique_ptr<Ability>> MakePlayerAbilities() {
           kPlayerSpeedX, kPlayerSpeedY,
           /*key_left=*/kKeyA, /*key_right=*/kKeyD,
           /*key_top=*/kKeyW, /*key_bottom=*/kKeyS)));
+
   return std::move(abilities);
+}
+
+std::vector<std::unique_ptr<StaticObject>> MakeStaticObjects(
+    const int screen_width, const int screen_height, const bool debug_mode) {
+  std::vector<std::unique_ptr<StaticObject>> static_objects;
+  static_objects.emplace_back(std::make_unique<StaticObject>(
+      /*kind=*/kButton,
+      StaticObject::StaticObjectOpts(
+          /*is_hit_box_active=*/true,
+          /*should_draw_hit_box=*/debug_mode),
+      /*hit_box_vertices=*/
+      std::vector<std::pair<double, double>>(
+          {{kButtonOffsetX, kButtonOffsetY},
+           {kButtonOffsetX, kButtonOffsetY + kButtonLengthY},
+           {kButtonOffsetX + kButtonLengthX, kButtonOffsetY},
+           {kButtonOffsetX + kButtonLengthX,
+            kButtonOffsetY + kButtonLengthY}})));
+  static_objects.emplace_back(std::make_unique<StaticObject>(
+      /*kind=*/kButton,
+      StaticObject::StaticObjectOpts(
+          /*is_hit_box_active=*/true,
+          /*should_draw_hit_box=*/debug_mode),
+      /*hit_box_vertices=*/
+      std::vector<std::pair<double, double>>(
+          {{500, -200}, {500, 200}, {1000, -200}, {1000, 200}})));
+
+  return std::move(static_objects);
 }
 
 }  // namespace
 
-std::unique_ptr<Level> MakeOpeningLevel(int screen_width, int screen_height,
-                                        bool debug_mode) {
-  std::unique_ptr<Player> player =
-      MakePlayer(screen_width, screen_height, debug_mode);
+std::unique_ptr<Level> MakeOpeningLevel(const int screen_width,
+                                        const int screen_height,
+                                        const bool debug_mode) {
+  std::unique_ptr<Player> player = MakePlayer(debug_mode);
+  std::vector<std::unique_ptr<StaticObject>> static_objects =
+      MakeStaticObjects(screen_width, screen_height, debug_mode);
+
   OpeningLevelBuilder level_builder =
       OpeningLevelBuilder(lib::api::kFirstLevel);
-  level_builder.SetPlayer(player.get());
-  level_builder.AddObjectAndAbilities(std::move(player), MakePlayerAbilities());
+  level_builder.AddPlayerAndAbilities(std::move(player), MakePlayerAbilities());
+  for (auto& static_object : static_objects) {
+    level_builder.AddObject(std::move(static_object));
+  }
   return level_builder.Build();
 }
 
