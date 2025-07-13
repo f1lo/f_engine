@@ -23,8 +23,7 @@ constexpr int kButtonLengthX = 400;
 constexpr int kButtonLengthY = 100;
 constexpr int kOffsetBetweenButtons = 50;
 
-constexpr double kPlayerSpeedX = 4.5;
-constexpr double kPlayerSpeedY = 4.5;
+constexpr double kPlayerSpeed = 5;
 
 constexpr int kPlayerX = 0;
 constexpr int kPlayerY = 0;
@@ -51,8 +50,7 @@ std::unique_ptr<Player> MakePlayer(const bool debug_mode) {
       /*options=*/
       MovableObject::MovableObjectOpts(
           /*is_hit_box_active*/ true, /*should_draw_hitbox*/ debug_mode,
-          /*attach_camera=*/true, kPlayerSpeedX,
-          kPlayerSpeedY), /*hit_box_vertices=*/
+          /*attach_camera=*/true, kPlayerSpeed), /*hit_box_vertices=*/
       std::vector<std::pair<double, double>>(
           {{kPlayerX, kPlayerY},
            {kPlayerX, kPlayerY + kPlayerHeight},
@@ -65,7 +63,6 @@ std::list<std::unique_ptr<Ability>> MakePlayerAbilities() {
   abilities.emplace_back(
       std::make_unique<MoveAbility>(MoveAbility::MoveAbilityOpts(
           Ability::AbilityOpts(/*cooldown_sec=*/0), /*should_hold=*/true,
-          kPlayerSpeedX, kPlayerSpeedY,
           /*key_left=*/kKeyA, /*key_right=*/kKeyD,
           /*key_top=*/kKeyW, /*key_bottom=*/kKeyS)));
 

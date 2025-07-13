@@ -53,5 +53,13 @@ Vector Vector::Rotate(const double& angle) const {
                 x * sin(angle) + y * cos(angle));
 }
 
+Vector Vector::ToUnitVector() const {
+  return Multiply(1.0 / Length());
+}
+
+bool Vector::IsZero() const {
+  return std::abs(this->x) <= eps && std::abs(this->y) <= eps;
+}
+
 }  // namespace internal
 }  // namespace lib

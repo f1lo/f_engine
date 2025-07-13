@@ -7,10 +7,13 @@
 #include "absl/container/flat_hash_map.h"
 #include "lib/api/objects/object.h"
 #include "lib/api/objects/object_utils.h"
+#include "lib/internal/geometry/vec.h"
 
 namespace lib {
 namespace api {
 namespace objects {
+
+using internal::Vector;
 
 MovableObject::MovableObject(
     const Kind kind, const MovableObjectOpts& options,
@@ -19,8 +22,7 @@ MovableObject::MovableObject(
              {.is_hit_box_active = options.is_hit_box_active,
               .should_draw_hit_box = options.should_draw_hit_box},
              CreateHitBoxOrDie(hit_box_vertices)),
-      velocity_x_(options.velocity_x),
-      velocity_y_(options.velocity_y) {}
+      velocity_(options.velocity) {}
 
 MovableObject::MovableObject(const Kind kind, const MovableObjectOpts& options,
                              const std::pair<double, double> hit_box_center,
@@ -30,17 +32,42 @@ MovableObject::MovableObject(const Kind kind, const MovableObjectOpts& options,
               .should_draw_hit_box = options.should_draw_hit_box},
              CreateCircle(hit_box_center.first, hit_box_center.second,
                           hit_box_radius)),
-      velocity_x_(options.velocity_x),
-      velocity_y_(options.velocity_y) {}
+      velocity_(options.velocity) {}
+
+void MovableObject::set_direction_global(const double x, const double y) {
+  const Vector v = Vector{x, y};
+  if (v.IsZero()) {
+    direction_x_ = 0;
+    direction_y_ = 0;
+    return;
+  }
+  const Vector unit = v.ToUnitVector();
+  direction_x_ = unit.x;
+  direction_y_ = unit.y;
+}
+
+void MovableObject::set_direction_relative(const double x, const double y) {
+  const Vector v = Vector{x - center_x(), y - center_y()};
+  if (v.IsZero()) {
+    direction_x_ = 0;
+    direction_y_ = 0;
+    return;
+  }
+  const Vector unit = v.ToUnitVector();
+  direction_x_ = unit.x;
+  direction_y_ = unit.y;
+}
 
 void MovableObject::Move() {
-  last_velocity_x_ = velocity_x_;
-  last_velocity_y_ = velocity_y_;
-  this->mutable_hit_box().Move(velocity_x_, velocity_y_);
+  last_direction_x_ = direction_x_;
+  last_direction_y_ = direction_y_;
+  this->mutable_hit_box().Move(velocity_ * direction_x_,
+                               velocity_ * direction_y_);
 }
 
 void MovableObject::ResetLastMove() {
-  this->mutable_hit_box().Move(-last_velocity_x_, -last_velocity_y_);
+  this->mutable_hit_box().Move(-last_direction_x_ * velocity_,
+                               -last_direction_y_ * velocity_);
 }
 
 void MovableObject::Update(
@@ -57,19 +84,6 @@ void MovableObject::Draw() const {
     return;
   }
   hit_box().Draw();
-}
-
-void MovableObject::BindCamera(const double object_center_x,
-                               const double object_center_y) {
-  camera_ = Camera2D{
-      .offset = {.x = 0.0f, .y = 0.0f},
-      .target = {.x = static_cast<float>(object_center_x),
-                 .y = static_cast<float>(object_center_y)},
-      .rotation = 0.0f,
-      .zoom = 1.0f,
-  };
-
-  // BeginMode2D(camera_.value());
 }
 
 }  // namespace objects

@@ -24,6 +24,8 @@ struct Vector {
   [[nodiscard]] Vector Multiply(double x) const;
   [[nodiscard]] double Angle(const Vector& other) const;
   [[nodiscard]] Vector Rotate(const double& angle) const;
+  [[nodiscard]] Vector ToUnitVector() const;
+  [[nodiscard]] bool IsZero() const;
 
   double x;
   double y;

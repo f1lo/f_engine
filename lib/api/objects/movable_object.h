@@ -19,13 +19,11 @@ class MovableObject : public Object {
   struct MovableObjectOpts : Opts {
     MovableObjectOpts(const bool is_hit_box_active,
                       const bool should_draw_hit_box, const bool attach_camera,
-                      const double velocity_x, const double velocity_y)
+                      const double velocity)
         : Opts(is_hit_box_active, should_draw_hit_box),
-          attach_camera(attach_camera),
-          velocity_x(velocity_x),
-          velocity_y(velocity_y) {}
-    double velocity_x;
-    double velocity_y;
+          velocity(velocity),
+          attach_camera(attach_camera) {}
+    double velocity;
     bool attach_camera;
   };
 
@@ -38,25 +36,25 @@ class MovableObject : public Object {
 
   void Update(const std::list<std::unique_ptr<Object>>& other_objects) override;
   void Draw() const override;
-  void set_velocity(double velocity_x, double velocity_y) {
-    velocity_x_ = velocity_x;
-    velocity_y_ = velocity_y;
-  }
+
+  void set_velocity(const double velocity) { velocity_ = velocity; }
+  double velocity() const { return velocity_; }
+  void set_direction_global(double x, double y);
+  void set_direction_relative(double x, double y);
 
  protected:
-  [[nodiscard]] double velocity_x() const { return velocity_x_; }
-  [[nodiscard]] double velocity_y() const { return velocity_y_; }
+  [[nodiscard]] double direction_x() const { return direction_x_; }
+  [[nodiscard]] double direction_y() const { return direction_y_; }
 
   void Move();
   void ResetLastMove();
 
  private:
-  void BindCamera(double object_center_x, double object_center_y);
-
-  double velocity_x_;
-  double velocity_y_;
-  double last_velocity_x_ = 0.0;
-  double last_velocity_y_ = 0.0;
+  double velocity_;
+  double direction_x_ = 0.0;
+  double direction_y_ = 0.0;
+  double last_direction_x_ = 0.0;
+  double last_direction_y_ = 0.0;
 
   std::optional<Camera2D> camera_;
 };

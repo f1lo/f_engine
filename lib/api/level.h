@@ -42,12 +42,12 @@ class LevelBuilder {
       level_->camera_object_ = object.get();
     }
 
+    for (const auto& ability : abilities) {
+      ability->user_ = object.get();
+    }
+
     level_->objects_.emplace_back(std::move(object));
     level_->abilities_.emplace_back(std::move(abilities));
-
-    for (const auto& ability : level_->abilities_.back()) {
-      ability->user_ = level_->objects_.back().get();
-    }
 
     return *this;
   }

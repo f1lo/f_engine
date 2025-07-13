@@ -50,6 +50,7 @@ class Object {
   [[nodiscard]] Kind kind() const { return kind_; }
   [[nodiscard]] bool deleted() const { return deleted_; }
   [[nodiscard]] bool clicked() const { return clicked_; }
+
   void set_deleted(const bool deleted) { deleted_ = deleted; }
   void set_clicked(const bool clicked) { clicked_ = clicked; }
 

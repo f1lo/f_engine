@@ -10,9 +10,9 @@ constexpr double kBallOffset = 3;
 
 class PlayerPad final : public lib::api::objects::MovableObject {
  public:
-  PlayerPad(double screen_width, double screen_height, double ball_radius,
-            double player_width, double player_height,
-            MovableObjectOpts options)
+  PlayerPad(const double screen_width, const double screen_height,
+            const double player_width, const double player_height,
+            const MovableObjectOpts& options)
       : MovableObject(kPlayer, options,
                       {{
                            (screen_width - player_width) / 2.0,
@@ -26,7 +26,6 @@ class PlayerPad final : public lib::api::objects::MovableObject {
                         screen_height - kPadOffset}}),
         screen_width_(screen_width),
         screen_height_(screen_height),
-        ball_radius_(ball_radius),
         player_width_(player_width),
         player_height_(player_height) {}
 
@@ -36,7 +35,6 @@ class PlayerPad final : public lib::api::objects::MovableObject {
  private:
   double screen_width_;
   double screen_height_;
-  double ball_radius_;
   double player_width_;
   double player_height_;
 };

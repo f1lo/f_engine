@@ -36,8 +36,7 @@ constexpr int kPlayerHeight = 25;
 constexpr int kScreenOffset = 10;
 constexpr int kBrickWidth = 130;
 constexpr int kBrickHeight = 30;
-constexpr int kBallVelocityX = 7;
-constexpr int kBallVelocityY = -7;
+constexpr int kBallVelocity = 9;
 constexpr int kBallRadius = 20;
 
 std::vector<std::unique_ptr<BrickObject>> GenerateBricks(int brick_width,
@@ -83,32 +82,31 @@ int main() {
   Game& game = Game::Create(/*width=*/1500, /*height=*/1000, "Breakout",
                             /*full_screen=*/false);
 
-  MoveAbility::MoveAbilityOpts opts = MoveAbility::MoveAbilityOpts(
-      {.cooldown_sec = 0}, /*should_hold=*/true, /*velocity_x=*/8,
-      /*velocity_y=*/0, kKeyA, kKeyD, kKeyW, kKeyS);
+  MoveAbility::MoveAbilityOpts opts =
+      MoveAbility::MoveAbilityOpts({.cooldown_sec = 0}, /*should_hold=*/true,
+                                   kKeyA, kKeyD, std::nullopt, std::nullopt);
   std::unique_ptr<MoveAbility> ability_move =
       std::make_unique<MoveAbility>(opts);
   std::unique_ptr<breakout::BallAbility> ability_ball =
       std::make_unique<breakout::BallAbility>(lib::api::abilities::kKeySpace);
 
   std::unique_ptr<Object> player = std::make_unique<PlayerPad>(
-      game.screen_width(), game.screen_height(), kBallRadius, kPlayerWidth,
-      kPlayerHeight,
+      game.screen_width(), game.screen_height(), kPlayerWidth, kPlayerHeight,
       MovableObject::MovableObjectOpts(
           /*is_hit_box_active=*/true, /*should_draw_hit_box=*/true,
-          /*attach_camera=*/false, /*velocity_x=*/0, /*velocity_y=*/0));
+          /*attach_camera=*/false, /*velocity_x=*/8));
 
   std::list<std::unique_ptr<Ability>> player_abilities;
   player_abilities.push_back(std::move(ability_move));
   std::unique_ptr<breakout::Ball> ball = std::make_unique<breakout::Ball>(
       MovableObject::MovableObjectOpts(
           /*is_hit_box_active=*/true, /*should_draw_hit_box=*/true,
-          /*attach_camera=*/false, /*velocity_x=*/0, /*velocity_y=*/0),
+          /*attach_camera=*/false, /*velocity=*/kBallVelocity),
       /*hit_box_center=*/
       std::make_pair(game.screen_width() / 2,
                      game.screen_height() - breakout::kPadOffset -
                          kPlayerHeight - breakout::kBallOffset - kBallRadius),
-      kBallRadius, kBallVelocityX, kBallVelocityY);
+      kBallRadius);
   std::list<std::unique_ptr<Ability>> ball_abilities;
   ball_abilities.push_back(std::move(ability_ball));
   LevelMainBuilder level_builder =

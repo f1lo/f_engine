@@ -3,6 +3,9 @@
 
 #include "raylib/include/raylib.h"
 
+#include <list>
+#include <memory>
+
 #include "lib/api/abilities/keys.h"
 #include "lib/api/objects/object.h"
 
@@ -23,7 +26,7 @@ class Ability {
   explicit Ability(const AbilityOpts opts) : user_(nullptr), opts_(opts) {}
   virtual ~Ability() = default;
 
-  virtual void MaybeUseModifyUser() = 0;
+  virtual std::list<std::unique_ptr<objects::Object>> Use() = 0;
 
   void update_last_used() { last_used_sec_ = GetTime(); }
 
@@ -44,29 +47,26 @@ class MoveAbility : public Ability {
  public:
   struct MoveAbilityOpts : AbilityOpts {
     MoveAbilityOpts(const AbilityOpts opts, const bool should_hold,
-                    const double velocity_x, const double velocity_y,
-                    const Button key_left, const Button key_right,
-                    const Button key_top, const Button key_bottom)
+                    const std::optional<Button> key_left,
+                    const std::optional<Button> key_right,
+                    const std::optional<Button> key_top,
+                    const std::optional<Button> key_bottom)
         : AbilityOpts(opts),
           should_hold(should_hold),
-          velocity_x(velocity_x),
-          velocity_y(velocity_y),
           key_left(key_left),
           key_right(key_right),
           key_top(key_top),
           key_bottom(key_bottom) {}
     bool should_hold;
-    double velocity_x;
-    double velocity_y;
-    Button key_left;
-    Button key_right;
-    Button key_top;
-    Button key_bottom;
+    const std::optional<Button> key_left;
+    const std::optional<Button> key_right;
+    const std::optional<Button> key_top;
+    const std::optional<Button> key_bottom;
   };
   explicit MoveAbility(const MoveAbilityOpts& opts)
       : Ability({opts.cooldown_sec}), opts_(opts) {}
 
-  void MaybeUseModifyUser() override;
+  [[nodiscard]] std::list<std::unique_ptr<objects::Object>> Use() override;
 
  private:
   MoveAbilityOpts opts_;

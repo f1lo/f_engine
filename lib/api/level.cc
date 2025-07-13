@@ -12,6 +12,7 @@
 namespace lib {
 namespace api {
 
+using abilities::Ability;
 using objects::MovableObject;
 using objects::Object;
 using objects::StaticObject;
@@ -46,9 +47,11 @@ LevelId Level::Run() {
 
     auto object_it = objects_.begin();
     auto ability_it = abilities_.begin();
+    std::list<std::unique_ptr<Object>> abilities_objects;
     while (object_it != objects_.end() && ability_it != abilities_.end()) {
       for (const auto& ability : *ability_it) {
-        ability->MaybeUseModifyUser();
+        std::list<std::unique_ptr<Object>> new_objects = ability->Use();
+        abilities_objects.splice(abilities_objects.end(), new_objects);
       }
 
       object_it->get()->Update(objects_);
@@ -57,6 +60,12 @@ LevelId Level::Run() {
       ++object_it;
       ++ability_it;
     }
+
+    // Add all accumulated objects from abilities.
+    abilities_.splice(abilities_.end(),
+                      std::list<std::list<std::unique_ptr<Ability>>>(
+                          abilities_objects.size()));
+    objects_.splice(objects_.end(), abilities_objects);
 
     if (camera_object_ != nullptr) {
       EndMode2D();
