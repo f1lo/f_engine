@@ -4,11 +4,14 @@
 #include "raylib/include/raylib.h"
 
 #include "lib/api/abilities/keys.h"
-#include "lib/api/objects/movable_object.h"
 #include "lib/api/objects/object.h"
 
 namespace lib {
 namespace api {
+
+template <typename LevelT>
+class LevelBuilder;
+
 namespace abilities {
 
 class Ability {
@@ -17,15 +20,20 @@ class Ability {
     uint32_t cooldown_sec;
   };
 
-  explicit Ability(const AbilityOpts opts) : opts_(opts) {}
+  explicit Ability(const AbilityOpts opts) : user_(nullptr), opts_(opts) {}
   virtual ~Ability() = default;
 
-  virtual void MaybeUseModifyUser(objects::Object& user) = 0;
+  virtual void MaybeUseModifyUser() = 0;
 
   void update_last_used() { last_used_sec_ = GetTime(); }
 
  protected:
+  template <typename LevelT>
+  friend class LevelBuilder;
+
   [[nodiscard]] bool IsOnCooldown() const;
+  // Does not take ownership.
+  objects::Object* user_;
 
  private:
   AbilityOpts opts_;
@@ -58,7 +66,7 @@ class MoveAbility : public Ability {
   explicit MoveAbility(const MoveAbilityOpts& opts)
       : Ability({opts.cooldown_sec}), opts_(opts) {}
 
-  void MaybeUseModifyUser(objects::Object& user) override;
+  void MaybeUseModifyUser() override;
 
  private:
   MoveAbilityOpts opts_;

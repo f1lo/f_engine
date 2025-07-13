@@ -48,7 +48,7 @@ LevelId Level::Run() {
     auto ability_it = abilities_.begin();
     while (object_it != objects_.end() && ability_it != abilities_.end()) {
       for (const auto& ability : *ability_it) {
-        ability->MaybeUseModifyUser(*object_it->get());
+        ability->MaybeUseModifyUser();
       }
 
       object_it->get()->Update(objects_);

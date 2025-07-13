@@ -12,7 +12,7 @@ class ClickAbility : public Ability {
  public:
   ClickAbility() : Ability({.cooldown_sec = 0}) {}
 
-  void MaybeUseModifyUser(objects::Object& user) override;
+  void MaybeUseModifyUser() override;
 };
 
 }  // namespace abilities

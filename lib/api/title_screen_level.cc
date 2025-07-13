@@ -1,5 +1,7 @@
 #include "lib/api/title_screen_level.h"
 
+#include "abilities/click_ability.h"
+
 namespace lib {
 namespace api {
 

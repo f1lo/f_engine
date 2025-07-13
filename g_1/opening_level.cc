@@ -1,5 +1,6 @@
 #include "g_1/opening_level.h"
 
+#include "lib/api/abilities/ability.h"
 #include "lib/api/abilities/keys.h"
 #include "lib/api/level.h"
 
@@ -17,15 +18,4 @@ LevelId OpeningLevel::MaybeChangeLevel() const {
   }
   return id();
 }
-
-OpeningLevelBuilder& OpeningLevelBuilder::AddPlayerAndAbilities(
-    std::unique_ptr<Player> player,
-    std::list<std::unique_ptr<lib::api::abilities::Ability>> abilities) {
-  // Unsafe.
-  level_->player_ = player.get();
-  AddObjectAndAbilities(std::move(player), std::move(abilities),
-                        /*attach_camera=*/true);
-  return *this;
-}
-
 }  // namespace g_1

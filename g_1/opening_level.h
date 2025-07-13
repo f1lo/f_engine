@@ -11,7 +11,7 @@ class OpeningLevel : public lib::api::Level {
  public:
   explicit OpeningLevel(const lib::api::LevelId id)
       : Level(id), player_(nullptr) {}
-  lib::api::LevelId MaybeChangeLevel() const override;
+  [[nodiscard]] lib::api::LevelId MaybeChangeLevel() const override;
 
  protected:
   friend class OpeningLevelBuilder;
@@ -24,7 +24,13 @@ class OpeningLevelBuilder : public lib::api::LevelBuilder<OpeningLevel> {
 
   OpeningLevelBuilder& AddPlayerAndAbilities(
       std::unique_ptr<Player> player,
-      std::list<std::unique_ptr<lib::api::abilities::Ability>> abilities);
+      std::list<std::unique_ptr<lib::api::abilities::Ability>> abilities) {
+    // Unsafe.
+    level_->player_ = player.get();
+    AddObjectAndAbilities(std::move(player), std::move(abilities),
+                          /*attach_camera=*/true);
+    return *this;
+  }
 };
 
 }  // namespace g_1

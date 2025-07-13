@@ -13,7 +13,7 @@ class BallAbility : public lib::api::abilities::Ability {
       : Ability(/*opts*/ {.cooldown_sec = 0}),
         activation_button_(activation_button) {}
 
-  void MaybeUseModifyUser(lib::api::objects::Object& user) override;
+  void MaybeUseModifyUser() override;
 
  private:
   lib::api::abilities::Button activation_button_;

@@ -34,6 +34,7 @@ constexpr float kPlayerHeight = 20;
 namespace g_1 {
 namespace {
 
+using lib::api::TitleScreenLevelBuilder;
 using lib::api::abilities::Ability;
 using lib::api::abilities::kKeyA;
 using lib::api::abilities::kKeyD;
@@ -146,8 +147,10 @@ std::unique_ptr<Level> MakeTitleScreenLevel(int screen_width, int screen_height,
            {kButtonOffsetX + kButtonLengthX,
             kButtonOffsetY + 2 * kButtonLengthY + kOffsetBetweenButtons}}));
 
-  return std::make_unique<lib::api::TitleScreenLevel>(
-      kTitleScreenLevel, std::move(start_button), std::move(exit_button));
+  TitleScreenLevelBuilder level_builder;
+  return level_builder.AddStartButton(std::move(start_button))
+      .AddExitButton(std::move(exit_button))
+      .Build();
 }
 
 }  // namespace g_1

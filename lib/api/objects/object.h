@@ -45,8 +45,8 @@ class Object {
                                                   double y) const;
   [[nodiscard]] bool CollidesWith(const Object& other) const;
 
-  double center_x() const { return hit_box_.center_x(); }
-  double center_y() const { return hit_box_.center_y(); }
+  [[nodiscard]] double center_x() const { return hit_box_.center_x(); }
+  [[nodiscard]] double center_y() const { return hit_box_.center_y(); }
   [[nodiscard]] Kind kind() const { return kind_; }
   [[nodiscard]] bool deleted() const { return deleted_; }
   [[nodiscard]] bool clicked() const { return clicked_; }
@@ -59,7 +59,6 @@ class Object {
   bool UpdateInternal(const std::list<std::unique_ptr<Object>>& other_objects);
 
   internal::HitBox& mutable_hit_box() { return hit_box_; }
-  Opts& mutable_options() { return options_; }
   [[nodiscard]] const internal::HitBox& hit_box() const { return hit_box_; }
 
  private:

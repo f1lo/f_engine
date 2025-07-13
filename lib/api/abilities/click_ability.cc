@@ -11,19 +11,19 @@ namespace abilities {
 using objects::Object;
 using objects::StaticObject;
 
-void ClickAbility::MaybeUseModifyUser(Object& user) {
+void ClickAbility::MaybeUseModifyUser() {
   if (!IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-    user.set_clicked(false);
+    user_->set_clicked(false);
     return;
   }
-  if (user.CollidesWith(StaticObject(
+  if (user_->CollidesWith(StaticObject(
           /*kind=*/kMousePointer,
           /*options=*/
           /*options=*/
           {/*is_hit_box_active=*/true,
            /*should_draw_hit_box=*/false},
           /*hit_box_vertices=*/{{GetMouseX(), GetMouseY()}}))) {
-    user.set_clicked(true);
+    user_->set_clicked(true);
   }
 }
 

@@ -45,10 +45,19 @@ class LevelBuilder {
     level_->objects_.emplace_back(std::move(object));
     level_->abilities_.emplace_back(std::move(abilities));
 
+    for (const auto& ability : level_->abilities_.back()) {
+      ability->user_ = level_->objects_.back().get();
+    }
+
     return *this;
   }
   LevelBuilder& AddObject(std::unique_ptr<objects::Object> object,
                           const bool attach_camera = false) {
+    if (attach_camera) {
+      CHECK(level_->camera_object_ == nullptr)
+          << "AddObject: Camera has already been added.";
+      level_->camera_object_ = object.get();
+    }
 
     level_->objects_.emplace_back(std::move(object));
     level_->abilities_.emplace_back();
@@ -125,13 +134,14 @@ class Level {
   Camera2D camera_;
 
  protected:
-  explicit Level(const LevelId id) : id_(id), camera_object_(nullptr) {
-    camera_ = {.offset = {.x = static_cast<float>(GetScreenWidth()) / 2.0f,
-                          .y = static_cast<float>(GetScreenHeight()) / 2.0f},
-               .target = {.x = 0.0f, .y = 0.0f},
-               .rotation = 0.0f,
-               .zoom = 1.0f};
-  }
+  explicit Level(const LevelId id)
+      : id_(id),
+        camera_({.offset = {.x = static_cast<float>(GetScreenWidth()) / 2.0f,
+                            .y = static_cast<float>(GetScreenHeight()) / 2.0f},
+                 .target = {.x = 0.0f, .y = 0.0f},
+                 .rotation = 0.0f,
+                 .zoom = 1.0f}),
+        camera_object_(nullptr) {}
   // This separation is required so that cyclic dependency is not introduced
   // between Object and Ability classes.
   std::list<std::unique_ptr<objects::Object>> objects_;
