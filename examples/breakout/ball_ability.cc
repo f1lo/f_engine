@@ -5,10 +5,14 @@
 
 #include "examples/breakout/ball.h"
 #include "lib/api/abilities/keys.h"
+#include "lib/api/camera.h"
 
 namespace breakout {
 
-std::list<std::unique_ptr<lib::api::objects::Object>> BallAbility::Use() {
+using lib::api::Camera;
+
+std::list<std::unique_ptr<lib::api::objects::Object>> BallAbility::Use(
+    const Camera& camera) {
   if (used_) {
     return {};
   }

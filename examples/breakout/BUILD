@@ -47,6 +47,7 @@ cc_library(
     deps = [
         "//examples/breakout:ball",
         "//examples/breakout:player_pad",
+        "//lib/api:camera",
         "//lib/api/abilities:ability",
         "//lib/api/abilities:keys",
     ],

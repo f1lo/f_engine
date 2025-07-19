@@ -47,7 +47,8 @@ void MovableObject::set_direction_global(const double x, const double y) {
 }
 
 void MovableObject::set_direction_relative(const double x, const double y) {
-  const Vector v = Vector{x - center_x(), y - center_y()};
+  const WorldPosition world_position = center();
+  const Vector v = Vector{x - world_position.x, y - world_position.y};
   if (v.IsZero()) {
     direction_x_ = 0;
     direction_y_ = 0;

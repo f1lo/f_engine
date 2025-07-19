@@ -1,12 +1,11 @@
 #ifndef LIB_API_ABILITIES_ABILITY_H
 #define LIB_API_ABILITIES_ABILITY_H
 
-#include "raylib/include/raylib.h"
-
 #include <list>
 #include <memory>
 
 #include "lib/api/abilities/keys.h"
+#include "lib/api/camera.h"
 #include "lib/api/objects/object.h"
 
 namespace lib {
@@ -26,9 +25,8 @@ class Ability {
   explicit Ability(const AbilityOpts opts) : user_(nullptr), opts_(opts) {}
   virtual ~Ability() = default;
 
-  virtual std::list<std::unique_ptr<objects::Object>> Use() = 0;
-
-  void update_last_used() { last_used_sec_ = GetTime(); }
+  virtual std::list<std::unique_ptr<objects::Object>> Use(
+      const Camera& camera) = 0;
 
  protected:
   template <typename LevelT>
@@ -46,18 +44,16 @@ class Ability {
 class MoveAbility : public Ability {
  public:
   struct MoveAbilityOpts : AbilityOpts {
-    MoveAbilityOpts(const AbilityOpts opts, const bool should_hold,
+    MoveAbilityOpts(const AbilityOpts opts,
                     const std::optional<Button> key_left,
                     const std::optional<Button> key_right,
                     const std::optional<Button> key_top,
                     const std::optional<Button> key_bottom)
         : AbilityOpts(opts),
-          should_hold(should_hold),
           key_left(key_left),
           key_right(key_right),
           key_top(key_top),
           key_bottom(key_bottom) {}
-    bool should_hold;
     const std::optional<Button> key_left;
     const std::optional<Button> key_right;
     const std::optional<Button> key_top;
@@ -65,11 +61,14 @@ class MoveAbility : public Ability {
   };
   explicit MoveAbility(const MoveAbilityOpts& opts)
       : Ability({opts.cooldown_sec}), opts_(opts) {}
+  ~MoveAbility() override = default;
 
-  [[nodiscard]] std::list<std::unique_ptr<objects::Object>> Use() override;
+  [[nodiscard]] std::list<std::unique_ptr<objects::Object>> Use(
+      const Camera& camera) override;
 
  private:
   MoveAbilityOpts opts_;
+  bool was_used_last_frame_ = false;
 };
 
 }  // namespace abilities

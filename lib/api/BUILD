@@ -22,6 +22,7 @@ cc_library(
     srcs = ["level.cc"],
     hdrs = ["level.h"],
     deps = [
+        "//lib/api:camera",
         "//lib/api/abilities:ability",
         "//lib/api/objects:movable_object",
         "//lib/api/objects:object",
@@ -44,4 +45,24 @@ cc_library(
         "//lib/api/objects:static_object",
         "//raylib",
     ],
+)
+
+cc_library(
+    name = "camera",
+    srcs = ["camera.cc"],
+    hdrs = ["camera.h"],
+    deps = [
+        "//lib/api:common_types",
+        "//lib/api/objects:object",
+        "//raylib",
+        "@abseil-cpp//absl/log:check",
+        "@abseil-cpp//absl/synchronization",
+    ],
+)
+
+cc_library(
+    name = "common_types",
+    srcs = ["common_types.cc"],
+    hdrs = ["common_types.h"],
+    deps = [],
 )

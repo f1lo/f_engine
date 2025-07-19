@@ -9,6 +9,7 @@ cc_library(
     srcs = ["object.cc"],
     hdrs = ["object.h"],
     deps = [
+        "//lib/api:common_types",
         "//lib/internal:hit_box",
         "@abseil-cpp//absl/container:flat_hash_map",
         "@abseil-cpp//absl/functional:any_invocable",

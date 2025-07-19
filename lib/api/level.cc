@@ -40,17 +40,14 @@ LevelId Level::Run() {
     BeginDrawing();
     ClearBackground(RAYWHITE);
     CleanUpOrDie();
-
-    if (camera_object_ != nullptr) {
-      BeginMode2D(Camera());
-    }
+    camera_.MaybeActivate();
 
     auto object_it = objects_.begin();
     auto ability_it = abilities_.begin();
     std::list<std::unique_ptr<Object>> abilities_objects;
     while (object_it != objects_.end() && ability_it != abilities_.end()) {
       for (const auto& ability : *ability_it) {
-        std::list<std::unique_ptr<Object>> new_objects = ability->Use();
+        std::list<std::unique_ptr<Object>> new_objects = ability->Use(camera_);
         abilities_objects.splice(abilities_objects.end(), new_objects);
       }
 
@@ -67,20 +64,11 @@ LevelId Level::Run() {
                           abilities_objects.size()));
     objects_.splice(objects_.end(), abilities_objects);
 
-    if (camera_object_ != nullptr) {
-      EndMode2D();
-    }
+    camera_.MaybeDeactivate();
     EndDrawing();
     changed_id = MaybeChangeLevel();
   }
   return changed_id;
-}
-
-Camera2D& Level::Camera() {
-  camera_.target.x = static_cast<float>(camera_object_->center_x());
-  camera_.target.y = static_cast<float>(camera_object_->center_y());
-
-  return camera_;
 }
 
 }  // namespace api

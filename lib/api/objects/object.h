@@ -4,6 +4,7 @@
 #include <list>
 #include <memory>
 
+#include "lib/api/common_types.h"
 #include "lib/internal/hit_box.h"
 
 typedef uint32_t Kind;
@@ -45,8 +46,10 @@ class Object {
                                                   double y) const;
   [[nodiscard]] bool CollidesWith(const Object& other) const;
 
-  [[nodiscard]] double center_x() const { return hit_box_.center_x(); }
-  [[nodiscard]] double center_y() const { return hit_box_.center_y(); }
+  // Object center in the world.
+  [[nodiscard]] WorldPosition center() const {
+    return {.x = hit_box().center_x(), .y = hit_box().center_y()};
+  }
   [[nodiscard]] Kind kind() const { return kind_; }
   [[nodiscard]] bool deleted() const { return deleted_; }
   [[nodiscard]] bool clicked() const { return clicked_; }

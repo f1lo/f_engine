@@ -6,16 +6,12 @@
 #include "g_1/player.h"
 #include "lib/api/abilities/ability.h"
 #include "lib/api/abilities/keys.h"
+#include "lib/api/abilities/move_with_cursor_ability.h"
 #include "lib/api/level.h"
 #include "lib/api/objects/movable_object.h"
 #include "lib/api/objects/object.h"
 #include "lib/api/objects/static_object.h"
 #include "lib/api/title_screen_level.h"
-
-using lib::api::kTitleScreenLevel;
-using lib::api::Level;
-using lib::api::objects::StaticObject;
-using lib::internal::HitBox;
 
 constexpr int kButtonOffsetX = 300;
 constexpr int kButtonOffsetY = 500;
@@ -33,6 +29,8 @@ constexpr float kPlayerHeight = 20;
 namespace g_1 {
 namespace {
 
+using lib::api::kTitleScreenLevel;
+using lib::api::Level;
 using lib::api::TitleScreenLevelBuilder;
 using lib::api::abilities::Ability;
 using lib::api::abilities::kKeyA;
@@ -40,9 +38,11 @@ using lib::api::abilities::kKeyD;
 using lib::api::abilities::kKeyS;
 using lib::api::abilities::kKeyW;
 using lib::api::abilities::MoveAbility;
+using lib::api::abilities::MoveWithCursorAbility;
 using lib::api::objects::MovableObject;
 using lib::api::objects::Object;
 using lib::api::objects::StaticObject;
+using lib::internal::HitBox;
 
 std::unique_ptr<Player> MakePlayer(const bool debug_mode) {
   return std::make_unique<Player>(
@@ -60,11 +60,11 @@ std::unique_ptr<Player> MakePlayer(const bool debug_mode) {
 
 std::list<std::unique_ptr<Ability>> MakePlayerAbilities() {
   std::list<std::unique_ptr<Ability>> abilities;
-  abilities.emplace_back(
-      std::make_unique<MoveAbility>(MoveAbility::MoveAbilityOpts(
-          Ability::AbilityOpts(/*cooldown_sec=*/0), /*should_hold=*/true,
-          /*key_left=*/kKeyA, /*key_right=*/kKeyD,
-          /*key_top=*/kKeyW, /*key_bottom=*/kKeyS)));
+  abilities.push_back(std::make_unique<MoveAbility>(
+      MoveAbility::MoveAbilityOpts(Ability::AbilityOpts(/*cooldown_sec=*/0),
+                                   /*key_left=*/kKeyA, /*key_right=*/kKeyD,
+                                   /*key_top=*/kKeyW, /*key_bottom=*/kKeyS)));
+  abilities.push_back(std::make_unique<MoveWithCursorAbility>());
 
   return std::move(abilities);
 }
@@ -72,7 +72,7 @@ std::list<std::unique_ptr<Ability>> MakePlayerAbilities() {
 std::vector<std::unique_ptr<StaticObject>> MakeStaticObjects(
     const int screen_width, const int screen_height, const bool debug_mode) {
   std::vector<std::unique_ptr<StaticObject>> static_objects;
-  static_objects.emplace_back(std::make_unique<StaticObject>(
+  static_objects.push_back(std::make_unique<StaticObject>(
       /*kind=*/kButton,
       StaticObject::StaticObjectOpts(
           /*is_hit_box_active=*/true,
@@ -84,7 +84,7 @@ std::vector<std::unique_ptr<StaticObject>> MakeStaticObjects(
            {kButtonOffsetX + kButtonLengthX, kButtonOffsetY},
            {kButtonOffsetX + kButtonLengthX,
             kButtonOffsetY + kButtonLengthY}})));
-  static_objects.emplace_back(std::make_unique<StaticObject>(
+  static_objects.push_back(std::make_unique<StaticObject>(
       /*kind=*/kButton,
       StaticObject::StaticObjectOpts(
           /*is_hit_box_active=*/true,

@@ -1,6 +1,7 @@
 #ifndef LIB_API_ABILITIES_KEYS_H
 #define LIB_API_ABILITIES_KEYS_H
 
+#include "lib/api/common_types.h"
 #include "raylib/include/raylib.h"
 
 namespace lib {
@@ -22,6 +23,19 @@ inline bool IsPressed(const Button button) {
 
 inline bool IsDown(const Button button) {
   return IsKeyDown(button);
+}
+
+inline bool IsPrimaryPressed() {
+  return IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
+}
+
+inline bool IsSecondaryPressed() {
+  return IsMouseButtonPressed(MOUSE_BUTTON_RIGHT);
+}
+
+inline ScreenPosition GetCursorPos() {
+  return {.x = static_cast<double>(GetMouseX()),
+          .y = static_cast<double>(GetMouseY())};
 }
 
 }  // namespace abilities

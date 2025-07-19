@@ -9,6 +9,7 @@
 
 #include "abilities/ability.h"
 #include "absl/container/flat_hash_map.h"
+#include "lib/api/camera.h"
 #include "lib/api/objects/object.h"
 #include "lib/api/objects/static_object.h"
 
@@ -37,9 +38,7 @@ class LevelBuilder {
       std::list<std::unique_ptr<abilities::Ability>> abilities,
       const bool attach_camera = false) {
     if (attach_camera) {
-      CHECK(level_->camera_object_ == nullptr)
-          << "AddObjectAndAbilities: Camera has already been added.";
-      level_->camera_object_ = object.get();
+      level_->camera_.Bind(object.get());
     }
 
     for (const auto& ability : abilities) {
@@ -54,9 +53,7 @@ class LevelBuilder {
   LevelBuilder& AddObject(std::unique_ptr<objects::Object> object,
                           const bool attach_camera = false) {
     if (attach_camera) {
-      CHECK(level_->camera_object_ == nullptr)
-          << "AddObject: Camera has already been added.";
-      level_->camera_object_ = object.get();
+      level_->camera_.Bind(object.get());
     }
 
     level_->objects_.emplace_back(std::move(object));
@@ -127,26 +124,15 @@ class Level {
 
   void CleanUpOrDie();
   [[nodiscard]] virtual LevelId MaybeChangeLevel() const = 0;
-  // Should only be called if camera is attached.
-  Camera2D& Camera();
-
   LevelId id_;
-  Camera2D camera_;
 
  protected:
-  explicit Level(const LevelId id)
-      : id_(id),
-        camera_({.offset = {.x = static_cast<float>(GetScreenWidth()) / 2.0f,
-                            .y = static_cast<float>(GetScreenHeight()) / 2.0f},
-                 .target = {.x = 0.0f, .y = 0.0f},
-                 .rotation = 0.0f,
-                 .zoom = 1.0f}),
-        camera_object_(nullptr) {}
+  explicit Level(const LevelId id) : id_(id) {}
   // This separation is required so that cyclic dependency is not introduced
   // between Object and Ability classes.
   std::list<std::unique_ptr<objects::Object>> objects_;
   std::list<std::list<std::unique_ptr<abilities::Ability>>> abilities_;
-  const objects::Object* camera_object_;
+  Camera camera_;
 };
 
 }  // namespace api
