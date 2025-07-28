@@ -93,7 +93,7 @@ int main() {
       game.screen_width(), game.screen_height(), kPlayerWidth, kPlayerHeight,
       MovableObject::MovableObjectOpts(
           /*is_hit_box_active=*/true, /*should_draw_hit_box=*/true,
-          /*attach_camera=*/false, /*velocity_x=*/8));
+          /*attach_camera=*/false, /*velocity=*/8));
 
   std::list<std::unique_ptr<Ability>> player_abilities;
   player_abilities.push_back(std::move(ability_move));

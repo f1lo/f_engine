@@ -10,9 +10,16 @@
 
 namespace lib {
 namespace api {
+namespace abilities {
+class Ability;
+}  // namespace abilities
 
 template <typename LevelT>
 class LevelBuilder;
+
+typedef std::pair<std::unique_ptr<objects::Object>,
+                  std::list<std::unique_ptr<abilities::Ability>>>
+    ObjectAndAbilities;
 
 namespace abilities {
 
@@ -25,8 +32,7 @@ class Ability {
   explicit Ability(const AbilityOpts opts) : user_(nullptr), opts_(opts) {}
   virtual ~Ability() = default;
 
-  virtual std::list<std::unique_ptr<objects::Object>> Use(
-      const Camera& camera) = 0;
+  virtual std::list<ObjectAndAbilities> Use(const Camera& camera) = 0;
 
  protected:
   template <typename LevelT>
@@ -63,7 +69,7 @@ class MoveAbility : public Ability {
       : Ability({opts.cooldown_sec}), opts_(opts) {}
   ~MoveAbility() override = default;
 
-  [[nodiscard]] std::list<std::unique_ptr<objects::Object>> Use(
+  [[nodiscard]] std::list<ObjectAndAbilities> Use(
       const Camera& camera) override;
 
  private:

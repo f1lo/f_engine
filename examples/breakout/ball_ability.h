@@ -17,7 +17,7 @@ class BallAbility : public lib::api::abilities::Ability {
       : Ability(/*opts*/ {.cooldown_sec = 0}),
         activation_button_(activation_button) {}
 
-  std::list<std::unique_ptr<lib::api::objects::Object>> Use(
+  std::list<lib::api::ObjectAndAbilities> Use(
       const lib::api::Camera& camera) override;
 
  private:

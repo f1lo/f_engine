@@ -111,6 +111,7 @@ std::unique_ptr<Level> MakeOpeningLevel(const int screen_width,
   for (auto& static_object : static_objects) {
     level_builder.AddObject(std::move(static_object));
   }
+  level_builder.WithScreenObjects(/*should_draw_hitbox=*/debug_mode);
   return level_builder.Build();
 }
 

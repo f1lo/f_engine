@@ -21,7 +21,7 @@ bool Ability::IsOnCooldown() const {
   return GetTime() - last_used_sec_ <= static_cast<double>(opts_.cooldown_sec);
 }
 
-std::list<std::unique_ptr<Object>> MoveAbility::Use(const Camera& camera) {
+std::list<ObjectAndAbilities> MoveAbility::Use(const Camera& camera) {
   // Generally move should have no cooldown - so ignore it.
   auto* cast_user = dynamic_cast<MovableObject*>(user_);
   CHECK(cast_user) << " ability user is not of correct type.";

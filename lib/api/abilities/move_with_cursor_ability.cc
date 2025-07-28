@@ -20,8 +20,7 @@ using api::Camera;
 using objects::MovableObject;
 using objects::Object;
 
-std::list<std::unique_ptr<Object>> MoveWithCursorAbility::Use(
-    const Camera& camera) {
+std::list<ObjectAndAbilities> MoveWithCursorAbility::Use(const Camera& camera) {
   MovableObject* const movable_user = dynamic_cast<MovableObject*>(user_);
   CHECK(movable_user);
   if (cursor_last_clicked_pos_.has_value()) {

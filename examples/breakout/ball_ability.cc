@@ -10,9 +10,9 @@
 namespace breakout {
 
 using lib::api::Camera;
+using lib::api::ObjectAndAbilities;
 
-std::list<std::unique_ptr<lib::api::objects::Object>> BallAbility::Use(
-    const Camera& camera) {
+std::list<ObjectAndAbilities> BallAbility::Use(const Camera& camera) {
   if (used_) {
     return {};
   }

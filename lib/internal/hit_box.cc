@@ -234,18 +234,16 @@ bool HitBox::CollidesWith(const HitBox& other) const {
   }
 }
 
-std::pair<double, double> HitBox::Reflect(const HitBox& other, double x,
-                                          double y) const {
+std::pair<double, double> HitBox::Reflect(const HitBox& other, const double x,
+                                          const double y) const {
   CHECK(shape_type_ == ShapeType::LINE || shape_type_ == ShapeType::RECTANGLE)
       << "Reflection is only implemented from Line or Rectangle.";
   const Vector v = {x, y};
   switch (shape_type_) {
-    // Potentially unsafe if not careful.
-    case ShapeType::LINE:
-      {
-        const Vector reflected = static_cast<Line*>(shape_.get())->Reflect(v);
-        return {reflected.x, reflected.y};
-      }
+    case ShapeType::LINE: {
+      const Vector reflected = static_cast<Line*>(shape_.get())->Reflect(v);
+      return {reflected.x, reflected.y};
+    }
     case ShapeType::RECTANGLE:
       return ReflectFromRectangle(*static_cast<Rectangle*>(shape_.get()), v,
                                   other.shape_->center_x(),

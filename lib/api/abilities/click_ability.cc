@@ -17,7 +17,7 @@ using api::Camera;
 using objects::Object;
 using objects::StaticObject;
 
-std::list<std::unique_ptr<Object>> ClickAbility::Use(const Camera& camera) {
+std::list<ObjectAndAbilities> ClickAbility::Use(const Camera& camera) {
   if (!IsPrimaryPressed()) {
     user_->set_clicked(false);
     return {};

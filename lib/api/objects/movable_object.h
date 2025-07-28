@@ -1,8 +1,6 @@
 #ifndef LIB_API_OBJECTS_MOVABLE_OBJECT_H
 #define LIB_API_OBJECTS_MOVABLE_OBJECT_H
 
-#include "raylib/include/raylib.h"
-
 #include <list>
 #include <memory>
 #include <optional>

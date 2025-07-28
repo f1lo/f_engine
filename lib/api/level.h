@@ -11,7 +11,7 @@
 #include "absl/container/flat_hash_map.h"
 #include "lib/api/camera.h"
 #include "lib/api/objects/object.h"
-#include "lib/api/objects/static_object.h"
+#include "lib/api/objects/screen_edge_object.h"
 
 namespace lib {
 namespace api {
@@ -62,44 +62,24 @@ class LevelBuilder {
     return *this;
   }
 
-  LevelBuilder& WithScreenObjects() {
-    int screen_width = GetScreenWidth();
-    int screen_height = GetScreenHeight();
-    std::unique_ptr<objects::StaticObject> screen_left =
-        std::make_unique<objects::StaticObject>(
-            kScreenLeft,
-            objects::StaticObject::StaticObjectOpts(
-                /*is_hit_box_active=*/true,
-                /*should_draw_hit_box=*/false),
-            std::vector({std::make_pair<double, double>(0, 0),
-                         std::make_pair<double, double>(0, screen_height)}));
-    std::unique_ptr<objects::StaticObject> screen_right =
-        std::make_unique<objects::StaticObject>(
-            kScreenRight,
-            objects::StaticObject::StaticObjectOpts(
-                /*is_hit_box_active=*/true,
-                /*should_draw_hit_box=*/false),
-            std::vector(
-                {std::make_pair<double, double>(screen_width, 0),
-                 std::make_pair<double, double>(screen_width, screen_height)}));
-    std::unique_ptr<objects::StaticObject> screen_top =
-        std::make_unique<objects::StaticObject>(
-            kScreenTop,
-            objects::StaticObject::StaticObjectOpts(
-                /*is_hit_box_active=*/true,
-                /*should_draw_hit_box=*/false),
-            std::vector({std::make_pair<double, double>(0, 0),
-                         std::make_pair<double, double>(screen_width, 0)}));
-    std::unique_ptr<objects::StaticObject> screen_bottom =
-        std::make_unique<objects::StaticObject>(
-            kScreenBottom,
-            objects::StaticObject::StaticObjectOpts(
-                /*is_hit_box_active=*/true,
-                /*should_draw_hit_box=*/false),
-            std::vector(
-                {std::make_pair<double, double>(0, screen_height),
-                 std::make_pair<double, double>(screen_width, screen_height)}));
+  LevelBuilder& WithScreenObjects(const bool should_draw_hitbox = false) {
+    const int screen_width = GetScreenWidth();
+    const int screen_height = GetScreenHeight();
+    std::unique_ptr<objects::ScreenEdgeObject> screen_left =
+        objects::ScreenEdgeObject::MakeLeft(screen_height, should_draw_hitbox);
+    std::unique_ptr<objects::ScreenEdgeObject> screen_right =
+        objects::ScreenEdgeObject::MakeRight(screen_width, screen_height,
+                                             should_draw_hitbox);
+    std::unique_ptr<objects::ScreenEdgeObject> screen_top =
+        objects::ScreenEdgeObject::MakeTop(screen_width, should_draw_hitbox);
+    std::unique_ptr<objects::ScreenEdgeObject> screen_bottom =
+        objects::ScreenEdgeObject::MakeBottom(screen_width, screen_height,
+                                              should_draw_hitbox);
 
+    level_->screen_edge_objects_.emplace_back(screen_left.get());
+    level_->screen_edge_objects_.emplace_back(screen_right.get());
+    level_->screen_edge_objects_.emplace_back(screen_top.get());
+    level_->screen_edge_objects_.emplace_back(screen_bottom.get());
     return AddObject(std::move(screen_left))
         .AddObject(std::move(screen_right))
         .AddObject(std::move(screen_top))
@@ -124,6 +104,7 @@ class Level {
 
   void CleanUpOrDie();
   [[nodiscard]] virtual LevelId MaybeChangeLevel() const = 0;
+  void UpdateScreenEdges() const;
   LevelId id_;
 
  protected:
@@ -132,6 +113,7 @@ class Level {
   // between Object and Ability classes.
   std::list<std::unique_ptr<objects::Object>> objects_;
   std::list<std::list<std::unique_ptr<abilities::Ability>>> abilities_;
+  std::list<objects::ScreenEdgeObject*> screen_edge_objects_;
   Camera camera_;
 };
 

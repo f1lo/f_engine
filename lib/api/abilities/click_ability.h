@@ -17,8 +17,7 @@ class ClickAbility : public Ability {
   ClickAbility() : Ability({.cooldown_sec = 0}) {}
   ~ClickAbility() override = default;
 
-  std::list<std::unique_ptr<objects::Object>> Use(
-      const Camera& camera) override;
+  std::list<ObjectAndAbilities> Use(const Camera& camera) override;
 };
 
 }  // namespace abilities

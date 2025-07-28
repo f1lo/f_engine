@@ -26,8 +26,10 @@ class Camera {
 
   // Does not take ownership.
   void Bind(objects::Object* object);
-  ScreenPosition GetScreenPosition(const WorldPosition& world_pos) const;
-  WorldPosition GetWorldPosition(const ScreenPosition& screen_pos) const;
+  [[nodiscard]] ScreenPosition GetScreenPosition(
+      const WorldPosition& world_pos) const;
+  [[nodiscard]] WorldPosition GetWorldPosition(
+      const ScreenPosition& screen_pos) const;
   void MaybeActivate();
   void MaybeDeactivate() const;
 

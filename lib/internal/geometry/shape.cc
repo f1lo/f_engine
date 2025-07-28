@@ -35,8 +35,9 @@ void Point::Draw() const {
 }
 void Line::Draw() const {
   // Unsafe cast.
-  DrawLineV(Vector2(static_cast<float>(a.x), static_cast<float>(a.y)),
-            Vector2(static_cast<float>(b.x), static_cast<float>(b.y)), RED);
+  DrawLineEx(Vector2(static_cast<float>(a.x), static_cast<float>(a.y)),
+             Vector2(static_cast<float>(b.x), static_cast<float>(b.y)),
+             /*thick=*/10.0, RED);
 }
 void Rectangle::Draw() const {
   DrawRectangleLines(b.x, b.y, /*width=*/c.x - b.x, /*height*/ a.y - b.y, RED);

@@ -26,7 +26,7 @@ cc_library(
         "//lib/api/abilities:ability",
         "//lib/api/objects:movable_object",
         "//lib/api/objects:object",
-        "//lib/api/objects:static_object",
+        "//lib/api/objects:screen_edge_object",
         "//raylib",
         "@abseil-cpp//absl/container:flat_hash_map",
         "@abseil-cpp//absl/log:check",

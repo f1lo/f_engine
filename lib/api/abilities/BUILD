@@ -48,6 +48,20 @@ cc_library(
 )
 
 cc_library(
+    name = "projectile_ability",
+    srcs = ["projectile_ability.cc"],
+    hdrs = ["projectile_ability.h"],
+    deps = [
+        "//lib/api:camera",
+        "//lib/api:common_types",
+        "//lib/api/abilities:ability",
+        "//lib/api/abilities:keys",
+        "//lib/api/objects:movable_object",
+        "//lib/api/objects:object",
+    ],
+)
+
+cc_library(
     name = "keys",
     hdrs = ["keys.h"],
     deps = [

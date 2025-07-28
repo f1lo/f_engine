@@ -7,15 +7,14 @@
 #include "absl/log/check.h"
 #include "lib/api/abilities/ability.h"
 #include "lib/api/objects/movable_object.h"
-#include "lib/api/objects/static_object.h"
 
 namespace lib {
 namespace api {
 
 using abilities::Ability;
+using api::ObjectAndAbilities;
 using objects::MovableObject;
 using objects::Object;
-using objects::StaticObject;
 
 void Level::CleanUpOrDie() {
   auto object_it = objects_.begin();
@@ -34,6 +33,13 @@ void Level::CleanUpOrDie() {
   }
 }
 
+void Level::UpdateScreenEdges() const {
+  for (auto& screen_edge_object : screen_edge_objects_) {
+    screen_edge_object->ReAdjustToScreen(camera_.GetWorldPosition({0.0, 0.0}),
+                                         GetScreenWidth(), GetScreenHeight());
+  }
+}
+
 LevelId Level::Run() {
   LevelId changed_id = id_;
   while (changed_id == id_) {
@@ -41,14 +47,17 @@ LevelId Level::Run() {
     ClearBackground(RAYWHITE);
     CleanUpOrDie();
     camera_.MaybeActivate();
+    UpdateScreenEdges();
 
     auto object_it = objects_.begin();
     auto ability_it = abilities_.begin();
-    std::list<std::unique_ptr<Object>> abilities_objects;
+    std::list<ObjectAndAbilities> new_objects_and_abilities;
     while (object_it != objects_.end() && ability_it != abilities_.end()) {
       for (const auto& ability : *ability_it) {
-        std::list<std::unique_ptr<Object>> new_objects = ability->Use(camera_);
-        abilities_objects.splice(abilities_objects.end(), new_objects);
+        std::list<ObjectAndAbilities> new_objects_and_abilities_current =
+            ability->Use(camera_);
+        new_objects_and_abilities.splice(new_objects_and_abilities.end(),
+                                         new_objects_and_abilities_current);
       }
 
       object_it->get()->Update(objects_);
@@ -59,10 +68,10 @@ LevelId Level::Run() {
     }
 
     // Add all accumulated objects from abilities.
-    abilities_.splice(abilities_.end(),
-                      std::list<std::list<std::unique_ptr<Ability>>>(
-                          abilities_objects.size()));
-    objects_.splice(objects_.end(), abilities_objects);
+    for (auto& [object, abilities] : new_objects_and_abilities) {
+      objects_.push_back(std::move(object));
+      abilities_.push_back(std::move(abilities));
+    }
 
     camera_.MaybeDeactivate();
     EndDrawing();

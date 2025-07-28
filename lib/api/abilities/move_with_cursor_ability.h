@@ -20,8 +20,7 @@ class MoveWithCursorAbility : public Ability {
         cursor_last_clicked_pos_(std::nullopt) {}
   ~MoveWithCursorAbility() override = default;
 
-  std::list<std::unique_ptr<objects::Object>> Use(
-      const Camera& camera) override;
+  std::list<ObjectAndAbilities> Use(const Camera& camera) override;
 
  private:
   std::optional<WorldPosition> cursor_last_clicked_pos_;

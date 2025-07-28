@@ -28,8 +28,7 @@ class HitBox {
   double center_y() const { return shape_->center_y(); }
 
  private:
-  // TODO(f1lo): Cannot see a better way for now but there has to be. Try to
-  // make this type agnostic.
+  // TODO(f1lo): Make this type agnostic.
   // When adding new types make sure that `CollidesWith` is appropriately
   // updated.
   enum class ShapeType { POINT, LINE, RECTANGLE, CIRCLE };

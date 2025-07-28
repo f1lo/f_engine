@@ -24,7 +24,6 @@ cc_library(
         "//lib/api/objects:object",
         "//lib/api/objects:object_utils",
         "//lib/internal/geometry:vec",
-        "//raylib",
     ],
 )
 
@@ -34,6 +33,7 @@ cc_library(
     hdrs = ["object_utils.h"],
     visibility = ["//visibility:private"],
     deps = [
+        "//lib/api:common_types",
         "//lib/api/objects:object",
         "//lib/internal:hit_box",
         "//lib/internal/geometry:shape",
@@ -50,5 +50,29 @@ cc_library(
         "//lib/api/objects:object",
         "//lib/api/objects:object_utils",
         "@abseil-cpp//absl/container:flat_hash_map",
+    ],
+)
+
+cc_library(
+    name = "projectile_object",
+    srcs = ["projectile_object.cc"],
+    hdrs = ["projectile_object.h"],
+    deps = [
+        "//lib/api/objects:movable_object",
+        "//lib/api/objects:object",
+        "@abseil-cpp//absl/container:flat_hash_set",
+    ],
+)
+
+cc_library(
+    name = "screen_edge_object",
+    srcs = ["screen_edge_object.cc"],
+    hdrs = ["screen_edge_object.h"],
+    deps = [
+        "//lib/api:common_types",
+        "//lib/api/objects:object",
+        "//lib/api/objects:object_utils",
+        "@abseil-cpp//absl/log:log",
+        "@abseil-cpp//absl/memory",
     ],
 )
