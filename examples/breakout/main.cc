@@ -75,7 +75,7 @@ std::vector<std::unique_ptr<BrickObject>> GenerateBricks(int brick_width,
     }
   }
 
-  return std::move(bricks);
+  return bricks;
 }
 
 int main() {

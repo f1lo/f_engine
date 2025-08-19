@@ -36,7 +36,7 @@ class Ability {
 
  protected:
   template <typename LevelT>
-  friend class LevelBuilder;
+  friend class lib::api::LevelBuilder;
 
   [[nodiscard]] bool IsOnCooldown() const;
   // Does not take ownership.

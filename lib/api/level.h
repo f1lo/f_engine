@@ -100,7 +100,8 @@ class Level {
   [[nodiscard]] LevelId id() const { return id_; }
 
  private:
-  friend LevelBuilder;
+  template <typename LevelT>
+  friend class LevelBuilder;
 
   void CleanUpOrDie();
   [[nodiscard]] virtual LevelId MaybeChangeLevel() const = 0;
