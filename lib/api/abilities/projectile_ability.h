@@ -3,9 +3,11 @@
 
 #include <list>
 
+#include "absl/container/flat_hash_set.h"
 #include "lib/api/abilities/ability.h"
 #include "lib/api/objects/movable_object.h"
 #include "lib/api/objects/object.h"
+#include "lib/api/objects/projectile_object.h"
 
 namespace lib {
 namespace api {
@@ -14,22 +16,26 @@ namespace abilities {
 class ProjectileAbility : public Ability {
  public:
   struct ProjectileAbilityOpts : AbilityOpts {
-    ProjectileAbilityOpts(const uint32_t cooldown_sec, const double velocity,
-                          const bool despawn_outside_screen_area)
-        : AbilityOpts(cooldown_sec),
-          velocity(velocity),
-          despawn_outside_screen_area(despawn_outside_screen_area) {}
-    double velocity;
-    bool despawn_outside_screen_area;
+    ProjectileAbilityOpts(const uint32_t cooldown_sec)
+        : AbilityOpts(cooldown_sec) {}
   };
 
-  explicit ProjectileAbility(const ProjectileAbilityOpts& opts)
-      : Ability(opts), projectile_ability_opts_(opts) {}
+  explicit ProjectileAbility(
+      const Kind projectile_kind, const ProjectileAbilityOpts& opts,
+      lib::api::objects::ProjectileObject::ProjectileObjectOpts
+          projectile_object_opts)
+      : Ability(opts),
+        projectile_kind_(projectile_kind),
+        projectile_ability_opts_(opts),
+        projectile_object_opts_(std::move(projectile_object_opts)) {}
 
-  std::list<ObjectAndAbilities> Ability::Use(const Camera& camera) override;
+  std::list<ObjectAndAbilities> Use(const Camera& camera) override;
 
  private:
+  Kind projectile_kind_;
   ProjectileAbilityOpts projectile_ability_opts_;
+  lib::api::objects::ProjectileObject::ProjectileObjectOpts
+      projectile_object_opts_;
 };
 
 }  // namespace abilities

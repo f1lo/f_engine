@@ -23,8 +23,10 @@ cc_library(
         "//lib/api/abilities:ability",
         "//lib/api/abilities:keys",
         "//lib/api/abilities:move_with_cursor_ability",
+        "//lib/api/abilities:projectile_ability",
         "//lib/api/objects:movable_object",
         "//lib/api/objects:object",
+        "//lib/api/objects:projectile_object",
         "//lib/api/objects:static_object",
     ],
 )
@@ -45,5 +47,8 @@ cc_library(
     name = "player",
     srcs = ["player.cc"],
     hdrs = ["player.h"],
-    deps = ["//lib/api/objects:movable_object"],
+    deps = [
+        "//lib/api/objects:movable_object",
+        "//lib/api/objects:object",
+    ],
 )

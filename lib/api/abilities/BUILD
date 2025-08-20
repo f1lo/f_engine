@@ -58,6 +58,9 @@ cc_library(
         "//lib/api/abilities:keys",
         "//lib/api/objects:movable_object",
         "//lib/api/objects:object",
+        "//lib/api/objects:projectile_object",
+        "//raylib",
+        "@abseil-cpp//absl/container:flat_hash_set",
     ],
 )
 

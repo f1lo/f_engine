@@ -1,3 +1,5 @@
+#include "raylib/include/raylib.h"
+
 #include "lib/api/abilities/ability.h"
 
 #include <list>

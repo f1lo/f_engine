@@ -19,12 +19,16 @@ class Game {
  public:
   static Game& Create(int width, int height, const std::string& title,
                       bool full_screen) {
+    if (full_screen) {
+      width = GetScreenWidth();
+      height = GetScreenHeight();
+    }
     static bool init_window = [width, height, title, full_screen]() {
       InitWindow(width, height, title.c_str());
-
       if (full_screen) {
         ToggleBorderlessWindowed();
       }
+
       return IsWindowReady();
     }();
     QCHECK(init_window);

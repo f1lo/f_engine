@@ -17,6 +17,8 @@ static constexpr Kind kScreenTop = std::numeric_limits<uint32_t>::max() - 5;
 static constexpr Kind kScreenBottom = std::numeric_limits<uint32_t>::max() - 6;
 static constexpr Kind kMousePointer = std::numeric_limits<uint32_t>::max() - 7;
 static constexpr Kind kButton = std::numeric_limits<uint32_t>::max() - 8;
+static constexpr Kind kProjectilePlayer =
+    std::numeric_limits<uint32_t>::max() - 9;
 
 namespace lib {
 namespace api {

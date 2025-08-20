@@ -30,11 +30,9 @@ bool CounterClockwise(const Point& a, const Point& b, const Point& c) {
 
 // Draw methods.
 void Point::Draw() const {
-  // Unsafe cast.
   DrawPixelV(Vector2(static_cast<float>(x), static_cast<float>(y)), RED);
 }
 void Line::Draw() const {
-  // Unsafe cast.
   DrawLineEx(Vector2(static_cast<float>(a.x), static_cast<float>(a.y)),
              Vector2(static_cast<float>(b.x), static_cast<float>(b.y)),
              /*thick=*/10.0, RED);

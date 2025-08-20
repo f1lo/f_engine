@@ -41,10 +41,10 @@ class Ability {
   [[nodiscard]] bool IsOnCooldown() const;
   // Does not take ownership.
   objects::Object* user_;
+  double last_used_sec_ = 0;
 
  private:
   AbilityOpts opts_;
-  double last_used_sec_ = 0;
 };
 
 class MoveAbility : public Ability {

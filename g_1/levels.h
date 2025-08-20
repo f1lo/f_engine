@@ -7,12 +7,8 @@
 
 namespace g_1 {
 
-std::unique_ptr<lib::api::Level> MakeTitleScreenLevel(int screen_width,
-                                                      int screen_height,
-                                                      bool debug_mode);
-std::unique_ptr<lib::api::Level> MakeOpeningLevel(int screen_width,
-                                                  int screen_height,
-                                                  bool debug_mode);
+std::unique_ptr<lib::api::Level> MakeTitleScreenLevel(bool debug_mode);
+std::unique_ptr<lib::api::Level> MakeOpeningLevel(bool debug_mode);
 
 }  // namespace g_1
 
