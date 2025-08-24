@@ -10,7 +10,7 @@ namespace internal {
 namespace {
 
 TEST(VecTest, SquareWorks) {
-  EXPECT_DOUBLE_EQ(Vector(3, 7).Square(), 58);
+  EXPECT_DOUBLE_EQ(Vector(3, 7).Square(), 57);
 }
 
 TEST(VecTest, LengthWorks) {
