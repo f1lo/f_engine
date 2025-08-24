@@ -8,7 +8,11 @@ namespace lib {
 namespace api {
 
 bool ScreenPosition::operator==(const ScreenPosition& other) const {
-  return abs(x - other.x) <= kEps && abs(y - other.y) <= kEps;
+  return std::abs(x - other.x) <= kEps && std::abs(y - other.y) <= kEps;
+}
+
+bool ScreenPosition::operator!=(const ScreenPosition& other) const {
+  return !(*this == other);
 }
 
 std::ostream& operator<<(std::ostream& os, const ScreenPosition& pos) {
@@ -17,7 +21,11 @@ std::ostream& operator<<(std::ostream& os, const ScreenPosition& pos) {
 }
 
 bool WorldPosition::operator==(const WorldPosition& other) const {
-  return abs(x - other.x) <= kEps && abs(y - other.y) <= kEps;
+  return std::abs(x - other.x) <= kEps && std::abs(y - other.y) <= kEps;
+}
+
+bool WorldPosition::operator!=(const WorldPosition& other) const {
+  return !(*this == other);
 }
 
 std::ostream& operator<<(std::ostream& os, const WorldPosition& pos) {

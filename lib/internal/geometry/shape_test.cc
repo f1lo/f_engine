@@ -1,4 +1,4 @@
-#include "shape.h"
+#include "lib/internal/geometry/shape.h"
 
 #include "gmock/gmock-matchers.h"
 #include "gtest/gtest.h"
@@ -15,6 +15,6 @@ TEST(ShapeTest, IsLowerLeftEqualPointsReturnFalse) {
   EXPECT_FALSE(b.IsLowerLeft(a));
 }
 
-} // namespace
-} // namespace internal
-} // namespace lib
+}  // namespace
+}  // namespace internal
+}  // namespace lib

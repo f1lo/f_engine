@@ -1,6 +1,7 @@
 #ifndef LIB_INTERNAL_GEOMETRY_SHAPE_H
 #define LIB_INTERNAL_GEOMETRY_SHAPE_H
 
+#include <cmath>
 #include <memory>
 #include <utility>
 
@@ -75,10 +76,10 @@ struct Line final : Shape {
   }
 
   Line(Point a, Point b) : a(std::move(a)), b(std::move(b)) {
-    if (abs(this->a.x - this->b.x) <= eps) {
+    if (std::abs(this->a.x - this->b.x) <= eps) {
       axis_aligned = Aligned::Y;
     }
-    if (abs(this->a.y - this->b.y) <= eps) {
+    if (std::abs(this->a.y - this->b.y) <= eps) {
       axis_aligned = Aligned::X;
     }
   }

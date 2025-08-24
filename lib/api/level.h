@@ -9,6 +9,7 @@
 
 #include "abilities/ability.h"
 #include "absl/container/flat_hash_map.h"
+#include "gtest/gtest_prod.h"
 #include "lib/api/camera.h"
 #include "lib/api/objects/object.h"
 #include "lib/api/objects/screen_edge_object.h"
@@ -112,6 +113,9 @@ class Level {
   explicit Level(const LevelId id) : id_(id) {}
   // This separation is required so that cyclic dependency is not introduced
   // between Object and Ability classes.
+  FRIEND_TEST(LevelTest, ObjectsAreAdded);
+  FRIEND_TEST(LevelTest, ObjectsAndAbilitiesAreAdded);
+  FRIEND_TEST(LevelTest, ScreenEdgeObjectsAreAdded);
   std::list<std::unique_ptr<objects::Object>> objects_;
   std::list<std::list<std::unique_ptr<abilities::Ability>>> abilities_;
   std::list<objects::ScreenEdgeObject*> screen_edge_objects_;

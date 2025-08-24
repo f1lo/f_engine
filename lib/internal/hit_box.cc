@@ -1,5 +1,6 @@
 #include "lib/internal/hit_box.h"
 
+#include <cmath>
 #include <memory>
 #include <vector>
 
@@ -99,7 +100,7 @@ enum class LineOrientation { ON_LINE, DOWN, UP };
 LineOrientation PointOrientation(double x, double y,
                                  const std::pair<double, double> line) {
   double line_y = line.first * x + line.second;
-  if (abs(line_y - y) <= eps) {
+  if (std::abs(line_y - y) <= eps) {
     return LineOrientation::ON_LINE;
   }
   return line_y < y ? LineOrientation::DOWN : LineOrientation::UP;

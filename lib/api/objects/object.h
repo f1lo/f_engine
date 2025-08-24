@@ -7,6 +7,7 @@
 #include "lib/api/common_types.h"
 #include "lib/internal/hit_box.h"
 
+// TODO(f1lo): Move these inside namespace.
 typedef uint32_t Kind;
 
 static constexpr Kind kPlayer = std::numeric_limits<uint32_t>::max() - 1;

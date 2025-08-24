@@ -11,13 +11,16 @@ struct ScreenPosition {
   double y;
 
   bool operator==(const ScreenPosition& other) const;
+  bool operator!=(const ScreenPosition& other) const;
   friend std::ostream& operator<<(std::ostream& os, const ScreenPosition& pos);
 };
 
 struct WorldPosition {
   double x;
   double y;
+
   bool operator==(const WorldPosition& other) const;
+  bool operator!=(const WorldPosition& other) const;
   friend std::ostream& operator<<(std::ostream& os, const WorldPosition& pos);
 };
 

@@ -30,6 +30,19 @@ cc_library(
         "//raylib",
         "@abseil-cpp//absl/container:flat_hash_map",
         "@abseil-cpp//absl/log:check",
+        "@googletest//:gtest",
+    ],
+)
+
+cc_test(
+    name = "level_test",
+    srcs = ["level_test.cc"],
+    deps = [
+        ":level",
+        "//lib/api/abilities:ability",
+        "//lib/api/objects:static_object",
+        "@googletest//:gtest",
+        "@googletest//:gtest_main",
     ],
 )
 
@@ -65,4 +78,14 @@ cc_library(
     srcs = ["common_types.cc"],
     hdrs = ["common_types.h"],
     deps = [],
+)
+
+cc_test(
+    name = "common_types_test",
+    srcs = ["common_types_test.cc"],
+    deps = [
+        ":common_types",
+        "@googletest//:gtest",
+        "@googletest//:gtest_main",
+    ],
 )
