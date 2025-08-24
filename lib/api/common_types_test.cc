@@ -10,11 +10,13 @@ namespace {
 TEST(CommonTypesTest, TestEqualityScreenPosition) {
   EXPECT_EQ(ScreenPosition(1.3, 2.7), ScreenPosition(1.3, 2.7));
   EXPECT_NE(ScreenPosition(1.2, 2.7), ScreenPosition(1.3, 2.7));
+  EXPECT_NE(ScreenPosition(1.1, 2.1), ScreenPosition(1.1, 2.112));
 }
 
 TEST(CommonTypesTest, TestEqualityWorldPosition) {
   EXPECT_EQ(WorldPosition(1.3, 2.7), WorldPosition(1.3, 2.7));
   EXPECT_NE(WorldPosition(1.3, 2.6), WorldPosition(1.3, 2.7));
+  EXPECT_NE(WorldPosition(1.3, 2.6), WorldPosition(1.2999, 2.6));
 }
 
 }  // namespace
