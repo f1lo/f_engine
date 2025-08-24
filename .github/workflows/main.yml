@@ -1,4 +1,4 @@
-name: build
+name: Build & Test
 
 on:
   push:
@@ -17,17 +17,7 @@ jobs:
         with:
           path: "~/.cache/bazel"
           key: bazel
-      - run: bazel build //...
-
-name: engine-api-tests
-
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-
-jobs:
+      - run: bazel build //...    
   engine-api:
     runs-on: ubuntu-latest
     steps:
@@ -39,16 +29,6 @@ jobs:
           path: "~/.cache/bazel"
           key: bazel
       - run: bazel test //lib/api/...
-
-name: engine-internal-tests
-
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-
-jobs:
   engine-internal:
     runs-on: ubuntu-latest
     steps:
