@@ -60,6 +60,19 @@ cc_library(
     ],
 )
 
+cc_test(
+    name = "title_screen_level_test",
+    srcs = ["title_screen_level_test.cc"],
+    deps = [
+        ":level",
+        ":title_screen_level",
+        "//lib/api/abilities:ability",
+        "//lib/api/objects:static_object",
+        "@googletest//:gtest",
+        "@googletest//:gtest_main",
+    ],
+)
+
 cc_library(
     name = "camera",
     srcs = ["camera.cc"],

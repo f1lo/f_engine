@@ -116,6 +116,7 @@ class Level {
   FRIEND_TEST(LevelTest, ObjectsAreAdded);
   FRIEND_TEST(LevelTest, ObjectsAndAbilitiesAreAdded);
   FRIEND_TEST(LevelTest, ScreenEdgeObjectsAreAdded);
+  FRIEND_TEST(TitleScreenLevelTest, StartAndExitAddedOk);
   std::list<std::unique_ptr<objects::Object>> objects_;
   std::list<std::list<std::unique_ptr<abilities::Ability>>> abilities_;
   std::list<objects::ScreenEdgeObject*> screen_edge_objects_;

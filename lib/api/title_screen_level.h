@@ -31,6 +31,8 @@ class TitleScreenLevelBuilder : LevelBuilder<TitleScreenLevel> {
 
   TitleScreenLevelBuilder& AddStartButton(
       std::unique_ptr<objects::StaticObject> start_button) {
+    CHECK(level_->start_button_ == nullptr)
+        << "Cannot add start button more than once.";
     level_->start_button_ = start_button.get();
 
     std::list<std::unique_ptr<abilities::Ability>> start_ability;
@@ -42,6 +44,8 @@ class TitleScreenLevelBuilder : LevelBuilder<TitleScreenLevel> {
 
   TitleScreenLevelBuilder& AddExitButton(
       std::unique_ptr<objects::StaticObject> exit_button) {
+    CHECK(level_->exit_button_ == nullptr)
+        << "Cannot add exit button more than once.";
     level_->exit_button_ = exit_button.get();
 
     std::list<std::unique_ptr<abilities::Ability>> start_ability;
