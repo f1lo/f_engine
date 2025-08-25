@@ -21,7 +21,8 @@ class ProjectileAbility : public Ability {
   };
 
   explicit ProjectileAbility(
-      const Kind projectile_kind, const ProjectileAbilityOpts& opts,
+      const lib::api::objects::Kind projectile_kind,
+      const ProjectileAbilityOpts& opts,
       lib::api::objects::ProjectileObject::ProjectileObjectOpts
           projectile_object_opts)
       : Ability(opts),
@@ -32,7 +33,7 @@ class ProjectileAbility : public Ability {
   std::list<ObjectAndAbilities> Use(const Camera& camera) override;
 
  private:
-  Kind projectile_kind_;
+  lib::api::objects::Kind projectile_kind_;
   ProjectileAbilityOpts projectile_ability_opts_;
   lib::api::objects::ProjectileObject::ProjectileObjectOpts
       projectile_object_opts_;

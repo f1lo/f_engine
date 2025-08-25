@@ -14,6 +14,13 @@ namespace api {
 using lib::api::abilities::Ability;
 using lib::api::abilities::kKeyA;
 using lib::api::abilities::MoveAbility;
+using lib::api::objects::kEnemy;
+using lib::api::objects::Kind;
+using lib::api::objects::kPlayer;
+using lib::api::objects::kScreenBottom;
+using lib::api::objects::kScreenLeft;
+using lib::api::objects::kScreenRight;
+using lib::api::objects::kScreenTop;
 using lib::api::objects::StaticObject;
 using ::testing::UnorderedElementsAre;
 

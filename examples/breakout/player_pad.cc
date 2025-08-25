@@ -4,6 +4,10 @@
 #include "lib/api/objects/object.h"
 
 namespace breakout {
+
+using lib::api::objects::kScreenLeft;
+using lib::api::objects::kScreenRight;
+
 bool PlayerPad::OnCollisionCallback(Object& other_object) {
   if (other_object.kind() == kScreenLeft ||
       other_object.kind() == kScreenRight) {

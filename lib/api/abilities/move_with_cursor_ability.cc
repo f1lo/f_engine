@@ -17,6 +17,7 @@ namespace api {
 namespace abilities {
 
 using api::Camera;
+using lib::api::objects::kMousePointer;
 using objects::MovableObject;
 using objects::Object;
 

@@ -5,6 +5,13 @@
 
 namespace breakout {
 
+using lib::api::objects::kEnemy;
+using lib::api::objects::kPlayer;
+using lib::api::objects::kScreenBottom;
+using lib::api::objects::kScreenLeft;
+using lib::api::objects::kScreenRight;
+using lib::api::objects::kScreenTop;
+
 bool Ball::OnCollisionCallback(Object& other_object) {
   std::pair<double, double> reflected_direction;
   BrickObject* cast_brick;

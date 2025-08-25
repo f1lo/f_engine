@@ -27,6 +27,7 @@ using lib::api::abilities::kKeyD;
 using lib::api::abilities::kKeyS;
 using lib::api::abilities::kKeyW;
 using lib::api::abilities::MoveAbility;
+using lib::api::objects::kEnemy;
 using lib::api::objects::MovableObject;
 using lib::api::objects::Object;
 using lib::api::objects::StaticObject;

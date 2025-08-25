@@ -7,7 +7,10 @@
 #include "lib/api/common_types.h"
 #include "lib/internal/hit_box.h"
 
-// TODO(f1lo): Move these inside namespace.
+namespace lib {
+namespace api {
+namespace objects {
+
 typedef uint32_t Kind;
 
 static constexpr Kind kPlayer = std::numeric_limits<uint32_t>::max() - 1;
@@ -20,10 +23,6 @@ static constexpr Kind kMousePointer = std::numeric_limits<uint32_t>::max() - 7;
 static constexpr Kind kButton = std::numeric_limits<uint32_t>::max() - 8;
 static constexpr Kind kProjectilePlayer =
     std::numeric_limits<uint32_t>::max() - 9;
-
-namespace lib {
-namespace api {
-namespace objects {
 
 class Object {
  public:
