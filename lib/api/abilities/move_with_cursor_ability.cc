@@ -33,7 +33,7 @@ std::list<ObjectAndAbilities> MoveWithCursorAbility::Use(const Camera& camera) {
             /*hit_box_vertices=*/
             {{cursor_last_clicked_pos_->x, cursor_last_clicked_pos_->y}}))) {
       cursor_last_clicked_pos_ = std::nullopt;
-      movable_user->SetDirectionGlobal(/*x=*/0, /*y=*/0);
+      movable_user->freeze_until_next_set_direction();
       return {};
     }
   }

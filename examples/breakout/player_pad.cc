@@ -16,7 +16,7 @@ bool PlayerPad::OnCollisionCallback(Object& other_object) {
   }
 
   if (other_object.kind() == BALL) {
-    SetDirectionGlobal(0, 0);
+    freeze_until_next_set_direction();
     return true;
   }
   return false;

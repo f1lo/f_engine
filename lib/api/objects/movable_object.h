@@ -36,6 +36,9 @@ class MovableObject : public Object {
   void Draw() const override;
 
   void set_velocity(const double velocity) { velocity_ = velocity; }
+  void freeze_until_next_set_direction() {
+    frozen_until_next_set_direction_ = true;
+  }
   [[nodiscard]] double velocity() const { return velocity_; }
   void SetDirectionGlobal(double x, double y);
   void SetDirectionRelative(double x, double y);
@@ -47,11 +50,15 @@ class MovableObject : public Object {
   void ResetLastMove();
 
  private:
+  [[nodiscard]] bool IsFrozen() const;
+
   double velocity_;
   double direction_x_ = 0.0;
   double direction_y_ = 0.0;
   double last_direction_x_ = 0.0;
   double last_direction_y_ = 0.0;
+
+  bool frozen_until_next_set_direction_ = false;
 };
 }  // namespace objects
 }  // namespace api

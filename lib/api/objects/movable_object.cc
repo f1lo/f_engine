@@ -35,6 +35,7 @@ MovableObject::MovableObject(const Kind kind, const MovableObjectOpts& options,
       velocity_(options.velocity) {}
 
 void MovableObject::SetDirectionGlobal(const double x, const double y) {
+  frozen_until_next_set_direction_ = false;
   const Vector v = Vector{x, y};
   if (v.IsZero()) {
     direction_x_ = 0;
@@ -47,6 +48,7 @@ void MovableObject::SetDirectionGlobal(const double x, const double y) {
 }
 
 void MovableObject::SetDirectionRelative(const double x, const double y) {
+  frozen_until_next_set_direction_ = false;
   const WorldPosition world_position = center();
   const Vector v = Vector{x - world_position.x, y - world_position.y};
   if (v.IsZero()) {
@@ -60,6 +62,9 @@ void MovableObject::SetDirectionRelative(const double x, const double y) {
 }
 
 void MovableObject::Move() {
+  if (IsFrozen()) {
+    return;
+  }
   last_direction_x_ = direction_x_;
   last_direction_y_ = direction_y_;
   this->mutable_hit_box().Move(velocity_ * direction_x_,
@@ -85,6 +90,10 @@ void MovableObject::Draw() const {
     return;
   }
   hit_box().Draw();
+}
+
+bool MovableObject::IsFrozen() const {
+  return frozen_until_next_set_direction_;
 }
 
 }  // namespace objects

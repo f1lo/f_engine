@@ -50,9 +50,9 @@ std::list<ObjectAndAbilities> MoveAbility::Use(const Camera& camera) {
   if (!was_used_this_frame) {
     if (was_used_last_frame_) {
       was_used_last_frame_ = was_used_this_frame;
-      // Only zero directions if this is the first frame when movement keys were
-      // not hold.
-      cast_user->SetDirectionGlobal(/*x=*/0, /*y=*/0);
+      // Freeze object temporarily if this is the first frame when movement
+      // keys were not hold.
+      cast_user->freeze_until_next_set_direction();
       return {};
     }
     // Do not touch directions.

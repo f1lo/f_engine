@@ -21,14 +21,14 @@ constexpr int kButtonLengthX = 400;
 constexpr int kButtonLengthY = 100;
 constexpr int kOffsetBetweenButtons = 50;
 
-constexpr double kProjectileRadius = 20;
+constexpr double kProjectileRadius = 10;
 constexpr double kProjectileSpeed = 5;
 
 constexpr double kPlayerSpeed = 7;
 constexpr int kPlayerX = 0;
 constexpr int kPlayerY = 0;
-constexpr float kPlayerWidth = 20;
-constexpr float kPlayerHeight = 20;
+constexpr float kPlayerWidth = 25;
+constexpr float kPlayerHeight = 25;
 
 namespace g_1 {
 namespace {
