@@ -11,12 +11,12 @@ using lib::api::objects::kScreenRight;
 bool PlayerPad::OnCollisionCallback(Object& other_object) {
   if (other_object.kind() == kScreenLeft ||
       other_object.kind() == kScreenRight) {
-    set_direction_global(-direction_x(), direction_y());
+    SetDirectionGlobal(-direction_x(), direction_y());
     return true;
   }
 
   if (other_object.kind() == BALL) {
-    set_direction_global(0, 0);
+    SetDirectionGlobal(0, 0);
     return true;
   }
   return false;

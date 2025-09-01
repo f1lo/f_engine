@@ -52,7 +52,7 @@ std::list<ObjectAndAbilities> MoveAbility::Use(const Camera& camera) {
       was_used_last_frame_ = was_used_this_frame;
       // Only zero directions if this is the first frame when movement keys were
       // not hold.
-      cast_user->set_direction_global(/*x=*/0, /*y=*/0);
+      cast_user->SetDirectionGlobal(/*x=*/0, /*y=*/0);
       return {};
     }
     // Do not touch directions.
@@ -60,7 +60,7 @@ std::list<ObjectAndAbilities> MoveAbility::Use(const Camera& camera) {
     return {};
   }
   was_used_last_frame_ = was_used_this_frame;
-  cast_user->set_direction_global(dir_x, dir_y);
+  cast_user->SetDirectionGlobal(dir_x, dir_y);
   return {};
 }
 

@@ -20,7 +20,7 @@ std::list<ObjectAndAbilities> BallAbility::Use(const Camera& camera) {
     used_ = true;
     auto* cast_ball = dynamic_cast<Ball*>(user_);
     CHECK(cast_ball) << " ability user is not of correct type.";
-    cast_ball->set_direction_global(1, -1);
+    cast_ball->SetDirectionGlobal(1, -1);
   }
 
   return {};

@@ -32,7 +32,7 @@ bool ProjectileObject::OnCollisionCallback(Object& other_object) {
     std::pair<double, double> reflected_direction =
         other_object.Reflect(*this, direction_x(), direction_y());
 
-    set_direction_global(reflected_direction.first, reflected_direction.second);
+    SetDirectionGlobal(reflected_direction.first, reflected_direction.second);
     return true;
   }
 

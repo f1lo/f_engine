@@ -33,7 +33,7 @@ std::list<ObjectAndAbilities> MoveWithCursorAbility::Use(const Camera& camera) {
             /*hit_box_vertices=*/
             {{cursor_last_clicked_pos_->x, cursor_last_clicked_pos_->y}}))) {
       cursor_last_clicked_pos_ = std::nullopt;
-      movable_user->set_direction_global(/*x=*/0, /*y=*/0);
+      movable_user->SetDirectionGlobal(/*x=*/0, /*y=*/0);
       return {};
     }
   }
@@ -43,7 +43,7 @@ std::list<ObjectAndAbilities> MoveWithCursorAbility::Use(const Camera& camera) {
   const WorldPosition cursor_pos_world =
       camera.GetWorldPosition(GetCursorPos());
   cursor_last_clicked_pos_ = cursor_pos_world;
-  movable_user->set_direction_relative(cursor_pos_world.x, cursor_pos_world.y);
+  movable_user->SetDirectionRelative(cursor_pos_world.x, cursor_pos_world.y);
   return {};
 }
 

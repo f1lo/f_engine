@@ -51,7 +51,7 @@ std::list<ObjectAndAbilities> ProjectileAbility::Use(const Camera& camera) {
   std::unique_ptr<ProjectileObject> projectile =
       std::make_unique<ProjectileObject>(
           /*kind=*/projectile_kind_, /*options=*/projectile_object_opts_);
-  projectile->set_direction_global(direction_x, direction_y);
+  projectile->SetDirectionGlobal(direction_x, direction_y);
 
   std::list<ObjectAndAbilities> result;
   result.push_back(ObjectAndAbilities{std::move(projectile),

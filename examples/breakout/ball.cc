@@ -18,10 +18,10 @@ bool Ball::OnCollisionCallback(Object& other_object) {
   switch (other_object.kind()) {
     case kScreenLeft:
     case kScreenRight:
-      set_direction_global(-direction_x(), direction_y());
+      SetDirectionGlobal(-direction_x(), direction_y());
       return true;
     case kScreenTop:
-      set_direction_global(direction_x(), -direction_y());
+      SetDirectionGlobal(direction_x(), -direction_y());
       return true;
     case kScreenBottom:
       set_has_touched_bottom();
@@ -29,14 +29,12 @@ bool Ball::OnCollisionCallback(Object& other_object) {
     case kPlayer:
       reflected_direction =
           other_object.Reflect(*this, direction_x(), direction_y());
-      set_direction_global(reflected_direction.first,
-                           reflected_direction.second);
+      SetDirectionGlobal(reflected_direction.first, reflected_direction.second);
       return true;
     case kEnemy:
       reflected_direction =
           other_object.Reflect(*this, direction_x(), direction_y());
-      set_direction_global(reflected_direction.first,
-                           reflected_direction.second);
+      SetDirectionGlobal(reflected_direction.first, reflected_direction.second);
       // Unsafe.
       cast_brick = static_cast<BrickObject*>(&other_object);
       cast_brick->set_deleted(true);

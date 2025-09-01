@@ -37,8 +37,8 @@ class MovableObject : public Object {
 
   void set_velocity(const double velocity) { velocity_ = velocity; }
   [[nodiscard]] double velocity() const { return velocity_; }
-  void set_direction_global(double x, double y);
-  void set_direction_relative(double x, double y);
+  void SetDirectionGlobal(double x, double y);
+  void SetDirectionRelative(double x, double y);
   [[nodiscard]] double direction_x() const { return direction_x_; }
   [[nodiscard]] double direction_y() const { return direction_y_; }
 
