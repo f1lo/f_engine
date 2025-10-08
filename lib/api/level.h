@@ -9,6 +9,7 @@
 
 #include "abilities/ability.h"
 #include "absl/container/flat_hash_map.h"
+#include "absl/memory/memory.h"
 #include "gtest/gtest_prod.h"
 #include "lib/api/camera.h"
 #include "lib/api/objects/object.h"
@@ -31,7 +32,7 @@ class LevelBuilder {
  public:
   virtual ~LevelBuilder() = default;
   explicit LevelBuilder(const LevelId id) {
-    level_ = std::make_unique<LevelT>(id);
+    level_ = absl::WrapUnique(new LevelT(id));
   }
 
   LevelBuilder& AddObjectAndAbilities(
@@ -105,7 +106,7 @@ class Level {
   friend class LevelBuilder;
 
   void CleanUpOrDie();
-  [[nodiscard]] virtual LevelId MaybeChangeLevel() const = 0;
+  [[nodiscard]] virtual LevelId MaybeChangeLevel() const;
   void UpdateScreenEdges() const;
   LevelId id_;
 

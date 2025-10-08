@@ -11,18 +11,21 @@ namespace api {
 
 class TitleScreenLevel : public Level {
  public:
-  explicit TitleScreenLevel(const LevelId id)
-      : Level(id), start_button_(nullptr), exit_button_(nullptr) {}
   ~TitleScreenLevel() override = default;
 
   [[nodiscard]] LevelId MaybeChangeLevel() const override;
 
  private:
   friend class TitleScreenLevelBuilder;
+  friend class LevelBuilder<TitleScreenLevel>;
 
   // Does not take ownership.
   const objects::StaticObject* start_button_;
   const objects::StaticObject* exit_button_;
+
+ protected:
+  explicit TitleScreenLevel(const LevelId id)
+      : Level(id), start_button_(nullptr), exit_button_(nullptr) {}
 };
 
 class TitleScreenLevelBuilder : LevelBuilder<TitleScreenLevel> {

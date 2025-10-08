@@ -13,8 +13,18 @@ namespace api {
 
 using abilities::Ability;
 using api::ObjectAndAbilities;
+using lib::api::abilities::IsPressed;
+using lib::api::abilities::kKeyEscape;
 using objects::MovableObject;
 using objects::Object;
+
+LevelId Level::MaybeChangeLevel() const {
+  if (IsPressed(kKeyEscape)) {
+    return kExitLevel;
+  }
+
+  return id();
+}
 
 void Level::CleanUpOrDie() {
   auto object_it = objects_.begin();
