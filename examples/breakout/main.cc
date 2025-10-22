@@ -122,6 +122,6 @@ int main() {
   for (auto& brick : bricks) {
     level_builder.AddObject(std::move(brick));
   }
-  game.add_level(std::move(level_builder.Build()));
+  game.AddLevel(std::move(level_builder.Build()));
   game.Run();
 }

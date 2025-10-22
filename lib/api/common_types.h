@@ -27,4 +27,4 @@ struct WorldPosition {
 }  // namespace api
 }  // namespace lib
 
-#endif  //LIB_API_COMMON_TYPES_H
+#endif  // LIB_API_COMMON_TYPES_H

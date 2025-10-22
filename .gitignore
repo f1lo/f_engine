@@ -6,3 +6,4 @@ bazel-testlogs
 test/
 examples/BUILD
 examples/main.cc
+examples/textures/

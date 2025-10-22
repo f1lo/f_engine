@@ -30,8 +30,8 @@ cc_library(
         "//raylib",
         "@abseil-cpp//absl/container:flat_hash_map",
         "@abseil-cpp//absl/log:check",
-        "@googletest//:gtest",
         "@abseil-cpp//absl/memory",
+        "@googletest//:gtest",
     ],
 )
 
