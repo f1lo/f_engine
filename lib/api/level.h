@@ -9,6 +9,7 @@
 
 #include "abilities/ability.h"
 #include "absl/container/flat_hash_map.h"
+#include "absl/log/check.h"
 #include "absl/memory/memory.h"
 #include "gtest/gtest_prod.h"
 #include "lib/api/camera.h"
@@ -52,6 +53,7 @@ class LevelBuilder {
 
     return *this;
   }
+
   LevelBuilder& AddObject(std::unique_ptr<objects::Object> object,
                           const bool attach_camera = false) {
     if (attach_camera) {
@@ -65,6 +67,8 @@ class LevelBuilder {
   }
 
   LevelBuilder& WithScreenObjects(const bool should_draw_hitbox = false) {
+    CHECK(level_->screen_edge_objects_.empty())
+        << "WithScreenObjects() has already been called.";
     const int screen_width = GetScreenWidth();
     const int screen_height = GetScreenHeight();
     std::unique_ptr<objects::ScreenEdgeObject> screen_left =

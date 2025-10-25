@@ -14,13 +14,14 @@ namespace sprites {
 
 class StaticSprite : public Sprite {
  public:
-  StaticSprite(std::string resource_path);
+  explicit StaticSprite(std::string resource_path);
   ~StaticSprite() override;
 
-  void Draw(ScreenPosition draw_destination,
+  void Draw(const WorldPosition draw_destination,
             int frame_to_draw = 0) const override;
-  void RotateAndDraw(ScreenPosition draw_destination, const int degree,
+  void RotateAndDraw(const WorldPosition draw_destination, const int degree,
                      int frame_to_draw = 0) const override;
+  int total_frames() const override;
 
  private:
   const Texture2D texture_;

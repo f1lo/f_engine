@@ -28,7 +28,7 @@ class ProjectileAbility : public Ability {
       : Ability(opts),
         projectile_kind_(projectile_kind),
         projectile_ability_opts_(opts),
-        projectile_object_opts_(std::move(projectile_object_opts)) {}
+        projectile_object_opts_(projectile_object_opts) {}
 
   std::list<ObjectAndAbilities> Use(const Camera& camera) override;
 

@@ -26,7 +26,7 @@ constexpr double kProjectileSpeed = 5;
 
 constexpr double kPlayerSpeed = 7;
 constexpr int kPlayerX = 0;
-constexpr int kPlayerY = 0;
+constexpr int kPlayerY = 200;
 constexpr float kPlayerWidth = 25;
 constexpr float kPlayerHeight = 25;
 

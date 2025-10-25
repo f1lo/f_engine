@@ -32,6 +32,7 @@ cc_library(
         "@abseil-cpp//absl/log:check",
         "@abseil-cpp//absl/memory",
         "@googletest//:gtest",
+        "@abseil-cpp//absl/log",
     ],
 )
 

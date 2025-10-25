@@ -19,7 +19,7 @@ StaticSprite::~StaticSprite() {
   UnloadTexture(texture_);
 }
 
-void StaticSprite::Draw(ScreenPosition draw_destination,
+void StaticSprite::Draw(const WorldPosition draw_destination,
                         int frame_to_draw) const {
   DrawTexturePro(texture_, source_,
                  {(float)draw_destination.x, (float)draw_destination.y,
@@ -27,12 +27,16 @@ void StaticSprite::Draw(ScreenPosition draw_destination,
                  origin_, 0.0f, WHITE);
 }
 
-void StaticSprite::RotateAndDraw(ScreenPosition draw_destination,
+void StaticSprite::RotateAndDraw(const WorldPosition draw_destination,
                                  const int degree, int frame_to_draw) const {
   DrawTexturePro(texture_, source_,
                  {(float)draw_destination.x, (float)draw_destination.y,
                   (float)texture_.width, (float)texture_.height},
                  origin_, degree, WHITE);
+}
+
+int StaticSprite::total_frames() const {
+  return 1;
 }
 
 }  // namespace sprites

@@ -9,10 +9,11 @@ namespace sprites {
 
 class Sprite {
  public:
-  virtual void Draw(ScreenPosition draw_destination,
+  virtual void Draw(const WorldPosition draw_destination,
                     int frame_to_draw = 0) const = 0;
-  virtual void RotateAndDraw(ScreenPosition draw_destination, const int degree,
-                             int frame_to_draw = 0) const = 0;
+  virtual void RotateAndDraw(const WorldPosition draw_destination,
+                             const int degree, int frame_to_draw = 0) const = 0;
+  virtual int total_frames() const = 0;
 
   virtual ~Sprite() {}
 };

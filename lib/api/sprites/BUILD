@@ -33,3 +33,14 @@ cc_library(
         "//raylib",
     ],
 )
+
+cc_library(
+    name = "sprite_instance",
+    srcs = ["sprite_instance.cc"],
+    hdrs = ["sprite_instance.h"],
+    deps = [
+        "//lib/api:common_types",
+        "//lib/api/sprites:sprite",
+        "@abseil-cpp//absl/time"
+    ],
+)

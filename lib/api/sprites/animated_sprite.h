@@ -17,9 +17,12 @@ class AnimatedSprite : public Sprite {
   AnimatedSprite(std::string resource_path, int frame_count);
   ~AnimatedSprite() override;
 
-  void Draw(ScreenPosition draw_destination, int frame_to_draw) const override;
-  virtual void RotateAndDraw(ScreenPosition draw_destination, const int degree,
+  void Draw(const WorldPosition draw_destination,
+            int frame_to_draw) const override;
+  virtual void RotateAndDraw(const WorldPosition draw_destination,
+                             const int degree,
                              int frame_to_draw) const override;
+  int total_frames() const override;
 
  private:
   const Texture2D texture_;

@@ -21,7 +21,7 @@ AnimatedSprite::~AnimatedSprite() {
   UnloadTexture(texture_);
 }
 
-void AnimatedSprite::Draw(ScreenPosition draw_destination,
+void AnimatedSprite::Draw(const WorldPosition draw_destination,
                           int frame_to_draw) const {
   frame_to_draw %= frame_count_;
 
@@ -33,7 +33,7 @@ void AnimatedSprite::Draw(ScreenPosition draw_destination,
                  origin_, 0.0f, WHITE);
 }
 
-void AnimatedSprite::RotateAndDraw(ScreenPosition draw_destination,
+void AnimatedSprite::RotateAndDraw(const WorldPosition draw_destination,
                                    const int degree, int frame_to_draw) const {
   frame_to_draw %= frame_count_;
 
@@ -43,6 +43,10 @@ void AnimatedSprite::RotateAndDraw(ScreenPosition draw_destination,
                  {(float)draw_destination.x, (float)draw_destination.y,
                   animation_frame_width_, (float)texture_.height},
                  origin_, degree, WHITE);
+}
+
+int AnimatedSprite::total_frames() const {
+  return frame_count_;
 }
 
 }  // namespace sprites
