@@ -41,6 +41,6 @@ cc_library(
     deps = [
         "//lib/api:common_types",
         "//lib/api/sprites:sprite",
-        "@abseil-cpp//absl/time"
+        "@abseil-cpp//absl/time",
     ],
 )

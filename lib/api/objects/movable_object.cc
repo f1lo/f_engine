@@ -86,7 +86,7 @@ void MovableObject::Update(
 
 void MovableObject::Draw() const {
   // TODO(f1lo): Draw texture in the future.
-  if (!options().should_draw_hit_box) {
+  if (!should_draw_hit_box()) {
     return;
   }
   hit_box().Draw();

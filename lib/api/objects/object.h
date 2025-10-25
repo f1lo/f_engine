@@ -31,12 +31,14 @@ class Object {
     bool should_draw_hit_box;
   };
 
-  explicit Object(const Kind kind, const Opts options, internal::HitBox hit_box)
+  explicit Object(const Kind kind, const Opts& options,
+                  internal::HitBox hit_box)
       : kind_(kind),
-        options_(options),
         hit_box_(std::move(hit_box)),
         deleted_(false),
-        clicked_(false) {}
+        clicked_(false),
+        is_hit_box_active_(options.is_hit_box_active),
+        should_draw_hit_box_(options.should_draw_hit_box) {}
 
   virtual ~Object() = default;
 
@@ -60,7 +62,10 @@ class Object {
   void set_clicked(const bool clicked) { clicked_ = clicked; }
 
  protected:
-  [[nodiscard]] const Opts& options() const { return options_; }
+  [[nodiscard]] bool is_hit_box_active() const { return is_hit_box_active_; }
+  [[nodiscard]] bool should_draw_hit_box() const {
+    return should_draw_hit_box_;
+  }
   virtual bool OnCollisionCallback(Object& other_object) = 0;
   bool UpdateInternal(const std::list<std::unique_ptr<Object>>& other_objects);
 
@@ -69,10 +74,11 @@ class Object {
 
  private:
   Kind kind_;
-  Opts options_;
   internal::HitBox hit_box_;
   bool deleted_;
   bool clicked_;
+  const bool is_hit_box_active_;
+  const bool should_draw_hit_box_;
 };
 
 }  // namespace objects

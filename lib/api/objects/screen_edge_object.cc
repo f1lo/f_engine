@@ -51,7 +51,7 @@ ScreenEdgeObject::ScreenEdgeObject(const Kind kind,
              CreateHitBoxOrDie({a, b})) {}
 
 void ScreenEdgeObject::Draw() const {
-  if (options().should_draw_hit_box) {
+  if (should_draw_hit_box()) {
     hit_box().Draw();
   }
 }

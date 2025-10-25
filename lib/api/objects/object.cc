@@ -8,10 +8,10 @@ namespace objects {
 
 bool Object::CollidesWith(const Object& other) const {
   // Hitbox not present or object deleted.
-  if (deleted() || !options().is_hit_box_active) {
+  if (deleted() || !is_hit_box_active()) {
     return false;
   }
-  if (other.deleted() || !other.options().is_hit_box_active) {
+  if (other.deleted() || !other.is_hit_box_active()) {
     return false;
   }
 
@@ -21,7 +21,7 @@ bool Object::CollidesWith(const Object& other) const {
 std::pair<double, double> Object::Reflect(const Object& other, double x,
                                           double y) const {
   // Hitbox not present or object deleted.
-  if (deleted() || !options().is_hit_box_active) {
+  if (deleted() || !is_hit_box_active()) {
     return {x, y};
   }
 
