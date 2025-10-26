@@ -50,6 +50,21 @@ void Level::UpdateScreenEdges() const {
   }
 }
 
+void Level::Draw() const {
+  // Inefficient, no need to sort everything.
+  // Will work for now - can be improved in the future to only sort movable
+  // objects.
+  // Y-sorting.
+  std::vector<std::pair<int, Object*>> objects_by_y_base;
+  for (const auto& object : objects_) {
+    objects_by_y_base.push_back(std::make_pair(object->YBase(), object.get()));
+  }
+  sort(objects_by_y_base.begin(), objects_by_y_base.end());
+  for (const auto& y_and_object : objects_by_y_base) {
+    y_and_object.second->Draw();
+  }
+}
+
 LevelId Level::Run() {
   LevelId changed_id = id_;
   while (changed_id == id_) {
@@ -71,11 +86,11 @@ LevelId Level::Run() {
       }
 
       object_it->get()->Update(objects_);
-      object_it->get()->Draw();
-
       ++object_it;
       ++ability_it;
     }
+
+    Draw();
 
     // Add all accumulated objects from abilities.
     for (auto& [object, abilities] : new_objects_and_abilities) {

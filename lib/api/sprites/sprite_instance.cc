@@ -61,6 +61,10 @@ void SpriteInstance::Reset() {
   current_frame_to_draw_ = 0;
 }
 
+int SpriteInstance::MainSpriteHeight() const {
+  return sprite_->sprite_height();
+}
+
 }  // namespace sprites
 }  // namespace api
 }  // namespace lib

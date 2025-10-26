@@ -49,6 +49,10 @@ int AnimatedSprite::total_frames() const {
   return frame_count_;
 }
 
+int AnimatedSprite::sprite_height() const {
+  return texture_.height;
+}
+
 }  // namespace sprites
 }  // namespace api
 }  // namespace lib

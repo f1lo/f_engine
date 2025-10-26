@@ -6,7 +6,7 @@
 namespace lib {
 namespace api {
 
-void Game::Run() const {
+void Game::Run() {
   SetTargetFPS(90);
   LevelId current_level = kTitleScreenLevel;
   while (current_level != kExitLevel) {
@@ -15,6 +15,11 @@ void Game::Run() const {
         << "Level " << current_level << " does not exist.";
     current_level = level_it->second->Run();
   }
+  // Clear levels_ before closing window.
+  // Otherwise some resources will be freed twice:
+  // * By calling levels_ destructor.
+  // * By calling CloseWindow().
+  levels_.clear();
   CloseWindow();
 }
 

@@ -112,6 +112,7 @@ class Level {
   void CleanUpOrDie();
   [[nodiscard]] virtual LevelId MaybeChangeLevel() const;
   void UpdateScreenEdges() const;
+  void Draw() const;
   LevelId id_;
 
  protected:

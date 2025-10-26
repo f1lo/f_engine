@@ -3,6 +3,10 @@ load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
 cc_binary(
     name = "main",
     srcs = ["main.cc"],
+    data = [
+        "//g_1/resources:sample_player.png",
+        "//g_1/resources:sample_tree.png",
+    ],
     deps = [
         "//g_1:levels",
         "//lib/api:game",
@@ -28,6 +32,8 @@ cc_library(
         "//lib/api/objects:object",
         "//lib/api/objects:projectile_object",
         "//lib/api/objects:static_object",
+        "//lib/api/sprites:sprite_instance",
+        "//lib/api/sprites:static_sprite",
     ],
 )
 

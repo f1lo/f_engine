@@ -10,6 +10,7 @@ cc_library(
     hdrs = ["object.h"],
     deps = [
         "//lib/api:common_types",
+        "//lib/api/sprites:sprite_instance",
         "//lib/internal:hit_box",
         "@abseil-cpp//absl/container:flat_hash_map",
         "@abseil-cpp//absl/functional:any_invocable",
@@ -36,6 +37,7 @@ cc_library(
     deps = [
         "//lib/api/objects:object",
         "//lib/api/objects:object_utils",
+        "//lib/api/sprites:sprite_instance",
         "//lib/internal/geometry:vec",
     ],
 )
@@ -62,6 +64,7 @@ cc_library(
     deps = [
         "//lib/api/objects:object",
         "//lib/api/objects:object_utils",
+        "//lib/api/sprites:sprite_instance",
         "@abseil-cpp//absl/container:flat_hash_map",
     ],
 )
@@ -73,6 +76,7 @@ cc_library(
     deps = [
         "//lib/api/objects:movable_object",
         "//lib/api/objects:object",
+        "//lib/api/sprites:sprite_instance",
         "@abseil-cpp//absl/container:flat_hash_set",
     ],
 )

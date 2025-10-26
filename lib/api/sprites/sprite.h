@@ -14,6 +14,7 @@ class Sprite {
   virtual void RotateAndDraw(const WorldPosition draw_destination,
                              const int degree, int frame_to_draw = 0) const = 0;
   virtual int total_frames() const = 0;
+  virtual int sprite_height() const = 0;
 
   virtual ~Sprite() {}
 };

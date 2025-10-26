@@ -1,10 +1,40 @@
 #include "lib/api/objects/object.h"
 
 #include <list>
+#include <optional>
+
+#include "lib/api/sprites/sprite_instance.h"
 
 namespace lib {
 namespace api {
 namespace objects {
+
+using sprites::SpriteInstance;
+
+Object::Object(const Kind kind, const Opts& options, internal::HitBox hit_box,
+               std::optional<std::unique_ptr<SpriteInstance>> sprite_instance)
+    : kind_(kind),
+      hit_box_(std::move(hit_box)),
+      deleted_(false),
+      clicked_(false),
+      is_hit_box_active_(options.is_hit_box_active),
+      should_draw_hit_box_(options.should_draw_hit_box) {
+  if (sprite_instance.has_value()) {
+    sprite_instance_ = std::move(*sprite_instance);
+  } else {
+    sprite_instance_ = nullptr;
+  }
+}
+
+void Object::Draw() const {
+  if (sprite_instance_) {
+    sprite_instance_->Draw(center());
+  }
+
+  if (should_draw_hit_box()) {
+    hit_box().Draw();
+  }
+}
 
 bool Object::CollidesWith(const Object& other) const {
   // Hitbox not present or object deleted.
@@ -46,6 +76,16 @@ bool Object::UpdateInternal(
   }
 
   return false;
+}
+
+int Object::YBase() const {
+  if (!sprite_instance_) {
+    // Technically incorrect - does not matter as long as there is no
+    // sprite to draw.
+    return (int)center().y;
+  }
+
+  return (int)center().y + sprite_instance_->MainSpriteHeight() / 2;
 }
 
 }  // namespace objects

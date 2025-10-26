@@ -1,9 +1,12 @@
 #ifndef LIB_API_OBJECTS_PROJECTILE_OBJECT_H
 #define LIB_API_OBJECTS_PROJECTILE_OBJECT_H
 
+#include <optional>
+
 #include "absl/container/flat_hash_set.h"
 #include "lib/api/objects/movable_object.h"
 #include "lib/api/objects/object.h"
+#include "lib/api/sprites/sprite_instance.h"
 
 namespace lib {
 namespace api {
@@ -38,9 +41,11 @@ class ProjectileObject : public MovableObject {
     absl::flat_hash_set<Kind> ignore_these_objects;
   };
 
-  ProjectileObject(const Kind kind, ProjectileObjectOpts options)
+  ProjectileObject(const Kind kind, ProjectileObjectOpts options,
+                   std::optional<std::unique_ptr<sprites::SpriteInstance>>
+                       sprite_instance = std::nullopt)
       : MovableObject(kind, options, options.hit_box_center,
-                      options.hit_box_radius),
+                      options.hit_box_radius, std::move(sprite_instance)),
         opts_(std::move(options)) {}
 
   bool OnCollisionCallback(Object& other_object) override;

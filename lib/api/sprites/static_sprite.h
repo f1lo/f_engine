@@ -22,8 +22,8 @@ class StaticSprite : public Sprite {
   void RotateAndDraw(const WorldPosition draw_destination, const int degree,
                      int frame_to_draw = 0) const override;
   int total_frames() const override;
+  int sprite_height() const override;
 
- private:
   const Texture2D texture_;
   const Rectangle source_;
   const Vector2 origin_;

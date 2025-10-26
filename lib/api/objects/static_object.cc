@@ -2,11 +2,13 @@
 
 #include <list>
 #include <memory>
+#include <optional>
 #include <vector>
 
 #include "absl/container/flat_hash_map.h"
 #include "lib/api/objects/object.h"
 #include "lib/api/objects/object_utils.h"
+#include "lib/api/sprites/sprite_instance.h"
 
 namespace lib {
 namespace api {
@@ -14,32 +16,27 @@ namespace objects {
 
 StaticObject::StaticObject(
     const Kind kind, const StaticObjectOpts options,
-    const std::vector<std::pair<double, double>>& hit_box_vertices)
+    const std::vector<std::pair<double, double>>& hit_box_vertices,
+    std::optional<std::unique_ptr<sprites::SpriteInstance>> sprite_instance)
     : Object(kind,
              {.is_hit_box_active = options.is_hit_box_active,
               .should_draw_hit_box = options.should_draw_hit_box},
-             CreateHitBoxOrDie(hit_box_vertices)) {}
+             CreateHitBoxOrDie(hit_box_vertices), std::move(sprite_instance)) {}
 
-StaticObject::StaticObject(const Kind kind, const StaticObjectOpts options,
-                           const std::pair<double, double> hit_box_center,
-                           const double hit_box_radius)
+StaticObject::StaticObject(
+    const Kind kind, const StaticObjectOpts options,
+    const std::pair<double, double> hit_box_center, const double hit_box_radius,
+    std::optional<std::unique_ptr<sprites::SpriteInstance>> sprite_instance)
     : Object(kind,
              {.is_hit_box_active = options.is_hit_box_active,
               .should_draw_hit_box = options.should_draw_hit_box},
              CreateCircle(hit_box_center.first, hit_box_center.second,
-                          hit_box_radius)) {}
+                          hit_box_radius),
+             std::move(sprite_instance)) {}
 
 void StaticObject::Update(
     const std::list<std::unique_ptr<Object>>& other_objects) {
   UpdateInternal(other_objects);
-}
-
-void StaticObject::Draw() const {
-  // TODO(f1lo): Draw texture in the future.
-  if (!should_draw_hit_box()) {
-    return;
-  }
-  hit_box().Draw();
 }
 
 bool StaticObject::OnCollisionCallback(Object& other_object) {

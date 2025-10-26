@@ -47,6 +47,11 @@ std::list<ObjectAndAbilities> ProjectileAbility::Use(const Camera& camera) {
     direction_x = user_movable->direction_x();
     direction_y = user_movable->direction_y();
   }
+  if (direction_x == 0.0f && direction_y == 0.0f) {
+    // This is never a good sign. Means projectile is stuck.
+    // Can happen if user has not pressed anything yet.
+    direction_x = 1.0f;
+  }
 
   std::unique_ptr<ProjectileObject> projectile =
       std::make_unique<ProjectileObject>(

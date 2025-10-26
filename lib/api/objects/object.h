@@ -3,8 +3,10 @@
 
 #include <list>
 #include <memory>
+#include <optional>
 
 #include "lib/api/common_types.h"
+#include "lib/api/sprites/sprite_instance.h"
 #include "lib/internal/hit_box.h"
 
 namespace lib {
@@ -32,23 +34,20 @@ class Object {
   };
 
   explicit Object(const Kind kind, const Opts& options,
-                  internal::HitBox hit_box)
-      : kind_(kind),
-        hit_box_(std::move(hit_box)),
-        deleted_(false),
-        clicked_(false),
-        is_hit_box_active_(options.is_hit_box_active),
-        should_draw_hit_box_(options.should_draw_hit_box) {}
+                  internal::HitBox hit_box,
+                  std::optional<std::unique_ptr<sprites::SpriteInstance>>
+                      sprite_instance = std::nullopt);
 
   virtual ~Object() = default;
 
   virtual void Update(
       const std::list<std::unique_ptr<Object>>& other_objects) = 0;
-  virtual void Draw() const = 0;
+  virtual void Draw() const;
 
   [[nodiscard]] std::pair<double, double> Reflect(const Object& other, double x,
                                                   double y) const;
   [[nodiscard]] bool CollidesWith(const Object& other) const;
+  int YBase() const;
 
   // Object center in the world.
   [[nodiscard]] WorldPosition center() const {
@@ -79,6 +78,7 @@ class Object {
   bool clicked_;
   const bool is_hit_box_active_;
   const bool should_draw_hit_box_;
+  std::unique_ptr<sprites::SpriteInstance> sprite_instance_;
 };
 
 }  // namespace objects

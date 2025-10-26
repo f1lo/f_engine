@@ -1,6 +1,8 @@
 #include "g_1/levels.h"
 
 #include <list>
+#include <memory>
+#include <string>
 
 #include "g_1/opening_level.h"
 #include "g_1/player.h"
@@ -13,6 +15,8 @@
 #include "lib/api/objects/object.h"
 #include "lib/api/objects/projectile_object.h"
 #include "lib/api/objects/static_object.h"
+#include "lib/api/sprites/sprite_instance.h"
+#include "lib/api/sprites/static_sprite.h"
 #include "lib/api/title_screen_level.h"
 
 constexpr int kButtonOffsetX = 300;
@@ -21,14 +25,17 @@ constexpr int kButtonLengthX = 400;
 constexpr int kButtonLengthY = 100;
 constexpr int kOffsetBetweenButtons = 50;
 
-constexpr double kProjectileRadius = 10;
+constexpr double kProjectileRadius = 8;
 constexpr double kProjectileSpeed = 5;
 
 constexpr double kPlayerSpeed = 7;
 constexpr int kPlayerX = 0;
 constexpr int kPlayerY = 200;
-constexpr float kPlayerWidth = 25;
-constexpr float kPlayerHeight = 25;
+constexpr float kPlayerWidth = 50;
+constexpr float kPlayerHeight = 100;
+
+static const char* kTreePath = "g_1/resources/sample_tree.png";
+static const char* kPlayerPath = "g_1/resources/sample_player.png";
 
 namespace g_1 {
 namespace {
@@ -53,9 +60,16 @@ using lib::api::objects::MovableObject;
 using lib::api::objects::Object;
 using lib::api::objects::ProjectileObject;
 using lib::api::objects::StaticObject;
+using lib::api::sprites::SpriteInstance;
+using lib::api::sprites::StaticSprite;
 using lib::internal::HitBox;
 
 std::unique_ptr<Player> MakePlayer(const bool debug_mode) {
+  std::shared_ptr<StaticSprite> player =
+      std::make_shared<StaticSprite>(kPlayerPath);
+  std::unique_ptr<SpriteInstance> player_instance =
+      std::make_unique<SpriteInstance>(player);
+
   return std::make_unique<Player>(
       /*kind=*/kPlayer,
       /*options=*/
@@ -66,7 +80,8 @@ std::unique_ptr<Player> MakePlayer(const bool debug_mode) {
           {{kPlayerX, kPlayerY},
            {kPlayerX, kPlayerY + kPlayerHeight},
            {kPlayerX + kPlayerWidth, kPlayerY},
-           {kPlayerX + kPlayerWidth, kPlayerY + kPlayerHeight}}));
+           {kPlayerX + kPlayerWidth, kPlayerY + kPlayerHeight}}),
+      std::move(player_instance));
 }
 
 std::list<std::unique_ptr<Ability>> MakePlayerAbilities(const bool debug_mode) {
@@ -102,6 +117,15 @@ std::list<std::unique_ptr<Ability>> MakePlayerAbilities(const bool debug_mode) {
 std::vector<std::unique_ptr<StaticObject>> MakeStaticObjects(
     const bool debug_mode) {
   std::vector<std::unique_ptr<StaticObject>> static_objects;
+  std::shared_ptr<StaticSprite> tree =
+      std::make_shared<StaticSprite>(kTreePath);
+  std::unique_ptr<SpriteInstance> tree_1 =
+      std::make_unique<SpriteInstance>(tree);
+  std::unique_ptr<SpriteInstance> tree_2 =
+      std::make_unique<SpriteInstance>(tree);
+  std::unique_ptr<SpriteInstance> tree_3 =
+      std::make_unique<SpriteInstance>(tree);
+
   static_objects.push_back(std::make_unique<StaticObject>(
       /*kind=*/kButton,
       StaticObject::StaticObjectOpts(
@@ -109,20 +133,28 @@ std::vector<std::unique_ptr<StaticObject>> MakeStaticObjects(
           /*should_draw_hit_box=*/debug_mode),
       /*hit_box_vertices=*/
       std::vector<std::pair<double, double>>(
-          {{kButtonOffsetX, kButtonOffsetY},
-           {kButtonOffsetX, kButtonOffsetY + kButtonLengthY},
-           {kButtonOffsetX + kButtonLengthX, kButtonOffsetY},
-           {kButtonOffsetX + kButtonLengthX,
-            kButtonOffsetY + kButtonLengthY}})));
+          {{700, -300}, {700, -100}, {800, -100}, {800, -300}}),
+      std::move(tree_1)));
+
   static_objects.push_back(std::make_unique<StaticObject>(
-      /*kind=*/kEnemy,
+      /*kind=*/kButton,
       StaticObject::StaticObjectOpts(
           /*is_hit_box_active=*/true,
           /*should_draw_hit_box=*/debug_mode),
       /*hit_box_vertices=*/
       std::vector<std::pair<double, double>>(
-          {{500, -200}, {500, 200}, {1000, -200}, {1000, 200}})));
+          {{500, -300}, {500, -100}, {600, -100}, {600, -300}}),
+      std::move(tree_2)));
 
+  static_objects.push_back(std::make_unique<StaticObject>(
+      /*kind=*/kButton,
+      StaticObject::StaticObjectOpts(
+          /*is_hit_box_active=*/true,
+          /*should_draw_hit_box=*/debug_mode),
+      /*hit_box_vertices=*/
+      std::vector<std::pair<double, double>>(
+          {{200, 200}, {200, 0}, {300, 0}, {300, 200}}),
+      std::move(tree_3)));
   return static_objects;
 }
 

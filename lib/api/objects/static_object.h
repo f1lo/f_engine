@@ -3,10 +3,12 @@
 
 #include <list>
 #include <memory>
+#include <optional>
 #include <vector>
 
 #include "absl/container/flat_hash_map.h"
 #include "lib/api/objects/object.h"
+#include "lib/api/sprites/sprite_instance.h"
 
 namespace lib {
 namespace api {
@@ -21,13 +23,16 @@ class StaticObject : public Object {
   };
 
   StaticObject(Kind kind, StaticObjectOpts options,
-               const std::vector<std::pair<double, double>>& hit_box_vertices);
+               const std::vector<std::pair<double, double>>& hit_box_vertices,
+               std::optional<std::unique_ptr<sprites::SpriteInstance>>
+                   sprite_instance = std::nullopt);
 
   StaticObject(Kind kind, StaticObjectOpts options,
-               std::pair<double, double> hit_box_center, double hit_box_radius);
+               std::pair<double, double> hit_box_center, double hit_box_radius,
+               std::optional<std::unique_ptr<sprites::SpriteInstance>>
+                   sprite_instance = std::nullopt);
 
   void Update(const std::list<std::unique_ptr<Object>>& other_objects) override;
-  void Draw() const override;
 
  private:
   bool OnCollisionCallback(Object& other_object) override;

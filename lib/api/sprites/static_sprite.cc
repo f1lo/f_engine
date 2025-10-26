@@ -39,6 +39,10 @@ int StaticSprite::total_frames() const {
   return 1;
 }
 
+int StaticSprite::sprite_height() const {
+  return texture_.height;
+}
+
 }  // namespace sprites
 }  // namespace api
 }  // namespace lib

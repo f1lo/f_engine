@@ -50,12 +50,6 @@ ScreenEdgeObject::ScreenEdgeObject(const Kind kind,
               /*should_draw_hitbox=*/should_draw_hit_box},
              CreateHitBoxOrDie({a, b})) {}
 
-void ScreenEdgeObject::Draw() const {
-  if (should_draw_hit_box()) {
-    hit_box().Draw();
-  }
-}
-
 void ScreenEdgeObject::ReAdjustToScreen(const WorldPosition screen_top_left_pos,
                                         const double screen_width,
                                         const double screen_height) {

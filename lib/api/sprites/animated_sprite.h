@@ -23,6 +23,7 @@ class AnimatedSprite : public Sprite {
                              const int degree,
                              int frame_to_draw) const override;
   int total_frames() const override;
+  int sprite_height() const override;
 
  private:
   const Texture2D texture_;

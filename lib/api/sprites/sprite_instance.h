@@ -22,6 +22,7 @@ class SpriteInstance {
   void RotateAndDraw(const WorldPosition draw_destination,
                      const int rotation_degree);
   void Reset();
+  int MainSpriteHeight() const;
 
  private:
   void DrawInternal(const WorldPosition draw_destination,

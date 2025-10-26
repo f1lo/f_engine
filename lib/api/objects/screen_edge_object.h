@@ -33,7 +33,6 @@ class ScreenEdgeObject : public Object {
 
   void Update(
       const std::list<std::unique_ptr<Object>>& other_objects) override {}
-  void Draw() const override;
   bool OnCollisionCallback(Object& other_object) override { return false; }
 };
 
