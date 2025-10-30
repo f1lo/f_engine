@@ -173,6 +173,9 @@ std::unique_ptr<Level> MakeOpeningLevel(const bool debug_mode) {
     level_builder.AddObject(std::move(static_object));
   }
   level_builder.WithScreenObjects(/*should_draw_hitbox=*/debug_mode);
+  if (debug_mode) {
+    level_builder.WithCoordinates();
+  }
   return level_builder.Build();
 }
 

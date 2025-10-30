@@ -50,6 +50,14 @@ void Level::UpdateScreenEdges() const {
   }
 }
 
+void Level::UpdateCoordinateAxes() const {
+  for (auto& coordinate_object : coordinate_objects_) {
+    coordinate_object->ReAdjustToScreen(
+        camera_.GetWorldPosition({objects::kAxisOffset, objects::kAxisOffset}),
+        GetScreenWidth(), GetScreenHeight());
+  }
+}
+
 void Level::Draw() const {
   // Inefficient, no need to sort everything.
   // Will work for now - can be improved in the future to only sort movable
@@ -73,6 +81,7 @@ LevelId Level::Run() {
     CleanUpOrDie();
     camera_.MaybeActivate();
     UpdateScreenEdges();
+    UpdateCoordinateAxes();
 
     auto object_it = objects_.begin();
     auto ability_it = abilities_.begin();

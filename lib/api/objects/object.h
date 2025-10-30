@@ -25,6 +25,7 @@ static constexpr Kind kMousePointer = std::numeric_limits<uint32_t>::max() - 7;
 static constexpr Kind kButton = std::numeric_limits<uint32_t>::max() - 8;
 static constexpr Kind kProjectilePlayer =
     std::numeric_limits<uint32_t>::max() - 9;
+static constexpr Kind kCoordinate = std::numeric_limits<uint32_t>::max() - 10;
 
 class Object {
  public:

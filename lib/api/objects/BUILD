@@ -93,3 +93,16 @@ cc_library(
         "@abseil-cpp//absl/memory",
     ],
 )
+
+cc_library(
+    name = "coordinate_object",
+    srcs = ["coordinate_object.cc"],
+    hdrs = ["coordinate_object.h"],
+    deps = [
+        ":object_utils",
+        "//lib/api:common_types",
+        "//lib/api/objects:object",
+        "//raylib",
+        "@abseil-cpp//absl/memory",
+    ],
+)

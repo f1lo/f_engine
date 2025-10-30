@@ -14,6 +14,7 @@ namespace api {
 using lib::api::abilities::Ability;
 using lib::api::abilities::kKeyA;
 using lib::api::abilities::MoveAbility;
+using lib::api::objects::kCoordinate;
 using lib::api::objects::kEnemy;
 using lib::api::objects::Kind;
 using lib::api::objects::kPlayer;
@@ -106,11 +107,33 @@ TEST_F(LevelTest, ScreenEdgeObjectsAreAdded) {
   for (const auto& object : dummy_level->screen_edge_objects_) {
     screen_edge_kinds.push_back(object->kind());
   }
+
   EXPECT_THAT(object_kinds, UnorderedElementsAre(kScreenLeft, kScreenRight,
                                                  kScreenTop, kScreenBottom));
   EXPECT_THAT(screen_edge_kinds,
               UnorderedElementsAre(kScreenLeft, kScreenRight, kScreenTop,
                                    kScreenBottom));
+}
+
+TEST_F(LevelTest, CoordinateObjectsAreAdded) {
+  LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel);
+
+  std::unique_ptr<DummyLevel> dummy_level =
+      dummy_builder.WithCoordinates().Build();
+
+  ASSERT_EQ(dummy_level->objects_.size(), 2);
+  ASSERT_EQ(dummy_level->coordinate_objects_.size(), 2);
+  std::vector<Kind> object_kinds;
+  std::vector<Kind> coordinate_kinds;
+  for (const auto& object : dummy_level->objects_) {
+    object_kinds.push_back(object->kind());
+  }
+  for (const auto& object : dummy_level->coordinate_objects_) {
+    coordinate_kinds.push_back(object->kind());
+  }
+
+  EXPECT_THAT(object_kinds, UnorderedElementsAre(kCoordinate, kCoordinate));
+  EXPECT_THAT(coordinate_kinds, UnorderedElementsAre(kCoordinate, kCoordinate));
 }
 
 }  // namespace api

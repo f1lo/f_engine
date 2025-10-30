@@ -13,6 +13,7 @@
 #include "absl/memory/memory.h"
 #include "gtest/gtest_prod.h"
 #include "lib/api/camera.h"
+#include "lib/api/objects/coordinate_object.h"
 #include "lib/api/objects/object.h"
 #include "lib/api/objects/screen_edge_object.h"
 
@@ -92,6 +93,21 @@ class LevelBuilder {
         .AddObject(std::move(screen_bottom));
   }
 
+  LevelBuilder& WithCoordinates() {
+    CHECK(level_->coordinate_objects_.empty())
+        << "WithCoordinates() has already been called.";
+    const int screen_width = GetScreenWidth();
+    const int screen_height = GetScreenHeight();
+    std::unique_ptr<objects::CoordinateObject> x_axis =
+        objects::CoordinateObject::MakeX(screen_width);
+    std::unique_ptr<objects::CoordinateObject> y_axis =
+        objects::CoordinateObject::MakeY(screen_height);
+
+    level_->coordinate_objects_.emplace_back(x_axis.get());
+    level_->coordinate_objects_.emplace_back(y_axis.get());
+    return AddObject(std::move(x_axis)).AddObject(std::move(y_axis));
+  }
+
   virtual std::unique_ptr<LevelT> Build() { return std::move(level_); }
 
  protected:
@@ -112,6 +128,7 @@ class Level {
   void CleanUpOrDie();
   [[nodiscard]] virtual LevelId MaybeChangeLevel() const;
   void UpdateScreenEdges() const;
+  void UpdateCoordinateAxes() const;
   void Draw() const;
   LevelId id_;
 
@@ -122,10 +139,12 @@ class Level {
   FRIEND_TEST(LevelTest, ObjectsAreAdded);
   FRIEND_TEST(LevelTest, ObjectsAndAbilitiesAreAdded);
   FRIEND_TEST(LevelTest, ScreenEdgeObjectsAreAdded);
+  FRIEND_TEST(LevelTest, CoordinateObjectsAreAdded);
   FRIEND_TEST(TitleScreenLevelTest, StartAndExitAddedOk);
   std::list<std::unique_ptr<objects::Object>> objects_;
   std::list<std::list<std::unique_ptr<abilities::Ability>>> abilities_;
   std::list<objects::ScreenEdgeObject*> screen_edge_objects_;
+  std::list<objects::CoordinateObject*> coordinate_objects_;
   Camera camera_;
 };
 
