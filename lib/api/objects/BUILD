@@ -81,6 +81,17 @@ cc_library(
     ],
 )
 
+cc_test(
+    name = "projectile_object_test",
+    srcs = ["projectile_object_test.cc"],
+    deps = [
+        ":projectile_object",
+        ":static_object",
+        "@googletest//:gtest",
+        "@googletest//:gtest_main",
+    ],
+)
+
 cc_library(
     name = "screen_edge_object",
     srcs = ["screen_edge_object.cc"],
@@ -91,6 +102,17 @@ cc_library(
         "//lib/api/objects:object_utils",
         "@abseil-cpp//absl/log:log",
         "@abseil-cpp//absl/memory",
+    ],
+)
+
+cc_test(
+    name = "screen_edge_object_test",
+    srcs = ["screen_edge_object_test.cc"],
+    deps = [
+        ":screen_edge_object",
+        "//lib/api:common_types",
+        "@googletest//:gtest",
+        "@googletest//:gtest_main",
     ],
 )
 
