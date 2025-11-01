@@ -16,7 +16,7 @@ bool ScreenPosition::operator!=(const ScreenPosition& other) const {
 }
 
 std::ostream& operator<<(std::ostream& os, const ScreenPosition& pos) {
-  os << "ScreenPosition (" << pos.x << ", " << pos.y << ")\n";
+  os << "ScreenPosition (" << pos.x << ", " << pos.y << ")";
   return os;
 }
 
@@ -29,7 +29,7 @@ bool WorldPosition::operator!=(const WorldPosition& other) const {
 }
 
 std::ostream& operator<<(std::ostream& os, const WorldPosition& pos) {
-  os << "WorldPosition (" << pos.x << ", " << pos.y << ")\n";
+  os << "WorldPosition (" << pos.x << ", " << pos.y << ")";
   return os;
 }
 

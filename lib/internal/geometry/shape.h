@@ -25,8 +25,8 @@ struct Shape {
   virtual void Draw() const = 0;
   virtual void Move(double x, double y) = 0;
 
-  [[nodiscard]] virtual double center_x() = 0;
-  [[nodiscard]] virtual double center_y() = 0;
+  [[nodiscard]] virtual double center_x() const = 0;
+  [[nodiscard]] virtual double center_y() const = 0;
 
   virtual ~Shape() = default;
 };
@@ -39,8 +39,8 @@ struct Point final : Shape {
   void Draw() const override;
   void Move(double x, double y) override;
 
-  [[nodiscard]] double center_x() override { return x; }
-  [[nodiscard]] double center_y() override { return y; }
+  [[nodiscard]] double center_x() const override { return x; }
+  [[nodiscard]] double center_y() const override { return y; }
 
   Point(const double x, const double y) : x(x), y(y) {}
   explicit Point(std::pair<double, double> p) : x(p.first), y(p.second) {}
@@ -68,14 +68,14 @@ struct Line final : Shape {
   void Draw() const override;
   void Move(double x, double y) override;
 
-  [[nodiscard]] double center_x() override {
+  [[nodiscard]] double center_x() const override {
     return (this->a.x + this->b.x) / 2.0;
   }
-  [[nodiscard]] double center_y() override {
+  [[nodiscard]] double center_y() const override {
     return (this->a.y + this->b.y) / 2.0;
   }
 
-  Line(Point a, Point b) : a(std::move(a)), b(std::move(b)) {
+  Line(Point a, Point b) : a(a), b(b) {
     if (std::abs(this->a.x - this->b.x) <= eps) {
       axis_aligned = Aligned::Y;
     }
@@ -104,8 +104,8 @@ struct Rectangle final : Shape {
   void Draw() const override;
   void Move(double x, double y) override;
 
-  [[nodiscard]] double center_x() override { return (a.x + c.x) / 2.0; }
-  [[nodiscard]] double center_y() override { return (a.y + c.y) / 2.0; }
+  [[nodiscard]] double center_x() const override { return (a.x + c.x) / 2.0; }
+  [[nodiscard]] double center_y() const override { return (a.y + c.y) / 2.0; }
 
   Rectangle(const Point& bottom_left, const Point& top_right)
       : a(bottom_left),
@@ -132,10 +132,10 @@ struct Circle final : Shape {
   void Draw() const override;
   void Move(double x, double y) override;
 
-  [[nodiscard]] double center_x() override { return a.x; }
-  [[nodiscard]] double center_y() override { return a.y; }
+  [[nodiscard]] double center_x() const override { return a.x; }
+  [[nodiscard]] double center_y() const override { return a.y; }
 
-  Circle(Point a, const double r) : a(std::move(a)), r(r) {
+  Circle(Point a, const double r) : a(a), r(r) {
     CHECK(this->r > 0) << "Negative radius for circle: " << this->r;
   }
 

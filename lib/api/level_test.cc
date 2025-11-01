@@ -23,6 +23,7 @@ using lib::api::objects::kScreenLeft;
 using lib::api::objects::kScreenRight;
 using lib::api::objects::kScreenTop;
 using lib::api::objects::StaticObject;
+using ::testing::HasSubstr;
 using ::testing::UnorderedElementsAre;
 
 namespace {
@@ -40,6 +41,22 @@ class LevelTest : public ::testing::Test {
  public:
  protected:
 };
+
+using LevelDeathTest = LevelTest;
+
+TEST_F(LevelDeathTest, ScreenEdgeObjectsAreAddedTwice) {
+  LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel);
+
+  EXPECT_DEATH(dummy_builder.WithScreenObjects().WithScreenObjects(),
+               HasSubstr("WithScreenObjects() has already been called."));
+}
+
+TEST_F(LevelDeathTest, CoordinateObjectsAreAddedTwice) {
+  LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel);
+
+  EXPECT_DEATH(dummy_builder.WithCoordinates().WithCoordinates(),
+               HasSubstr("WithCoordinates() has already been called."));
+}
 
 TEST_F(LevelTest, ObjectsAreAdded) {
   LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel);
