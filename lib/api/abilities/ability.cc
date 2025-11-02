@@ -6,10 +6,9 @@
 #include <memory>
 
 #include "absl/log/check.h"
-#include "lib/api/objects/movable_object.h"
-// ReSharper disable once CppUnusedIncludeDirective
 #include "lib/api/abilities/keys.h"
 #include "lib/api/camera.h"
+#include "lib/api/objects/movable_object.h"
 
 namespace lib {
 namespace api {
@@ -25,7 +24,7 @@ bool Ability::IsOnCooldown() const {
 
 std::list<ObjectAndAbilities> MoveAbility::Use(const Camera& camera) {
   // Generally move should have no cooldown - so ignore it.
-  auto* cast_user = dynamic_cast<MovableObject*>(user_);
+  auto* cast_user = dynamic_cast<MovableObject*>(user());
   CHECK(cast_user) << " ability user is not of correct type.";
   double dir_x = 0;
   double dir_y = 0;

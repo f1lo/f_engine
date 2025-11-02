@@ -68,6 +68,18 @@ cc_library(
     ],
 )
 
+cc_test(
+    name = "object_utils_test",
+    srcs = ["object_utils_test.cc"],
+    deps = [
+        ":object_utils",
+        "//lib/api:common_types",
+        "//lib/internal:hit_box",
+        "@googletest//:gtest",
+        "@googletest//:gtest_main",
+    ],
+)
+
 cc_library(
     name = "static_object",
     srcs = ["static_object.cc"],

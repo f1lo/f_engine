@@ -30,11 +30,11 @@ std::list<ObjectAndAbilities> ProjectileAbility::Use(const Camera& camera) {
   last_used_sec_ = GetTime();
 
   // Always spawn off user.
-  projectile_object_opts_.hit_box_center = {user_->center().x,
-                                            user_->center().y};
+  projectile_object_opts_.hit_box_center = {user()->center().x,
+                                            user()->center().y};
 
   // Always ignore the user.
-  projectile_object_opts_.ignore_these_objects.insert(user_->kind());
+  projectile_object_opts_.ignore_these_objects.insert(user()->kind());
 
   // If user has direction, spawn projectile with the same direction.
   // Otherwise go top right.
@@ -42,7 +42,7 @@ std::list<ObjectAndAbilities> ProjectileAbility::Use(const Camera& camera) {
   // This means projectile will not move - probably last known direction
   // needs to be saved to address this.
   double direction_x = 1, direction_y = -1;
-  MovableObject* user_movable = dynamic_cast<MovableObject*>(user_);
+  MovableObject* user_movable = dynamic_cast<MovableObject*>(user());
   if (user_movable != nullptr) {
     direction_x = user_movable->direction_x();
     direction_y = user_movable->direction_y();

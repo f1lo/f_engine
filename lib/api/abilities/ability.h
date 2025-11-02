@@ -33,17 +33,18 @@ class Ability {
   virtual ~Ability() = default;
 
   virtual std::list<ObjectAndAbilities> Use(const Camera& camera) = 0;
+  void set_user(objects::Object* user) { user_ = user; }
+  objects::Object* user() { return user_; }
 
  protected:
   template <typename LevelT>
   friend class lib::api::LevelBuilder;
-
   [[nodiscard]] bool IsOnCooldown() const;
-  // Does not take ownership.
-  objects::Object* user_;
   double last_used_sec_ = 0;
 
  private:
+  // Does not take ownership.
+  objects::Object* user_;
   AbilityOpts opts_;
 };
 

@@ -18,6 +18,20 @@ cc_library(
     ],
 )
 
+cc_test(
+    name = "move_ability_test",
+    srcs = ["move_ability_test.cc"],
+    deps = [
+        ":ability",
+        "//lib/api:camera",
+        "//lib/api:common_types",
+        "//lib/api/objects:movable_object",
+        "//lib/api/objects:static_object",
+        "@googletest//:gtest",
+        "@googletest//:gtest_main",
+    ],
+)
+
 cc_library(
     name = "click_ability",
     srcs = ["click_ability.cc"],

@@ -18,7 +18,7 @@ std::list<ObjectAndAbilities> BallAbility::Use(const Camera& camera) {
   }
   if (lib::api::abilities::IsPressed(activation_button_)) {
     used_ = true;
-    auto* cast_ball = dynamic_cast<Ball*>(user_);
+    auto* cast_ball = dynamic_cast<Ball*>(user());
     CHECK(cast_ball) << " ability user is not of correct type.";
     cast_ball->SetDirectionGlobal(1, -1);
   }

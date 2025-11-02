@@ -46,7 +46,7 @@ class LevelBuilder {
     }
 
     for (const auto& ability : abilities) {
-      ability->user_ = object.get();
+      ability->set_user(object.get());
     }
 
     level_->objects_.emplace_back(std::move(object));
