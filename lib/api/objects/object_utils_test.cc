@@ -35,6 +35,14 @@ TEST(ObjectUtilsTest, CreateCircle) {
   EXPECT_DOUBLE_EQ(circle.center_y(), 2);
 }
 
+TEST(ObjectUtilsTest, CreateLine) {
+  const internal::HitBox line =
+      CreateHitBoxOrDie(std::vector<ScreenPosition>{{0, 0}, {0, 1}});
+
+  EXPECT_DOUBLE_EQ(line.center_x(), 0);
+  EXPECT_DOUBLE_EQ(line.center_y(), 0.5);
+}
+
 }  // namespace
 }  // namespace objects
 }  // namespace api
