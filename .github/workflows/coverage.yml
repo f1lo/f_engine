@@ -21,7 +21,7 @@ jobs:
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
-        # with:
-        #   # (Optional) Specify the file path for clarity
-        #   files: bazel-out/_coverage/_coverage_report.dat
-        #   token: ${{ secrets.CODECOV_TOKEN }} # Store this in GitHub > Settings > Secrets
+        with:
+          files: bazel-out/_coverage/_coverage_report.dat
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: true
