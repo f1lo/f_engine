@@ -7,7 +7,7 @@
 #include "g_1/opening_level.h"
 #include "g_1/player.h"
 #include "lib/api/abilities/ability.h"
-#include "lib/api/abilities/keys.h"
+#include "lib/api/abilities/controls.h"
 #include "lib/api/abilities/move_with_cursor_ability.h"
 #include "lib/api/abilities/projectile_ability.h"
 #include "lib/api/level.h"
@@ -44,6 +44,7 @@ using lib::api::kTitleScreenLevel;
 using lib::api::Level;
 using lib::api::TitleScreenLevelBuilder;
 using lib::api::abilities::Ability;
+using lib::api::abilities::Controls;
 using lib::api::abilities::kKeyA;
 using lib::api::abilities::kKeyD;
 using lib::api::abilities::kKeyS;
@@ -87,11 +88,13 @@ std::unique_ptr<Player> MakePlayer(const bool debug_mode) {
 std::list<std::unique_ptr<Ability>> MakePlayerAbilities(const bool debug_mode) {
   std::list<std::unique_ptr<Ability>> abilities;
   abilities.push_back(std::make_unique<MoveAbility>(
+      std::make_unique<Controls>(),
       MoveAbility::MoveAbilityOpts(Ability::AbilityOpts(/*cooldown_sec=*/0),
                                    /*key_left=*/kKeyA, /*key_right=*/kKeyD,
                                    /*key_top=*/kKeyW, /*key_bottom=*/kKeyS)));
 
-  abilities.push_back(std::make_unique<MoveWithCursorAbility>());
+  abilities.push_back(
+      std::make_unique<MoveWithCursorAbility>(std::make_unique<Controls>()));
 
   absl::flat_hash_set<Kind> despawn;
   absl::flat_hash_set<Kind> reflect;
@@ -99,6 +102,7 @@ std::list<std::unique_ptr<Ability>> MakePlayerAbilities(const bool debug_mode) {
   despawn.insert(kEnemy);
   reflect.insert(kButton);
   abilities.push_back(std::make_unique<ProjectileAbility>(
+      std::make_unique<Controls>(),
       /*projectile_kind=*/kProjectilePlayer,
       /*opts=*/ProjectileAbility::ProjectileAbilityOpts(/*cooldown_sec=*/1),
       /*projectile_object_opts=*/

@@ -5,7 +5,7 @@
 
 #include "absl/log/check.h"
 #include "lib/api/abilities/ability.h"
-#include "lib/api/abilities/keys.h"
+#include "lib/api/abilities/controls.h"
 #include "lib/api/camera.h"
 #include "lib/api/common_types.h"
 #include "lib/api/objects/movable_object.h"
@@ -37,11 +37,11 @@ std::list<ObjectAndAbilities> MoveWithCursorAbility::Use(const Camera& camera) {
       return {};
     }
   }
-  if (!IsSecondaryPressed()) {
+  if (!controls_->IsSecondaryPressed()) {
     return {};
   }
   const WorldPosition cursor_pos_world =
-      camera.GetWorldPosition(GetCursorPos());
+      camera.GetWorldPosition(controls_->GetCursorPos());
   cursor_last_clicked_pos_ = cursor_pos_world;
   movable_user->SetDirectionRelative(cursor_pos_world.x, cursor_pos_world.y);
   return {};

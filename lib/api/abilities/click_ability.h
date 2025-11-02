@@ -5,6 +5,7 @@
 #include <memory>
 
 #include "lib/api/abilities/ability.h"
+#include "lib/api/abilities/controls.h"
 #include "lib/api/camera.h"
 #include "lib/api/objects/object.h"
 
@@ -14,7 +15,8 @@ namespace abilities {
 
 class ClickAbility : public Ability {
  public:
-  ClickAbility() : Ability({.cooldown_sec = 0}) {}
+  explicit ClickAbility(std::unique_ptr<const ControlsInterface> controls)
+      : Ability(std::move(controls), {.cooldown_sec = 0}) {}
   ~ClickAbility() override = default;
 
   std::list<ObjectAndAbilities> Use(const Camera& camera) override;

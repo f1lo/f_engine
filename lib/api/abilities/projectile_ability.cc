@@ -6,7 +6,7 @@
 #include <memory>
 
 #include "lib/api/abilities/ability.h"
-#include "lib/api/abilities/keys.h"
+#include "lib/api/abilities/controls.h"
 #include "lib/api/camera.h"
 #include "lib/api/objects/movable_object.h"
 #include "lib/api/objects/object.h"
@@ -23,7 +23,7 @@ std::list<ObjectAndAbilities> ProjectileAbility::Use(const Camera& camera) {
   if (IsOnCooldown()) {
     return {};
   }
-  if (!IsPrimaryPressed() && !IsPressed(kKeySpace)) {
+  if (!controls_->IsPrimaryPressed() && !controls_->IsPressed(kKeySpace)) {
     return {};
   }
 

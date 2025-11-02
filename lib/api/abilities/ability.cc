@@ -6,7 +6,7 @@
 #include <memory>
 
 #include "absl/log/check.h"
-#include "lib/api/abilities/keys.h"
+#include "lib/api/abilities/controls.h"
 #include "lib/api/camera.h"
 #include "lib/api/objects/movable_object.h"
 
@@ -29,19 +29,19 @@ std::list<ObjectAndAbilities> MoveAbility::Use(const Camera& camera) {
   double dir_x = 0;
   double dir_y = 0;
   bool was_used_this_frame = false;
-  if (opts_.key_left.has_value() && IsDown(*opts_.key_left)) {
+  if (opts_.key_left.has_value() && controls_->IsDown(*opts_.key_left)) {
     was_used_this_frame = true;
     dir_x = -1;
   }
-  if (opts_.key_right.has_value() && IsDown(*opts_.key_right)) {
+  if (opts_.key_right.has_value() && controls_->IsDown(*opts_.key_right)) {
     was_used_this_frame = true;
     dir_x = 1;
   }
-  if (opts_.key_top.has_value() && IsDown(*opts_.key_top)) {
+  if (opts_.key_top.has_value() && controls_->IsDown(*opts_.key_top)) {
     was_used_this_frame = true;
     dir_y = -1;
   }
-  if (opts_.key_bottom.has_value() && IsDown(*opts_.key_bottom)) {
+  if (opts_.key_bottom.has_value() && controls_->IsDown(*opts_.key_bottom)) {
     was_used_this_frame = true;
     dir_y = 1;
   }

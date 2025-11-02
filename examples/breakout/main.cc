@@ -8,7 +8,7 @@
 #include "examples/breakout/level_main.h"
 #include "examples/breakout/player_pad.h"
 #include "lib/api/abilities/ability.h"
-#include "lib/api/abilities/keys.h"
+#include "lib/api/abilities/controls.h"
 #include "lib/api/game.h"
 #include "lib/api/level.h"
 #include "lib/api/objects/movable_object.h"
@@ -22,6 +22,7 @@ using breakout::PlayerPad;
 using lib::api::Game;
 using lib::api::Level;
 using lib::api::abilities::Ability;
+using lib::api::abilities::Controls;
 using lib::api::abilities::kKeyA;
 using lib::api::abilities::kKeyD;
 using lib::api::abilities::kKeyS;
@@ -86,7 +87,7 @@ int main() {
   MoveAbility::MoveAbilityOpts opts = MoveAbility::MoveAbilityOpts(
       {.cooldown_sec = 0}, kKeyA, kKeyD, std::nullopt, std::nullopt);
   std::unique_ptr<MoveAbility> ability_move =
-      std::make_unique<MoveAbility>(opts);
+      std::make_unique<MoveAbility>(std::make_unique<Controls>(), opts);
   std::unique_ptr<breakout::BallAbility> ability_ball =
       std::make_unique<breakout::BallAbility>(lib::api::abilities::kKeySpace);
 

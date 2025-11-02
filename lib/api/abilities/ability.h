@@ -4,14 +4,16 @@
 #include <list>
 #include <memory>
 
-#include "lib/api/abilities/keys.h"
+#include "lib/api/abilities/controls.h"
 #include "lib/api/camera.h"
 #include "lib/api/objects/object.h"
 
 namespace lib {
 namespace api {
 namespace abilities {
+
 class Ability;
+
 }  // namespace abilities
 
 template <typename LevelT>
@@ -29,7 +31,9 @@ class Ability {
     uint32_t cooldown_sec;
   };
 
-  explicit Ability(const AbilityOpts opts) : user_(nullptr), opts_(opts) {}
+  Ability(std::unique_ptr<const ControlsInterface> controls,
+          const AbilityOpts opts)
+      : controls_(std::move(controls)), user_(nullptr), opts_(opts) {}
   virtual ~Ability() = default;
 
   virtual std::list<ObjectAndAbilities> Use(const Camera& camera) = 0;
@@ -41,6 +45,7 @@ class Ability {
   friend class lib::api::LevelBuilder;
   [[nodiscard]] bool IsOnCooldown() const;
   double last_used_sec_ = 0;
+  std::unique_ptr<const ControlsInterface> controls_;
 
  private:
   // Does not take ownership.
@@ -66,8 +71,9 @@ class MoveAbility : public Ability {
     const std::optional<Button> key_top;
     const std::optional<Button> key_bottom;
   };
-  explicit MoveAbility(const MoveAbilityOpts& opts)
-      : Ability({opts.cooldown_sec}), opts_(opts) {}
+  explicit MoveAbility(std::unique_ptr<const ControlsInterface> controls,
+                       const MoveAbilityOpts& opts)
+      : Ability(std::move(controls), {opts.cooldown_sec}), opts_(opts) {}
   ~MoveAbility() override = default;
 
   [[nodiscard]] std::list<ObjectAndAbilities> Use(

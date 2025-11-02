@@ -7,11 +7,12 @@
 #include <memory>
 #include <optional>
 
-#include "abilities/ability.h"
 #include "absl/container/flat_hash_map.h"
 #include "absl/log/check.h"
 #include "absl/memory/memory.h"
 #include "gtest/gtest_prod.h"
+#include "lib/api/abilities/ability.h"
+#include "lib/api/abilities/controls.h"
 #include "lib/api/camera.h"
 #include "lib/api/objects/coordinate_object.h"
 #include "lib/api/objects/object.h"
@@ -133,7 +134,8 @@ class Level {
   LevelId id_;
 
  protected:
-  explicit Level(const LevelId id) : id_(id) {}
+  explicit Level(const LevelId id)
+      : id_(id), controls_(std::make_unique<abilities::Controls>()) {}
   // This separation is required so that cyclic dependency is not introduced
   // between Object and Ability classes.
   FRIEND_TEST(LevelTest, ObjectsAreAdded);
@@ -146,6 +148,7 @@ class Level {
   std::list<objects::ScreenEdgeObject*> screen_edge_objects_;
   std::list<objects::CoordinateObject*> coordinate_objects_;
   Camera camera_;
+  std::unique_ptr<const abilities::Controls> controls_;
 };
 
 }  // namespace api

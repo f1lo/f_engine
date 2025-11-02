@@ -5,7 +5,8 @@
 #include "gmock/gmock-matchers.h"
 #include "gtest/gtest.h"
 #include "lib/api/abilities/ability.h"
-#include "lib/api/abilities/keys.h"
+#include "lib/api/abilities/controls.h"
+#include "lib/api/abilities/controls_mock.h"
 #include "lib/api/objects/static_object.h"
 
 namespace lib {
@@ -88,6 +89,7 @@ TEST_F(LevelTest, ObjectsAndAbilitiesAreAdded) {
   LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel);
   std::list<std::unique_ptr<Ability>> abilities;
   abilities.push_back(std::make_unique<MoveAbility>(
+      std::make_unique<abilities::ControlsMock>(),
       MoveAbility::MoveAbilityOpts(Ability::AbilityOpts(/*cooldown_sec=*/0),
                                    /*key_left=*/kKeyA, /*key_right=*/kKeyA,
                                    /*key_top=*/kKeyA, /*key_bottom=*/kKeyA)));

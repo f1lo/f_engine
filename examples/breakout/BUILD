@@ -12,7 +12,7 @@ cc_binary(
         "//lib/api:game",
         "//lib/api:level",
         "//lib/api/abilities:ability",
-        "//lib/api/abilities:keys",
+        "//lib/api/abilities:controls",
         "//raylib",
     ],
 )
@@ -49,7 +49,7 @@ cc_library(
         "//examples/breakout:player_pad",
         "//lib/api:camera",
         "//lib/api/abilities:ability",
-        "//lib/api/abilities:keys",
+        "//lib/api/abilities:controls",
     ],
 )
 

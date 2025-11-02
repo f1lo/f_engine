@@ -5,7 +5,7 @@
 #include <memory>
 
 #include "lib/api/abilities/ability.h"
-#include "lib/api/abilities/keys.h"
+#include "lib/api/abilities/controls.h"
 #include "lib/api/camera.h"
 #include "lib/api/objects/object.h"
 
@@ -14,7 +14,8 @@ namespace breakout {
 class BallAbility : public lib::api::abilities::Ability {
  public:
   explicit BallAbility(const lib::api::abilities::Button activation_button)
-      : Ability(/*opts*/ {.cooldown_sec = 0}),
+      : Ability(std::make_unique<lib::api::abilities::Controls>(),
+                /*opts*/ {.cooldown_sec = 0}),
         activation_button_(activation_button) {}
 
   std::list<lib::api::ObjectAndAbilities> Use(

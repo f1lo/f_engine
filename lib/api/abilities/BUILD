@@ -10,7 +10,7 @@ cc_library(
     hdrs = ["ability.h"],
     deps = [
         "//lib/api:camera",
-        "//lib/api/abilities:keys",
+        "//lib/api/abilities:controls",
         "//lib/api/objects:movable_object",
         "//lib/api/objects:object",
         "//raylib",
@@ -23,6 +23,7 @@ cc_test(
     srcs = ["move_ability_test.cc"],
     deps = [
         ":ability",
+        ":controls_mock",
         "//lib/api:camera",
         "//lib/api:common_types",
         "//lib/api/objects:movable_object",
@@ -40,7 +41,7 @@ cc_library(
         "//lib/api:camera",
         "//lib/api:common_types",
         "//lib/api/abilities:ability",
-        "//lib/api/abilities:keys",
+        "//lib/api/abilities:controls",
         "//lib/api/objects:object",
         "//lib/api/objects:static_object",
     ],
@@ -54,7 +55,7 @@ cc_library(
         "//lib/api:camera",
         "//lib/api:common_types",
         "//lib/api/abilities:ability",
-        "//lib/api/abilities:keys",
+        "//lib/api/abilities:controls",
         "//lib/api/objects:movable_object",
         "//lib/api/objects:object",
         "//lib/api/objects:static_object",
@@ -69,7 +70,7 @@ cc_library(
         "//lib/api:camera",
         "//lib/api:common_types",
         "//lib/api/abilities:ability",
-        "//lib/api/abilities:keys",
+        "//lib/api/abilities:controls",
         "//lib/api/objects:movable_object",
         "//lib/api/objects:object",
         "//lib/api/objects:projectile_object",
@@ -79,10 +80,21 @@ cc_library(
 )
 
 cc_library(
-    name = "keys",
-    hdrs = ["keys.h"],
+    name = "controls",
+    srcs = ["controls.cc"],
+    hdrs = ["controls.h"],
     deps = [
         "//lib/api:common_types",
         "//raylib",
+    ],
+)
+
+cc_library(
+    name = "controls_mock",
+    srcs = ["controls_mock.cc"],
+    hdrs = ["controls_mock.h"],
+    deps = [
+        ":controls",
+        "//lib/api:common_types",
     ],
 )

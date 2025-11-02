@@ -4,7 +4,7 @@
 #include <memory>
 
 #include "examples/breakout/ball.h"
-#include "lib/api/abilities/keys.h"
+#include "lib/api/abilities/controls.h"
 #include "lib/api/camera.h"
 
 namespace breakout {
@@ -16,7 +16,7 @@ std::list<ObjectAndAbilities> BallAbility::Use(const Camera& camera) {
   if (used_) {
     return {};
   }
-  if (lib::api::abilities::IsPressed(activation_button_)) {
+  if (controls_->IsPressed(activation_button_)) {
     used_ = true;
     auto* cast_ball = dynamic_cast<Ball*>(user());
     CHECK(cast_ball) << " ability user is not of correct type.";

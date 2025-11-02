@@ -25,7 +25,7 @@ cc_library(
         "//lib/api:level",
         "//lib/api:title_screen_level",
         "//lib/api/abilities:ability",
-        "//lib/api/abilities:keys",
+        "//lib/api/abilities:controls",
         "//lib/api/abilities:move_with_cursor_ability",
         "//lib/api/abilities:projectile_ability",
         "//lib/api/objects:movable_object",
@@ -45,7 +45,7 @@ cc_library(
         "//g_1:player",
         "//lib/api:level",
         "//lib/api/abilities:ability",
-        "//lib/api/abilities:keys",
+        "//lib/api/abilities:controls",
     ],
 )
 

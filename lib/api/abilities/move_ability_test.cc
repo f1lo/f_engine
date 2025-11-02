@@ -5,6 +5,7 @@
 
 #include "gmock/gmock-matchers.h"
 #include "gtest/gtest.h"
+#include "lib/api/abilities/controls_mock.h"
 #include "lib/api/camera.h"
 #include "lib/api/common_types.h"
 #include "lib/api/objects/movable_object.h"
@@ -43,10 +44,12 @@ TEST(MoveAbilityDeathTest, UserNotMovable) {
       StaticObject::StaticObjectOpts(/*is_hit_box_active=*/false,
                                      /*should_draw_hit_box=*/false),
       /*hit_box_center=*/std::make_pair(0, 0), /*hit_box_radius=*/3);
-  MoveAbility ability = MoveAbility(MoveAbility::MoveAbilityOpts(
-      Ability::AbilityOpts(/*cooldown_sec=*/0),
-      /*key_left=*/std::nullopt, /*key_right=*/std::nullopt,
-      /*key_top=*/std::nullopt, /*key_bottom=*/std::nullopt));
+  MoveAbility ability =
+      MoveAbility(std::make_unique<ControlsMock>(),
+                  MoveAbility::MoveAbilityOpts(
+                      Ability::AbilityOpts(/*cooldown_sec=*/0),
+                      /*key_left=*/std::nullopt, /*key_right=*/std::nullopt,
+                      /*key_top=*/std::nullopt, /*key_bottom=*/std::nullopt));
 
   ability.set_user(&static_object);
 
@@ -59,10 +62,12 @@ TEST(MoveAbilityTest, Move) {
   DummyMovableObject movable_object = DummyMovableObject(
       /*velocity=*/5, /*hit_box_center=*/std::make_pair(0, 0));
   movable_object.SetDirectionGlobal(1, 0);
-  MoveAbility ability = MoveAbility(MoveAbility::MoveAbilityOpts(
-      Ability::AbilityOpts(/*cooldown_sec=*/0),
-      /*key_left=*/std::nullopt, /*key_right=*/std::nullopt,
-      /*key_top=*/std::nullopt, /*key_bottom=*/std::nullopt));
+  MoveAbility ability =
+      MoveAbility(std::make_unique<ControlsMock>(),
+                  MoveAbility::MoveAbilityOpts(
+                      Ability::AbilityOpts(/*cooldown_sec=*/0),
+                      /*key_left=*/std::nullopt, /*key_right=*/std::nullopt,
+                      /*key_top=*/std::nullopt, /*key_bottom=*/std::nullopt));
   ability.set_user(&movable_object);
 
   Camera camera;

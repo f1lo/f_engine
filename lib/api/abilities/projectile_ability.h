@@ -2,9 +2,11 @@
 #define LIB_API_ABILITIES_PROJECTILE_ABILITY_H
 
 #include <list>
+#include <memory>
 
 #include "absl/container/flat_hash_set.h"
 #include "lib/api/abilities/ability.h"
+#include "lib/api/abilities/controls.h"
 #include "lib/api/objects/movable_object.h"
 #include "lib/api/objects/object.h"
 #include "lib/api/objects/projectile_object.h"
@@ -20,12 +22,12 @@ class ProjectileAbility : public Ability {
         : AbilityOpts(cooldown_sec) {}
   };
 
-  explicit ProjectileAbility(
-      const lib::api::objects::Kind projectile_kind,
-      const ProjectileAbilityOpts& opts,
-      lib::api::objects::ProjectileObject::ProjectileObjectOpts
-          projectile_object_opts)
-      : Ability(opts),
+  ProjectileAbility(std::unique_ptr<const ControlsInterface> controls,
+                    const lib::api::objects::Kind projectile_kind,
+                    const ProjectileAbilityOpts& opts,
+                    lib::api::objects::ProjectileObject::ProjectileObjectOpts
+                        projectile_object_opts)
+      : Ability(std::move(controls), opts),
         projectile_kind_(projectile_kind),
         projectile_ability_opts_(opts),
         projectile_object_opts_(projectile_object_opts) {}

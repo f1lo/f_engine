@@ -13,13 +13,12 @@ namespace api {
 
 using abilities::Ability;
 using api::ObjectAndAbilities;
-using lib::api::abilities::IsPressed;
 using lib::api::abilities::kKeyEscape;
 using objects::MovableObject;
 using objects::Object;
 
 LevelId Level::MaybeChangeLevel() const {
-  if (IsPressed(kKeyEscape)) {
+  if (controls_->IsPressed(kKeyEscape)) {
     return kExitLevel;
   }
 

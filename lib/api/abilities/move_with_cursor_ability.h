@@ -6,6 +6,7 @@
 #include <optional>
 
 #include "lib/api/abilities/ability.h"
+#include "lib/api/abilities/controls.h"
 #include "lib/api/camera.h"
 #include "lib/api/objects/object.h"
 
@@ -15,8 +16,9 @@ namespace abilities {
 
 class MoveWithCursorAbility : public Ability {
  public:
-  MoveWithCursorAbility()
-      : Ability(/*opts=*/{.cooldown_sec = 0}),
+  explicit MoveWithCursorAbility(
+      std::unique_ptr<const ControlsInterface> controls)
+      : Ability(std::move(controls), /*opts=*/{.cooldown_sec = 0}),
         cursor_last_clicked_pos_(std::nullopt) {}
   ~MoveWithCursorAbility() override = default;
 

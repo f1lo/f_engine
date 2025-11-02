@@ -24,6 +24,7 @@ cc_library(
     deps = [
         "//lib/api:camera",
         "//lib/api/abilities:ability",
+        "//lib/api/abilities:controls",
         "//lib/api/objects:coordinate_object",
         "//lib/api/objects:movable_object",
         "//lib/api/objects:object",
@@ -43,6 +44,7 @@ cc_test(
     deps = [
         ":level",
         "//lib/api/abilities:ability",
+        "//lib/api/abilities:controls_mock",
         "//lib/api/objects:static_object",
         "@googletest//:gtest",
         "@googletest//:gtest_main",
@@ -57,6 +59,7 @@ cc_library(
         "//lib/api:level",
         "//lib/api/abilities:ability",
         "//lib/api/abilities:click_ability",
+        "//lib/api/abilities:controls",
         "//lib/api/objects:object",
         "//lib/api/objects:static_object",
         "//raylib",
