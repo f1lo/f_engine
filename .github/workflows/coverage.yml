@@ -1,0 +1,27 @@
+name: Coverage
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Bazel
+        uses: bazelbuild/setup-bazelisk@v3
+        
+      - name: Run Bazel Coverage
+        run: bazel coverage --combined_report=lcov //lib/...
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        # with:
+        #   # (Optional) Specify the file path for clarity
+        #   files: bazel-out/_coverage/_coverage_report.dat
+        #   token: ${{ secrets.CODECOV_TOKEN }} # Store this in GitHub > Settings > Secrets
