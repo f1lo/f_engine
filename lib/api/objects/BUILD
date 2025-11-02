@@ -42,6 +42,17 @@ cc_library(
     ],
 )
 
+cc_test(
+    name = "movable_object_test",
+    srcs = ["movable_object_test.cc"],
+    deps = [
+        ":movable_object",
+        "//lib/api:common_types",
+        "@googletest//:gtest",
+        "@googletest//:gtest_main",
+    ],
+)
+
 cc_library(
     name = "object_utils",
     srcs = ["object_utils.cc"],
