@@ -167,6 +167,17 @@ TEST(ObjectTest, ReflectOk) {
   EXPECT_EQ(rect.Reflect(circle, 1, -1), std::make_pair(-1.0, -1.0));
 }
 
+TEST(ObjectTest, YBase) {
+  const DummyObject rect = DummyObject(
+      /*kind=*/kEnemy,
+      /*options=*/{.is_hit_box_active = true, .should_draw_hit_box = false},
+      /*hit_box=*/
+      CreateHitBoxOrDie(std::vector<std::pair<double, double>>{
+          {2, 2}, {10, 2}, {10, 8}, {2, 8}}));
+
+  EXPECT_EQ(rect.YBase(), 5);
+}
+
 }  // namespace
 }  // namespace objects
 }  // namespace api

@@ -1,5 +1,8 @@
 #include "lib/api/objects/movable_object.h"
 
+#include <list>
+#include <memory>
+
 #include "gmock/gmock-matchers.h"
 #include "gtest/gtest.h"
 #include "lib/api/common_types.h"
@@ -15,12 +18,25 @@ class DummyMovableObject : public MovableObject {
                      const std::pair<double, double> hit_box_center)
       : MovableObject(
             /*kind=*/kPlayer,
-            MovableObjectOpts(/*is_hit_box_active=*/false,
+            MovableObjectOpts(/*is_hit_box_active=*/true,
                               /*should_draw_hit_box=*/false,
                               /*attach_camera=*/false, velocity),
             hit_box_center, /*hit_box_radius=*/3) {}
 
-  bool OnCollisionCallback(Object& other_object) override { return false; }
+  DummyMovableObject(
+      const double velocity,
+      const std::vector<std::pair<double, double>>& hit_box_vertices)
+      : MovableObject(
+            /*kind=*/kPlayer,
+            MovableObjectOpts(/*is_hit_box_active=*/true,
+                              /*should_draw_hit_box=*/false,
+                              /*attach_camera=*/false, velocity),
+            hit_box_vertices) {}
+
+  bool OnCollisionCallback(Object& other_object) override {
+    set_deleted(true);
+    return true;
+  }
   void Move() { MovableObject::Move(); }
   void ResetLastMove() { MovableObject::ResetLastMove(); }
 };
@@ -97,6 +113,30 @@ TEST(MovableObjectTest, SetDirectionRelativeUnfreezes) {
   movable_object.Move();
 
   EXPECT_EQ(movable_object.center(), (WorldPosition{.x = 1, .y = -3}));
+}
+
+TEST(MovableObjectTest, NoDirectionSet) {
+  DummyMovableObject movable_object = DummyMovableObject(
+      /*velocity=*/5, std::vector<std::pair<double, double>>{{0, 0}, {0, 2}});
+
+  movable_object.Move();
+
+  EXPECT_EQ(movable_object.center(), (WorldPosition{.x = 0, .y = 1}));
+}
+
+TEST(MovableObjectTest, UpdateWorks) {
+  DummyMovableObject movable_object_1 = DummyMovableObject(
+      /*velocity=*/5, std::vector<std::pair<double, double>>{{1, 0}, {5, 0}});
+  std::unique_ptr<DummyMovableObject> movable_object_2 =
+      std::make_unique<DummyMovableObject>(
+          /*velocity=*/5,
+          std::vector<std::pair<double, double>>{{2, -1}, {4, 2}});
+  std::list<std::unique_ptr<Object>> objs;
+  objs.push_back(std::move(movable_object_2));
+
+  movable_object_1.Update(objs);
+
+  EXPECT_TRUE(movable_object_1.deleted());
 }
 
 }  // namespace
