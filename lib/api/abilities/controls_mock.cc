@@ -6,6 +6,8 @@ namespace lib {
 namespace api {
 namespace abilities {
 
+// TODO(f1lo): Add a constructor which sets or unsets all controls.
+// Delete this one.
 ControlsMock::ControlsMock()
     : is_pressed_(true),
       is_down_(true),

@@ -44,7 +44,8 @@ class Ability {
   template <typename LevelT>
   friend class lib::api::LevelBuilder;
   [[nodiscard]] bool IsOnCooldown() const;
-  double last_used_sec_ = 0;
+  // TODO(f1lo): Temporary hack, switch to absl::Time.
+  double last_used_sec_ = -100;
   std::unique_ptr<const ControlsInterface> controls_;
 
  private:

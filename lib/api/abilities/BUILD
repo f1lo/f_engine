@@ -93,6 +93,23 @@ cc_library(
     ],
 )
 
+cc_test(
+    name = "projectile_ability_test",
+    srcs = ["projectile_ability_test.cc"],
+    deps = [
+        ":controls_mock",
+        ":projectile_ability",
+        "//lib/api:camera",
+        "//lib/api:common_types",
+        "//lib/api/objects:movable_object",
+        "//lib/api/objects:object",
+        "//lib/api/objects:projectile_object",
+        "//lib/api/objects:static_object",
+        "@googletest//:gtest",
+        "@googletest//:gtest_main",
+    ],
+)
+
 cc_library(
     name = "controls",
     srcs = ["controls.cc"],
