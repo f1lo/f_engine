@@ -47,6 +47,20 @@ cc_library(
     ],
 )
 
+cc_test(
+    name = "click_ability_test",
+    srcs = ["click_ability_test.cc"],
+    deps = [
+        ":click_ability",
+        ":controls_mock",
+        "//lib/api:camera",
+        "//lib/api:common_types",
+        "//lib/api/objects:static_object",
+        "@googletest//:gtest",
+        "@googletest//:gtest_main",
+    ],
+)
+
 cc_library(
     name = "move_with_cursor_ability",
     srcs = ["move_with_cursor_ability.cc"],

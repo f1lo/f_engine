@@ -15,6 +15,8 @@ namespace api {
 namespace objects {
 namespace {
 
+using ::testing::HasSubstr;
+
 class DummyObject : public Object {
   using Object::Object;
 
@@ -23,6 +25,21 @@ class DummyObject : public Object {
   void Draw() const override {}
   bool OnCollisionCallback(Object& other_object) override { return true; }
 };
+
+class ObjectTest : public ::testing::Test {};
+
+using ObjectDeathTest = ObjectTest;
+
+TEST(ObjectDeathTest, ObjectCreationFails) {
+  EXPECT_DEATH(
+      DummyObject(
+          /*kind=*/kEnemy,
+          /*options=*/{.is_hit_box_active = true, .should_draw_hit_box = false},
+          /*hit_box=*/
+          CreateHitBoxOrDie(std::vector<std::pair<double, double>>{
+              {2, 2}, {10, 2}, {10, 8}})),
+      HasSubstr("HitBox::CreateHitBox() failed"));
+}
 
 TEST(ObjectTest, ObjectCreationOk) {
   const DummyObject object = DummyObject(

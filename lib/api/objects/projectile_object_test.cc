@@ -36,6 +36,106 @@ TEST(ProjectileObjectTest, OnCollisionCallbackDespawns) {
   EXPECT_TRUE(projectile.deleted());
 }
 
+TEST(ProjectileObjectTest, OnCollisionCallbackBottomScreenDespawns) {
+  StaticObject collided_object =
+      StaticObject(kScreenBottom,
+                   StaticObject::StaticObjectOpts(
+                       /*is_hit_box_active=*/true,
+                       /*should_draw_hit_box=*/false),
+                   std::vector<std::pair<double, double>>{{0, 0}, {10, 0}});
+  ProjectileObject projectile = ProjectileObject(
+      kProjectilePlayer,
+      ProjectileObject::ProjectileObjectOpts(
+          /*should_draw_hit_box=*/false,
+          /*despawn_outside_screen_area=*/true, /*velocity=*/1,
+          /*hit_box_center=*/std::make_pair(5, 0), /*hit_box_radius=*/3,
+          /*despawn_on_colliding_with_these_objects=*/
+          absl::flat_hash_set<Kind>{},
+          /*reflect_on_colliding_with_these_objects=*/
+          absl::flat_hash_set<Kind>{},
+          /*ignore_these_objects=*/
+          absl::flat_hash_set<Kind>{}));
+
+  projectile.OnCollisionCallback(collided_object);
+
+  EXPECT_TRUE(projectile.deleted());
+}
+
+TEST(ProjectileObjectTest, OnCollisionCallbackTopScreenDespawns) {
+  StaticObject collided_object =
+      StaticObject(kScreenTop,
+                   StaticObject::StaticObjectOpts(
+                       /*is_hit_box_active=*/true,
+                       /*should_draw_hit_box=*/false),
+                   std::vector<std::pair<double, double>>{{0, 0}, {10, 0}});
+  ProjectileObject projectile = ProjectileObject(
+      kProjectilePlayer,
+      ProjectileObject::ProjectileObjectOpts(
+          /*should_draw_hit_box=*/false,
+          /*despawn_outside_screen_area=*/true, /*velocity=*/1,
+          /*hit_box_center=*/std::make_pair(5, 0), /*hit_box_radius=*/3,
+          /*despawn_on_colliding_with_these_objects=*/
+          absl::flat_hash_set<Kind>{},
+          /*reflect_on_colliding_with_these_objects=*/
+          absl::flat_hash_set<Kind>{},
+          /*ignore_these_objects=*/
+          absl::flat_hash_set<Kind>{}));
+
+  projectile.OnCollisionCallback(collided_object);
+
+  EXPECT_TRUE(projectile.deleted());
+}
+
+TEST(ProjectileObjectTest, OnCollisionCallbackLeftScreenDespawns) {
+  StaticObject collided_object =
+      StaticObject(kScreenLeft,
+                   StaticObject::StaticObjectOpts(
+                       /*is_hit_box_active=*/true,
+                       /*should_draw_hit_box=*/false),
+                   std::vector<std::pair<double, double>>{{0, 0}, {10, 0}});
+  ProjectileObject projectile = ProjectileObject(
+      kProjectilePlayer,
+      ProjectileObject::ProjectileObjectOpts(
+          /*should_draw_hit_box=*/false,
+          /*despawn_outside_screen_area=*/true, /*velocity=*/1,
+          /*hit_box_center=*/std::make_pair(5, 0), /*hit_box_radius=*/3,
+          /*despawn_on_colliding_with_these_objects=*/
+          absl::flat_hash_set<Kind>{},
+          /*reflect_on_colliding_with_these_objects=*/
+          absl::flat_hash_set<Kind>{},
+          /*ignore_these_objects=*/
+          absl::flat_hash_set<Kind>{}));
+
+  projectile.OnCollisionCallback(collided_object);
+
+  EXPECT_TRUE(projectile.deleted());
+}
+
+TEST(ProjectileObjectTest, OnCollisionCallbackRightScreenDespawns) {
+  StaticObject collided_object =
+      StaticObject(kScreenRight,
+                   StaticObject::StaticObjectOpts(
+                       /*is_hit_box_active=*/true,
+                       /*should_draw_hit_box=*/false),
+                   std::vector<std::pair<double, double>>{{0, 0}, {10, 0}});
+  ProjectileObject projectile = ProjectileObject(
+      kProjectilePlayer,
+      ProjectileObject::ProjectileObjectOpts(
+          /*should_draw_hit_box=*/false,
+          /*despawn_outside_screen_area=*/true, /*velocity=*/1,
+          /*hit_box_center=*/std::make_pair(5, 0), /*hit_box_radius=*/3,
+          /*despawn_on_colliding_with_these_objects=*/
+          absl::flat_hash_set<Kind>{},
+          /*reflect_on_colliding_with_these_objects=*/
+          absl::flat_hash_set<Kind>{},
+          /*ignore_these_objects=*/
+          absl::flat_hash_set<Kind>{}));
+
+  projectile.OnCollisionCallback(collided_object);
+
+  EXPECT_TRUE(projectile.deleted());
+}
+
 TEST(ProjectileObjectTest, OnCollisionCallbackReflects) {
   StaticObject collided_object =
       StaticObject(kEnemy,
