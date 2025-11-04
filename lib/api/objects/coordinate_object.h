@@ -24,12 +24,13 @@ class CoordinateObject : public Object {
   void ReAdjustToScreen(const WorldPosition screen_top_left_pos,
                         const double screen_width, const double screen_height);
 
+  void Update(const std::list<std::unique_ptr<Object>>& other_objects) override;
+
  private:
   CoordinateObject(const ScreenPosition screen_position_start,
                    const ScreenPosition screen_position_end,
                    const bool is_x_axis);
 
-  void Update(const std::list<std::unique_ptr<Object>>& other_objects) override;
   bool OnCollisionCallback(Object& other_object) override;
   void Draw() const override;
 

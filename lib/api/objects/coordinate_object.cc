@@ -64,18 +64,19 @@ void CoordinateObject::Draw() const {
 void CoordinateObject::ReAdjustToScreen(const WorldPosition screen_top_left_pos,
                                         const double screen_width,
                                         const double screen_height) {
-  screen_top_left_pos_ = screen_top_left_pos;
+  screen_top_left_pos_ = {screen_top_left_pos.x + kAxisOffset,
+                          screen_top_left_pos.y + kAxisOffset};
 
   if (is_x_axis_) {
     mutable_hit_box().Move(
-        screen_width / 2 + screen_top_left_pos.x - center().x,
-        screen_top_left_pos.y - center().y);
+        screen_width / 2 + screen_top_left_pos_.x - center().x,
+        screen_top_left_pos_.y - center().y);
     return;
   }
 
   mutable_hit_box().Move(
-      screen_top_left_pos.x - center().x,
-      screen_top_left_pos.y + screen_height / 2 - center().y);
+      screen_top_left_pos_.x - center().x,
+      screen_top_left_pos_.y + screen_height / 2 - center().y);
 }
 
 }  // namespace objects

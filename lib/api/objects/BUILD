@@ -151,3 +151,15 @@ cc_library(
         "@abseil-cpp//absl/memory",
     ],
 )
+
+cc_test(
+    name = "coordinate_object_test",
+    srcs = ["coordinate_object_test.cc"],
+    deps = [
+        ":coordinate_object",
+        ":object",
+        "//lib/api:common_types",
+        "@googletest//:gtest",
+        "@googletest//:gtest_main",
+    ],
+)

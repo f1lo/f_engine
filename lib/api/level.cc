@@ -51,9 +51,8 @@ void Level::UpdateScreenEdges() const {
 
 void Level::UpdateCoordinateAxes() const {
   for (auto& coordinate_object : coordinate_objects_) {
-    coordinate_object->ReAdjustToScreen(
-        camera_.GetWorldPosition({objects::kAxisOffset, objects::kAxisOffset}),
-        GetScreenWidth(), GetScreenHeight());
+    coordinate_object->ReAdjustToScreen(camera_.GetWorldPosition({0.0, 0.0}),
+                                        GetScreenWidth(), GetScreenHeight());
   }
 }
 
