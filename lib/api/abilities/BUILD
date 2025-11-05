@@ -76,6 +76,20 @@ cc_library(
     ],
 )
 
+cc_test(
+    name = "move_with_cursor_ability_test",
+    srcs = ["move_with_cursor_ability_test.cc"],
+    deps = [
+        ":controls_mock",
+        ":move_with_cursor_ability",
+        "//lib/api:camera",
+        "//lib/api/objects:movable_object",
+        "//lib/api/objects:static_object",
+        "@googletest//:gtest",
+        "@googletest//:gtest_main",
+    ],
+)
+
 cc_library(
     name = "projectile_ability",
     srcs = ["projectile_ability.cc"],

@@ -23,7 +23,7 @@ using objects::Object;
 
 std::list<ObjectAndAbilities> MoveWithCursorAbility::Use(const Camera& camera) {
   MovableObject* const movable_user = dynamic_cast<MovableObject*>(user());
-  CHECK(movable_user);
+  CHECK(movable_user) << "User not movable.";
   if (cursor_last_clicked_pos_.has_value()) {
     if (movable_user->CollidesWith(objects::StaticObject(
             /*kind=*/kMousePointer,
