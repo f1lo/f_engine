@@ -45,6 +45,24 @@ class LevelTest : public ::testing::Test {
 
 using LevelDeathTest = LevelTest;
 
+TEST_F(LevelDeathTest, CleanUpOrDieOutOfSync) {
+  LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel);
+
+  dummy_builder.AddObject(std::make_unique<StaticObject>(
+      /*kind=*/kPlayer,
+      StaticObject::StaticObjectOpts(
+          /*is_hit_box_active=*/false,
+          /*should_draw_hit_box=*/false),
+      /*hit_box_vertices=*/
+      std::vector<std::pair<double, double>>({{0, 0}, {0, 1}})));
+  std::unique_ptr<DummyLevel> dummy_level = dummy_builder.Build();
+  dummy_level->abilities_.clear();
+
+  EXPECT_DEATH(dummy_level->CleanUpOrDie(),
+               HasSubstr("Abilities and Objects are out of sync, abilities "
+                         "size: 0, objects size: 1"));
+}
+
 TEST_F(LevelDeathTest, ScreenEdgeObjectsAreAddedTwice) {
   LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel);
 
@@ -57,6 +75,33 @@ TEST_F(LevelDeathTest, CoordinateObjectsAreAddedTwice) {
 
   EXPECT_DEATH(dummy_builder.WithCoordinates().WithCoordinates(),
                HasSubstr("WithCoordinates() has already been called."));
+}
+
+TEST_F(LevelTest, CleanupOrDie) {
+  LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel);
+  std::unique_ptr<StaticObject> static_object = std::make_unique<StaticObject>(
+      /*kind=*/kPlayer,
+      StaticObject::StaticObjectOpts(
+          /*is_hit_box_active=*/false,
+          /*should_draw_hit_box=*/false),
+      /*hit_box_vertices=*/
+      std::vector<std::pair<double, double>>({{0, 0}, {0, 1}}));
+  StaticObject* static_object_raw = static_object.get();
+  std::list<std::unique_ptr<Ability>> abilities;
+  abilities.push_back(std::make_unique<MoveAbility>(
+      std::make_unique<abilities::ControlsMock>(),
+      MoveAbility::MoveAbilityOpts(Ability::AbilityOpts(/*cooldown_sec=*/0),
+                                   /*key_left=*/kKeyA, /*key_right=*/kKeyA,
+                                   /*key_top=*/kKeyA, /*key_bottom=*/kKeyA)));
+  dummy_builder.AddObjectAndAbilities(std::move(static_object),
+                                      std::move(abilities));
+  std::unique_ptr<DummyLevel> dummy_level = dummy_builder.Build();
+  static_object_raw->set_deleted(true);
+
+  dummy_level->CleanUpOrDie();
+
+  ASSERT_EQ(dummy_level->objects_.size(), 0);
+  ASSERT_EQ(dummy_level->abilities_.size(), 0);
 }
 
 TEST_F(LevelTest, ObjectsAreAdded) {
@@ -110,9 +155,8 @@ TEST_F(LevelTest, ObjectsAndAbilitiesAreAdded) {
   EXPECT_EQ(dummy_level->objects_.front()->kind(), kPlayer);
 }
 
-TEST_F(LevelTest, ScreenEdgeObjectsAreAdded) {
+TEST_F(LevelTest, ScreenEdgeObjects) {
   LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel);
-
   std::unique_ptr<DummyLevel> dummy_level =
       dummy_builder.WithScreenObjects().Build();
 
@@ -126,6 +170,7 @@ TEST_F(LevelTest, ScreenEdgeObjectsAreAdded) {
   for (const auto& object : dummy_level->screen_edge_objects_) {
     screen_edge_kinds.push_back(object->kind());
   }
+  dummy_level->UpdateScreenEdges();
 
   EXPECT_THAT(object_kinds, UnorderedElementsAre(kScreenLeft, kScreenRight,
                                                  kScreenTop, kScreenBottom));
@@ -134,9 +179,8 @@ TEST_F(LevelTest, ScreenEdgeObjectsAreAdded) {
                                    kScreenBottom));
 }
 
-TEST_F(LevelTest, CoordinateObjectsAreAdded) {
+TEST_F(LevelTest, CoordinateObjects) {
   LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel);
-
   std::unique_ptr<DummyLevel> dummy_level =
       dummy_builder.WithCoordinates().Build();
 
@@ -150,6 +194,7 @@ TEST_F(LevelTest, CoordinateObjectsAreAdded) {
   for (const auto& object : dummy_level->coordinate_objects_) {
     coordinate_kinds.push_back(object->kind());
   }
+  dummy_level->UpdateCoordinateAxes();
 
   EXPECT_THAT(object_kinds, UnorderedElementsAre(kCoordinate, kCoordinate));
   EXPECT_THAT(coordinate_kinds, UnorderedElementsAre(kCoordinate, kCoordinate));

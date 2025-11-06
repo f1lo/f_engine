@@ -140,8 +140,10 @@ class Level {
   // between Object and Ability classes.
   FRIEND_TEST(LevelTest, ObjectsAreAdded);
   FRIEND_TEST(LevelTest, ObjectsAndAbilitiesAreAdded);
-  FRIEND_TEST(LevelTest, ScreenEdgeObjectsAreAdded);
-  FRIEND_TEST(LevelTest, CoordinateObjectsAreAdded);
+  FRIEND_TEST(LevelTest, ScreenEdgeObjects);
+  FRIEND_TEST(LevelTest, CoordinateObjects);
+  FRIEND_TEST(LevelTest, CleanupOrDie);
+  FRIEND_TEST(LevelDeathTest, CleanUpOrDieOutOfSync);
   FRIEND_TEST(TitleScreenLevelTest, StartAndExitAddedOk);
   std::list<std::unique_ptr<objects::Object>> objects_;
   std::list<std::list<std::unique_ptr<abilities::Ability>>> abilities_;
