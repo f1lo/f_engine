@@ -56,32 +56,29 @@ class Ability {
 
 class MoveAbility : public Ability {
  public:
-  struct MoveAbilityOpts : AbilityOpts {
-    MoveAbilityOpts(const AbilityOpts opts,
-                    const std::optional<Button> key_left,
-                    const std::optional<Button> key_right,
-                    const std::optional<Button> key_top,
-                    const std::optional<Button> key_bottom)
-        : AbilityOpts(opts),
-          key_left(key_left),
-          key_right(key_right),
-          key_top(key_top),
-          key_bottom(key_bottom) {}
-    const std::optional<Button> key_left;
-    const std::optional<Button> key_right;
-    const std::optional<Button> key_top;
-    const std::optional<Button> key_bottom;
+  struct MoveAbilityOpts {
+    std::optional<Button> key_left;
+    std::optional<Button> key_right;
+    std::optional<Button> key_top;
+    std::optional<Button> key_bottom;
   };
   explicit MoveAbility(std::unique_ptr<const ControlsInterface> controls,
                        const MoveAbilityOpts& opts)
-      : Ability(std::move(controls), {opts.cooldown_sec}), opts_(opts) {}
+      : Ability(std::move(controls), {.cooldown_sec = 0}),
+        key_left_(opts.key_left),
+        key_right_(opts.key_right),
+        key_top_(opts.key_top),
+        key_bottom_(opts.key_bottom) {}
   ~MoveAbility() override = default;
 
   [[nodiscard]] std::list<ObjectAndAbilities> Use(
       const Camera& camera) override;
 
  private:
-  MoveAbilityOpts opts_;
+  std::optional<Button> key_left_;
+  std::optional<Button> key_right_;
+  std::optional<Button> key_top_;
+  std::optional<Button> key_bottom_;
   bool was_used_last_frame_ = false;
 };
 

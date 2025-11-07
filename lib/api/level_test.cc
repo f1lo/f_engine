@@ -88,9 +88,10 @@ TEST_F(LevelTest, CleanupOrDie) {
   std::list<std::unique_ptr<Ability>> abilities;
   abilities.push_back(std::make_unique<MoveAbility>(
       std::make_unique<abilities::ControlsMock>(),
-      MoveAbility::MoveAbilityOpts(Ability::AbilityOpts(/*cooldown_sec=*/0),
-                                   /*key_left=*/kKeyA, /*key_right=*/kKeyA,
-                                   /*key_top=*/kKeyA, /*key_bottom=*/kKeyA)));
+      MoveAbility::MoveAbilityOpts{.key_left = kKeyA,
+                                   .key_right = kKeyA,
+                                   .key_top = kKeyA,
+                                   .key_bottom = kKeyA}));
   dummy_builder.AddObjectAndAbilities(std::move(static_object),
                                       std::move(abilities));
   std::unique_ptr<DummyLevel> dummy_level = dummy_builder.Build();
@@ -131,9 +132,10 @@ TEST_F(LevelTest, ObjectsAndAbilitiesAreAdded) {
   std::list<std::unique_ptr<Ability>> abilities;
   abilities.push_back(std::make_unique<MoveAbility>(
       std::make_unique<abilities::ControlsMock>(),
-      MoveAbility::MoveAbilityOpts(Ability::AbilityOpts(/*cooldown_sec=*/0),
-                                   /*key_left=*/kKeyA, /*key_right=*/kKeyA,
-                                   /*key_top=*/kKeyA, /*key_bottom=*/kKeyA)));
+      MoveAbility::MoveAbilityOpts{.key_left = kKeyA,
+                                   .key_right = kKeyA,
+                                   .key_top = kKeyA,
+                                   .key_bottom = kKeyA}));
 
   dummy_builder.AddObjectAndAbilities(
       std::make_unique<StaticObject>(

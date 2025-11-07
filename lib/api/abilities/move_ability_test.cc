@@ -48,10 +48,10 @@ TEST(MoveAbilityDeathTest, UserNotMovable) {
       /*hit_box_center=*/std::make_pair(0, 0), /*hit_box_radius=*/3);
   MoveAbility ability =
       MoveAbility(std::make_unique<ControlsMock>(),
-                  MoveAbility::MoveAbilityOpts(
-                      Ability::AbilityOpts(/*cooldown_sec=*/0),
-                      /*key_left=*/std::nullopt, /*key_right=*/std::nullopt,
-                      /*key_top=*/std::nullopt, /*key_bottom=*/std::nullopt));
+                  MoveAbility::MoveAbilityOpts{.key_left = std::nullopt,
+                                               .key_right = std::nullopt,
+                                               .key_top = std::nullopt,
+                                               .key_bottom = std::nullopt});
 
   ability.set_user(&static_object);
 
@@ -66,10 +66,10 @@ TEST(MoveAbilityTest, Move) {
   movable_object.SetDirectionGlobal(1, 0);
   MoveAbility ability =
       MoveAbility(std::make_unique<ControlsMock>(),
-                  MoveAbility::MoveAbilityOpts(
-                      Ability::AbilityOpts(/*cooldown_sec=*/0),
-                      /*key_left=*/std::nullopt, /*key_right=*/std::nullopt,
-                      /*key_top=*/std::nullopt, /*key_bottom=*/std::nullopt));
+                  MoveAbility::MoveAbilityOpts{.key_left = std::nullopt,
+                                               .key_right = std::nullopt,
+                                               .key_top = std::nullopt,
+                                               .key_bottom = std::nullopt});
   ability.set_user(&movable_object);
 
   Camera camera;
@@ -89,10 +89,10 @@ TEST(MoveAbilityTest, MoveLeft) {
           /*is_pressed=*/false, /*is_down=*/true, /*is_primary_pressed=*/false,
           /*is_secondary_pressed=*/false,
           /*cursor_pos*/ ScreenPosition{.x = 0, .y = 0}),
-      MoveAbility::MoveAbilityOpts(
-          Ability::AbilityOpts(/*cooldown_sec=*/0),
-          /*key_left=*/kKeyA, /*key_right=*/std::nullopt,
-          /*key_top=*/std::nullopt, /*key_bottom=*/std::nullopt));
+      MoveAbility::MoveAbilityOpts{.key_left = kKeyA,
+                                   .key_right = std::nullopt,
+                                   .key_top = std::nullopt,
+                                   .key_bottom = std::nullopt});
   ability.set_user(&movable_object);
 
   Camera camera;
@@ -112,10 +112,10 @@ TEST(MoveAbilityTest, MoveRight) {
           /*is_pressed=*/false, /*is_down=*/true, /*is_primary_pressed=*/false,
           /*is_secondary_pressed=*/false,
           /*cursor_pos*/ ScreenPosition{.x = 0, .y = 0}),
-      MoveAbility::MoveAbilityOpts(
-          Ability::AbilityOpts(/*cooldown_sec=*/0),
-          /*key_left=*/std::nullopt, /*key_right=*/kKeyA,
-          /*key_top=*/std::nullopt, /*key_bottom=*/std::nullopt));
+      MoveAbility::MoveAbilityOpts{.key_left = std::nullopt,
+                                   .key_right = kKeyA,
+                                   .key_top = std::nullopt,
+                                   .key_bottom = std::nullopt});
   ability.set_user(&movable_object);
 
   Camera camera;
@@ -135,10 +135,10 @@ TEST(MoveAbilityTest, MoveTop) {
           /*is_pressed=*/false, /*is_down=*/true, /*is_primary_pressed=*/false,
           /*is_secondary_pressed=*/false,
           /*cursor_pos*/ ScreenPosition{.x = 0, .y = 0}),
-      MoveAbility::MoveAbilityOpts(
-          Ability::AbilityOpts(/*cooldown_sec=*/0),
-          /*key_left=*/std::nullopt, /*key_right=*/std::nullopt,
-          /*key_top=*/kKeyA, /*key_bottom=*/std::nullopt));
+      MoveAbility::MoveAbilityOpts{.key_left = std::nullopt,
+                                   .key_right = std::nullopt,
+                                   .key_top = kKeyA,
+                                   .key_bottom = std::nullopt});
   ability.set_user(&movable_object);
 
   Camera camera;
@@ -158,10 +158,10 @@ TEST(MoveAbilityTest, MoveBottom) {
           /*is_pressed=*/false, /*is_down=*/true, /*is_primary_pressed=*/false,
           /*is_secondary_pressed=*/false,
           /*cursor_pos*/ ScreenPosition{.x = 0, .y = 0}),
-      MoveAbility::MoveAbilityOpts(
-          Ability::AbilityOpts(/*cooldown_sec=*/0),
-          /*key_left=*/std::nullopt, /*key_right=*/std::nullopt,
-          /*key_top=*/std::nullopt, /*key_bottom=*/kKeyA));
+      MoveAbility::MoveAbilityOpts{.key_left = std::nullopt,
+                                   .key_right = std::nullopt,
+                                   .key_top = std::nullopt,
+                                   .key_bottom = kKeyA});
   ability.set_user(&movable_object);
 
   Camera camera;

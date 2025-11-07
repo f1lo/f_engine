@@ -91,9 +91,10 @@ std::list<std::unique_ptr<Ability>> MakePlayerAbilities(const bool debug_mode) {
   std::list<std::unique_ptr<Ability>> abilities;
   abilities.push_back(std::make_unique<MoveAbility>(
       std::make_unique<Controls>(),
-      MoveAbility::MoveAbilityOpts(Ability::AbilityOpts(/*cooldown_sec=*/0),
-                                   /*key_left=*/kKeyA, /*key_right=*/kKeyD,
-                                   /*key_top=*/kKeyW, /*key_bottom=*/kKeyS)));
+      MoveAbility::MoveAbilityOpts{.key_left = kKeyA,
+                                   .key_right = kKeyD,
+                                   .key_top = kKeyW,
+                                   .key_bottom = kKeyS}));
 
   abilities.push_back(
       std::make_unique<MoveWithCursorAbility>(std::make_unique<Controls>()));
@@ -106,7 +107,7 @@ std::list<std::unique_ptr<Ability>> MakePlayerAbilities(const bool debug_mode) {
   abilities.push_back(std::make_unique<ProjectileAbility>(
       std::make_unique<Controls>(),
       /*projectile_kind=*/kProjectilePlayer,
-      /*opts=*/ProjectileAbility::ProjectileAbilityOpts(/*cooldown_sec=*/1),
+      /*opts=*/ProjectileAbility::ProjectileAbilityOpts{.cooldown_sec = 1},
       /*projectile_object_opts=*/
       ProjectileObject::ProjectileObjectOpts{
           .should_draw_hit_box = debug_mode,

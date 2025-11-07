@@ -29,19 +29,19 @@ std::list<ObjectAndAbilities> MoveAbility::Use(const Camera& camera) {
   double dir_x = 0;
   double dir_y = 0;
   bool was_used_this_frame = false;
-  if (opts_.key_left.has_value() && controls_->IsDown(*opts_.key_left)) {
+  if (key_left_.has_value() && controls_->IsDown(*key_left_)) {
     was_used_this_frame = true;
     dir_x = -1;
   }
-  if (opts_.key_right.has_value() && controls_->IsDown(*opts_.key_right)) {
+  if (key_right_.has_value() && controls_->IsDown(*key_right_)) {
     was_used_this_frame = true;
     dir_x = 1;
   }
-  if (opts_.key_top.has_value() && controls_->IsDown(*opts_.key_top)) {
+  if (key_top_.has_value() && controls_->IsDown(*key_top_)) {
     was_used_this_frame = true;
     dir_y = -1;
   }
-  if (opts_.key_bottom.has_value() && controls_->IsDown(*opts_.key_bottom)) {
+  if (key_bottom_.has_value() && controls_->IsDown(*key_bottom_)) {
     was_used_this_frame = true;
     dir_y = 1;
   }

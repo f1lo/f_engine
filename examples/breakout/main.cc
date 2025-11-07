@@ -84,8 +84,10 @@ int main() {
   Game& game = Game::Create(/*width=*/1500, /*height=*/1000, "Breakout",
                             /*full_screen=*/false);
 
-  MoveAbility::MoveAbilityOpts opts = MoveAbility::MoveAbilityOpts(
-      {.cooldown_sec = 0}, kKeyA, kKeyD, std::nullopt, std::nullopt);
+  MoveAbility::MoveAbilityOpts opts = {.key_left = kKeyA,
+                                       .key_right = kKeyD,
+                                       .key_top = std::nullopt,
+                                       .key_bottom = std::nullopt};
   std::unique_ptr<MoveAbility> ability_move =
       std::make_unique<MoveAbility>(std::make_unique<Controls>(), opts);
   std::unique_ptr<breakout::BallAbility> ability_ball =

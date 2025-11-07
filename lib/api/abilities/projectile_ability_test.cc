@@ -49,7 +49,7 @@ TEST(ProjectileAbilityTest, InputNotPressed) {
           /*is_secondary_pressed=*/false,
           /*cursor_pos*/ ScreenPosition{.x = 0, .y = 0}),
       /*projectile_kind=*/objects::kProjectilePlayer,
-      ProjectileAbility::ProjectileAbilityOpts(/*cooldown_sec=*/0),
+      ProjectileAbility::ProjectileAbilityOpts{.cooldown_sec = 0},
       ProjectileObject::ProjectileObjectOpts{
           .should_draw_hit_box = false,
           .despawn_outside_screen_area = true,
@@ -82,7 +82,7 @@ TEST(ProjectileAbilityTest, OnCooldown) {
           /*is_secondary_pressed=*/false,
           /*cursor_pos*/ ScreenPosition{.x = 0, .y = 0}),
       /*projectile_kind=*/objects::kProjectilePlayer,
-      ProjectileAbility::ProjectileAbilityOpts(/*cooldown_sec=*/0),
+      ProjectileAbility::ProjectileAbilityOpts{.cooldown_sec = 0},
       ProjectileObject::ProjectileObjectOpts{
           .should_draw_hit_box = false,
           .despawn_outside_screen_area = true,
@@ -115,7 +115,7 @@ TEST(ProjectileAbilityTest, ProjectileSpawned) {
           /*is_secondary_pressed=*/false,
           /*cursor_pos*/ ScreenPosition{.x = 0, .y = 0}),
       /*projectile_kind=*/objects::kProjectilePlayer,
-      ProjectileAbility::ProjectileAbilityOpts(/*cooldown_sec=*/0),
+      ProjectileAbility::ProjectileAbilityOpts{.cooldown_sec = 0},
       ProjectileObject::ProjectileObjectOpts{
           .should_draw_hit_box = false,
           .despawn_outside_screen_area = true,
@@ -148,7 +148,7 @@ TEST(ProjectileAbilityTest, MovableObjectProjectileSameDirection) {
           /*is_secondary_pressed=*/false,
           /*cursor_pos*/ ScreenPosition{.x = 0, .y = 0}),
       /*projectile_kind=*/objects::kProjectilePlayer,
-      ProjectileAbility::ProjectileAbilityOpts(/*cooldown_sec=*/0),
+      ProjectileAbility::ProjectileAbilityOpts{.cooldown_sec = 0},
       ProjectileObject::ProjectileObjectOpts{
           .should_draw_hit_box = false,
           .despawn_outside_screen_area = true,

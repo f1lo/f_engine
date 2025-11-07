@@ -17,9 +17,8 @@ namespace abilities {
 
 class ProjectileAbility : public Ability {
  public:
-  struct ProjectileAbilityOpts : AbilityOpts {
-    ProjectileAbilityOpts(const uint32_t cooldown_sec)
-        : AbilityOpts(cooldown_sec) {}
+  struct ProjectileAbilityOpts {
+    uint32_t cooldown_sec;
   };
 
   ProjectileAbility(std::unique_ptr<const ControlsInterface> controls,
@@ -27,16 +26,14 @@ class ProjectileAbility : public Ability {
                     const ProjectileAbilityOpts& opts,
                     lib::api::objects::ProjectileObject::ProjectileObjectOpts
                         projectile_object_opts)
-      : Ability(std::move(controls), opts),
+      : Ability(std::move(controls), {.cooldown_sec = opts.cooldown_sec}),
         projectile_kind_(projectile_kind),
-        projectile_ability_opts_(opts),
         projectile_object_opts_(projectile_object_opts) {}
 
   std::list<ObjectAndAbilities> Use(const Camera& camera) override;
 
  private:
   lib::api::objects::Kind projectile_kind_;
-  ProjectileAbilityOpts projectile_ability_opts_;
   lib::api::objects::ProjectileObject::ProjectileObjectOpts
       projectile_object_opts_;
 };
