@@ -74,9 +74,11 @@ std::unique_ptr<Player> MakePlayer(const bool debug_mode) {
   return std::make_unique<Player>(
       /*kind=*/kPlayer,
       /*options=*/
-      MovableObject::MovableObjectOpts(
-          /*is_hit_box_active*/ true, /*should_draw_hitbox*/ debug_mode,
-          /*attach_camera=*/true, kPlayerSpeed), /*hit_box_vertices=*/
+      MovableObject::MovableObjectOpts{.is_hit_box_active = true,
+                                       .should_draw_hit_box = debug_mode,
+                                       .attach_camera = true,
+                                       .velocity = kPlayerSpeed},
+      /*hit_box_vertices=*/
       std::vector<std::pair<double, double>>(
           {{kPlayerX, kPlayerY},
            {kPlayerX, kPlayerY + kPlayerHeight},
@@ -106,14 +108,15 @@ std::list<std::unique_ptr<Ability>> MakePlayerAbilities(const bool debug_mode) {
       /*projectile_kind=*/kProjectilePlayer,
       /*opts=*/ProjectileAbility::ProjectileAbilityOpts(/*cooldown_sec=*/1),
       /*projectile_object_opts=*/
-      ProjectileObject::ProjectileObjectOpts(
-          /*should_draw_hit_box=*/debug_mode,
-          /*despawn_outside_screen_area=*/true,
-          /*velocity=*/kProjectileSpeed, /*hit_box_center=*/{-100, -100},
-          /*hit_box_radius=*/kProjectileRadius,
-          /*despawn_on_colliding_with_these_objects=*/std::move(despawn),
-          /*reflect_on_colliding_with_these_objects=*/std::move(reflect),
-          /*ignore_these_objects=*/std::move(ignore))));
+      ProjectileObject::ProjectileObjectOpts{
+          .should_draw_hit_box = debug_mode,
+          .despawn_outside_screen_area = true,
+          .velocity = kProjectileSpeed,
+          .hit_box_center = {-100, -100},
+          .hit_box_radius = kProjectileRadius,
+          .despawn_on_colliding_with_these_objects = std::move(despawn),
+          .reflect_on_colliding_with_these_objects = std::move(reflect),
+          .ignore_these_objects = std::move(ignore)}));
 
   return abilities;
 }
@@ -132,9 +135,8 @@ std::vector<std::unique_ptr<StaticObject>> MakeStaticObjects(
 
   static_objects.push_back(std::make_unique<StaticObject>(
       /*kind=*/kButton,
-      StaticObject::StaticObjectOpts(
-          /*is_hit_box_active=*/true,
-          /*should_draw_hit_box=*/debug_mode),
+      StaticObject::StaticObjectOpts{.is_hit_box_active = true,
+                                     .should_draw_hit_box = debug_mode},
       /*hit_box_vertices=*/
       std::vector<std::pair<double, double>>(
           {{700, -300}, {700, -100}, {800, -100}, {800, -300}}),
@@ -142,9 +144,8 @@ std::vector<std::unique_ptr<StaticObject>> MakeStaticObjects(
 
   static_objects.push_back(std::make_unique<StaticObject>(
       /*kind=*/kButton,
-      StaticObject::StaticObjectOpts(
-          /*is_hit_box_active=*/true,
-          /*should_draw_hit_box=*/debug_mode),
+      StaticObject::StaticObjectOpts{.is_hit_box_active = true,
+                                     .should_draw_hit_box = debug_mode},
       /*hit_box_vertices=*/
       std::vector<std::pair<double, double>>(
           {{500, -300}, {500, -100}, {600, -100}, {600, -300}}),
@@ -152,9 +153,8 @@ std::vector<std::unique_ptr<StaticObject>> MakeStaticObjects(
 
   static_objects.push_back(std::make_unique<StaticObject>(
       /*kind=*/kButton,
-      StaticObject::StaticObjectOpts(
-          /*is_hit_box_active=*/true,
-          /*should_draw_hit_box=*/debug_mode),
+      StaticObject::StaticObjectOpts{.is_hit_box_active = true,
+                                     .should_draw_hit_box = debug_mode},
       /*hit_box_vertices=*/
       std::vector<std::pair<double, double>>(
           {{200, 200}, {200, 0}, {300, 0}, {300, 200}}),
@@ -186,9 +186,8 @@ std::unique_ptr<Level> MakeOpeningLevel(const bool debug_mode) {
 std::unique_ptr<Level> MakeTitleScreenLevel(bool debug_mode) {
   std::unique_ptr<StaticObject> start_button = std::make_unique<StaticObject>(
       /*kind=*/kButton,
-      StaticObject::StaticObjectOpts(
-          /*is_hit_box_active=*/true,
-          /*should_draw_hit_box=*/debug_mode),
+      StaticObject::StaticObjectOpts{.is_hit_box_active = true,
+                                     .should_draw_hit_box = debug_mode},
       /*hit_box_vertices=*/
       std::vector<std::pair<double, double>>(
           {{kButtonOffsetX, kButtonOffsetY},
@@ -198,9 +197,8 @@ std::unique_ptr<Level> MakeTitleScreenLevel(bool debug_mode) {
             kButtonOffsetY + kButtonLengthY}}));
   std::unique_ptr<StaticObject> exit_button = std::make_unique<StaticObject>(
       /*kind=*/kButton,
-      StaticObject::StaticObjectOpts(
-          /*is_hit_box_active=*/true,
-          /*should_draw_hit_box=*/debug_mode),
+      StaticObject::StaticObjectOpts{.is_hit_box_active = true,
+                                     .should_draw_hit_box = debug_mode},
       /*hit_box_vertices=*/
       std::vector<std::pair<double, double>>(
           {{kButtonOffsetX,

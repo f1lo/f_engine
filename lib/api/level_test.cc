@@ -50,9 +50,8 @@ TEST_F(LevelDeathTest, CleanUpOrDieOutOfSync) {
 
   dummy_builder.AddObject(std::make_unique<StaticObject>(
       /*kind=*/kPlayer,
-      StaticObject::StaticObjectOpts(
-          /*is_hit_box_active=*/false,
-          /*should_draw_hit_box=*/false),
+      StaticObject::StaticObjectOpts{.is_hit_box_active = false,
+                                     .should_draw_hit_box = false},
       /*hit_box_vertices=*/
       std::vector<std::pair<double, double>>({{0, 0}, {0, 1}})));
   std::unique_ptr<DummyLevel> dummy_level = dummy_builder.Build();
@@ -81,9 +80,8 @@ TEST_F(LevelTest, CleanupOrDie) {
   LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel);
   std::unique_ptr<StaticObject> static_object = std::make_unique<StaticObject>(
       /*kind=*/kPlayer,
-      StaticObject::StaticObjectOpts(
-          /*is_hit_box_active=*/false,
-          /*should_draw_hit_box=*/false),
+      StaticObject::StaticObjectOpts{.is_hit_box_active = false,
+                                     .should_draw_hit_box = false},
       /*hit_box_vertices=*/
       std::vector<std::pair<double, double>>({{0, 0}, {0, 1}}));
   StaticObject* static_object_raw = static_object.get();
@@ -109,16 +107,14 @@ TEST_F(LevelTest, ObjectsAreAdded) {
 
   dummy_builder.AddObject(std::make_unique<StaticObject>(
       /*kind=*/kPlayer,
-      StaticObject::StaticObjectOpts(
-          /*is_hit_box_active=*/false,
-          /*should_draw_hit_box=*/false),
+      StaticObject::StaticObjectOpts{.is_hit_box_active = false,
+                                     .should_draw_hit_box = false},
       /*hit_box_vertices=*/
       std::vector<std::pair<double, double>>({{0, 0}, {0, 1}})));
   dummy_builder.AddObject(std::make_unique<StaticObject>(
       /*kind=*/kEnemy,
-      StaticObject::StaticObjectOpts(
-          /*is_hit_box_active=*/false,
-          /*should_draw_hit_box=*/false),
+      StaticObject::StaticObjectOpts{.is_hit_box_active = false,
+                                     .should_draw_hit_box = false},
       /*hit_box_vertices=*/
       std::vector<std::pair<double, double>>({{0, 0}, {0, 1}})));
   std::unique_ptr<DummyLevel> dummy_level = dummy_builder.Build();
@@ -142,9 +138,8 @@ TEST_F(LevelTest, ObjectsAndAbilitiesAreAdded) {
   dummy_builder.AddObjectAndAbilities(
       std::make_unique<StaticObject>(
           /*kind=*/kPlayer,
-          StaticObject::StaticObjectOpts(
-              /*is_hit_box_active=*/false,
-              /*should_draw_hit_box=*/false),
+          StaticObject::StaticObjectOpts{.is_hit_box_active = false,
+                                         .should_draw_hit_box = false},
           /*hit_box_vertices=*/
           std::vector<std::pair<double, double>>({{0, 0}, {0, 1}})),
       std::move(abilities));

@@ -15,15 +15,11 @@ namespace objects {
 
 class MovableObject : public Object {
  public:
-  struct MovableObjectOpts : Opts {
-    MovableObjectOpts(const bool is_hit_box_active,
-                      const bool should_draw_hit_box, const bool attach_camera,
-                      const double velocity)
-        : Opts(is_hit_box_active, should_draw_hit_box),
-          velocity(velocity),
-          attach_camera(attach_camera) {}
-    double velocity;
+  struct MovableObjectOpts {
+    bool is_hit_box_active;
+    bool should_draw_hit_box;
     bool attach_camera;
+    double velocity;
   };
 
   MovableObject(Kind kind, const MovableObjectOpts& options,

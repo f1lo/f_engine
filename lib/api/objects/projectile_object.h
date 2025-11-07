@@ -14,26 +14,10 @@ namespace objects {
 
 class ProjectileObject : public MovableObject {
  public:
-  struct ProjectileObjectOpts : MovableObjectOpts {
-    ProjectileObjectOpts(
-        const bool should_draw_hit_box, const bool despawn_outside_screen_area,
-        const double velocity, const std::pair<double, double> hit_box_center,
-        const double hit_box_radius,
-        absl::flat_hash_set<Kind> despawn_on_colliding_with_these_objects,
-        absl::flat_hash_set<Kind> reflect_on_colliding_with_these_objects,
-        absl::flat_hash_set<Kind> ignore_these_objects)
-        : MovableObjectOpts(/*is_hit_box_active=*/true, should_draw_hit_box,
-                            /*attach_camera=*/false, velocity),
-          despawn_outside_screen_area(despawn_outside_screen_area),
-          hit_box_center(hit_box_center),
-          hit_box_radius(hit_box_radius),
-          despawn_on_colliding_with_these_objects(
-              std::move(despawn_on_colliding_with_these_objects)),
-          reflect_on_colliding_with_these_objects(
-              std::move(reflect_on_colliding_with_these_objects)),
-          ignore_these_objects(std::move(ignore_these_objects)) {}
-
+  struct ProjectileObjectOpts {
+    bool should_draw_hit_box;
     bool despawn_outside_screen_area;
+    double velocity;
     std::pair<double, double> hit_box_center;
     double hit_box_radius;
     absl::flat_hash_set<Kind> despawn_on_colliding_with_these_objects;
@@ -44,14 +28,28 @@ class ProjectileObject : public MovableObject {
   ProjectileObject(const Kind kind, ProjectileObjectOpts options,
                    std::optional<std::unique_ptr<sprites::SpriteInstance>>
                        sprite_instance = std::nullopt)
-      : MovableObject(kind, options, options.hit_box_center,
-                      options.hit_box_radius, std::move(sprite_instance)),
-        opts_(std::move(options)) {}
+      : MovableObject(kind,
+                      MovableObjectOpts{
+                          .is_hit_box_active = true,
+                          .should_draw_hit_box = options.should_draw_hit_box,
+                          .attach_camera = false,
+                          .velocity = options.velocity},
+                      options.hit_box_center, options.hit_box_radius,
+                      std::move(sprite_instance)),
+        despawn_outside_screen_area_(options.despawn_outside_screen_area),
+        despawn_on_colliding_with_these_objects_(
+            std::move(options.despawn_on_colliding_with_these_objects)),
+        reflect_on_colliding_with_these_objects_(
+            options.reflect_on_colliding_with_these_objects),
+        ignore_these_objects_(options.ignore_these_objects) {}
 
   bool OnCollisionCallback(Object& other_object) override;
 
  private:
-  ProjectileObjectOpts opts_;
+  bool despawn_outside_screen_area_;
+  absl::flat_hash_set<Kind> despawn_on_colliding_with_these_objects_;
+  absl::flat_hash_set<Kind> reflect_on_colliding_with_these_objects_;
+  absl::flat_hash_set<Kind> ignore_these_objects_;
 };
 
 }  // namespace objects

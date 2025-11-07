@@ -18,9 +18,10 @@ class DummyMovableObject : public MovableObject {
                      const std::pair<double, double> hit_box_center)
       : MovableObject(
             /*kind=*/kPlayer,
-            MovableObjectOpts(/*is_hit_box_active=*/true,
-                              /*should_draw_hit_box=*/false,
-                              /*attach_camera=*/false, velocity),
+            MovableObjectOpts{.is_hit_box_active = true,
+                              .should_draw_hit_box = false,
+                              .attach_camera = false,
+                              .velocity = velocity},
             hit_box_center, /*hit_box_radius=*/3) {}
 
   DummyMovableObject(
@@ -28,9 +29,10 @@ class DummyMovableObject : public MovableObject {
       const std::vector<std::pair<double, double>>& hit_box_vertices)
       : MovableObject(
             /*kind=*/kPlayer,
-            MovableObjectOpts(/*is_hit_box_active=*/true,
-                              /*should_draw_hit_box=*/false,
-                              /*attach_camera=*/false, velocity),
+            MovableObjectOpts{.is_hit_box_active = true,
+                              .should_draw_hit_box = false,
+                              .attach_camera = false,
+                              .velocity = velocity},
             hit_box_vertices) {}
 
   bool OnCollisionCallback(Object& other_object) override {

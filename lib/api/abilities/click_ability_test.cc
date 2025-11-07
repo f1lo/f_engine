@@ -17,8 +17,8 @@ using objects::StaticObject;
 TEST(ClickAbilityTest, NotClicked) {
   StaticObject static_object = StaticObject(
       /*kind=*/objects::kEnemy, /*options=*/
-      StaticObject::StaticObjectOpts(/*is_hit_box_active=*/true,
-                                     /*should_draw_hit_box=*/false),
+      StaticObject::StaticObjectOpts{.is_hit_box_active = true,
+                                     .should_draw_hit_box = false},
       /*hit_box_center=*/std::make_pair(0, 0), /*hit_box_radius=*/3);
   ClickAbility ability = ClickAbility(std::make_unique<ControlsMock>(
       /*is_pressed=*/false, /*is_down=*/false, /*is_primary_pressed=*/false,
@@ -35,8 +35,8 @@ TEST(ClickAbilityTest, NotClicked) {
 TEST(ClickAbilityTest, ClickedButMissed) {
   StaticObject static_object = StaticObject(
       /*kind=*/objects::kEnemy, /*options=*/
-      StaticObject::StaticObjectOpts(/*is_hit_box_active=*/true,
-                                     /*should_draw_hit_box=*/false),
+      StaticObject::StaticObjectOpts{.is_hit_box_active = true,
+                                     .should_draw_hit_box = false},
       /*hit_box_center=*/std::make_pair(0, 0), /*hit_box_radius=*/3);
   ClickAbility ability = ClickAbility(std::make_unique<ControlsMock>(
       /*is_pressed=*/false, /*is_down=*/false, /*is_primary_pressed=*/true,
@@ -53,8 +53,8 @@ TEST(ClickAbilityTest, ClickedButMissed) {
 TEST(ClickAbilityTest, Clicked) {
   StaticObject static_object = StaticObject(
       /*kind=*/objects::kEnemy, /*options=*/
-      StaticObject::StaticObjectOpts(/*is_hit_box_active=*/true,
-                                     /*should_draw_hit_box=*/false),
+      StaticObject::StaticObjectOpts{.is_hit_box_active = true,
+                                     .should_draw_hit_box = false},
       /*hit_box_center=*/std::make_pair(0, 0), /*hit_box_radius=*/3);
   ClickAbility ability = ClickAbility(std::make_unique<ControlsMock>(
       /*is_pressed=*/false, /*is_down=*/false, /*is_primary_pressed=*/true,

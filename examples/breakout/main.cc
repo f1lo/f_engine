@@ -65,8 +65,8 @@ std::vector<std::unique_ptr<BrickObject>> GenerateBricks(int brick_width,
     while (x + brick_width <= right_limit) {
       std::unique_ptr<BrickObject> brick = std::make_unique<BrickObject>(
           kEnemy,
-          StaticObject::StaticObjectOpts(/*is_hit_box_active*/ true,
-                                         /*should_draw_hitbox*/ true),
+          StaticObject::StaticObjectOpts{.is_hit_box_active = true,
+                                         .should_draw_hit_box = true},
           std::vector<std::pair<double, double>>(
               {{x, y},
                {x, y - brick_height},
@@ -93,16 +93,18 @@ int main() {
 
   std::unique_ptr<Object> player = std::make_unique<PlayerPad>(
       game.screen_width(), game.screen_height(), kPlayerWidth, kPlayerHeight,
-      MovableObject::MovableObjectOpts(
-          /*is_hit_box_active=*/true, /*should_draw_hit_box=*/true,
-          /*attach_camera=*/false, /*velocity=*/8));
+      MovableObject::MovableObjectOpts{.is_hit_box_active = true,
+                                       .should_draw_hit_box = true,
+                                       .attach_camera = false,
+                                       .velocity = 8});
 
   std::list<std::unique_ptr<Ability>> player_abilities;
   player_abilities.push_back(std::move(ability_move));
   std::unique_ptr<breakout::Ball> ball = std::make_unique<breakout::Ball>(
-      MovableObject::MovableObjectOpts(
-          /*is_hit_box_active=*/true, /*should_draw_hit_box=*/true,
-          /*attach_camera=*/false, /*velocity=*/kBallVelocity),
+      MovableObject::MovableObjectOpts{.is_hit_box_active = true,
+                                       .should_draw_hit_box = true,
+                                       .attach_camera = false,
+                                       .velocity = kBallVelocity},
       /*hit_box_center=*/
       std::make_pair(game.screen_width() / 2,
                      game.screen_height() - breakout::kPadOffset -

@@ -27,9 +27,10 @@ class DummyMovableObject : public MovableObject {
                      const std::pair<double, double> hit_box_center)
       : MovableObject(
             /*kind=*/objects::kPlayer,
-            MovableObjectOpts(/*is_hit_box_active=*/false,
-                              /*should_draw_hit_box=*/false,
-                              /*attach_camera=*/false, velocity),
+            MovableObjectOpts{.is_hit_box_active = false,
+                              .should_draw_hit_box = false,
+                              .attach_camera = false,
+                              .velocity = velocity},
             hit_box_center, /*hit_box_radius=*/3) {}
 
   bool OnCollisionCallback(Object& other_object) override { return false; }
@@ -40,8 +41,8 @@ using MoveWithCursorAbilityTestDeathTest = MoveWithCursorAbilityTest;
 TEST(MoveWithCursorAbilityDeathTest, NonMovableObject) {
   StaticObject static_object = StaticObject(
       /*kind=*/objects::kEnemy, /*options=*/
-      StaticObject::StaticObjectOpts(/*is_hit_box_active=*/false,
-                                     /*should_draw_hit_box=*/false),
+      StaticObject::StaticObjectOpts{.is_hit_box_active = false,
+                                     .should_draw_hit_box = false},
       /*hit_box_center=*/std::make_pair(0, 0), /*hit_box_radius=*/3);
   MoveWithCursorAbility ability =
       MoveWithCursorAbility(std::make_unique<ControlsMock>());

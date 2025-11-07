@@ -32,9 +32,8 @@ TEST_F(TitleScreenLevelDeathTest, StartButtonNotAdded) {
       builder
           .AddExitButton(std::make_unique<StaticObject>(
               /*kind=*/kExitButton,
-              StaticObject::StaticObjectOpts(
-                  /*is_hit_box_active=*/false,
-                  /*should_draw_hit_box=*/false),
+              StaticObject::StaticObjectOpts{.is_hit_box_active = false,
+                                             .should_draw_hit_box = false},
               /*hit_box_vertices=*/
               std::vector<std::pair<double, double>>({{0, 0}, {0, 1}})))
           .Build(),
@@ -49,9 +48,8 @@ TEST_F(TitleScreenLevelDeathTest, ExitButtonNotAdded) {
       builder
           .AddStartButton(std::make_unique<StaticObject>(
               /*kind=*/kStartButton,
-              StaticObject::StaticObjectOpts(
-                  /*is_hit_box_active=*/false,
-                  /*should_draw_hit_box=*/false),
+              StaticObject::StaticObjectOpts{.is_hit_box_active = false,
+                                             .should_draw_hit_box = false},
               /*hit_box_vertices=*/
               std::vector<std::pair<double, double>>({{0, 0}, {0, 1}})))
           .Build(),
@@ -66,16 +64,14 @@ TEST_F(TitleScreenLevelDeathTest, StartButtonAddedTwice) {
       builder
           .AddStartButton(std::make_unique<StaticObject>(
               /*kind=*/kStartButton,
-              StaticObject::StaticObjectOpts(
-                  /*is_hit_box_active=*/false,
-                  /*should_draw_hit_box=*/false),
+              StaticObject::StaticObjectOpts{.is_hit_box_active = false,
+                                             .should_draw_hit_box = false},
               /*hit_box_vertices=*/
               std::vector<std::pair<double, double>>({{0, 0}, {0, 1}})))
           .AddStartButton(std::make_unique<StaticObject>(
               /*kind=*/kStartButton,
-              StaticObject::StaticObjectOpts(
-                  /*is_hit_box_active=*/false,
-                  /*should_draw_hit_box=*/false),
+              StaticObject::StaticObjectOpts{.is_hit_box_active = false,
+                                             .should_draw_hit_box = false},
               /*hit_box_vertices=*/
               std::vector<std::pair<double, double>>({{0, 0}, {0, 1}})))
           .Build(),
@@ -90,16 +86,14 @@ TEST_F(TitleScreenLevelDeathTest, ExitButtonAddedTwice) {
       builder
           .AddExitButton(std::make_unique<StaticObject>(
               /*kind=*/kExitButton,
-              StaticObject::StaticObjectOpts(
-                  /*is_hit_box_active=*/false,
-                  /*should_draw_hit_box=*/false),
+              StaticObject::StaticObjectOpts{.is_hit_box_active = false,
+                                             .should_draw_hit_box = false},
               /*hit_box_vertices=*/
               std::vector<std::pair<double, double>>({{0, 0}, {0, 1}})))
           .AddExitButton(std::make_unique<StaticObject>(
               /*kind=*/kExitButton,
-              StaticObject::StaticObjectOpts(
-                  /*is_hit_box_active=*/false,
-                  /*should_draw_hit_box=*/false),
+              StaticObject::StaticObjectOpts{.is_hit_box_active = false,
+                                             .should_draw_hit_box = false},
               /*hit_box_vertices=*/
               std::vector<std::pair<double, double>>({{0, 0}, {0, 1}})))
 
@@ -116,16 +110,14 @@ TEST_F(TitleScreenLevelTest, StartAndExitAddedOk) {
       builder
           .AddStartButton(std::make_unique<StaticObject>(
               /*kind=*/kStartButton,
-              StaticObject::StaticObjectOpts(
-                  /*is_hit_box_active=*/false,
-                  /*should_draw_hit_box=*/false),
+              StaticObject::StaticObjectOpts{.is_hit_box_active = false,
+                                             .should_draw_hit_box = false},
               /*hit_box_vertices=*/
               std::vector<std::pair<double, double>>({{0, 0}, {0, 1}})))
           .AddExitButton(std::make_unique<StaticObject>(
               /*kind=*/kExitButton,
-              StaticObject::StaticObjectOpts(
-                  /*is_hit_box_active=*/false,
-                  /*should_draw_hit_box=*/false),
+              StaticObject::StaticObjectOpts{.is_hit_box_active = false,
+                                             .should_draw_hit_box = false},
               /*hit_box_vertices=*/
               std::vector<std::pair<double, double>>({{0, 0}, {0, 1}})))
           .Build();
