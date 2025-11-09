@@ -100,9 +100,9 @@ class LevelBuilder {
     const int screen_width = GetScreenWidth();
     const int screen_height = GetScreenHeight();
     std::unique_ptr<objects::CoordinateObject> x_axis =
-        objects::CoordinateObject::MakeX(screen_width);
+        objects::CoordinateObject::MakeX(screen_width, screen_height);
     std::unique_ptr<objects::CoordinateObject> y_axis =
-        objects::CoordinateObject::MakeY(screen_height);
+        objects::CoordinateObject::MakeY(screen_width, screen_height);
 
     level_->coordinate_objects_.emplace_back(x_axis.get());
     level_->coordinate_objects_.emplace_back(y_axis.get());

@@ -13,11 +13,12 @@ namespace objects {
 
 TEST(CoordinateObjectTest, XAxisReadjustement) {
   const double screen_width = 100;
+  const double screen_height = 80;
   std::unique_ptr<CoordinateObject> x_object =
-      CoordinateObject::MakeX(screen_width);
+      CoordinateObject::MakeX(screen_width, screen_height);
 
   x_object->ReAdjustToScreen(/*screen_top_left_pos=*/{.x = 20, .y = 10},
-                             screen_width, /*screen_height=*/80);
+                             screen_width, screen_height);
 
   EXPECT_EQ(
       x_object->center(),
@@ -26,12 +27,13 @@ TEST(CoordinateObjectTest, XAxisReadjustement) {
 }
 
 TEST(CoordinateObjectTest, YAxisReadjustement) {
+  const double screen_width = 100;
   const double screen_height = 80;
   std::unique_ptr<CoordinateObject> y_object =
-      CoordinateObject::MakeY(screen_height);
+      CoordinateObject::MakeY(screen_width, screen_height);
 
   y_object->ReAdjustToScreen(/*screen_top_left_pos=*/{.x = 20, .y = 10},
-                             /*screen_width=*/100, screen_height);
+                             screen_width, screen_height);
 
   EXPECT_EQ(
       y_object->center(),
@@ -41,11 +43,11 @@ TEST(CoordinateObjectTest, YAxisReadjustement) {
 
 TEST(CoordinateObjectTest, UpdateDoesNothing) {
   std::unique_ptr<CoordinateObject> x_object =
-      CoordinateObject::MakeX(/*screen_width*/ 10);
+      CoordinateObject::MakeX(/*screen_width*/ 10, /*screen_height=*/20);
   std::unique_ptr<CoordinateObject> y_object =
-      CoordinateObject::MakeY(/*screen_height=*/20);
+      CoordinateObject::MakeY(/*screen_width*/ 10, /*screen_height=*/20);
   std::unique_ptr<CoordinateObject> dummy_object =
-      CoordinateObject::MakeX(/*screen_width*/ 30);
+      CoordinateObject::MakeX(/*screen_width*/ 30, /*screen_height=*/20);
   std::list<std::unique_ptr<Object>> objs;
   objs.push_back(std::move(dummy_object));
 
