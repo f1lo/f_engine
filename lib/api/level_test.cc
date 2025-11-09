@@ -23,6 +23,7 @@ using lib::api::objects::kScreenBottom;
 using lib::api::objects::kScreenLeft;
 using lib::api::objects::kScreenRight;
 using lib::api::objects::kScreenTop;
+using lib::api::objects::kWorldBorder;
 using lib::api::objects::StaticObject;
 using ::testing::HasSubstr;
 using ::testing::UnorderedElementsAre;
@@ -195,6 +196,23 @@ TEST_F(LevelTest, CoordinateObjects) {
 
   EXPECT_THAT(object_kinds, UnorderedElementsAre(kCoordinate, kCoordinate));
   EXPECT_THAT(coordinate_kinds, UnorderedElementsAre(kCoordinate, kCoordinate));
+}
+
+TEST_F(LevelTest, WorldBorderObjects) {
+  LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel);
+  std::unique_ptr<DummyLevel> dummy_level =
+      dummy_builder.WithWorldBorderX(/*x=*/1000)
+          .WithWorldBorderY(/*y=*/200)
+          .Build();
+
+  ASSERT_EQ(dummy_level->objects_.size(), 2);
+  ASSERT_EQ(dummy_level->world_border_objects_.size(), 2);
+  auto it = dummy_level->world_border_objects_.begin();
+  EXPECT_THAT((*it)->kind(), kWorldBorder);
+  EXPECT_THAT((*it)->center().x, 1000);
+  it++;
+  EXPECT_THAT((*it)->kind(), kWorldBorder);
+  EXPECT_THAT((*it)->center().y, 200);
 }
 
 }  // namespace api

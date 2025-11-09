@@ -17,9 +17,14 @@
 #include "lib/api/objects/coordinate_object.h"
 #include "lib/api/objects/object.h"
 #include "lib/api/objects/screen_edge_object.h"
+#include "lib/api/objects/static_object.h"
 
 namespace lib {
 namespace api {
+
+namespace {
+static constexpr double kWorldBorderLength = 1000000;
+}  // namespace
 
 typedef uint32_t LevelId;
 
@@ -94,6 +99,36 @@ class LevelBuilder {
         .AddObject(std::move(screen_bottom));
   }
 
+  LevelBuilder& WithWorldBorderX(const double x,
+                                 const bool should_draw_hitbox = false) {
+    std::unique_ptr<objects::StaticObject> x_border =
+        std::make_unique<objects::StaticObject>(
+            objects::kWorldBorder,
+            objects::StaticObject::StaticObjectOpts{
+                .is_hit_box_active = true,
+                .should_draw_hit_box = should_draw_hitbox},
+            std::vector<std::pair<double, double>>{{x, -kWorldBorderLength},
+                                                   {x, kWorldBorderLength}});
+
+    level_->world_border_objects_.emplace_back(x_border.get());
+    return AddObject(std::move(x_border));
+  }
+
+  LevelBuilder& WithWorldBorderY(const double y,
+                                 const bool should_draw_hitbox = false) {
+    std::unique_ptr<objects::StaticObject> y_border =
+        std::make_unique<objects::StaticObject>(
+            objects::kWorldBorder,
+            objects::StaticObject::StaticObjectOpts{
+                .is_hit_box_active = true,
+                .should_draw_hit_box = should_draw_hitbox},
+            std::vector<std::pair<double, double>>{{-kWorldBorderLength, y},
+                                                   {kWorldBorderLength, y}});
+
+    level_->world_border_objects_.emplace_back(y_border.get());
+    return AddObject(std::move(y_border));
+  }
+
   LevelBuilder& WithCoordinates() {
     CHECK(level_->coordinate_objects_.empty())
         << "WithCoordinates() has already been called.";
@@ -143,12 +178,14 @@ class Level {
   FRIEND_TEST(LevelTest, ScreenEdgeObjects);
   FRIEND_TEST(LevelTest, CoordinateObjects);
   FRIEND_TEST(LevelTest, CleanupOrDie);
+  FRIEND_TEST(LevelTest, WorldBorderObjects);
   FRIEND_TEST(LevelDeathTest, CleanUpOrDieOutOfSync);
   FRIEND_TEST(TitleScreenLevelTest, StartAndExitAddedOk);
   std::list<std::unique_ptr<objects::Object>> objects_;
   std::list<std::list<std::unique_ptr<abilities::Ability>>> abilities_;
   std::list<objects::ScreenEdgeObject*> screen_edge_objects_;
   std::list<objects::CoordinateObject*> coordinate_objects_;
+  std::list<objects::StaticObject*> world_border_objects_;
   Camera camera_;
   std::unique_ptr<const abilities::Controls> controls_;
 };

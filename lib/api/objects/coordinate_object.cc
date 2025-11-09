@@ -64,7 +64,7 @@ void CoordinateObject::DrawX() const {
       DrawLineEx(
           Vector2(static_cast<float>(screen_top_left_pos_.x),
                   static_cast<float>(screen_top_left_pos_.y + increment)),
-          Vector2(static_cast<float>(screen_width_),
+          Vector2(static_cast<float>(screen_top_left_pos_.x + screen_width_),
                   static_cast<float>(screen_top_left_pos_.y + increment)),
           /*thick=*/3.0, BLACK);
     }
@@ -84,11 +84,12 @@ void CoordinateObject::DrawY() const {
         /*fontSize=*/kFontSize,
         /*color=*/GREEN);
     if (increment != 0) {
-      DrawLineEx(Vector2(static_cast<float>(screen_top_left_pos_.x + increment),
-                         static_cast<float>(screen_top_left_pos_.y)),
-                 Vector2(static_cast<float>(screen_top_left_pos_.x + increment),
-                         static_cast<float>(screen_height_)),
-                 /*thick=*/3.0, BLACK);
+      DrawLineEx(
+          Vector2(static_cast<float>(screen_top_left_pos_.x + increment),
+                  static_cast<float>(screen_top_left_pos_.y)),
+          Vector2(static_cast<float>(screen_top_left_pos_.x + increment),
+                  static_cast<float>(screen_top_left_pos_.y + screen_height_)),
+          /*thick=*/3.0, BLACK);
     }
 
     increment += kDistanceBetweenGrid;

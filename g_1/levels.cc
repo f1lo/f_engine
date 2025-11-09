@@ -34,6 +34,8 @@ constexpr int kPlayerY = 0;
 constexpr float kPlayerWidth = 50;
 constexpr float kPlayerHeight = 100;
 
+constexpr double kWorldBorderSize = 2000;
+
 static const char* kTreePath = "g_1/resources/sample_tree.png";
 static const char* kPlayerPath = "g_1/resources/sample_player.png";
 
@@ -177,10 +179,18 @@ std::unique_ptr<Level> MakeOpeningLevel(const bool debug_mode) {
   for (auto& static_object : static_objects) {
     level_builder.AddObject(std::move(static_object));
   }
-  level_builder.WithScreenObjects(/*should_draw_hitbox=*/debug_mode);
+  level_builder.WithScreenObjects(/*should_draw_hitbox=*/false);
   if (debug_mode) {
     level_builder.WithCoordinates();
   }
+  level_builder.WithWorldBorderX(-kWorldBorderSize,
+                                 /*should_draw_hitbox=*/debug_mode);
+  level_builder.WithWorldBorderX(kWorldBorderSize,
+                                 /*should_draw_hitbox=*/debug_mode);
+  level_builder.WithWorldBorderY(-kWorldBorderSize,
+                                 /*should_draw_hitbox=*/debug_mode);
+  level_builder.WithWorldBorderY(kWorldBorderSize,
+                                 /*should_draw_hitbox=*/debug_mode);
   return level_builder.Build();
 }
 
