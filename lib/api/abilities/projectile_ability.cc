@@ -35,6 +35,9 @@ std::list<ObjectAndAbilities> ProjectileAbility::Use(const Camera& camera) {
 
   // Always ignore the user.
   projectile_object_opts_.ignore_these_objects.insert(user()->kind());
+  // Despawn once outside world borders.
+  projectile_object_opts_.despawn_on_colliding_with_these_objects.insert(
+      objects::kWorldBorder);
 
   // If user has direction, spawn projectile with the same direction.
   // Otherwise go top right.
