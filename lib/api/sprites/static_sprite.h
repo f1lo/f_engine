@@ -12,17 +12,23 @@ namespace lib {
 namespace api {
 namespace sprites {
 
+class SpriteFactory;
+
 class StaticSprite : public Sprite {
  public:
-  explicit StaticSprite(std::string resource_path);
   ~StaticSprite() override;
 
   void Draw(const WorldPosition draw_destination,
-            int frame_to_draw = 0) const override;
+            const int frame_to_draw = 0) const override;
   void RotateAndDraw(const WorldPosition draw_destination, const int degree,
-                     int frame_to_draw = 0) const override;
+                     const int frame_to_draw = 0) const override;
   int total_frames() const override;
   int sprite_height() const override;
+
+ private:
+  friend class SpriteFactory;
+
+  explicit StaticSprite(std::string resource_path);
 
   const Texture2D texture_;
   const Rectangle source_;

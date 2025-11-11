@@ -1,7 +1,5 @@
 #include "lib/api/objects/projectile_object.h"
 
-#include <optional>
-
 #include "lib/api/objects/object.h"
 #include "lib/api/sprites/sprite_instance.h"
 

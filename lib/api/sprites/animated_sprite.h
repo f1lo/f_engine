@@ -12,20 +12,25 @@ namespace lib {
 namespace api {
 namespace sprites {
 
+class SpriteFactory;
+
 class AnimatedSprite : public Sprite {
  public:
-  AnimatedSprite(std::string resource_path, int frame_count);
   ~AnimatedSprite() override;
 
   void Draw(const WorldPosition draw_destination,
-            int frame_to_draw) const override;
+            const int frame_to_draw) const override;
   virtual void RotateAndDraw(const WorldPosition draw_destination,
                              const int degree,
-                             int frame_to_draw) const override;
+                             const int frame_to_draw) const override;
   int total_frames() const override;
   int sprite_height() const override;
 
  private:
+  friend class SpriteFactory;
+
+  AnimatedSprite(const std::string resource_path, const int frame_count);
+
   const Texture2D texture_;
   const int frame_count_;
   const float animation_frame_width_;

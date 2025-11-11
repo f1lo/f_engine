@@ -11,6 +11,7 @@
 #include "absl/log/check.h"
 #include "lib/api/level.h"
 #include "lib/api/objects/object.h"
+#include "lib/api/sprites/sprite_factory.h"
 
 namespace lib {
 namespace api {
@@ -49,11 +50,13 @@ class Game {
     levels_[level->id()] = std::move(level);
   }
   void set_debug_mode(const bool debug_mode) { debug_mode_ = debug_mode; }
+  sprites::SpriteFactory& sprite_factory() { return sprite_factory_; }
 
  private:
   explicit Game() = default;
 
   absl::flat_hash_map<LevelId, std::unique_ptr<Level>> levels_;
+  sprites::SpriteFactory sprite_factory_;
   bool debug_mode_ = false;
 };
 

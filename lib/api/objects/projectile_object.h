@@ -1,8 +1,6 @@
 #ifndef LIB_API_OBJECTS_PROJECTILE_OBJECT_H
 #define LIB_API_OBJECTS_PROJECTILE_OBJECT_H
 
-#include <optional>
-
 #include "absl/container/flat_hash_set.h"
 #include "lib/api/objects/movable_object.h"
 #include "lib/api/objects/object.h"
@@ -25,9 +23,9 @@ class ProjectileObject : public MovableObject {
     absl::flat_hash_set<Kind> ignore_these_objects;
   };
 
-  ProjectileObject(const Kind kind, ProjectileObjectOpts options,
-                   std::optional<std::unique_ptr<sprites::SpriteInstance>>
-                       sprite_instance = std::nullopt)
+  ProjectileObject(
+      const Kind kind, ProjectileObjectOpts options,
+      std::unique_ptr<sprites::SpriteInstance> sprite_instance = nullptr)
       : MovableObject(kind,
                       MovableObjectOpts{
                           .is_hit_box_active = true,

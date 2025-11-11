@@ -3,7 +3,6 @@
 
 #include <list>
 #include <memory>
-#include <optional>
 #include <vector>
 
 #include "absl/container/flat_hash_map.h"
@@ -21,15 +20,15 @@ class StaticObject : public Object {
     bool should_draw_hit_box;
   };
 
-  StaticObject(Kind kind, StaticObjectOpts options,
-               const std::vector<std::pair<double, double>>& hit_box_vertices,
-               std::optional<std::unique_ptr<sprites::SpriteInstance>>
-                   sprite_instance = std::nullopt);
+  StaticObject(
+      Kind kind, StaticObjectOpts options,
+      const std::vector<std::pair<double, double>>& hit_box_vertices,
+      std::unique_ptr<sprites::SpriteInstance> sprite_instance = nullptr);
 
-  StaticObject(Kind kind, StaticObjectOpts options,
-               std::pair<double, double> hit_box_center, double hit_box_radius,
-               std::optional<std::unique_ptr<sprites::SpriteInstance>>
-                   sprite_instance = std::nullopt);
+  StaticObject(
+      Kind kind, StaticObjectOpts options,
+      std::pair<double, double> hit_box_center, double hit_box_radius,
+      std::unique_ptr<sprites::SpriteInstance> sprite_instance = nullptr);
 
   void Update(const std::list<std::unique_ptr<Object>>& other_objects) override;
 

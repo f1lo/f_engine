@@ -3,7 +3,6 @@
 
 #include <list>
 #include <memory>
-#include <optional>
 #include <vector>
 
 #include "lib/api/objects/object.h"
@@ -22,15 +21,15 @@ class MovableObject : public Object {
     double velocity;
   };
 
-  MovableObject(Kind kind, const MovableObjectOpts& options,
-                const std::vector<std::pair<double, double>>& hit_box_vertices,
-                std::optional<std::unique_ptr<sprites::SpriteInstance>>
-                    sprite_instance = std::nullopt);
+  MovableObject(
+      Kind kind, const MovableObjectOpts& options,
+      const std::vector<std::pair<double, double>>& hit_box_vertices,
+      std::unique_ptr<sprites::SpriteInstance> sprite_instance = nullptr);
 
-  MovableObject(Kind kind, const MovableObjectOpts& options,
-                std::pair<double, double> hit_box_center, double hit_box_radius,
-                std::optional<std::unique_ptr<sprites::SpriteInstance>>
-                    sprite_instance = std::nullopt);
+  MovableObject(
+      Kind kind, const MovableObjectOpts& options,
+      std::pair<double, double> hit_box_center, double hit_box_radius,
+      std::unique_ptr<sprites::SpriteInstance> sprite_instance = nullptr);
 
   void Update(const std::list<std::unique_ptr<Object>>& other_objects) override;
 

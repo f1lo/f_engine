@@ -32,6 +32,7 @@ cc_library(
         "//lib/api/objects:object",
         "//lib/api/objects:projectile_object",
         "//lib/api/objects:static_object",
+        "//lib/api/sprites:sprite_factory",
         "//lib/api/sprites:sprite_instance",
         "//lib/api/sprites:static_sprite",
     ],

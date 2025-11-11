@@ -2,7 +2,6 @@
 
 #include <list>
 #include <memory>
-#include <optional>
 #include <vector>
 
 #include "absl/container/flat_hash_map.h"
@@ -20,7 +19,7 @@ using internal::Vector;
 MovableObject::MovableObject(
     const Kind kind, const MovableObjectOpts& options,
     const std::vector<std::pair<double, double>>& hit_box_vertices,
-    std::optional<std::unique_ptr<sprites::SpriteInstance>> sprite_instance)
+    std::unique_ptr<sprites::SpriteInstance> sprite_instance)
     : Object(kind,
              {.is_hit_box_active = options.is_hit_box_active,
               .should_draw_hit_box = options.should_draw_hit_box},
@@ -30,7 +29,7 @@ MovableObject::MovableObject(
 MovableObject::MovableObject(
     const Kind kind, const MovableObjectOpts& options,
     const std::pair<double, double> hit_box_center, const double hit_box_radius,
-    std::optional<std::unique_ptr<sprites::SpriteInstance>> sprite_instance)
+    std::unique_ptr<sprites::SpriteInstance> sprite_instance)
     : Object(kind,
              {.is_hit_box_active = options.is_hit_box_active,
               .should_draw_hit_box = options.should_draw_hit_box},

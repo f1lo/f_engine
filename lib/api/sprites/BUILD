@@ -44,3 +44,19 @@ cc_library(
         "@abseil-cpp//absl/time",
     ],
 )
+
+cc_library(
+    name = "sprite_factory",
+    srcs = ["sprite_factory.cc"],
+    hdrs = ["sprite_factory.h"],
+    deps = [
+        ":animated_sprite",
+        ":sprite",
+        ":sprite_instance",
+        ":static_sprite",
+        "//raylib",
+        "@abseil-cpp//absl/container:flat_hash_map",
+        "@abseil-cpp//absl/memory",
+        "@abseil-cpp//absl/time",
+    ],
+)

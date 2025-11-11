@@ -15,8 +15,8 @@
 #include "lib/api/objects/object.h"
 #include "lib/api/objects/projectile_object.h"
 #include "lib/api/objects/static_object.h"
+#include "lib/api/sprites/sprite_factory.h"
 #include "lib/api/sprites/sprite_instance.h"
-#include "lib/api/sprites/static_sprite.h"
 #include "lib/api/title_screen_level.h"
 
 constexpr int kButtonOffsetX = 300;
@@ -63,15 +63,14 @@ using lib::api::objects::MovableObject;
 using lib::api::objects::Object;
 using lib::api::objects::ProjectileObject;
 using lib::api::objects::StaticObject;
+using lib::api::sprites::SpriteFactory;
 using lib::api::sprites::SpriteInstance;
-using lib::api::sprites::StaticSprite;
 using lib::internal::HitBox;
 
-std::unique_ptr<Player> MakePlayer(const bool debug_mode) {
-  std::shared_ptr<StaticSprite> player =
-      std::make_shared<StaticSprite>(kPlayerPath);
+std::unique_ptr<Player> MakePlayer(SpriteFactory& sprite_factory,
+                                   const bool debug_mode) {
   std::unique_ptr<SpriteInstance> player_instance =
-      std::make_unique<SpriteInstance>(player);
+      sprite_factory.MakeStaticSprite(kPlayerPath);
 
   return std::make_unique<Player>(
       /*kind=*/kPlayer,
@@ -125,16 +124,14 @@ std::list<std::unique_ptr<Ability>> MakePlayerAbilities(const bool debug_mode) {
 }
 
 std::vector<std::unique_ptr<StaticObject>> MakeStaticObjects(
-    const bool debug_mode) {
+    SpriteFactory& sprite_factory, const bool debug_mode) {
   std::vector<std::unique_ptr<StaticObject>> static_objects;
-  std::shared_ptr<StaticSprite> tree =
-      std::make_shared<StaticSprite>(kTreePath);
   std::unique_ptr<SpriteInstance> tree_1 =
-      std::make_unique<SpriteInstance>(tree);
+      sprite_factory.MakeStaticSprite(kTreePath);
   std::unique_ptr<SpriteInstance> tree_2 =
-      std::make_unique<SpriteInstance>(tree);
+      sprite_factory.MakeStaticSprite(kTreePath);
   std::unique_ptr<SpriteInstance> tree_3 =
-      std::make_unique<SpriteInstance>(tree);
+      sprite_factory.MakeStaticSprite(kTreePath);
 
   static_objects.push_back(std::make_unique<StaticObject>(
       /*kind=*/kButton,
@@ -167,10 +164,11 @@ std::vector<std::unique_ptr<StaticObject>> MakeStaticObjects(
 
 }  // namespace
 
-std::unique_ptr<Level> MakeOpeningLevel(const bool debug_mode) {
-  std::unique_ptr<Player> player = MakePlayer(debug_mode);
+std::unique_ptr<Level> MakeOpeningLevel(SpriteFactory& sprite_factory,
+                                        const bool debug_mode) {
+  std::unique_ptr<Player> player = MakePlayer(sprite_factory, debug_mode);
   std::vector<std::unique_ptr<StaticObject>> static_objects =
-      MakeStaticObjects(debug_mode);
+      MakeStaticObjects(sprite_factory, debug_mode);
 
   OpeningLevelBuilder level_builder =
       OpeningLevelBuilder(lib::api::kFirstLevel);
@@ -194,7 +192,8 @@ std::unique_ptr<Level> MakeOpeningLevel(const bool debug_mode) {
   return level_builder.Build();
 }
 
-std::unique_ptr<Level> MakeTitleScreenLevel(bool debug_mode) {
+std::unique_ptr<Level> MakeTitleScreenLevel(SpriteFactory& sprite_factory,
+                                            bool debug_mode) {
   std::unique_ptr<StaticObject> start_button = std::make_unique<StaticObject>(
       /*kind=*/kButton,
       StaticObject::StaticObjectOpts{.is_hit_box_active = true,

@@ -11,6 +11,7 @@ cc_library(
     deps = [
         "//lib/api:level",
         "//lib/api/objects:object",
+        "//lib/api/sprites:sprite_factory",
         "//raylib",
         "@abseil-cpp//absl/container:flat_hash_map",
         "@abseil-cpp//absl/log:check",

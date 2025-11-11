@@ -1,7 +1,5 @@
 #include "lib/api/sprites/sprite_instance.h"
 
-#include <memory>
-
 #include "absl/time/clock.h"
 #include "absl/time/time.h"
 #include "lib/api/sprites/sprite.h"
@@ -10,16 +8,16 @@ namespace lib {
 namespace api {
 namespace sprites {
 
-SpriteInstance::SpriteInstance(std::shared_ptr<Sprite> sprite)
-    : sprite_(std::move(sprite)),
+SpriteInstance::SpriteInstance(const Sprite* sprite)
+    : sprite_(sprite),
       advance_to_next_frame_after_(absl::ZeroDuration()),
       current_frame_to_draw_(0),
       first_time_current_frame_was_drawn_(std::nullopt),
       is_animation_(false) {}
 
-SpriteInstance::SpriteInstance(std::shared_ptr<Sprite> sprite,
+SpriteInstance::SpriteInstance(const Sprite* sprite,
                                const absl::Duration advance_to_next_frame_after)
-    : sprite_(std::move(sprite)),
+    : sprite_(sprite),
       advance_to_next_frame_after_(advance_to_next_frame_after),
       current_frame_to_draw_(0),
       first_time_current_frame_was_drawn_(std::nullopt),

@@ -3,7 +3,6 @@
 
 #include <list>
 #include <memory>
-#include <optional>
 
 #include "lib/api/common_types.h"
 #include "lib/api/sprites/sprite_instance.h"
@@ -35,10 +34,9 @@ class Object {
     bool should_draw_hit_box;
   };
 
-  explicit Object(const Kind kind, const Opts& options,
-                  internal::HitBox hit_box,
-                  std::optional<std::unique_ptr<sprites::SpriteInstance>>
-                      sprite_instance = std::nullopt);
+  explicit Object(
+      const Kind kind, const Opts& options, internal::HitBox hit_box,
+      std::unique_ptr<sprites::SpriteInstance> sprite_instance = nullptr);
 
   virtual ~Object() = default;
 

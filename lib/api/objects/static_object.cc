@@ -2,7 +2,6 @@
 
 #include <list>
 #include <memory>
-#include <optional>
 #include <vector>
 
 #include "absl/container/flat_hash_map.h"
@@ -17,7 +16,7 @@ namespace objects {
 StaticObject::StaticObject(
     const Kind kind, const StaticObjectOpts options,
     const std::vector<std::pair<double, double>>& hit_box_vertices,
-    std::optional<std::unique_ptr<sprites::SpriteInstance>> sprite_instance)
+    std::unique_ptr<sprites::SpriteInstance> sprite_instance)
     : Object(kind,
              {.is_hit_box_active = options.is_hit_box_active,
               .should_draw_hit_box = options.should_draw_hit_box},
@@ -26,7 +25,7 @@ StaticObject::StaticObject(
 StaticObject::StaticObject(
     const Kind kind, const StaticObjectOpts options,
     const std::pair<double, double> hit_box_center, const double hit_box_radius,
-    std::optional<std::unique_ptr<sprites::SpriteInstance>> sprite_instance)
+    std::unique_ptr<sprites::SpriteInstance> sprite_instance)
     : Object(kind,
              {.is_hit_box_active = options.is_hit_box_active,
               .should_draw_hit_box = options.should_draw_hit_box},
