@@ -1,5 +1,3 @@
-#include "raylib/include/raylib.h"
-
 #include "lib/api/sprites/sprite_factory.h"
 
 #include <memory>
@@ -8,6 +6,8 @@
 #include <string_view>
 
 #include "absl/time/time.h"
+#include "lib/api/graphics.h"
+#include "lib/api/graphics_mock.h"
 #include "lib/api/sprites/animated_sprite.h"
 #include "lib/api/sprites/sprite.h"
 #include "lib/api/sprites/sprite_instance.h"
@@ -17,13 +17,34 @@ namespace lib {
 namespace api {
 namespace sprites {
 
+SpriteFactory::SpriteFactory()
+    : make_mock_sprites_(false),
+      id_testing_(0),
+      texture_width_testing_(0),
+      texture_height_testing_(0) {}
+
+SpriteFactory::SpriteFactory(const unsigned int id, const int texture_width,
+                             const int texture_height)
+    : make_mock_sprites_(true),
+      id_testing_(id),
+      texture_width_testing_(texture_width),
+      texture_height_testing_(texture_height) {}
+
 std::unique_ptr<SpriteInstance> SpriteFactory::MakeStaticSprite(
     std::string_view resource_path) {
   std::unique_ptr<Sprite> sprite;
   auto [sprite_it, inserted] = sprites_.try_emplace(resource_path, nullptr);
   if (inserted) {
-    sprite_it->second =
-        absl::WrapUnique(new StaticSprite(std::string(resource_path)));
+    if (make_mock_sprites_) {
+      sprite_it->second = absl::WrapUnique(new StaticSprite(
+          std::make_unique<GraphicsMock>(id_testing_, texture_width_testing_,
+                                         texture_height_testing_),
+          std::string(resource_path)));
+
+    } else {
+      sprite_it->second = absl::WrapUnique(new StaticSprite(
+          std::make_unique<Graphics>(), std::string(resource_path)));
+    }
   }
 
   std::unique_ptr<SpriteInstance> sprite_instance =
@@ -38,8 +59,15 @@ std::unique_ptr<SpriteInstance> SpriteFactory::MakeAnimatedSprite(
   std::unique_ptr<Sprite> sprite;
   auto [sprite_it, inserted] = sprites_.try_emplace(resource_path, nullptr);
   if (inserted) {
-    sprite_it->second = absl::WrapUnique(
-        new AnimatedSprite(std::string(resource_path), frame_count));
+    if (make_mock_sprites_) {
+      sprite_it->second = absl::WrapUnique(new AnimatedSprite(
+          std::make_unique<GraphicsMock>(id_testing_, texture_width_testing_,
+                                         texture_height_testing_),
+          std::string(resource_path), frame_count));
+    } else {
+      new AnimatedSprite(std::make_unique<Graphics>(),
+                         std::string(resource_path), frame_count);
+    }
   }
 
   std::unique_ptr<SpriteInstance> sprite_instance = absl::WrapUnique(

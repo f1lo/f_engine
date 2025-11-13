@@ -90,7 +90,6 @@ cc_library(
         "//lib/api/objects:object",
         "//raylib",
         "@abseil-cpp//absl/log:check",
-        "@abseil-cpp//absl/synchronization",
     ],
 )
 
@@ -108,5 +107,21 @@ cc_test(
         ":common_types",
         "@googletest//:gtest",
         "@googletest//:gtest_main",
+    ],
+)
+
+cc_library(
+    name = "graphics",
+    srcs = ["graphics.cc"],
+    hdrs = ["graphics.h"],
+    deps = ["//raylib"],
+)
+
+cc_library(
+    name = "graphics_mock",
+    srcs = ["graphics_mock.cc"],
+    hdrs = ["graphics_mock.h"],
+    deps = [
+        ":graphics",
     ],
 )

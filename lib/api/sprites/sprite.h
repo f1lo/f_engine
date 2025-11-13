@@ -2,6 +2,7 @@
 #define LIB_API_SPRITES_SPRITE_H
 
 #include "lib/api/common_types.h"
+#include "lib/api/graphics.h"
 
 namespace lib {
 namespace api {
@@ -16,6 +17,7 @@ class Sprite {
                              const int frame_to_draw = 0) const = 0;
   virtual int total_frames() const = 0;
   virtual int sprite_height() const = 0;
+  virtual const GraphicsInterface* GraphicsForTesting() const = 0;
 
   virtual ~Sprite() {}
 };

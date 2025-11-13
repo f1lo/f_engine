@@ -2,29 +2,33 @@
 
 #include "lib/api/sprites/animated_sprite.h"
 
+#include <memory>
 #include <string>
 
 #include "lib/api/common_types.h"
+#include "lib/api/graphics.h"
 #include "lib/api/sprites/sprite.h"
 
 namespace lib {
 namespace api {
 namespace sprites {
 
-AnimatedSprite::AnimatedSprite(const std::string resource_path,
+AnimatedSprite::AnimatedSprite(std::unique_ptr<GraphicsInterface> graphics,
+                               const std::string resource_path,
                                const int frame_count)
-    : texture_(LoadTexture(resource_path.c_str())),
+    : graphics_(std::move(graphics)),
+      texture_(graphics_->Load(resource_path.c_str())),
       frame_count_(frame_count),
       animation_frame_width_((float)texture_.width / (float)frame_count_),
       origin_({animation_frame_width_ / 2, (float)texture_.height / 2}) {}
 
 AnimatedSprite::~AnimatedSprite() {
-  UnloadTexture(texture_);
+  graphics_->Unload(texture_);
 }
 
 void AnimatedSprite::Draw(const WorldPosition draw_destination,
                           const int frame_to_draw) const {
-  DrawTexturePro(
+  graphics_->Draw(
       texture_,
       {(float)(frame_to_draw % frame_count_) * animation_frame_width_, 0.0f,
        animation_frame_width_, (float)texture_.height},
@@ -35,13 +39,17 @@ void AnimatedSprite::Draw(const WorldPosition draw_destination,
 
 void AnimatedSprite::RotateAndDraw(const WorldPosition draw_destination,
                                    const int degree, int frame_to_draw) const {
-  DrawTexturePro(
+  graphics_->Draw(
       texture_,
       {(float)(frame_to_draw % frame_count_) * animation_frame_width_, 0.0f,
        animation_frame_width_, (float)texture_.height},
       {(float)draw_destination.x, (float)draw_destination.y,
        animation_frame_width_, (float)texture_.height},
       origin_, degree, WHITE);
+}
+
+const GraphicsInterface* AnimatedSprite::GraphicsForTesting() const {
+  return graphics_.get();
 }
 
 int AnimatedSprite::total_frames() const {

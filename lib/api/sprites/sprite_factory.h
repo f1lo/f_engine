@@ -10,6 +10,7 @@
 #include "absl/container/flat_hash_map.h"
 #include "absl/memory/memory.h"
 #include "absl/time/time.h"
+#include "gtest/gtest_prod.h"
 #include "lib/api/sprites/sprite.h"
 #include "lib/api/sprites/sprite_instance.h"
 
@@ -19,6 +20,8 @@ namespace api {
 class Game;
 
 namespace sprites {
+
+class SpriteTest;
 
 class SpriteFactory {
  public:
@@ -30,8 +33,16 @@ class SpriteFactory {
 
  private:
   friend class lib::api::Game;
-  SpriteFactory() = default;
+  friend class SpriteTest;
+  SpriteFactory();
+  // For testing only.
+  SpriteFactory(const unsigned int id, const int texture_width,
+                const int texture_height);
 
+  const bool make_mock_sprites_;
+  const unsigned int id_testing_;
+  const int texture_width_testing_;
+  const int texture_height_testing_;
   absl::flat_hash_map<std::string, std::unique_ptr<Sprite>> sprites_;
 };
 

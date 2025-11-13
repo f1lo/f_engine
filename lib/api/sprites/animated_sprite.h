@@ -3,9 +3,11 @@
 
 #include "raylib/include/raylib.h"
 
+#include <memory>
 #include <string>
 
 #include "lib/api/common_types.h"
+#include "lib/api/graphics.h"
 #include "lib/api/sprites/sprite.h"
 
 namespace lib {
@@ -13,6 +15,7 @@ namespace api {
 namespace sprites {
 
 class SpriteFactory;
+class SpriteInstance;
 
 class AnimatedSprite : public Sprite {
  public:
@@ -28,9 +31,14 @@ class AnimatedSprite : public Sprite {
 
  private:
   friend class SpriteFactory;
+  friend class SpriteInstance;
 
-  AnimatedSprite(const std::string resource_path, const int frame_count);
+  AnimatedSprite(std::unique_ptr<GraphicsInterface> graphics,
+                 const std::string resource_path, const int frame_count);
 
+  const GraphicsInterface* GraphicsForTesting() const override;
+
+  std::unique_ptr<GraphicsInterface> graphics_;
   const Texture2D texture_;
   const int frame_count_;
   const float animation_frame_width_;

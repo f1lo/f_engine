@@ -2,6 +2,7 @@
 
 #include "absl/time/clock.h"
 #include "absl/time/time.h"
+#include "lib/api/graphics.h"
 #include "lib/api/sprites/sprite.h"
 
 namespace lib {
@@ -61,6 +62,10 @@ void SpriteInstance::Reset() {
 
 int SpriteInstance::MainSpriteHeight() const {
   return sprite_->sprite_height();
+}
+
+const GraphicsInterface* SpriteInstance::GraphicsForTesting() const {
+  return sprite_->GraphicsForTesting();
 }
 
 }  // namespace sprites

@@ -9,6 +9,7 @@ cc_library(
     hdrs = ["sprite.h"],
     deps = [
         "//lib/api:common_types",
+        "//lib/api:graphics",
     ],
 )
 
@@ -18,6 +19,7 @@ cc_library(
     hdrs = ["static_sprite.h"],
     deps = [
         "//lib/api:common_types",
+        "//lib/api:graphics",
         "//lib/api/sprites:sprite",
         "//raylib",
     ],
@@ -29,6 +31,7 @@ cc_library(
     hdrs = ["animated_sprite.h"],
     deps = [
         "//lib/api:common_types",
+        "//lib/api:graphics",
         "//lib/api/sprites:sprite",
         "//raylib",
     ],
@@ -40,6 +43,7 @@ cc_library(
     hdrs = ["sprite_instance.h"],
     deps = [
         "//lib/api:common_types",
+        "//lib/api:graphics",
         "//lib/api/sprites:sprite",
         "@abseil-cpp//absl/time",
     ],
@@ -54,9 +58,30 @@ cc_library(
         ":sprite",
         ":sprite_instance",
         ":static_sprite",
-        "//raylib",
+        "//lib/api:graphics",
+        "//lib/api:graphics_mock",
         "@abseil-cpp//absl/container:flat_hash_map",
         "@abseil-cpp//absl/memory",
         "@abseil-cpp//absl/time",
+        "@googletest//:gtest",
+    ],
+)
+
+cc_test(
+    name = "sprite_test",
+    srcs = ["sprite_test.cc"],
+    deps = [
+        ":animated_sprite",
+        ":sprite",
+        ":sprite_factory",
+        ":sprite_instance",
+        ":static_sprite",
+        "//lib/api:common_types",
+        "//lib/api:graphics",
+        "//lib/api:graphics_mock",
+        "//raylib",
+        "@abseil-cpp//absl/time",
+        "@googletest//:gtest",
+        "@googletest//:gtest_main",
     ],
 )

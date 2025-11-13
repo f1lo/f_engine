@@ -5,6 +5,7 @@
 
 #include "absl/time/time.h"
 #include "lib/api/common_types.h"
+#include "lib/api/graphics.h"
 #include "lib/api/sprites/sprite.h"
 
 namespace lib {
@@ -20,6 +21,7 @@ class SpriteInstance {
                      const int rotation_degree);
   void Reset();
   int MainSpriteHeight() const;
+  const GraphicsInterface* GraphicsForTesting() const;
 
  private:
   friend class SpriteFactory;
