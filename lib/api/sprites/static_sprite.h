@@ -21,8 +21,6 @@ class StaticSprite : public Sprite {
  public:
   ~StaticSprite() override;
 
-  void Draw(const WorldPosition draw_destination,
-            const int frame_to_draw = 0) const override;
   void RotateAndDraw(const WorldPosition draw_destination, const int degree,
                      const int frame_to_draw = 0) const override;
   int total_frames() const override;

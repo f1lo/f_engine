@@ -23,14 +23,6 @@ StaticSprite::~StaticSprite() {
   graphics_->Unload(texture_);
 }
 
-void StaticSprite::Draw(const WorldPosition draw_destination,
-                        const int frame_to_draw) const {
-  graphics_->Draw(texture_, source_,
-                  {(float)draw_destination.x, (float)draw_destination.y,
-                   (float)texture_.width, (float)texture_.height},
-                  origin_, 0.0f, WHITE);
-}
-
 void StaticSprite::RotateAndDraw(const WorldPosition draw_destination,
                                  const int degree,
                                  const int frame_to_draw) const {

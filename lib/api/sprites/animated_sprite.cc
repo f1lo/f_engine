@@ -26,17 +26,6 @@ AnimatedSprite::~AnimatedSprite() {
   graphics_->Unload(texture_);
 }
 
-void AnimatedSprite::Draw(const WorldPosition draw_destination,
-                          const int frame_to_draw) const {
-  graphics_->Draw(
-      texture_,
-      {(float)(frame_to_draw % frame_count_) * animation_frame_width_, 0.0f,
-       animation_frame_width_, (float)texture_.height},
-      {(float)draw_destination.x, (float)draw_destination.y,
-       animation_frame_width_, (float)texture_.height},
-      origin_, 0.0f, WHITE);
-}
-
 void AnimatedSprite::RotateAndDraw(const WorldPosition draw_destination,
                                    const int degree, int frame_to_draw) const {
   graphics_->Draw(

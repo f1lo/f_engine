@@ -20,9 +20,6 @@ class SpriteInstance;
 class AnimatedSprite : public Sprite {
  public:
   ~AnimatedSprite() override;
-
-  void Draw(const WorldPosition draw_destination,
-            const int frame_to_draw) const override;
   virtual void RotateAndDraw(const WorldPosition draw_destination,
                              const int degree,
                              const int frame_to_draw) const override;
