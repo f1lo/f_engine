@@ -60,7 +60,7 @@ void SpriteInstance::Reset() {
   current_frame_to_draw_ = 0;
 }
 
-int SpriteInstance::MainSpriteHeight() const {
+int SpriteInstance::SpriteHeight() const {
   return sprite_->sprite_height();
 }
 

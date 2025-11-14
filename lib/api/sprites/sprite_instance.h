@@ -20,7 +20,7 @@ class SpriteInstance {
   void RotateAndDraw(const WorldPosition draw_destination,
                      const int rotation_degree);
   void Reset();
-  int MainSpriteHeight() const;
+  int SpriteHeight() const;
   const GraphicsInterface* GraphicsForTesting() const;
 
  private:

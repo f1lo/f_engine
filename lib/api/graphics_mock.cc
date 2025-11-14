@@ -28,6 +28,7 @@ void GraphicsMock::Draw(const Texture2D& texture, const Rectangle& source,
   texture_source_ = source;
   texture_origin_ = origin;
   drawn_texture_ = texture;
+  rotation_ = rotation;
 }
 
 void GraphicsMock::Unload(const Texture2D& texture) {
@@ -52,6 +53,10 @@ Vector2 GraphicsMock::drawn_texture_origin() const {
 
 Texture2D GraphicsMock::drawn_texture() const {
   return drawn_texture_;
+}
+
+float GraphicsMock::rotation() const {
+  return rotation_;
 }
 
 }  // namespace api

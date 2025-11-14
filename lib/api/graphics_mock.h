@@ -27,6 +27,7 @@ class GraphicsMock : public GraphicsInterface {
   Vector2 drawn_texture_origin() const;
   Texture2D drawn_texture() const;
   unsigned int unloaded_texture_id() const;
+  float rotation() const;
 
  private:
   std::string loaded_texture_;
@@ -35,6 +36,7 @@ class GraphicsMock : public GraphicsInterface {
   Texture2D texture_to_be_drawn_;
   Vector2 texture_origin_;
   Texture2D drawn_texture_;
+  float rotation_;
 };
 
 }  // namespace api

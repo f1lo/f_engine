@@ -82,7 +82,7 @@ int Object::YBase() const {
     return (int)center().y;
   }
 
-  return (int)center().y + sprite_instance_->MainSpriteHeight() / 2;
+  return (int)center().y + sprite_instance_->SpriteHeight() / 2;
 }
 
 }  // namespace objects
