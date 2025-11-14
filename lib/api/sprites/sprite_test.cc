@@ -153,6 +153,38 @@ TEST_F(SpriteTest, AnimatedSpriteFrameChange) {
   EXPECT_EQ(sprite->SpriteHeight(), kTextureHeight);
 }
 
+TEST_F(SpriteTest, AnimatedSpriteReset) {
+  const std::string resource_path = "a/b/picture.png";
+  const int frame_count = 4;
+  std::unique_ptr<SpriteInstance> sprite = sprite_factory_.MakeAnimatedSprite(
+      resource_path, frame_count, kAdvanceToNextFrameAfter);
+  const WorldPosition draw_destination{.x = 100, .y = 200};
+  sprite->Draw(draw_destination);
+  absl::SleepFor(kAdvanceToNextFrameAfter + kSmallIncrement);
+  sprite->Draw(draw_destination);
+
+  sprite->Reset();
+  sprite->Draw(draw_destination);
+
+  const GraphicsMock* graphics =
+      dynamic_cast<const GraphicsMock*>(sprite->GraphicsForTesting());
+  ASSERT_NE(graphics, nullptr);
+  EXPECT_EQ(graphics->loaded_texture(), resource_path);
+  EXPECT_EQ(graphics->drawn_texture_source().x, 0);
+  EXPECT_EQ(graphics->drawn_texture_source().y, 0.0f);
+  EXPECT_EQ(graphics->drawn_texture_source().width,
+            static_cast<float>(kTextureWidth) / frame_count);
+  EXPECT_EQ(graphics->drawn_texture_source().height,
+            static_cast<float>(kTextureHeight));
+  EXPECT_EQ(graphics->drawn_texture_origin().x,
+            static_cast<float>(kTextureWidth) / frame_count / 2.0);
+  EXPECT_EQ(graphics->drawn_texture_origin().y,
+            static_cast<float>(kTextureHeight) / 2.0);
+  EXPECT_EQ(graphics->drawn_texture().id, kTextureId);
+  EXPECT_EQ(graphics->rotation(), 0.0f);
+  EXPECT_EQ(sprite->SpriteHeight(), kTextureHeight);
+}
+
 TEST_F(SpriteTest, AnimatedSpriteLoopsBackToStart) {
   const std::string resource_path = "a/b/picture.png";
   const int frame_count = 4;
@@ -245,7 +277,6 @@ TEST_F(SpriteTest, SpriteFactoryAnimatedSpriteAlreadyExists) {
 
   absl::SleepFor(kAdvanceToNextFrameAfter / 2);
   const WorldPosition draw_destination{.x = 100, .y = 200};
-
   sprite->Draw(draw_destination);
   const GraphicsMock* graphics =
       dynamic_cast<const GraphicsMock*>(sprite->GraphicsForTesting());
