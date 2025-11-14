@@ -92,6 +92,21 @@ cc_library(
     ],
 )
 
+cc_test(
+    name = "static_object_test",
+    srcs = ["static_object_test.cc"],
+    deps = [
+        ":static_object",
+        "//lib/api:graphics_mock",
+        "//lib/api/objects:object",
+        "//lib/api/objects:object_utils",
+        "//lib/api/sprites:sprite_factory",
+        "//lib/api/sprites:sprite_instance",
+        "@googletest//:gtest",
+        "@googletest//:gtest_main",
+    ],
+)
+
 cc_library(
     name = "projectile_object",
     srcs = ["projectile_object.cc"],

@@ -19,6 +19,10 @@ namespace api {
 
 class Game;
 
+namespace objects {
+class StaticObjectTest;
+}  // namespace objects
+
 namespace sprites {
 
 class SpriteTest;
@@ -34,6 +38,7 @@ class SpriteFactory {
  private:
   friend class lib::api::Game;
   friend class SpriteTest;
+  friend class objects::StaticObjectTest;
   SpriteFactory();
   // For testing only.
   SpriteFactory(const unsigned int id, const int texture_width,

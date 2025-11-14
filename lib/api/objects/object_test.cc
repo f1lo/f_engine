@@ -18,12 +18,18 @@ namespace {
 using ::testing::HasSubstr;
 
 class DummyObject : public Object {
+ public:
   using Object::Object;
 
   void Update(
-      const std::list<std::unique_ptr<Object>>& other_objects) override {}
+      const std::list<std::unique_ptr<Object>>& other_objects) override {
+    UpdateInternal(other_objects);
+  }
   void Draw() const override {}
-  bool OnCollisionCallback(Object& other_object) override { return true; }
+  bool OnCollisionCallback(Object& other_object) override {
+    other_object.set_deleted(true);
+    return true;
+  }
 };
 
 class ObjectTest : public ::testing::Test {};
@@ -193,6 +199,23 @@ TEST(ObjectTest, YBase) {
           {2, 2}, {10, 2}, {10, 8}, {2, 8}}));
 
   EXPECT_EQ(rect.YBase(), 5);
+}
+
+TEST(ObjectTest, UpdateInternalIgnoresSameObject) {
+  std::unique_ptr<DummyObject> rect = std::make_unique<DummyObject>(
+      /*kind=*/kEnemy,
+      /*options=*/
+      Object::Opts{.is_hit_box_active = true, .should_draw_hit_box = false},
+      /*hit_box=*/
+      CreateHitBoxOrDie(std::vector<std::pair<double, double>>{
+          {2, 2}, {10, 2}, {10, 8}, {2, 8}}));
+  DummyObject* rect_ptr = rect.get();
+  std::list<std::unique_ptr<Object>> same_object;
+  same_object.emplace_back(std::move(rect));
+
+  rect_ptr->Update(same_object);
+
+  EXPECT_FALSE(rect_ptr->deleted());
 }
 
 }  // namespace

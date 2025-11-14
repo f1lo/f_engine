@@ -17,9 +17,10 @@ void Game::Run() {
   }
   // Clear levels_ before closing window.
   // Otherwise some resources will be freed twice:
-  // * By calling levels_ destructor.
+  // * By calling levels_/sprites_ destructor.
   // * By calling CloseWindow().
   levels_.clear();
+  sprite_factory_.sprites_.clear();
   CloseWindow();
 }
 
