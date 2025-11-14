@@ -219,6 +219,40 @@ TEST_F(SpriteTest, AnimatedSpriteRotateAndDraw) {
   EXPECT_EQ(sprite->SpriteHeight(), kTextureHeight);
 }
 
+TEST_F(SpriteTest, SpriteFactoryStaticSpriteAlreadyExists) {
+  const std::string resource_path = "a/b/picture.png";
+  std::unique_ptr<SpriteInstance> sprite =
+      sprite_factory_.MakeStaticSprite(resource_path);
+
+  sprite = sprite_factory_.MakeStaticSprite(resource_path);
+
+  const WorldPosition draw_destination{.x = 100, .y = 200};
+  sprite->Draw(draw_destination);
+  const GraphicsMock* graphics =
+      dynamic_cast<const GraphicsMock*>(sprite->GraphicsForTesting());
+  ASSERT_NE(graphics, nullptr);
+  EXPECT_EQ(graphics->loaded_texture(), resource_path);
+}
+
+TEST_F(SpriteTest, SpriteFactoryAnimatedSpriteAlreadyExists) {
+  const std::string resource_path = "a/b/picture.png";
+  const int frame_count = 4;
+  std::unique_ptr<SpriteInstance> sprite = sprite_factory_.MakeAnimatedSprite(
+      resource_path, frame_count, kAdvanceToNextFrameAfter);
+
+  sprite = sprite_factory_.MakeAnimatedSprite(resource_path, frame_count,
+                                              kAdvanceToNextFrameAfter);
+
+  absl::SleepFor(kAdvanceToNextFrameAfter / 2);
+  const WorldPosition draw_destination{.x = 100, .y = 200};
+
+  sprite->Draw(draw_destination);
+  const GraphicsMock* graphics =
+      dynamic_cast<const GraphicsMock*>(sprite->GraphicsForTesting());
+  ASSERT_NE(graphics, nullptr);
+  EXPECT_EQ(graphics->loaded_texture(), resource_path);
+}
+
 }  // namespace
 }  // namespace sprites
 }  // namespace api
