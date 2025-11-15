@@ -36,7 +36,7 @@ class SpriteFactory {
       absl::Duration advance_to_next_frame_after);
 
  private:
-  friend class Game;
+  friend class lib::api::Game;
   friend class SpriteTest;
   friend class objects::StaticObjectTest;
   SpriteFactory();
