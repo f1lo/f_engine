@@ -1,5 +1,6 @@
 #include "lib/internal/hit_box.h"
 
+#include <algorithm>
 #include <cmath>
 #include <memory>
 #include <vector>
@@ -22,12 +23,11 @@ std::vector<Point> ConstructConvexHull(std::vector<Point>& vertices) {
   if (vertices.size() == 1)
     return {vertices[0]};
 
-  std::sort(vertices.begin(), vertices.end(),
-            [](const Point& a, const Point& b) {
-              return a.x < b.x || (a.x == b.x && a.y < b.y);
-            });
-  Point point_1 = vertices[0];
-  Point point_2 = vertices.back();
+  std::ranges::sort(vertices, [](const Point& a, const Point& b) {
+    return a.x < b.x || (a.x == b.x && a.y < b.y);
+  });
+  const Point point_1 = vertices[0];
+  const Point point_2 = vertices.back();
   std::vector<Point> up, down;
   up.push_back(point_1);
   down.push_back(point_1);
@@ -62,7 +62,7 @@ std::vector<Point> ConstructConvexHull(std::vector<Point>& vertices) {
  * Assumes clockwise or counterclockwise order.
  * For now only allows rectangles which are aligned to the X, Y axis.
  */
-bool IsAxisAlignedRectangle(absl::Span<const Point> vertices) {
+bool IsAxisAlignedRectangle(const absl::Span<const Point> vertices) {
   if (vertices.size() != 4) {
     return false;
   }
@@ -97,26 +97,27 @@ bool IsAxisAlignedRectangle(absl::Span<const Point> vertices) {
 
 enum class LineOrientation { ON_LINE, DOWN, UP };
 
-LineOrientation PointOrientation(double x, double y,
+LineOrientation PointOrientation(const double x, const double y,
                                  const std::pair<double, double> line) {
-  double line_y = line.first * x + line.second;
+  const double line_y = line.first * x + line.second;
   if (std::abs(line_y - y) <= eps) {
     return LineOrientation::ON_LINE;
   }
   return line_y < y ? LineOrientation::DOWN : LineOrientation::UP;
 }
 
-std::pair<double, double> Build45DegreeLine(double x, double y) {
+std::pair<double, double> Build45DegreeLine(const double x, const double y) {
   return {-1, x + y};
 }
 
-std::pair<double, double> Build135DegreeLine(double x, double y) {
+std::pair<double, double> Build135DegreeLine(const double x, const double y) {
   return {1, y - x};
 }
 
 std::pair<double, double> ReflectFromRectangle(const Rectangle& rec,
-                                               const Vector& v, double center_x,
-                                               double center_y) {
+                                               const Vector& v,
+                                               const double center_x,
+                                               const double center_y) {
   const std::pair<double, double> a = Build45DegreeLine(rec.a.x, rec.a.y);
   const std::pair<double, double> b = Build135DegreeLine(rec.b.x, rec.b.y);
   const std::pair<double, double> c = Build45DegreeLine(rec.c.x, rec.c.y);
@@ -132,26 +133,26 @@ std::pair<double, double> ReflectFromRectangle(const Rectangle& rec,
   // Reflected from (rec.a, rec.d) line.
   if (PointOrientation(center_x, center_y, a) == LineOrientation::DOWN &&
       PointOrientation(center_x, center_y, d) == LineOrientation::DOWN) {
-    const Vector w = Line(rec.a, rec.d).Reflect(v);
-    return {w.x, w.y};
+    const auto [x, y] = Line(rec.a, rec.d).Reflect(v);
+    return {x, y};
   }
   // Reflected from (rec.b, rec.c) line.
   if (PointOrientation(center_x, center_y, b) == LineOrientation::UP &&
       PointOrientation(center_x, center_y, c) == LineOrientation::UP) {
-    const Vector w = Line(rec.b, rec.c).Reflect(v);
-    return {w.x, w.y};
+    const auto [x, y] = Line(rec.b, rec.c).Reflect(v);
+    return {x, y};
   }
   // Reflected from (rec.a, rec.b) line.
   if (PointOrientation(center_x, center_y, a) == LineOrientation::UP &&
       PointOrientation(center_x, center_y, b) == LineOrientation::DOWN) {
-    Vector w = Line(rec.a, rec.b).Reflect(v);
-    return {w.x, w.y};
+    auto [x, y] = Line(rec.a, rec.b).Reflect(v);
+    return {x, y};
   }
   // Reflected from (rec.c, rec.d) line.
   if (PointOrientation(center_x, center_y, c) == LineOrientation::DOWN &&
       PointOrientation(center_x, center_y, d) == LineOrientation::UP) {
-    Vector w = Line(rec.c, rec.d).Reflect(v);
-    return {w.x, w.y};
+    auto [x, y] = Line(rec.c, rec.d).Reflect(v);
+    return {x, y};
   }
 
   // Should be unreachable.
@@ -242,8 +243,8 @@ std::pair<double, double> HitBox::Reflect(const HitBox& other, const double x,
   const Vector v = {x, y};
   switch (shape_type_) {
     case ShapeType::LINE: {
-      const Vector reflected = static_cast<Line*>(shape_.get())->Reflect(v);
-      return {reflected.x, reflected.y};
+      const auto [x, y] = static_cast<Line*>(shape_.get())->Reflect(v);
+      return {x, y};
     }
     case ShapeType::RECTANGLE:
       return ReflectFromRectangle(*static_cast<Rectangle*>(shape_.get()), v,

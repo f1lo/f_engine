@@ -26,7 +26,7 @@ TEST(ClickAbilityTest, NotClicked) {
       /*cursor_pos*/ ScreenPosition{.x = 0, .y = 0}));
   ability.set_user(&static_object);
 
-  Camera camera;
+  const Camera camera;
   const auto& objects_and_abilities = ability.Use(camera);
 
   EXPECT_FALSE(static_object.clicked());
@@ -44,7 +44,7 @@ TEST(ClickAbilityTest, ClickedButMissed) {
       /*cursor_pos*/ ScreenPosition{.x = 5, .y = 5}));
   ability.set_user(&static_object);
 
-  Camera camera;
+  const Camera camera;
   const auto& objects_and_abilities = ability.Use(camera);
 
   EXPECT_FALSE(static_object.clicked());
@@ -62,7 +62,7 @@ TEST(ClickAbilityTest, Clicked) {
       /*cursor_pos*/ ScreenPosition{.x = 1, .y = 1}));
   ability.set_user(&static_object);
 
-  Camera camera;
+  const Camera camera;
   const auto& objects_and_abilities = ability.Use(camera);
 
   EXPECT_TRUE(static_object.clicked());

@@ -344,7 +344,7 @@ TEST_F(HitBoxTest, RectangleReflectionTop) {
   const HitBox circle = HitBox::CreateHitBox({750, 942}, 20);
   const HitBox rectangle = HitBoxOrDie(
       HitBox::CreateHitBox({{696, 990}, {696, 965}, {996, 965}, {996, 990}}));
-  const Vector speed = {10, 20};
+  constexpr Vector speed = {10, 20};
 
   EXPECT_EQ(rectangle.Reflect(circle, speed.x, speed.y),
             std::make_pair(speed.x, -speed.y));
@@ -354,7 +354,7 @@ TEST_F(HitBoxTest, RectangleReflectionTop2) {
   const HitBox circle = HitBox::CreateHitBox({750, 942}, 20);
   const HitBox rectangle = HitBoxOrDie(
       HitBox::CreateHitBox({{336, 990}, {336, 965}, {636, 965}, {636, 990}}));
-  const Vector speed = {10, 20};
+  constexpr Vector speed = {10, 20};
 
   EXPECT_EQ(rectangle.Reflect(circle, speed.x, speed.y),
             std::make_pair(-speed.x, speed.y));

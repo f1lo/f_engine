@@ -63,7 +63,7 @@ TEST(ProjectileAbilityTest, InputNotPressed) {
           .ignore_these_objects = absl::flat_hash_set<Kind>{}});
   ability.set_user(&static_object);
 
-  Camera camera;
+  const Camera camera;
   const std::list<ObjectAndAbilities> objects_and_abilities =
       ability.Use(camera);
 
@@ -96,7 +96,7 @@ TEST(ProjectileAbilityTest, OnCooldown) {
           .ignore_these_objects = absl::flat_hash_set<Kind>{}});
   ability.set_user(&static_object);
 
-  Camera camera;
+  const Camera camera;
   std::list<ObjectAndAbilities> objects_and_abilities = ability.Use(camera);
   objects_and_abilities = ability.Use(camera);
 
@@ -129,7 +129,7 @@ TEST(ProjectileAbilityTest, ProjectileSpawned) {
           .ignore_these_objects = absl::flat_hash_set<Kind>{}});
   ability.set_user(&static_object);
 
-  Camera camera;
+  const Camera camera;
   const std::list<ObjectAndAbilities> objects_and_abilities =
       ability.Use(camera);
 

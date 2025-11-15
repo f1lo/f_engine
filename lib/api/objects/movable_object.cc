@@ -88,6 +88,7 @@ void MovableObject::Update(
   }
 }
 
+// TODO(f1lo): This never returns true?
 bool MovableObject::IsFrozen() const {
   return frozen_until_next_set_direction_;
 }

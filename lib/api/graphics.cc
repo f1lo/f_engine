@@ -8,7 +8,7 @@ namespace lib {
 namespace api {
 
 Texture2D Graphics::Load(const std::string resource_path) {
-  Texture2D texture = LoadTexture(resource_path.c_str());
+  const Texture2D texture = LoadTexture(resource_path.c_str());
   return texture;
 }
 

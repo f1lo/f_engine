@@ -12,7 +12,7 @@ namespace objects {
 namespace {
 
 TEST(ScreenEdgeObjectTest, TopAdjustement) {
-  std::unique_ptr<ScreenEdgeObject> edge = ScreenEdgeObject::MakeTop(
+  const std::unique_ptr<ScreenEdgeObject> edge = ScreenEdgeObject::MakeTop(
       /*screen_width=*/100, /*should_draw_hit_box=*/false);
 
   edge->ReAdjustToScreen(/*screen_top_left_pos=*/{.x = 20, .y = 10},
@@ -22,7 +22,7 @@ TEST(ScreenEdgeObjectTest, TopAdjustement) {
 }
 
 TEST(ScreenEdgeObjectTest, BottomAdjustement) {
-  std::unique_ptr<ScreenEdgeObject> edge = ScreenEdgeObject::MakeBottom(
+  const std::unique_ptr<ScreenEdgeObject> edge = ScreenEdgeObject::MakeBottom(
       /*screen_width=*/100, /*screen_height=*/50,
       /*should_draw_hit_box=*/false);
 
@@ -33,7 +33,7 @@ TEST(ScreenEdgeObjectTest, BottomAdjustement) {
 }
 
 TEST(ScreenEdgeObjectTest, LeftAdjustement) {
-  std::unique_ptr<ScreenEdgeObject> edge =
+  const std::unique_ptr<ScreenEdgeObject> edge =
       ScreenEdgeObject::MakeLeft(/*screen_height=*/50,
                                  /*should_draw_hit_box=*/false);
 
@@ -44,7 +44,7 @@ TEST(ScreenEdgeObjectTest, LeftAdjustement) {
 }
 
 TEST(ScreenEdgeObjectTest, RightAdjustement) {
-  std::unique_ptr<ScreenEdgeObject> edge =
+  const std::unique_ptr<ScreenEdgeObject> edge =
       ScreenEdgeObject::MakeRight(/*screen_width=*/100, /*screen_height=*/50,
                                   /*should_draw_hit_box=*/false);
 

@@ -16,7 +16,7 @@ void Game::Run() {
     current_level = level_it->second->Run();
   }
   // Clear levels_ before closing window.
-  // Otherwise some resources will be freed twice:
+  // Otherwise, some resources will be freed twice:
   // * By calling levels_/sprites_ destructor.
   // * By calling CloseWindow().
   levels_.clear();

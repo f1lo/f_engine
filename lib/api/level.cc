@@ -2,6 +2,7 @@
 
 #include "lib/api/level.h"
 
+#include <algorithm>
 #include <optional>
 
 #include "absl/log/check.h"
@@ -12,8 +13,8 @@ namespace lib {
 namespace api {
 
 using abilities::Ability;
+using abilities::kKeyEscape;
 using api::ObjectAndAbilities;
-using lib::api::abilities::kKeyEscape;
 using objects::MovableObject;
 using objects::Object;
 
@@ -65,7 +66,7 @@ void Level::Draw() const {
   for (const auto& object : objects_) {
     objects_by_y_base.push_back(std::make_pair(object->YBase(), object.get()));
   }
-  sort(objects_by_y_base.begin(), objects_by_y_base.end());
+  std::ranges::sort(objects_by_y_base);
   for (const auto& y_and_object : objects_by_y_base) {
     y_and_object.second->Draw();
   }

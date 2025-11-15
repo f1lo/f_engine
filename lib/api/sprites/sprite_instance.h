@@ -16,9 +16,8 @@ class SpriteFactory;
 
 class SpriteInstance {
  public:
-  void Draw(const WorldPosition draw_destination);
-  void RotateAndDraw(const WorldPosition draw_destination,
-                     const int rotation_degree);
+  void Draw(WorldPosition draw_destination);
+  void RotateAndDraw(WorldPosition draw_destination, int rotation_degree);
   void Reset();
   int SpriteHeight() const;
   const GraphicsInterface* GraphicsForTesting() const;
@@ -26,12 +25,11 @@ class SpriteInstance {
  private:
   friend class SpriteFactory;
 
-  SpriteInstance(const Sprite* sprite);
+  explicit SpriteInstance(const Sprite* sprite);
   SpriteInstance(const Sprite* sprite,
-                 const absl::Duration advance_to_next_frame_after);
+                 absl::Duration advance_to_next_frame_after);
 
-  void DrawInternal(const WorldPosition draw_destination,
-                    const int rotation_degree);
+  void DrawInternal(WorldPosition draw_destination, int rotation_degree);
 
   const Sprite* sprite_;
   const absl::Duration advance_to_next_frame_after_;

@@ -11,16 +11,13 @@
 namespace lib {
 namespace api {
 
-using lib::api::abilities::Ability;
-using lib::api::abilities::MoveAbility;
-using lib::api::objects::Kind;
-using lib::api::objects::StaticObject;
+using abilities::Ability;
+using abilities::MoveAbility;
+using objects::Kind;
+using objects::StaticObject;
 using ::testing::UnorderedElementsAre;
 
-class TitleScreenLevelTest : public ::testing::Test {
- public:
- protected:
-};
+class TitleScreenLevelTest : public ::testing::Test {};
 
 using TitleScreenLevelDeathTest = TitleScreenLevelTest;
 
@@ -106,7 +103,7 @@ TEST_F(TitleScreenLevelTest, StartAndExitAddedOk) {
 
   Kind kStartButton = 0;
   Kind kExitButton = 0;
-  std::unique_ptr<TitleScreenLevel> level =
+  const std::unique_ptr<TitleScreenLevel> level =
       builder
           .AddStartButton(std::make_unique<StaticObject>(
               /*kind=*/kStartButton,
@@ -125,7 +122,7 @@ TEST_F(TitleScreenLevelTest, StartAndExitAddedOk) {
   ASSERT_EQ(level->objects_.size(), 2);
   auto it = level->objects_.begin();
   EXPECT_EQ((*it)->kind(), kStartButton);
-  it++;
+  ++it;
   EXPECT_EQ((*it)->kind(), kExitButton);
   EXPECT_EQ(level->abilities_.size(), 2);
 }

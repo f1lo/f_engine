@@ -39,8 +39,8 @@ class DummyMovableObject : public MovableObject {
     set_deleted(true);
     return true;
   }
-  void Move() { MovableObject::Move(); }
-  void ResetLastMove() { MovableObject::ResetLastMove(); }
+  void Move() override { MovableObject::Move(); }
+  void ResetLastMove() override { MovableObject::ResetLastMove(); }
 };
 
 TEST(MovableObjectTest, SetDirectionGlobal) {

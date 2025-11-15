@@ -13,9 +13,9 @@ using sprites::SpriteFactory;
 
 namespace {
 
-static constexpr unsigned int kTextureId = 7;
-static constexpr int kTextureWidth = 300;
-static constexpr int kTextureHeight = 200;
+constexpr unsigned int kTextureId = 7;
+constexpr int kTextureWidth = 300;
+constexpr int kTextureHeight = 200;
 
 }  // namespace
 

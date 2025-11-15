@@ -12,19 +12,19 @@
 namespace lib {
 namespace api {
 
-using lib::api::abilities::Ability;
-using lib::api::abilities::kKeyA;
-using lib::api::abilities::MoveAbility;
-using lib::api::objects::kCoordinate;
-using lib::api::objects::kEnemy;
-using lib::api::objects::Kind;
-using lib::api::objects::kPlayer;
-using lib::api::objects::kScreenBottom;
-using lib::api::objects::kScreenLeft;
-using lib::api::objects::kScreenRight;
-using lib::api::objects::kScreenTop;
-using lib::api::objects::kWorldBorder;
-using lib::api::objects::StaticObject;
+using abilities::Ability;
+using abilities::kKeyA;
+using abilities::MoveAbility;
+using objects::kCoordinate;
+using objects::kEnemy;
+using objects::Kind;
+using objects::kPlayer;
+using objects::kScreenBottom;
+using objects::kScreenLeft;
+using objects::kScreenRight;
+using objects::kScreenTop;
+using objects::kWorldBorder;
+using objects::StaticObject;
 using ::testing::HasSubstr;
 using ::testing::UnorderedElementsAre;
 
@@ -39,10 +39,7 @@ class DummyLevel : public Level {
 
 }  // namespace
 
-class LevelTest : public ::testing::Test {
- public:
- protected:
-};
+class LevelTest : public ::testing::Test {};
 
 using LevelDeathTest = LevelTest;
 
@@ -55,7 +52,7 @@ TEST_F(LevelDeathTest, CleanUpOrDieOutOfSync) {
                                      .should_draw_hit_box = false},
       /*hit_box_vertices=*/
       std::vector<std::pair<double, double>>({{0, 0}, {0, 1}})));
-  std::unique_ptr<DummyLevel> dummy_level = dummy_builder.Build();
+  const std::unique_ptr<DummyLevel> dummy_level = dummy_builder.Build();
   dummy_level->abilities_.clear();
 
   EXPECT_DEATH(dummy_level->CleanUpOrDie(),
@@ -95,7 +92,7 @@ TEST_F(LevelTest, CleanupOrDie) {
                                    .key_bottom = kKeyA}));
   dummy_builder.AddObjectAndAbilities(std::move(static_object),
                                       std::move(abilities));
-  std::unique_ptr<DummyLevel> dummy_level = dummy_builder.Build();
+  const std::unique_ptr<DummyLevel> dummy_level = dummy_builder.Build();
   static_object_raw->set_deleted(true);
 
   dummy_level->CleanUpOrDie();
@@ -119,12 +116,12 @@ TEST_F(LevelTest, ObjectsAreAdded) {
                                      .should_draw_hit_box = false},
       /*hit_box_vertices=*/
       std::vector<std::pair<double, double>>({{0, 0}, {0, 1}})));
-  std::unique_ptr<DummyLevel> dummy_level = dummy_builder.Build();
+  const std::unique_ptr<DummyLevel> dummy_level = dummy_builder.Build();
 
   ASSERT_EQ(dummy_level->objects_.size(), 2);
   auto it = dummy_level->objects_.begin();
   EXPECT_EQ((*it)->kind(), kPlayer);
-  it++;
+  ++it;
   EXPECT_EQ((*it)->kind(), kEnemy);
 }
 
@@ -146,7 +143,7 @@ TEST_F(LevelTest, ObjectsAndAbilitiesAreAdded) {
           /*hit_box_vertices=*/
           std::vector<std::pair<double, double>>({{0, 0}, {0, 1}})),
       std::move(abilities));
-  std::unique_ptr<DummyLevel> dummy_level = dummy_builder.Build();
+  const std::unique_ptr<DummyLevel> dummy_level = dummy_builder.Build();
 
   ASSERT_EQ(dummy_level->objects_.size(), 1);
   ASSERT_EQ(dummy_level->abilities_.size(), 1);
@@ -155,7 +152,7 @@ TEST_F(LevelTest, ObjectsAndAbilitiesAreAdded) {
 
 TEST_F(LevelTest, ScreenEdgeObjects) {
   LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel);
-  std::unique_ptr<DummyLevel> dummy_level =
+  const std::unique_ptr<DummyLevel> dummy_level =
       dummy_builder.WithScreenObjects().Build();
 
   ASSERT_EQ(dummy_level->objects_.size(), 4);
@@ -179,7 +176,7 @@ TEST_F(LevelTest, ScreenEdgeObjects) {
 
 TEST_F(LevelTest, CoordinateObjects) {
   LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel);
-  std::unique_ptr<DummyLevel> dummy_level =
+  const std::unique_ptr<DummyLevel> dummy_level =
       dummy_builder.WithCoordinates().Build();
 
   ASSERT_EQ(dummy_level->objects_.size(), 2);
@@ -200,7 +197,7 @@ TEST_F(LevelTest, CoordinateObjects) {
 
 TEST_F(LevelTest, WorldBorderObjects) {
   LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel);
-  std::unique_ptr<DummyLevel> dummy_level =
+  const std::unique_ptr<DummyLevel> dummy_level =
       dummy_builder.WithWorldBorderX(/*x=*/1000)
           .WithWorldBorderY(/*y=*/200)
           .Build();
@@ -210,7 +207,7 @@ TEST_F(LevelTest, WorldBorderObjects) {
   auto it = dummy_level->world_border_objects_.begin();
   EXPECT_THAT((*it)->kind(), kWorldBorder);
   EXPECT_THAT((*it)->center().x, 1000);
-  it++;
+  ++it;
   EXPECT_THAT((*it)->kind(), kWorldBorder);
   EXPECT_THAT((*it)->center().y, 200);
 }

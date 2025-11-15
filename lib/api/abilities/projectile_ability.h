@@ -3,6 +3,7 @@
 
 #include <list>
 #include <memory>
+#include <utility>
 
 #include "absl/container/flat_hash_set.h"
 #include "lib/api/abilities/ability.h"
@@ -21,21 +22,19 @@ class ProjectileAbility : public Ability {
     uint32_t cooldown_sec;
   };
 
-  ProjectileAbility(std::unique_ptr<const ControlsInterface> controls,
-                    const lib::api::objects::Kind projectile_kind,
-                    const ProjectileAbilityOpts& opts,
-                    lib::api::objects::ProjectileObject::ProjectileObjectOpts
-                        projectile_object_opts)
+  ProjectileAbility(
+      std::unique_ptr<const ControlsInterface> controls,
+      const objects::Kind projectile_kind, const ProjectileAbilityOpts& opts,
+      objects::ProjectileObject::ProjectileObjectOpts projectile_object_opts)
       : Ability(std::move(controls), {.cooldown_sec = opts.cooldown_sec}),
         projectile_kind_(projectile_kind),
-        projectile_object_opts_(projectile_object_opts) {}
+        projectile_object_opts_(std::move(projectile_object_opts)) {}
 
   std::list<ObjectAndAbilities> Use(const Camera& camera) override;
 
  private:
-  lib::api::objects::Kind projectile_kind_;
-  lib::api::objects::ProjectileObject::ProjectileObjectOpts
-      projectile_object_opts_;
+  objects::Kind projectile_kind_;
+  objects::ProjectileObject::ProjectileObjectOpts projectile_object_opts_;
 };
 
 }  // namespace abilities

@@ -13,10 +13,11 @@ namespace api {
 namespace sprites {
 
 StaticSprite::StaticSprite(std::unique_ptr<GraphicsInterface> graphics,
-                           const std::string resource_path)
+                           const std::string& resource_path)
     : graphics_(std::move(graphics)),
       texture_(graphics_->Load(resource_path.c_str())),
-      source_({0.0f, 0.0f, (float)texture_.width, (float)texture_.height}),
+      source_({0.0f, 0.0f, static_cast<float>(texture_.width),
+               static_cast<float>(texture_.height)}),
       origin_(texture_.width / 2, texture_.height / 2) {}
 
 StaticSprite::~StaticSprite() {
@@ -26,10 +27,12 @@ StaticSprite::~StaticSprite() {
 void StaticSprite::RotateAndDraw(const WorldPosition draw_destination,
                                  const int degree,
                                  const int frame_to_draw) const {
-  graphics_->Draw(texture_, source_,
-                  {(float)draw_destination.x, (float)draw_destination.y,
-                   (float)texture_.width, (float)texture_.height},
-                  origin_, degree, WHITE);
+  graphics_->Draw(
+      texture_, source_,
+      {static_cast<float>(draw_destination.x),
+       static_cast<float>(draw_destination.y),
+       static_cast<float>(texture_.width), static_cast<float>(texture_.height)},
+      origin_, degree, WHITE);
 }
 
 const GraphicsInterface* StaticSprite::GraphicsForTesting() const {

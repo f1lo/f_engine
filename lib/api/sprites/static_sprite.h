@@ -21,8 +21,8 @@ class StaticSprite : public Sprite {
  public:
   ~StaticSprite() override;
 
-  void RotateAndDraw(const WorldPosition draw_destination, const int degree,
-                     const int frame_to_draw = 0) const override;
+  void RotateAndDraw(WorldPosition draw_destination, int degree,
+                     int frame_to_draw = 0) const override;
   int total_frames() const override;
   int sprite_height() const override;
 
@@ -31,7 +31,7 @@ class StaticSprite : public Sprite {
   friend class SpriteInstance;
 
   StaticSprite(std::unique_ptr<GraphicsInterface> graphics,
-               std::string resource_path);
+               const std::string& resource_path);
 
   const GraphicsInterface* GraphicsForTesting() const override;
 

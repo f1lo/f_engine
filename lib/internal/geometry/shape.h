@@ -75,7 +75,7 @@ struct Line final : Shape {
     return (this->a.y + this->b.y) / 2.0;
   }
 
-  Line(Point a, Point b) : a(a), b(b) {
+  Line(const Point& a, const Point& b) : a(a), b(b) {
     if (std::abs(this->a.x - this->b.x) <= eps) {
       axis_aligned = Aligned::Y;
     }
@@ -135,7 +135,7 @@ struct Circle final : Shape {
   [[nodiscard]] double center_x() const override { return a.x; }
   [[nodiscard]] double center_y() const override { return a.y; }
 
-  Circle(Point a, const double r) : a(a), r(r) {
+  Circle(const Point& a, const double r) : a(a), r(r) {
     CHECK(this->r > 0) << "Negative radius for circle: " << this->r;
   }
 

@@ -42,8 +42,8 @@ class Game {
 
   void Run();
 
-  int screen_width() const { return GetScreenWidth(); }
-  int screen_height() const { return GetScreenHeight(); }
+  static int screen_width() { return GetScreenWidth(); }
+  static int screen_height() { return GetScreenHeight(); }
   void AddLevel(std::unique_ptr<Level> level) {
     CHECK(levels_.find(level->id()) == levels_.end())
         << "Level " << level->id() << " already exists.";

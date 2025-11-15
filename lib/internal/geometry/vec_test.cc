@@ -40,46 +40,46 @@ TEST(VecTest, ScalarProductWorks) {
 }
 
 TEST(VecTest, ProjectionWorks) {
-  const Vector v{8, 16};
-  const Vector v_to_project{10, 10};
+  constexpr Vector v{8, 16};
+  constexpr Vector v_to_project{10, 10};
 
   EXPECT_EQ(v.Project(v_to_project), (Vector{6, 12}));
 }
 
 TEST(VecTest, ProjectionOutside) {
-  const Vector v{-2, -4};
-  const Vector v_to_project{-20, 0};
+  constexpr Vector v{-2, -4};
+  constexpr Vector v_to_project{-20, 0};
 
   EXPECT_EQ(v.Project(v_to_project), (Vector{-4, -8}));
 }
 
 TEST(VecTest, ProjectionSameVectors) {
-  const Vector v{2, 7};
-  const Vector v_to_project{2, 7};
+  constexpr Vector v{2, 7};
+  constexpr Vector v_to_project{2, 7};
 
   EXPECT_EQ(v.Project(v_to_project), (Vector{2, 7}));
 }
 
 TEST(VecTest, ProjectionOrthogonalVectors) {
-  const Vector v{-4, 4};
-  const Vector v_to_project{4, 4};
+  constexpr Vector v{-4, 4};
+  constexpr Vector v_to_project{4, 4};
 
   EXPECT_EQ(v.Project(v_to_project), (Vector{0, 0}));
 }
 
 TEST(VecTest, AngleIsCorrect) {
-  const Vector v{2, 4};
-  const Vector w{1, 0};
-  const Vector w_oposite{-1, 0};
+  constexpr Vector v{2, 4};
+  constexpr Vector w{1, 0};
+  constexpr Vector opposite{-1, 0};
 
   EXPECT_DOUBLE_EQ(v.Angle(w), atan(2.0));
   EXPECT_DOUBLE_EQ(w.Angle(v), atan(2.0));
-  EXPECT_DOUBLE_EQ(w_oposite.Angle(v), std::numbers::pi_v<double> - atan(2.0));
-  EXPECT_DOUBLE_EQ(v.Angle(w_oposite), std::numbers::pi_v<double> - atan(2.0));
+  EXPECT_DOUBLE_EQ(opposite.Angle(v), std::numbers::pi_v<double> - atan(2.0));
+  EXPECT_DOUBLE_EQ(v.Angle(opposite), std::numbers::pi_v<double> - atan(2.0));
 }
 
 TEST(VecTest, RotateWorks) {
-  const Vector v{2, 4};
+  constexpr Vector v{2, 4};
   const Vector w{sqrt(20), 0};
   const Vector opposite{-sqrt(20), 0};
   const double rotation_angle_clockwise = -atan(2.0);

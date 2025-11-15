@@ -56,17 +56,17 @@ Vector Line::Reflect(const Vector& vec) const {
 }
 
 // Move methods.
-void Point::Move(double x, double y) {
+void Point::Move(const double x, const double y) {
   this->x += x;
   this->y += y;
 }
-void Line::Move(double x, double y) {
+void Line::Move(const double x, const double y) {
   this->a.x += x;
   this->a.y += y;
   this->b.x += x;
   this->b.y += y;
 }
-void Rectangle::Move(double x, double y) {
+void Rectangle::Move(const double x, const double y) {
   this->a.x += x;
   this->a.y += y;
   this->b.x += x;
@@ -76,7 +76,7 @@ void Rectangle::Move(double x, double y) {
   this->d.x += x;
   this->d.y += y;
 }
-void Circle::Move(double x, double y) {
+void Circle::Move(const double x, const double y) {
   this->a.x += x;
   this->a.y += y;
 }

@@ -22,9 +22,7 @@
 namespace lib {
 namespace api {
 
-namespace {
-static constexpr double kWorldBorderLength = 1000000;
-}  // namespace
+constexpr double kWorldBorderLength = 1000000;
 
 typedef uint32_t LevelId;
 

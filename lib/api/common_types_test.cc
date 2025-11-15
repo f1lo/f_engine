@@ -22,7 +22,7 @@ TEST(CommonTypesTest, EqualityWorldPosition) {
 }
 
 TEST(CommonTypesTest, WorldPositionToString) {
-  const WorldPosition pos = WorldPosition(1.3, 2.7);
+  constexpr WorldPosition pos = WorldPosition(1.3, 2.7);
 
   std::ostringstream oss;
   oss << pos;
@@ -31,7 +31,7 @@ TEST(CommonTypesTest, WorldPositionToString) {
 }
 
 TEST(CommonTypesTest, ScreenPositionToString) {
-  const ScreenPosition pos = ScreenPosition(1.3, 2.7);
+  constexpr ScreenPosition pos = ScreenPosition(1.3, 2.7);
 
   std::ostringstream oss;
   oss << pos;

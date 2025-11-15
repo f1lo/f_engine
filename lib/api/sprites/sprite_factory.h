@@ -32,17 +32,16 @@ class SpriteFactory {
   std::unique_ptr<SpriteInstance> MakeStaticSprite(
       std::string_view resource_path);
   std::unique_ptr<SpriteInstance> MakeAnimatedSprite(
-      std::string_view resource_path, const int frame_count,
-      const absl::Duration advance_to_next_frame_after);
+      std::string_view resource_path, int frame_count,
+      absl::Duration advance_to_next_frame_after);
 
  private:
-  friend class lib::api::Game;
+  friend class Game;
   friend class SpriteTest;
   friend class objects::StaticObjectTest;
   SpriteFactory();
   // For testing only.
-  SpriteFactory(const unsigned int id, const int texture_width,
-                const int texture_height);
+  SpriteFactory(unsigned int id, int texture_width, int texture_height);
 
   const bool make_mock_sprites_;
   const unsigned int id_testing_;

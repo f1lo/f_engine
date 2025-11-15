@@ -31,7 +31,7 @@ SpriteFactory::SpriteFactory(const unsigned int id, const int texture_width,
       texture_height_testing_(texture_height) {}
 
 std::unique_ptr<SpriteInstance> SpriteFactory::MakeStaticSprite(
-    std::string_view resource_path) {
+    const std::string_view resource_path) {
   std::unique_ptr<Sprite> sprite;
   auto [sprite_it, inserted] = sprites_.try_emplace(resource_path, nullptr);
   if (inserted) {
@@ -54,7 +54,7 @@ std::unique_ptr<SpriteInstance> SpriteFactory::MakeStaticSprite(
 }
 
 std::unique_ptr<SpriteInstance> SpriteFactory::MakeAnimatedSprite(
-    std::string_view resource_path, const int frame_count,
+    const std::string_view resource_path, const int frame_count,
     const absl::Duration advance_to_next_frame_after) {
   std::unique_ptr<Sprite> sprite;
   auto [sprite_it, inserted] = sprites_.try_emplace(resource_path, nullptr);

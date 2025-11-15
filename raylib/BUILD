@@ -16,9 +16,7 @@ cc_import(
         "include/raymath.h",
         "include/rlgl.h",
     ],
-    static_library = select({
-        "@platforms//os:linux": "//raylib/linux_static:libraylib.a",
-    }),
+    static_library = "//raylib/linux_static:libraylib.a",
     visibility = ["//visibility:private"],
     alwayslink = True,
 )

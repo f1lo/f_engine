@@ -12,15 +12,14 @@ namespace abilities {
 class ControlsMock : public ControlsInterface {
  public:
   ControlsMock();
-  ControlsMock(const bool is_pressed, const bool is_down,
-               const bool is_primary_pressed, const bool is_secondary_pressed,
-               const ScreenPosition cursor_pos);
+  ControlsMock(bool is_pressed, bool is_down, bool is_primary_pressed,
+               bool is_secondary_pressed, ScreenPosition cursor_pos);
 
-  bool IsPressed(const Button button) const override;
-  bool IsDown(const Button button) const override;
-  bool IsPrimaryPressed() const override;
-  bool IsSecondaryPressed() const override;
-  ScreenPosition GetCursorPos() const override;
+  [[nodiscard]] bool IsPressed(Button button) const override;
+  [[nodiscard]] bool IsDown(Button button) const override;
+  [[nodiscard]] bool IsPrimaryPressed() const override;
+  [[nodiscard]] bool IsSecondaryPressed() const override;
+  [[nodiscard]] ScreenPosition GetCursorPos() const override;
 
  private:
   const bool is_pressed_;

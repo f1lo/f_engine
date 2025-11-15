@@ -38,7 +38,7 @@ class Ability {
 
   virtual std::list<ObjectAndAbilities> Use(const Camera& camera) = 0;
   void set_user(objects::Object* user) { user_ = user; }
-  objects::Object* user() { return user_; }
+  [[nodiscard]] objects::Object* user() const { return user_; }
 
  protected:
   template <typename LevelT>

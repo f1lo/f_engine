@@ -28,10 +28,10 @@ bool ProjectileObject::OnCollisionCallback(Object& other_object) {
   }
 
   if (reflect_on_colliding_with_these_objects_.contains(other_object.kind())) {
-    std::pair<double, double> reflected_direction =
+    auto [dir_x, dir_y] =
         other_object.Reflect(*this, direction_x(), direction_y());
 
-    SetDirectionGlobal(reflected_direction.first, reflected_direction.second);
+    SetDirectionGlobal(dir_x, dir_y);
     return true;
   }
 

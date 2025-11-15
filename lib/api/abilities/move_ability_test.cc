@@ -55,7 +55,7 @@ TEST(MoveAbilityDeathTest, UserNotMovable) {
 
   ability.set_user(&static_object);
 
-  Camera camera;
+  const Camera camera;
   EXPECT_DEATH(ability.Use(camera),
                HasSubstr("ability user is not of correct type."));
 }
@@ -72,7 +72,7 @@ TEST(MoveAbilityTest, Move) {
                                                .key_bottom = std::nullopt});
   ability.set_user(&movable_object);
 
-  Camera camera;
+  const Camera camera;
   const std::list<ObjectAndAbilities> objects_and_abilities =
       ability.Use(camera);
 
@@ -95,7 +95,7 @@ TEST(MoveAbilityTest, MoveLeft) {
                                    .key_bottom = std::nullopt});
   ability.set_user(&movable_object);
 
-  Camera camera;
+  const Camera camera;
   const std::list<ObjectAndAbilities> objects_and_abilities =
       ability.Use(camera);
 
@@ -118,7 +118,7 @@ TEST(MoveAbilityTest, MoveRight) {
                                    .key_bottom = std::nullopt});
   ability.set_user(&movable_object);
 
-  Camera camera;
+  const Camera camera;
   const std::list<ObjectAndAbilities> objects_and_abilities =
       ability.Use(camera);
 
@@ -141,7 +141,7 @@ TEST(MoveAbilityTest, MoveTop) {
                                    .key_bottom = std::nullopt});
   ability.set_user(&movable_object);
 
-  Camera camera;
+  const Camera camera;
   const std::list<ObjectAndAbilities> objects_and_abilities =
       ability.Use(camera);
 
@@ -164,7 +164,7 @@ TEST(MoveAbilityTest, MoveBottom) {
                                    .key_bottom = kKeyA});
   ability.set_user(&movable_object);
 
-  Camera camera;
+  const Camera camera;
   const std::list<ObjectAndAbilities> objects_and_abilities =
       ability.Use(camera);
 

@@ -18,11 +18,11 @@ namespace api {
 namespace sprites {
 namespace {
 
-static constexpr unsigned int kTextureId = 7;
-static constexpr int kTextureWidth = 300;
-static constexpr int kTextureHeight = 200;
-const absl::Duration kAdvanceToNextFrameAfter = absl::Milliseconds(200);
-const absl::Duration kSmallIncrement = absl::Milliseconds(20);
+constexpr unsigned int kTextureId = 7;
+constexpr int kTextureWidth = 300;
+constexpr int kTextureHeight = 200;
+constexpr absl::Duration kAdvanceToNextFrameAfter = absl::Milliseconds(200);
+constexpr absl::Duration kSmallIncrement = absl::Milliseconds(20);
 
 }  // namespace
 
@@ -40,9 +40,9 @@ namespace {
 
 TEST_F(SpriteTest, StaticSpriteDraw) {
   const std::string resource_path = "a/b/picture.png";
-  std::unique_ptr<SpriteInstance> sprite =
+  const std::unique_ptr<SpriteInstance> sprite =
       sprite_factory_.MakeStaticSprite(resource_path);
-  const WorldPosition draw_destination{.x = 100, .y = 200};
+  constexpr WorldPosition draw_destination{.x = 100, .y = 200};
 
   sprite->Draw(draw_destination);
 
@@ -67,11 +67,11 @@ TEST_F(SpriteTest, StaticSpriteDraw) {
 
 TEST_F(SpriteTest, StaticSpriteRotateAndDraw) {
   const std::string resource_path = "a/b/picture.png";
-  std::unique_ptr<SpriteInstance> sprite =
+  const std::unique_ptr<SpriteInstance> sprite =
       sprite_factory_.MakeStaticSprite(resource_path);
-  const WorldPosition draw_destination{.x = 100, .y = 200};
+  constexpr WorldPosition draw_destination{.x = 100, .y = 200};
 
-  const int degree = 90;
+  constexpr int degree = 90;
   sprite->RotateAndDraw(draw_destination, degree);
 
   const GraphicsMock* graphics =
@@ -95,10 +95,11 @@ TEST_F(SpriteTest, StaticSpriteRotateAndDraw) {
 
 TEST_F(SpriteTest, AnimatedSpriteNoFrameChange) {
   const std::string resource_path = "a/b/picture.png";
-  const int frame_count = 4;
-  std::unique_ptr<SpriteInstance> sprite = sprite_factory_.MakeAnimatedSprite(
-      resource_path, frame_count, kAdvanceToNextFrameAfter);
-  const WorldPosition draw_destination{.x = 100, .y = 200};
+  constexpr int frame_count = 4;
+  const std::unique_ptr<SpriteInstance> sprite =
+      sprite_factory_.MakeAnimatedSprite(resource_path, frame_count,
+                                         kAdvanceToNextFrameAfter);
+  constexpr WorldPosition draw_destination{.x = 100, .y = 200};
 
   absl::SleepFor(kAdvanceToNextFrameAfter / 2);
   sprite->Draw(draw_destination);
@@ -124,10 +125,11 @@ TEST_F(SpriteTest, AnimatedSpriteNoFrameChange) {
 
 TEST_F(SpriteTest, AnimatedSpriteFrameChange) {
   const std::string resource_path = "a/b/picture.png";
-  const int frame_count = 4;
-  std::unique_ptr<SpriteInstance> sprite = sprite_factory_.MakeAnimatedSprite(
-      resource_path, frame_count, kAdvanceToNextFrameAfter);
-  const WorldPosition draw_destination{.x = 100, .y = 200};
+  constexpr int frame_count = 4;
+  const std::unique_ptr<SpriteInstance> sprite =
+      sprite_factory_.MakeAnimatedSprite(resource_path, frame_count,
+                                         kAdvanceToNextFrameAfter);
+  constexpr WorldPosition draw_destination{.x = 100, .y = 200};
 
   sprite->Draw(draw_destination);
   absl::SleepFor(kAdvanceToNextFrameAfter + kSmallIncrement);
@@ -155,10 +157,11 @@ TEST_F(SpriteTest, AnimatedSpriteFrameChange) {
 
 TEST_F(SpriteTest, AnimatedSpriteReset) {
   const std::string resource_path = "a/b/picture.png";
-  const int frame_count = 4;
-  std::unique_ptr<SpriteInstance> sprite = sprite_factory_.MakeAnimatedSprite(
-      resource_path, frame_count, kAdvanceToNextFrameAfter);
-  const WorldPosition draw_destination{.x = 100, .y = 200};
+  constexpr int frame_count = 4;
+  const std::unique_ptr<SpriteInstance> sprite =
+      sprite_factory_.MakeAnimatedSprite(resource_path, frame_count,
+                                         kAdvanceToNextFrameAfter);
+  constexpr WorldPosition draw_destination{.x = 100, .y = 200};
   sprite->Draw(draw_destination);
   absl::SleepFor(kAdvanceToNextFrameAfter + kSmallIncrement);
   sprite->Draw(draw_destination);
@@ -187,10 +190,10 @@ TEST_F(SpriteTest, AnimatedSpriteReset) {
 
 TEST_F(SpriteTest, AnimatedSpriteLoopsBackToStart) {
   const std::string resource_path = "a/b/picture.png";
-  const int frame_count = 4;
+  constexpr int frame_count = 4;
   std::unique_ptr<SpriteInstance> sprite = sprite_factory_.MakeAnimatedSprite(
       resource_path, frame_count, kAdvanceToNextFrameAfter);
-  const WorldPosition draw_destination{.x = 100, .y = 200};
+  constexpr WorldPosition draw_destination{.x = 100, .y = 200};
 
   sprite->Draw(draw_destination);
   absl::SleepFor(kAdvanceToNextFrameAfter + kSmallIncrement);
@@ -223,13 +226,14 @@ TEST_F(SpriteTest, AnimatedSpriteLoopsBackToStart) {
 
 TEST_F(SpriteTest, AnimatedSpriteRotateAndDraw) {
   const std::string resource_path = "a/b/picture.png";
-  const int frame_count = 4;
-  std::unique_ptr<SpriteInstance> sprite = sprite_factory_.MakeAnimatedSprite(
-      resource_path, frame_count, kAdvanceToNextFrameAfter);
-  const WorldPosition draw_destination{.x = 100, .y = 200};
+  constexpr int frame_count = 4;
+  const std::unique_ptr<SpriteInstance> sprite =
+      sprite_factory_.MakeAnimatedSprite(resource_path, frame_count,
+                                         kAdvanceToNextFrameAfter);
+  constexpr WorldPosition draw_destination{.x = 100, .y = 200};
 
   absl::SleepFor(kAdvanceToNextFrameAfter / 2);
-  const int degree = 90;
+  constexpr int degree = 90;
   sprite->RotateAndDraw(draw_destination, degree);
 
   const GraphicsMock* graphics =
@@ -258,7 +262,7 @@ TEST_F(SpriteTest, SpriteFactoryStaticSpriteAlreadyExists) {
 
   sprite = sprite_factory_.MakeStaticSprite(resource_path);
 
-  const WorldPosition draw_destination{.x = 100, .y = 200};
+  constexpr WorldPosition draw_destination{.x = 100, .y = 200};
   sprite->Draw(draw_destination);
   const GraphicsMock* graphics =
       dynamic_cast<const GraphicsMock*>(sprite->GraphicsForTesting());
@@ -268,7 +272,7 @@ TEST_F(SpriteTest, SpriteFactoryStaticSpriteAlreadyExists) {
 
 TEST_F(SpriteTest, SpriteFactoryAnimatedSpriteAlreadyExists) {
   const std::string resource_path = "a/b/picture.png";
-  const int frame_count = 4;
+  constexpr int frame_count = 4;
   std::unique_ptr<SpriteInstance> sprite = sprite_factory_.MakeAnimatedSprite(
       resource_path, frame_count, kAdvanceToNextFrameAfter);
 
@@ -276,7 +280,7 @@ TEST_F(SpriteTest, SpriteFactoryAnimatedSpriteAlreadyExists) {
                                               kAdvanceToNextFrameAfter);
 
   absl::SleepFor(kAdvanceToNextFrameAfter / 2);
-  const WorldPosition draw_destination{.x = 100, .y = 200};
+  constexpr WorldPosition draw_destination{.x = 100, .y = 200};
   sprite->Draw(draw_destination);
   const GraphicsMock* graphics =
       dynamic_cast<const GraphicsMock*>(sprite->GraphicsForTesting());

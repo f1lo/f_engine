@@ -35,7 +35,7 @@ class Object {
   };
 
   explicit Object(
-      const Kind kind, const Opts& options, internal::HitBox hit_box,
+      Kind kind, const Opts& options, internal::HitBox hit_box,
       std::unique_ptr<sprites::SpriteInstance> sprite_instance = nullptr);
 
   virtual ~Object() = default;
@@ -47,7 +47,7 @@ class Object {
   [[nodiscard]] std::pair<double, double> Reflect(const Object& other, double x,
                                                   double y) const;
   [[nodiscard]] bool CollidesWith(const Object& other) const;
-  int YBase() const;
+  [[nodiscard]] int YBase() const;
 
   // Object center in the world.
   [[nodiscard]] WorldPosition center() const {

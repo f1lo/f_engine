@@ -12,18 +12,16 @@ namespace api {
 
 class GraphicsMock : public GraphicsInterface {
  public:
-  GraphicsMock(const unsigned int id, const int texture_width,
-               const int texture_height);
+  GraphicsMock(unsigned int id, int texture_width, int texture_height);
 
-  virtual Texture2D Load(const std::string resource_path) override;
+  Texture2D Load(std::string resource_path) override;
   void Unload(const Texture2D& texture) override;
   void Draw(const Texture2D& texture, const Rectangle& source,
-            const Rectangle& dest, const Vector2& origin, const float rotation,
-            const Color tint) override;
+            const Rectangle& dest, const Vector2& origin, float rotation,
+            Color tint) override;
 
   std::string loaded_texture() const;
   Rectangle drawn_texture_source() const;
-  std::string unloaded_texture() const;
   Vector2 drawn_texture_origin() const;
   Texture2D drawn_texture() const;
   unsigned int unloaded_texture_id() const;

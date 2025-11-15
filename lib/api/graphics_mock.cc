@@ -9,13 +9,18 @@ namespace api {
 
 GraphicsMock::GraphicsMock(const unsigned int id, const int texture_width,
                            const int texture_height)
-    : texture_to_be_drawn_({
+    : texture_source_(Rectangle{}),
+      unloaded_texture_id_(0),
+      texture_to_be_drawn_({
           .id = id,
           .width = texture_width,
           .height = texture_height,
           .mipmaps = 0,
           .format = 0,
-      }) {}
+      }),
+      texture_origin_(),
+      drawn_texture_(),
+      rotation_(0) {}
 
 Texture2D GraphicsMock::Load(const std::string resource_path) {
   loaded_texture_ = resource_path;

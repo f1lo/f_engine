@@ -79,10 +79,10 @@ int Object::YBase() const {
   if (!sprite_instance_) {
     // Technically incorrect - does not matter as long as there is no
     // sprite to draw.
-    return (int)center().y;
+    return static_cast<int>(center().y);
   }
 
-  return (int)center().y + sprite_instance_->SpriteHeight() / 2;
+  return static_cast<int>(center().y) + sprite_instance_->SpriteHeight() / 2;
 }
 
 }  // namespace objects

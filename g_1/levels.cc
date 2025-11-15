@@ -2,7 +2,6 @@
 
 #include <list>
 #include <memory>
-#include <string>
 
 #include "g_1/opening_level.h"
 #include "g_1/player.h"

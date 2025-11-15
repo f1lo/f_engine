@@ -20,20 +20,19 @@ class SpriteInstance;
 class AnimatedSprite : public Sprite {
  public:
   ~AnimatedSprite() override;
-  virtual void RotateAndDraw(const WorldPosition draw_destination,
-                             const int degree,
-                             const int frame_to_draw) const override;
-  int total_frames() const override;
-  int sprite_height() const override;
+  void RotateAndDraw(WorldPosition draw_destination, int degree,
+                     int frame_to_draw) const override;
+  [[nodiscard]] int total_frames() const override;
+  [[nodiscard]] int sprite_height() const override;
 
  private:
   friend class SpriteFactory;
   friend class SpriteInstance;
 
   AnimatedSprite(std::unique_ptr<GraphicsInterface> graphics,
-                 const std::string resource_path, const int frame_count);
+                 const std::string& resource_path, int frame_count);
 
-  const GraphicsInterface* GraphicsForTesting() const override;
+  [[nodiscard]] const GraphicsInterface* GraphicsForTesting() const override;
 
   std::unique_ptr<GraphicsInterface> graphics_;
   const Texture2D texture_;

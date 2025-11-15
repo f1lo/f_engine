@@ -44,8 +44,8 @@ class MovableObject : public Object {
   [[nodiscard]] double direction_y() const { return direction_y_; }
 
  protected:
-  void Move();
-  void ResetLastMove();
+  virtual void Move();
+  virtual void ResetLastMove();
 
  private:
   [[nodiscard]] bool IsFrozen() const;
