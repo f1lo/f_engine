@@ -23,6 +23,7 @@ class AnimatedSprite : public Sprite {
   void RotateAndDraw(WorldPosition draw_destination, int degree,
                      int frame_to_draw) const override;
   [[nodiscard]] int total_frames() const override;
+  [[nodiscard]] int sprite_width() const override;
   [[nodiscard]] int sprite_height() const override;
 
  private:

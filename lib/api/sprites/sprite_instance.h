@@ -19,6 +19,7 @@ class SpriteInstance {
   void Draw(WorldPosition draw_destination);
   void RotateAndDraw(WorldPosition draw_destination, int rotation_degree);
   void Reset();
+  int SpriteWidth() const;
   int SpriteHeight() const;
   const GraphicsInterface* GraphicsForTesting() const;
 

@@ -6,6 +6,7 @@
 #include <list>
 #include <memory>
 #include <optional>
+#include <vector>
 
 #include "absl/container/flat_hash_map.h"
 #include "absl/log/check.h"
@@ -163,6 +164,7 @@ class Level {
   [[nodiscard]] virtual LevelId MaybeChangeLevel() const;
   void UpdateScreenEdges() const;
   void UpdateCoordinateAxes() const;
+  [[nodiscard]] bool ShouldDraw(const objects::Object& object) const;
   void Draw() const;
   LevelId id_;
 
@@ -177,11 +179,18 @@ class Level {
   FRIEND_TEST(LevelTest, CoordinateObjects);
   FRIEND_TEST(LevelTest, CleanupOrDie);
   FRIEND_TEST(LevelTest, WorldBorderObjects);
+  FRIEND_TEST(LevelTest, DrawsNoScreenEdgeObjects);
+  FRIEND_TEST(LevelTest, DoesNotDrawOutsideScreenOnlyHitBox);
+  FRIEND_TEST(LevelTest, DrawsPartiallyOutsideScreenOnlyHitBox);
+  FRIEND_TEST(LevelTest, DrawsFullyInsideScreenOnlyHitBox);
+  FRIEND_TEST(LevelTest, DoesNotDrawOutsideScreen);
+  FRIEND_TEST(LevelTest, DrawsPartiallyOutsideScreen);
+  FRIEND_TEST(LevelTest, DrawsFullyInsideScreen);
   FRIEND_TEST(LevelDeathTest, CleanUpOrDieOutOfSync);
   FRIEND_TEST(TitleScreenLevelTest, StartAndExitAddedOk);
   std::list<std::unique_ptr<objects::Object>> objects_;
   std::list<std::list<std::unique_ptr<abilities::Ability>>> abilities_;
-  std::list<objects::ScreenEdgeObject*> screen_edge_objects_;
+  std::vector<objects::ScreenEdgeObject*> screen_edge_objects_;
   std::list<objects::CoordinateObject*> coordinate_objects_;
   std::list<objects::StaticObject*> world_border_objects_;
   Camera camera_;

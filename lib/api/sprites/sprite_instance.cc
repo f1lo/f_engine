@@ -60,6 +60,10 @@ void SpriteInstance::Reset() {
   current_frame_to_draw_ = 0;
 }
 
+int SpriteInstance::SpriteWidth() const {
+  return sprite_->sprite_width();
+}
+
 int SpriteInstance::SpriteHeight() const {
   return sprite_->sprite_height();
 }

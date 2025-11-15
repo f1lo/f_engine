@@ -13,6 +13,7 @@ class Sprite {
   virtual void RotateAndDraw(WorldPosition draw_destination, int degree,
                              int frame_to_draw = 0) const = 0;
   [[nodiscard]] virtual int total_frames() const = 0;
+  [[nodiscard]] virtual int sprite_width() const = 0;
   [[nodiscard]] virtual int sprite_height() const = 0;
   [[nodiscard]] virtual const GraphicsInterface* GraphicsForTesting() const = 0;
 

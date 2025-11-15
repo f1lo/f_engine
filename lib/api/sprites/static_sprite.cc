@@ -43,6 +43,10 @@ int StaticSprite::total_frames() const {
   return 1;
 }
 
+int StaticSprite::sprite_width() const {
+  return texture_.width;
+}
+
 int StaticSprite::sprite_height() const {
   return texture_.height;
 }

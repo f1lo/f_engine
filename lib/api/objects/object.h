@@ -4,6 +4,7 @@
 #include <list>
 #include <memory>
 
+#include "absl/base/nullability.h"
 #include "lib/api/common_types.h"
 #include "lib/api/sprites/sprite_instance.h"
 #include "lib/internal/hit_box.h"
@@ -26,6 +27,8 @@ static constexpr Kind kProjectilePlayer =
     std::numeric_limits<uint32_t>::max() - 9;
 static constexpr Kind kCoordinate = std::numeric_limits<uint32_t>::max() - 10;
 static constexpr Kind kWorldBorder = std::numeric_limits<uint32_t>::max() - 11;
+static constexpr Kind kSpriteBoundingBox =
+    std::numeric_limits<uint32_t>::max() - 12;
 
 class Object {
  public:
@@ -60,6 +63,11 @@ class Object {
   void set_deleted(const bool deleted) { deleted_ = deleted; }
   void set_clicked(const bool clicked) { clicked_ = clicked; }
 
+  absl::Nullable<const sprites::SpriteInstance*> active_sprite_instance()
+      const {
+    return active_sprite_instance_.get();
+  }
+
  protected:
   [[nodiscard]] bool is_hit_box_active() const { return is_hit_box_active_; }
   [[nodiscard]] bool should_draw_hit_box() const {
@@ -78,7 +86,7 @@ class Object {
   bool clicked_;
   const bool is_hit_box_active_;
   const bool should_draw_hit_box_;
-  std::unique_ptr<sprites::SpriteInstance> sprite_instance_;
+  std::unique_ptr<sprites::SpriteInstance> active_sprite_instance_;
 };
 
 }  // namespace objects

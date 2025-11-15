@@ -7,7 +7,11 @@
 #include "lib/api/abilities/ability.h"
 #include "lib/api/abilities/controls.h"
 #include "lib/api/abilities/controls_mock.h"
+#include "lib/api/graphics_mock.h"
+#include "lib/api/objects/screen_edge_object.h"
 #include "lib/api/objects/static_object.h"
+#include "lib/api/sprites/sprite_factory.h"
+#include "lib/api/sprites/sprite_instance.h"
 
 namespace lib {
 namespace api {
@@ -25,10 +29,16 @@ using objects::kScreenRight;
 using objects::kScreenTop;
 using objects::kWorldBorder;
 using objects::StaticObject;
+using sprites::SpriteFactory;
+using sprites::SpriteInstance;
+using ::testing::ElementsAre;
 using ::testing::HasSubstr;
-using ::testing::UnorderedElementsAre;
 
 namespace {
+
+constexpr unsigned int kTextureId = 7;
+constexpr int kTextureWidth = 30;
+constexpr int kTextureHeight = 20;
 
 class DummyLevel : public Level {
  public:
@@ -39,7 +49,19 @@ class DummyLevel : public Level {
 
 }  // namespace
 
-class LevelTest : public ::testing::Test {};
+class LevelTest : public ::testing::Test {
+ public:
+  LevelTest()
+      : sprite_factory_(
+            SpriteFactory(kTextureId, kTextureWidth, kTextureHeight)) {}
+
+  std::unique_ptr<SpriteInstance> MakeSprite() {
+    return sprite_factory_.MakeStaticSprite("a/b/picture.png");
+  }
+
+ protected:
+  SpriteFactory sprite_factory_;
+};
 
 using LevelDeathTest = LevelTest;
 
@@ -167,11 +189,10 @@ TEST_F(LevelTest, ScreenEdgeObjects) {
   }
   dummy_level->UpdateScreenEdges();
 
-  EXPECT_THAT(object_kinds, UnorderedElementsAre(kScreenLeft, kScreenRight,
-                                                 kScreenTop, kScreenBottom));
-  EXPECT_THAT(screen_edge_kinds,
-              UnorderedElementsAre(kScreenLeft, kScreenRight, kScreenTop,
-                                   kScreenBottom));
+  EXPECT_THAT(object_kinds, ElementsAre(kScreenLeft, kScreenRight, kScreenTop,
+                                        kScreenBottom));
+  EXPECT_THAT(screen_edge_kinds, ElementsAre(kScreenLeft, kScreenRight,
+                                             kScreenTop, kScreenBottom));
 }
 
 TEST_F(LevelTest, CoordinateObjects) {
@@ -191,8 +212,8 @@ TEST_F(LevelTest, CoordinateObjects) {
   }
   dummy_level->UpdateCoordinateAxes();
 
-  EXPECT_THAT(object_kinds, UnorderedElementsAre(kCoordinate, kCoordinate));
-  EXPECT_THAT(coordinate_kinds, UnorderedElementsAre(kCoordinate, kCoordinate));
+  EXPECT_THAT(object_kinds, ElementsAre(kCoordinate, kCoordinate));
+  EXPECT_THAT(coordinate_kinds, ElementsAre(kCoordinate, kCoordinate));
 }
 
 TEST_F(LevelTest, WorldBorderObjects) {
@@ -210,6 +231,385 @@ TEST_F(LevelTest, WorldBorderObjects) {
   ++it;
   EXPECT_THAT((*it)->kind(), kWorldBorder);
   EXPECT_THAT((*it)->center().y, 200);
+}
+
+TEST_F(LevelTest, DrawsNoScreenEdgeObjects) {
+  LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel);
+  const std::unique_ptr<DummyLevel> dummy_level = dummy_builder.Build();
+  const StaticObject object = StaticObject(
+      /*kind=*/kPlayer,
+      StaticObject::StaticObjectOpts{.is_hit_box_active = true,
+                                     .should_draw_hit_box = false},
+      /*hit_box_vertices=*/
+      std::vector<std::pair<double, double>>(
+          {{-1, 50}, {-1, 49}, {1, 50}, {1, 49}}));
+
+  EXPECT_TRUE(dummy_level->ShouldDraw(object));
+}
+
+TEST_F(LevelTest, DrawsFullyInsideScreenOnlyHitBox) {
+  LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel);
+  const std::unique_ptr<DummyLevel> dummy_level =
+      dummy_builder.WithScreenObjects().Build();
+  dummy_level->screen_edge_objects_.clear();
+  constexpr double screen_width = 200;
+  constexpr double screen_height = 100;
+  std::unique_ptr<objects::ScreenEdgeObject> screen_left =
+      objects::ScreenEdgeObject::MakeLeft(screen_height,
+                                          /*should_draw_hitbox=*/false);
+  std::unique_ptr<objects::ScreenEdgeObject> screen_right =
+      objects::ScreenEdgeObject::MakeRight(screen_width, screen_height,
+                                           /*should_draw_hitbox=*/false);
+  std::unique_ptr<objects::ScreenEdgeObject> screen_top =
+      objects::ScreenEdgeObject::MakeTop(screen_width,
+                                         /*should_draw_hitbox=*/false);
+  std::unique_ptr<objects::ScreenEdgeObject> screen_bottom =
+      objects::ScreenEdgeObject::MakeBottom(screen_width, screen_height,
+                                            /*should_draw_hitbox=*/false);
+  dummy_level->screen_edge_objects_.push_back(screen_left.get());
+  dummy_level->screen_edge_objects_.push_back(screen_right.get());
+  dummy_level->screen_edge_objects_.push_back(screen_top.get());
+  dummy_level->screen_edge_objects_.push_back(screen_bottom.get());
+  const StaticObject object = StaticObject(
+      /*kind=*/kPlayer,
+      StaticObject::StaticObjectOpts{.is_hit_box_active = true,
+                                     .should_draw_hit_box = false},
+      /*hit_box_vertices=*/
+      std::vector<std::pair<double, double>>(
+          {{5, 50}, {5, 49}, {90, 50}, {90, 49}}));
+
+  EXPECT_TRUE(dummy_level->ShouldDraw(object));
+}
+
+TEST_F(LevelTest, DrawsFullyInsideScreen) {
+  LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel);
+  const std::unique_ptr<DummyLevel> dummy_level =
+      dummy_builder.WithScreenObjects().Build();
+  dummy_level->screen_edge_objects_.clear();
+  constexpr double screen_width = 200;
+  constexpr double screen_height = 100;
+  std::unique_ptr<objects::ScreenEdgeObject> screen_left =
+      objects::ScreenEdgeObject::MakeLeft(screen_height,
+                                          /*should_draw_hitbox=*/false);
+  std::unique_ptr<objects::ScreenEdgeObject> screen_right =
+      objects::ScreenEdgeObject::MakeRight(screen_width, screen_height,
+                                           /*should_draw_hitbox=*/false);
+  std::unique_ptr<objects::ScreenEdgeObject> screen_top =
+      objects::ScreenEdgeObject::MakeTop(screen_width,
+                                         /*should_draw_hitbox=*/false);
+  std::unique_ptr<objects::ScreenEdgeObject> screen_bottom =
+      objects::ScreenEdgeObject::MakeBottom(screen_width, screen_height,
+                                            /*should_draw_hitbox=*/false);
+  dummy_level->screen_edge_objects_.push_back(screen_left.get());
+  dummy_level->screen_edge_objects_.push_back(screen_right.get());
+  dummy_level->screen_edge_objects_.push_back(screen_top.get());
+  dummy_level->screen_edge_objects_.push_back(screen_bottom.get());
+  const StaticObject object = StaticObject(
+      /*kind=*/kPlayer,
+      StaticObject::StaticObjectOpts{.is_hit_box_active = true,
+                                     .should_draw_hit_box = false},
+      /*hit_box_vertices=*/
+      std::vector<std::pair<double, double>>(
+          {{5, 50}, {5, 49}, {90, 50}, {90, 49}}),
+      MakeSprite());
+
+  EXPECT_TRUE(dummy_level->ShouldDraw(object));
+}
+
+TEST_F(LevelTest, DrawsPartiallyOutsideScreenOnlyHitBox) {
+  LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel);
+  const std::unique_ptr<DummyLevel> dummy_level =
+      dummy_builder.WithScreenObjects().Build();
+  dummy_level->screen_edge_objects_.clear();
+  constexpr double screen_width = 200;
+  constexpr double screen_height = 100;
+  std::unique_ptr<objects::ScreenEdgeObject> screen_left =
+      objects::ScreenEdgeObject::MakeLeft(screen_height,
+                                          /*should_draw_hitbox=*/false);
+  std::unique_ptr<objects::ScreenEdgeObject> screen_right =
+      objects::ScreenEdgeObject::MakeRight(screen_width, screen_height,
+                                           /*should_draw_hitbox=*/false);
+  std::unique_ptr<objects::ScreenEdgeObject> screen_top =
+      objects::ScreenEdgeObject::MakeTop(screen_width,
+                                         /*should_draw_hitbox=*/false);
+  std::unique_ptr<objects::ScreenEdgeObject> screen_bottom =
+      objects::ScreenEdgeObject::MakeBottom(screen_width, screen_height,
+                                            /*should_draw_hitbox=*/false);
+  dummy_level->screen_edge_objects_.push_back(screen_left.get());
+  dummy_level->screen_edge_objects_.push_back(screen_right.get());
+  dummy_level->screen_edge_objects_.push_back(screen_top.get());
+  dummy_level->screen_edge_objects_.push_back(screen_bottom.get());
+
+  {
+    const StaticObject object_left = StaticObject(
+        /*kind=*/kPlayer,
+        StaticObject::StaticObjectOpts{.is_hit_box_active = true,
+                                       .should_draw_hit_box = false},
+        /*hit_box_vertices=*/
+        std::vector<std::pair<double, double>>(
+            {{-1, 50}, {-1, 49}, {1, 50}, {1, 49}}));
+    EXPECT_TRUE(dummy_level->ShouldDraw(object_left));
+  }
+
+  {
+    const StaticObject object_right = StaticObject(
+        /*kind=*/kPlayer,
+        StaticObject::StaticObjectOpts{.is_hit_box_active = true,
+                                       .should_draw_hit_box = false},
+        /*hit_box_vertices=*/
+        std::vector<std::pair<double, double>>(
+            {{190, 50}, {190, 49}, {400, 50}, {400, 49}}));
+
+    EXPECT_TRUE(dummy_level->ShouldDraw(object_right));
+  }
+
+  {
+    const StaticObject object_top = StaticObject(
+        /*kind=*/kPlayer,
+        StaticObject::StaticObjectOpts{.is_hit_box_active = true,
+                                       .should_draw_hit_box = false},
+        /*hit_box_vertices=*/
+        std::vector<std::pair<double, double>>(
+            {{3, 5}, {13, 5}, {3, -1}, {13, -1}}));
+
+    EXPECT_TRUE(dummy_level->ShouldDraw(object_top));
+  }
+
+  {
+    const StaticObject object_bottom = StaticObject(
+        /*kind=*/kPlayer,
+        StaticObject::StaticObjectOpts{.is_hit_box_active = true,
+                                       .should_draw_hit_box = false},
+        /*hit_box_vertices=*/
+        std::vector<std::pair<double, double>>(
+            {{3, 90}, {13, 90}, {3, 200}, {13, 200}}));
+
+    EXPECT_TRUE(dummy_level->ShouldDraw(object_bottom));
+  }
+}
+
+TEST_F(LevelTest, DrawsPartiallyOutsideScreen) {
+  LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel);
+  const std::unique_ptr<DummyLevel> dummy_level =
+      dummy_builder.WithScreenObjects().Build();
+  dummy_level->screen_edge_objects_.clear();
+  constexpr double screen_width = 200;
+  constexpr double screen_height = 100;
+  std::unique_ptr<objects::ScreenEdgeObject> screen_left =
+      objects::ScreenEdgeObject::MakeLeft(screen_height,
+                                          /*should_draw_hitbox=*/false);
+  std::unique_ptr<objects::ScreenEdgeObject> screen_right =
+      objects::ScreenEdgeObject::MakeRight(screen_width, screen_height,
+                                           /*should_draw_hitbox=*/false);
+  std::unique_ptr<objects::ScreenEdgeObject> screen_top =
+      objects::ScreenEdgeObject::MakeTop(screen_width,
+                                         /*should_draw_hitbox=*/false);
+  std::unique_ptr<objects::ScreenEdgeObject> screen_bottom =
+      objects::ScreenEdgeObject::MakeBottom(screen_width, screen_height,
+                                            /*should_draw_hitbox=*/false);
+  dummy_level->screen_edge_objects_.push_back(screen_left.get());
+  dummy_level->screen_edge_objects_.push_back(screen_right.get());
+  dummy_level->screen_edge_objects_.push_back(screen_top.get());
+  dummy_level->screen_edge_objects_.push_back(screen_bottom.get());
+
+  {
+    const StaticObject object_left = StaticObject(
+        /*kind=*/kPlayer,
+        StaticObject::StaticObjectOpts{.is_hit_box_active = true,
+                                       .should_draw_hit_box = false},
+        /*hit_box_vertices=*/
+        std::vector<std::pair<double, double>>(
+            {{-2, 50}, {-2, 49}, {-1, 50}, {-1, 49}}),
+        MakeSprite());
+    EXPECT_TRUE(dummy_level->ShouldDraw(object_left));
+  }
+
+  {
+    const StaticObject object_right = StaticObject(
+        /*kind=*/kPlayer,
+        StaticObject::StaticObjectOpts{.is_hit_box_active = true,
+                                       .should_draw_hit_box = false},
+        /*hit_box_vertices=*/
+        std::vector<std::pair<double, double>>(
+            {{201, 50}, {201, 49}, {202, 50}, {202, 49}}),
+        MakeSprite());
+
+    EXPECT_TRUE(dummy_level->ShouldDraw(object_right));
+  }
+
+  {
+    const StaticObject object_top = StaticObject(
+        /*kind=*/kPlayer,
+        StaticObject::StaticObjectOpts{.is_hit_box_active = true,
+                                       .should_draw_hit_box = false},
+        /*hit_box_vertices=*/
+        std::vector<std::pair<double, double>>(
+            {{3, -2}, {13, -2}, {3, -1}, {13, -1}}),
+        MakeSprite());
+
+    EXPECT_TRUE(dummy_level->ShouldDraw(object_top));
+  }
+
+  {
+    const StaticObject object_bottom = StaticObject(
+        /*kind=*/kPlayer,
+        StaticObject::StaticObjectOpts{.is_hit_box_active = true,
+                                       .should_draw_hit_box = false},
+        /*hit_box_vertices=*/
+        std::vector<std::pair<double, double>>(
+            {{3, 101}, {13, 101}, {3, 102}, {13, 102}}),
+        MakeSprite());
+
+    EXPECT_TRUE(dummy_level->ShouldDraw(object_bottom));
+  }
+}
+
+TEST_F(LevelTest, DoesNotDrawOutsideScreenOnlyHitBox) {
+  LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel);
+  const std::unique_ptr<DummyLevel> dummy_level =
+      dummy_builder.WithScreenObjects().Build();
+  dummy_level->screen_edge_objects_.clear();
+  constexpr double screen_width = 200;
+  constexpr double screen_height = 100;
+  std::unique_ptr<objects::ScreenEdgeObject> screen_left =
+      objects::ScreenEdgeObject::MakeLeft(screen_height,
+                                          /*should_draw_hitbox=*/false);
+  std::unique_ptr<objects::ScreenEdgeObject> screen_right =
+      objects::ScreenEdgeObject::MakeRight(screen_width, screen_height,
+                                           /*should_draw_hitbox=*/false);
+  std::unique_ptr<objects::ScreenEdgeObject> screen_top =
+      objects::ScreenEdgeObject::MakeTop(screen_width,
+                                         /*should_draw_hitbox=*/false);
+  std::unique_ptr<objects::ScreenEdgeObject> screen_bottom =
+      objects::ScreenEdgeObject::MakeBottom(screen_width, screen_height,
+                                            /*should_draw_hitbox=*/false);
+  dummy_level->screen_edge_objects_.push_back(screen_left.get());
+  dummy_level->screen_edge_objects_.push_back(screen_right.get());
+  dummy_level->screen_edge_objects_.push_back(screen_top.get());
+  dummy_level->screen_edge_objects_.push_back(screen_bottom.get());
+
+  {
+    const StaticObject object_left = StaticObject(
+        /*kind=*/kPlayer,
+        StaticObject::StaticObjectOpts{.is_hit_box_active = true,
+                                       .should_draw_hit_box = false},
+        /*hit_box_vertices=*/
+        std::vector<std::pair<double, double>>(
+            {{-100, 50}, {-100, 49}, {-1, 50}, {-1, 49}}));
+    EXPECT_FALSE(dummy_level->ShouldDraw(object_left));
+  }
+
+  {
+    const StaticObject object_right = StaticObject(
+        /*kind=*/kPlayer,
+        StaticObject::StaticObjectOpts{.is_hit_box_active = true,
+                                       .should_draw_hit_box = false},
+        /*hit_box_vertices=*/
+        std::vector<std::pair<double, double>>(
+            {{210, 50}, {210, 49}, {400, 50}, {400, 49}}));
+
+    EXPECT_FALSE(dummy_level->ShouldDraw(object_right));
+  }
+
+  {
+    const StaticObject object_top = StaticObject(
+        /*kind=*/kPlayer,
+        StaticObject::StaticObjectOpts{.is_hit_box_active = true,
+                                       .should_draw_hit_box = false},
+        /*hit_box_vertices=*/
+        std::vector<std::pair<double, double>>(
+            {{3, -1}, {13, -1}, {3, -100}, {13, -100}}));
+
+    EXPECT_FALSE(dummy_level->ShouldDraw(object_top));
+  }
+
+  {
+    const StaticObject object_bottom = StaticObject(
+        /*kind=*/kPlayer,
+        StaticObject::StaticObjectOpts{.is_hit_box_active = true,
+                                       .should_draw_hit_box = false},
+        /*hit_box_vertices=*/
+        std::vector<std::pair<double, double>>(
+            {{3, 120}, {13, 120}, {3, 200}, {13, 200}}));
+
+    EXPECT_FALSE(dummy_level->ShouldDraw(object_bottom));
+  }
+}
+
+TEST_F(LevelTest, DoesNotDrawOutsideScreen) {
+  LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel);
+  const std::unique_ptr<DummyLevel> dummy_level =
+      dummy_builder.WithScreenObjects().Build();
+  dummy_level->screen_edge_objects_.clear();
+  constexpr double screen_width = 200;
+  constexpr double screen_height = 100;
+  std::unique_ptr<objects::ScreenEdgeObject> screen_left =
+      objects::ScreenEdgeObject::MakeLeft(screen_height,
+                                          /*should_draw_hitbox=*/false);
+  std::unique_ptr<objects::ScreenEdgeObject> screen_right =
+      objects::ScreenEdgeObject::MakeRight(screen_width, screen_height,
+                                           /*should_draw_hitbox=*/false);
+  std::unique_ptr<objects::ScreenEdgeObject> screen_top =
+      objects::ScreenEdgeObject::MakeTop(screen_width,
+                                         /*should_draw_hitbox=*/false);
+  std::unique_ptr<objects::ScreenEdgeObject> screen_bottom =
+      objects::ScreenEdgeObject::MakeBottom(screen_width, screen_height,
+                                            /*should_draw_hitbox=*/false);
+  dummy_level->screen_edge_objects_.push_back(screen_left.get());
+  dummy_level->screen_edge_objects_.push_back(screen_right.get());
+  dummy_level->screen_edge_objects_.push_back(screen_top.get());
+  dummy_level->screen_edge_objects_.push_back(screen_bottom.get());
+
+  {
+    const StaticObject object_left = StaticObject(
+        /*kind=*/kPlayer,
+        StaticObject::StaticObjectOpts{.is_hit_box_active = true,
+                                       .should_draw_hit_box = false},
+        /*hit_box_vertices=*/
+        std::vector<std::pair<double, double>>(
+            {{-100, 50}, {-100, 49}, {-50, 50}, {-50, 49}}),
+        MakeSprite());
+    EXPECT_FALSE(dummy_level->ShouldDraw(object_left));
+  }
+
+  {
+    const StaticObject object_right = StaticObject(
+        /*kind=*/kPlayer,
+        StaticObject::StaticObjectOpts{.is_hit_box_active = true,
+                                       .should_draw_hit_box = false},
+        /*hit_box_vertices=*/
+        std::vector<std::pair<double, double>>(
+            {{210, 50}, {210, 49}, {400, 50}, {400, 49}}),
+        MakeSprite());
+
+    EXPECT_FALSE(dummy_level->ShouldDraw(object_right));
+  }
+
+  {
+    const StaticObject object_top = StaticObject(
+        /*kind=*/kPlayer,
+        StaticObject::StaticObjectOpts{.is_hit_box_active = true,
+                                       .should_draw_hit_box = false},
+        /*hit_box_vertices=*/
+        std::vector<std::pair<double, double>>(
+            {{3, -1}, {13, -1}, {3, -100}, {13, -100}}),
+        MakeSprite());
+
+    EXPECT_FALSE(dummy_level->ShouldDraw(object_top));
+  }
+
+  {
+    const StaticObject object_bottom = StaticObject(
+        /*kind=*/kPlayer,
+        StaticObject::StaticObjectOpts{.is_hit_box_active = true,
+                                       .should_draw_hit_box = false},
+        /*hit_box_vertices=*/
+        std::vector<std::pair<double, double>>(
+            {{3, 120}, {13, 120}, {3, 200}, {13, 200}}),
+        MakeSprite());
+
+    EXPECT_FALSE(dummy_level->ShouldDraw(object_bottom));
+  }
 }
 
 }  // namespace api

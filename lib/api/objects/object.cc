@@ -19,13 +19,13 @@ Object::Object(const Kind kind, const Opts& options, internal::HitBox hit_box,
       is_hit_box_active_(options.is_hit_box_active),
       should_draw_hit_box_(options.should_draw_hit_box) {
   if (sprite_instance) {
-    sprite_instance_ = std::move(sprite_instance);
+    active_sprite_instance_ = std::move(sprite_instance);
   }
 }
 
 void Object::Draw() const {
-  if (sprite_instance_) {
-    sprite_instance_->Draw(center());
+  if (active_sprite_instance_) {
+    active_sprite_instance_->Draw(center());
   }
 
   if (should_draw_hit_box()) {
@@ -76,13 +76,14 @@ bool Object::UpdateInternal(
 }
 
 int Object::YBase() const {
-  if (!sprite_instance_) {
+  if (!active_sprite_instance_) {
     // Technically incorrect - does not matter as long as there is no
     // sprite to draw.
     return static_cast<int>(center().y);
   }
 
-  return static_cast<int>(center().y) + sprite_instance_->SpriteHeight() / 2;
+  return static_cast<int>(center().y) +
+         active_sprite_instance_->SpriteHeight() / 2;
 }
 
 }  // namespace objects

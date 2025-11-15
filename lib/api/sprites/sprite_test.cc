@@ -62,6 +62,7 @@ TEST_F(SpriteTest, StaticSpriteDraw) {
             static_cast<float>(kTextureHeight) / 2.0);
   EXPECT_EQ(graphics->drawn_texture().id, kTextureId);
   EXPECT_EQ(graphics->rotation(), 0.0f);
+  EXPECT_EQ(sprite->SpriteWidth(), kTextureWidth);
   EXPECT_EQ(sprite->SpriteHeight(), kTextureHeight);
 }
 
@@ -90,6 +91,7 @@ TEST_F(SpriteTest, StaticSpriteRotateAndDraw) {
             static_cast<float>(kTextureHeight) / 2.0);
   EXPECT_EQ(graphics->drawn_texture().id, kTextureId);
   EXPECT_EQ(graphics->rotation(), static_cast<float>(degree));
+  EXPECT_EQ(sprite->SpriteWidth(), kTextureWidth);
   EXPECT_EQ(sprite->SpriteHeight(), kTextureHeight);
 }
 
@@ -120,6 +122,7 @@ TEST_F(SpriteTest, AnimatedSpriteNoFrameChange) {
             static_cast<float>(kTextureHeight) / 2.0);
   EXPECT_EQ(graphics->drawn_texture().id, kTextureId);
   EXPECT_EQ(graphics->rotation(), 0.0f);
+  EXPECT_EQ(sprite->SpriteWidth(), kTextureWidth / frame_count);
   EXPECT_EQ(sprite->SpriteHeight(), kTextureHeight);
 }
 
@@ -152,6 +155,7 @@ TEST_F(SpriteTest, AnimatedSpriteFrameChange) {
             static_cast<float>(kTextureHeight) / 2.0);
   EXPECT_EQ(graphics->drawn_texture().id, kTextureId);
   EXPECT_EQ(graphics->rotation(), 0.0f);
+  EXPECT_EQ(sprite->SpriteWidth(), kTextureWidth / frame_count);
   EXPECT_EQ(sprite->SpriteHeight(), kTextureHeight);
 }
 
@@ -185,6 +189,7 @@ TEST_F(SpriteTest, AnimatedSpriteReset) {
             static_cast<float>(kTextureHeight) / 2.0);
   EXPECT_EQ(graphics->drawn_texture().id, kTextureId);
   EXPECT_EQ(graphics->rotation(), 0.0f);
+  EXPECT_EQ(sprite->SpriteWidth(), kTextureWidth / frame_count);
   EXPECT_EQ(sprite->SpriteHeight(), kTextureHeight);
 }
 
@@ -221,6 +226,7 @@ TEST_F(SpriteTest, AnimatedSpriteLoopsBackToStart) {
             static_cast<float>(kTextureHeight) / 2.0);
   EXPECT_EQ(graphics->drawn_texture().id, kTextureId);
   EXPECT_EQ(graphics->rotation(), 0.0f);
+  EXPECT_EQ(sprite->SpriteWidth(), kTextureWidth / frame_count);
   EXPECT_EQ(sprite->SpriteHeight(), kTextureHeight);
 }
 
@@ -252,6 +258,7 @@ TEST_F(SpriteTest, AnimatedSpriteRotateAndDraw) {
             static_cast<float>(kTextureHeight) / 2.0);
   EXPECT_EQ(graphics->drawn_texture().id, kTextureId);
   EXPECT_EQ(graphics->rotation(), degree);
+  EXPECT_EQ(sprite->SpriteWidth(), kTextureWidth / frame_count);
   EXPECT_EQ(sprite->SpriteHeight(), kTextureHeight);
 }
 

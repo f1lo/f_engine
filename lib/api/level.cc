@@ -8,6 +8,7 @@
 #include "absl/log/check.h"
 #include "lib/api/abilities/ability.h"
 #include "lib/api/objects/movable_object.h"
+#include "lib/api/objects/static_object.h"
 
 namespace lib {
 namespace api {
@@ -15,8 +16,35 @@ namespace api {
 using abilities::Ability;
 using abilities::kKeyEscape;
 using api::ObjectAndAbilities;
+using lib::api::objects::kSpriteBoundingBox;
 using objects::MovableObject;
 using objects::Object;
+using objects::StaticObject;
+
+namespace {
+
+StaticObject MakeSpriteBoundingBox(const Object& object) {
+  const double half_sprite_width =
+      static_cast<double>(object.active_sprite_instance()->SpriteWidth()) / 2;
+  const double half_sprite_height =
+      static_cast<double>(object.active_sprite_instance()->SpriteHeight()) / 2;
+  const double upper_left_x = object.center().x - half_sprite_width;
+  const double upper_left_y = object.center().y - half_sprite_height;
+  const double lower_right_x = object.center().x + half_sprite_width;
+  const double lower_right_y = object.center().y + half_sprite_height;
+
+  return StaticObject(
+      /*kind=*/kSpriteBoundingBox,
+      StaticObject::StaticObjectOpts{.is_hit_box_active = true,
+                                     .should_draw_hit_box = false},
+      /*hit_box_vertices=*/
+      std::vector<std::pair<double, double>>({{upper_left_x, upper_left_y},
+                                              {upper_left_x, lower_right_y},
+                                              {lower_right_x, upper_left_y},
+                                              {lower_right_x, lower_right_y}}));
+}
+
+}  // namespace
 
 LevelId Level::MaybeChangeLevel() const {
   if (controls_->IsPressed(kKeyEscape)) {
@@ -24,6 +52,30 @@ LevelId Level::MaybeChangeLevel() const {
   }
 
   return id();
+}
+
+bool Level::ShouldDraw(const Object& object) const {
+  if (screen_edge_objects_.empty()) {
+    return true;
+  }
+  if (object.active_sprite_instance()) {
+    const StaticObject sprite_bounding_box = MakeSpriteBoundingBox(object);
+    for (const auto& screen_edge_object : screen_edge_objects_) {
+      if (screen_edge_object->CollidesWith(sprite_bounding_box)) {
+        return true;
+      }
+    }
+  } else {
+    for (const auto& screen_edge_object : screen_edge_objects_) {
+      if (screen_edge_object->CollidesWith(object)) {
+        return true;
+      }
+    }
+  }
+  return screen_edge_objects_[0]->center().x <= object.center().x &&
+         object.center().x <= screen_edge_objects_[1]->center().x &&
+         screen_edge_objects_[2]->center().y <= object.center().y &&
+         object.center().y <= screen_edge_objects_[3]->center().y;
 }
 
 void Level::CleanUpOrDie() {
@@ -68,6 +120,9 @@ void Level::Draw() const {
   }
   std::ranges::sort(objects_by_y_base);
   for (const auto& y_and_object : objects_by_y_base) {
+    if (!ShouldDraw(*y_and_object.second)) {
+      continue;
+    }
     y_and_object.second->Draw();
   }
 }

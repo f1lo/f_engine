@@ -23,8 +23,9 @@ class StaticSprite : public Sprite {
 
   void RotateAndDraw(WorldPosition draw_destination, int degree,
                      int frame_to_draw = 0) const override;
-  int total_frames() const override;
-  int sprite_height() const override;
+  [[nodiscard]] int total_frames() const override;
+  [[nodiscard]] int sprite_width() const override;
+  [[nodiscard]] int sprite_height() const override;
 
  private:
   friend class SpriteFactory;
@@ -33,7 +34,7 @@ class StaticSprite : public Sprite {
   StaticSprite(std::unique_ptr<GraphicsInterface> graphics,
                const std::string& resource_path);
 
-  const GraphicsInterface* GraphicsForTesting() const override;
+  [[nodiscard]] const GraphicsInterface* GraphicsForTesting() const override;
 
   std::unique_ptr<GraphicsInterface> graphics_;
   const Texture2D texture_;

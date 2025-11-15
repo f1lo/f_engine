@@ -12,6 +12,7 @@ cc_library(
         "//lib/api:common_types",
         "//lib/api/sprites:sprite_instance",
         "//lib/internal:hit_box",
+        "@abseil-cpp//absl/base:nullability",
         "@abseil-cpp//absl/container:flat_hash_map",
         "@abseil-cpp//absl/functional:any_invocable",
     ],

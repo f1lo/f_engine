@@ -143,7 +143,6 @@ bool Line::Collides(const Rectangle& rectangle) const {
   // At this point either both of the vertices are inside the rectangle or none
   // of them.
   if (this->a.Collides(rectangle) ^ this->b.Collides(rectangle)) {
-    LOG(ERROR) << "Line::Collides() segment points mismatch";
     return false;
   }
   return this->a.Collides(rectangle) && this->b.Collides(rectangle);

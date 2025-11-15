@@ -18,6 +18,7 @@ namespace lib {
 namespace api {
 
 class Game;
+class LevelTest;
 
 namespace objects {
 class StaticObjectTest;
@@ -37,6 +38,7 @@ class SpriteFactory {
 
  private:
   friend class lib::api::Game;
+  friend class lib::api::LevelTest;
   friend class SpriteTest;
   friend class objects::StaticObjectTest;
   SpriteFactory();

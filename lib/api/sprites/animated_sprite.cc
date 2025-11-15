@@ -50,6 +50,10 @@ int AnimatedSprite::total_frames() const {
   return frame_count_;
 }
 
+int AnimatedSprite::sprite_width() const {
+  return static_cast<int>(animation_frame_width_);
+}
+
 int AnimatedSprite::sprite_height() const {
   return texture_.height;
 }
