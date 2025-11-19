@@ -32,6 +32,8 @@ class SpriteFactory {
  public:
   std::unique_ptr<SpriteInstance> MakeStaticSprite(
       std::string_view resource_path);
+  std::unique_ptr<SpriteInstance> MakeBackgroundStaticSprite(
+      std::string_view resource_path, float parallax_factor = 1);
   std::unique_ptr<SpriteInstance> MakeAnimatedSprite(
       std::string_view resource_path, int frame_count,
       absl::Duration advance_to_next_frame_after);

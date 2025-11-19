@@ -612,5 +612,61 @@ TEST_F(LevelTest, DoesNotDrawOutsideScreen) {
   }
 }
 
+TEST_F(LevelTest, DrawBackground) {
+  const std::string resource_path_0 = "a/b/picture_0.png";
+  const std::string resource_path_1 = "a/b/picture_1.png";
+  const float parallax_factor_0 = 0.5f;
+  const float parallax_factor_1 = 0.8f;
+  std::unique_ptr<SpriteInstance> sprite_0 =
+      sprite_factory_.MakeBackgroundStaticSprite(resource_path_0,
+                                                 parallax_factor_0);
+  std::unique_ptr<SpriteInstance> sprite_1 =
+      sprite_factory_.MakeBackgroundStaticSprite(resource_path_1,
+                                                 parallax_factor_1);
+  const GraphicsMock* graphics_0 =
+      dynamic_cast<const GraphicsMock*>(sprite_0->GraphicsForTesting());
+  ASSERT_NE(graphics_0, nullptr);
+  const GraphicsMock* graphics_1 =
+      dynamic_cast<const GraphicsMock*>(sprite_1->GraphicsForTesting());
+  ASSERT_NE(graphics_1, nullptr);
+  LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel);
+  dummy_builder.AddBackgroundLayer(std::move(sprite_0));
+  dummy_builder.AddBackgroundLayer(std::move(sprite_1));
+  const std::unique_ptr<DummyLevel> dummy_level = dummy_builder.Build();
+
+  dummy_level->DrawBackgrounds();
+
+  {
+    EXPECT_EQ(graphics_0->loaded_texture(), resource_path_0);
+    EXPECT_EQ(graphics_0->drawn_texture_source().x, 0);
+    EXPECT_EQ(graphics_0->drawn_texture_source().y, 0);
+    EXPECT_EQ(graphics_0->drawn_texture_source().width,
+              static_cast<float>(graphics_0->ScreenWidth()));
+    EXPECT_EQ(graphics_0->drawn_texture_source().height,
+              static_cast<float>(graphics_0->ScreenHeight()));
+    EXPECT_EQ(graphics_0->drawn_texture_origin().x,
+              static_cast<float>(graphics_0->ScreenWidth()) / 2);
+    EXPECT_EQ(graphics_0->drawn_texture_origin().y,
+              static_cast<float>(graphics_0->ScreenHeight()) / 2);
+    EXPECT_EQ(graphics_0->drawn_texture().id, kTextureId);
+    EXPECT_EQ(graphics_0->rotation(), 0);
+  }
+  {
+    EXPECT_EQ(graphics_1->loaded_texture(), resource_path_1);
+    EXPECT_EQ(graphics_1->drawn_texture_source().x, 0);
+    EXPECT_EQ(graphics_1->drawn_texture_source().y, 0);
+    EXPECT_EQ(graphics_1->drawn_texture_source().width,
+              static_cast<float>(graphics_1->ScreenWidth()));
+    EXPECT_EQ(graphics_1->drawn_texture_source().height,
+              static_cast<float>(graphics_1->ScreenHeight()));
+    EXPECT_EQ(graphics_1->drawn_texture_origin().x,
+              static_cast<float>(graphics_1->ScreenWidth()) / 2);
+    EXPECT_EQ(graphics_1->drawn_texture_origin().y,
+              static_cast<float>(graphics_1->ScreenHeight()) / 2);
+    EXPECT_EQ(graphics_1->drawn_texture().id, kTextureId);
+    EXPECT_EQ(graphics_1->rotation(), 0);
+  }
+}
+
 }  // namespace api
 }  // namespace lib

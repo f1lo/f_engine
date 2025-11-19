@@ -50,17 +50,31 @@ cc_library(
 )
 
 cc_library(
+    name = "background_static_sprite",
+    srcs = ["background_static_sprite.cc"],
+    hdrs = ["background_static_sprite.h"],
+    deps = [
+        ":sprite",
+        "//lib/api:common_types",
+        "//lib/api:graphics",
+        "//raylib",
+    ],
+)
+
+cc_library(
     name = "sprite_factory",
     srcs = ["sprite_factory.cc"],
     hdrs = ["sprite_factory.h"],
     deps = [
         ":animated_sprite",
+        ":background_static_sprite",
         ":sprite",
         ":sprite_instance",
         ":static_sprite",
         "//lib/api:graphics",
         "//lib/api:graphics_mock",
         "@abseil-cpp//absl/container:flat_hash_map",
+        "@abseil-cpp//absl/log:check",
         "@abseil-cpp//absl/memory",
         "@abseil-cpp//absl/time",
         "@googletest//:gtest",
@@ -72,6 +86,7 @@ cc_test(
     srcs = ["sprite_test.cc"],
     deps = [
         ":animated_sprite",
+        ":background_static_sprite",
         ":sprite",
         ":sprite_factory",
         ":sprite_instance",

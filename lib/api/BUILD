@@ -31,6 +31,7 @@ cc_library(
         "//lib/api/objects:object",
         "//lib/api/objects:screen_edge_object",
         "//lib/api/objects:static_object",
+        "//lib/api/sprites:sprite",
         "//raylib",
         "@abseil-cpp//absl/container:flat_hash_map",
         "@abseil-cpp//absl/log",
@@ -118,7 +119,10 @@ cc_library(
     name = "graphics",
     srcs = ["graphics.cc"],
     hdrs = ["graphics.h"],
-    deps = ["//raylib"],
+    deps = [
+        "//raylib",
+        "@abseil-cpp//absl/log:check",
+    ],
 )
 
 cc_library(

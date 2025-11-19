@@ -37,6 +37,7 @@ constexpr double kWorldBorderSize = 2000;
 
 static const char* kTreePath = "g_1/resources/sample_tree.png";
 static const char* kPlayerPath = "g_1/resources/sample_player.png";
+static const char* kLayer0 = "g_1/resources/sample_layer_0.png";
 
 namespace g_1 {
 namespace {
@@ -188,6 +189,8 @@ std::unique_ptr<Level> MakeOpeningLevel(SpriteFactory& sprite_factory,
                                  /*should_draw_hitbox=*/debug_mode);
   level_builder.WithWorldBorderY(kWorldBorderSize,
                                  /*should_draw_hitbox=*/debug_mode);
+  level_builder.AddBackgroundLayer(sprite_factory.MakeBackgroundStaticSprite(
+      kLayer0, /*parallax_factor=*/0.5));
   return level_builder.Build();
 }
 

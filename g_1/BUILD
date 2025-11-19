@@ -4,6 +4,7 @@ cc_binary(
     name = "main",
     srcs = ["main.cc"],
     data = [
+        "//g_1/resources:sample_layer_0.png",
         "//g_1/resources:sample_player.png",
         "//g_1/resources:sample_tree.png",
     ],

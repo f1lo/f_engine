@@ -40,6 +40,16 @@ void GraphicsMock::Unload(const Texture2D& texture) {
   unloaded_texture_id_ = texture.id;
 }
 
+int GraphicsMock::ScreenWidth() const {
+  return 600;
+}
+
+int GraphicsMock::ScreenHeight() const {
+  return 450;
+}
+
+void GraphicsMock::SetTextureWrap(Texture2D texture, int wrap) const {}
+
 std::string GraphicsMock::loaded_texture() const {
   return loaded_texture_;
 }

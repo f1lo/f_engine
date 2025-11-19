@@ -14,7 +14,7 @@ cc_library(
         "//lib/api/objects:movable_object",
         "//lib/api/objects:object",
         "//raylib",
-        "@abseil-cpp//absl/log",
+        "@abseil-cpp//absl/log:check",
     ],
 )
 

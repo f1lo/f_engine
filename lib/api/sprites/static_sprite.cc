@@ -51,6 +51,10 @@ int StaticSprite::sprite_height() const {
   return texture_.height;
 }
 
+Texture2D StaticSprite::texture() const {
+  return texture_;
+}
+
 }  // namespace sprites
 }  // namespace api
 }  // namespace lib

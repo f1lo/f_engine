@@ -6,6 +6,7 @@
 #include <list>
 #include <memory>
 #include <optional>
+#include <string_view>
 #include <vector>
 
 #include "absl/container/flat_hash_map.h"
@@ -19,6 +20,7 @@
 #include "lib/api/objects/object.h"
 #include "lib/api/objects/screen_edge_object.h"
 #include "lib/api/objects/static_object.h"
+#include "lib/api/sprites/sprite_instance.h"
 
 namespace lib {
 namespace api {
@@ -68,6 +70,13 @@ class LevelBuilder {
 
     level_->objects_.emplace_back(std::move(object));
     level_->abilities_.emplace_back();
+
+    return *this;
+  }
+
+  LevelBuilder& AddBackgroundLayer(
+      std::unique_ptr<sprites::SpriteInstance> layer) {
+    level_->background_layers_.push_back({std::move(layer)});
 
     return *this;
   }
@@ -166,6 +175,7 @@ class Level {
   void UpdateCoordinateAxes() const;
   [[nodiscard]] bool ShouldDraw(const objects::Object& object) const;
   void Draw() const;
+  void DrawBackgrounds() const;
   LevelId id_;
 
  protected:
@@ -186,6 +196,7 @@ class Level {
   FRIEND_TEST(LevelTest, DoesNotDrawOutsideScreen);
   FRIEND_TEST(LevelTest, DrawsPartiallyOutsideScreen);
   FRIEND_TEST(LevelTest, DrawsFullyInsideScreen);
+  FRIEND_TEST(LevelTest, DrawBackground);
   FRIEND_TEST(LevelDeathTest, CleanUpOrDieOutOfSync);
   FRIEND_TEST(TitleScreenLevelTest, StartAndExitAddedOk);
   std::list<std::unique_ptr<objects::Object>> objects_;
@@ -195,6 +206,7 @@ class Level {
   std::list<objects::StaticObject*> world_border_objects_;
   Camera camera_;
   std::unique_ptr<const abilities::Controls> controls_;
+  std::vector<std::unique_ptr<sprites::SpriteInstance>> background_layers_;
 };
 
 }  // namespace api

@@ -127,6 +127,16 @@ void Level::Draw() const {
   }
 }
 
+void Level::DrawBackgrounds() const {
+  const WorldPosition center_world_pos = camera_.GetWorldPosition(
+      {.x = GetScreenWidth() / 2.0, .y = GetScreenHeight() / 2.0});
+  for (const auto& background_layer : background_layers_) {
+    background_layer->Draw(
+        /*draw_destination=*/{.x = center_world_pos.x,
+                              .y = center_world_pos.y});
+  }
+}
+
 LevelId Level::Run() {
   LevelId changed_id = id_;
   while (changed_id == id_) {
@@ -153,6 +163,7 @@ LevelId Level::Run() {
       ++ability_it;
     }
 
+    DrawBackgrounds();
     Draw();
 
     // Add all accumulated objects from abilities.

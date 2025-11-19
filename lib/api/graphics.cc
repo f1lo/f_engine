@@ -4,6 +4,8 @@
 
 #include <string>
 
+#include "absl/log/check.h"
+
 namespace lib {
 namespace api {
 
@@ -20,6 +22,20 @@ void Graphics::Draw(const Texture2D& texture, const Rectangle& source,
 
 void Graphics::Unload(const Texture2D& texture) {
   UnloadTexture(texture);
+}
+
+int Graphics::ScreenWidth() const {
+  CHECK(IsWindowReady());
+  return GetScreenWidth();
+}
+
+int Graphics::ScreenHeight() const {
+  CHECK(IsWindowReady());
+  return GetScreenHeight();
+}
+
+void Graphics::SetTextureWrap(Texture2D texture, int wrap) const {
+  SetTextureWrap(texture, wrap);
 }
 
 }  // namespace api

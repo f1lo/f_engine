@@ -1,5 +1,5 @@
-#ifndef LIB_API_SPRITES_STATIC_SPRITE_H
-#define LIB_API_SPRITES_STATIC_SPRITE_H
+#ifndef LIB_API_SPRITES_BACKGROUND_STATIC_SPRITE_H
+#define LIB_API_SPRITES_BACKGROUND_STATIC_SPRITE_H
 
 #include "raylib/include/raylib.h"
 
@@ -14,12 +14,9 @@ namespace lib {
 namespace api {
 namespace sprites {
 
-class SpriteFactory;
-class SpriteInstance;
-
-class StaticSprite : public Sprite {
+class BackgroundStaticSprite : public Sprite {
  public:
-  ~StaticSprite() override;
+  ~BackgroundStaticSprite() override;
 
   void RotateAndDraw(WorldPosition draw_destination, int degree,
                      int frame_to_draw = 0) const override;
@@ -31,8 +28,9 @@ class StaticSprite : public Sprite {
   friend class SpriteFactory;
   friend class SpriteInstance;
 
-  StaticSprite(std::unique_ptr<GraphicsInterface> graphics,
-               const std::string& resource_path);
+  BackgroundStaticSprite(std::unique_ptr<GraphicsInterface> graphics,
+                         const std::string& resource_path,
+                         float parallax_factor);
   Texture2D texture() const;
 
  private:
@@ -40,12 +38,14 @@ class StaticSprite : public Sprite {
 
   std::unique_ptr<GraphicsInterface> graphics_;
   const Texture2D texture_;
-  const Rectangle source_;
+  const float screen_width_;
+  const float screen_height_;
   const Vector2 origin_;
+  const float parallax_factor_;
 };
 
 }  // namespace sprites
 }  // namespace api
 }  // namespace lib
 
-#endif  // LIB_API_SPRITES_STATIC_SPRITE_H
+#endif  // LIB_API_SPRITES_BACKGROUND_STATIC_SPRITE_H
