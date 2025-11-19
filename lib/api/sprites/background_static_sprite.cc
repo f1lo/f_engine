@@ -21,7 +21,7 @@ BackgroundStaticSprite::BackgroundStaticSprite(
       screen_height_(static_cast<float>(graphics_->ScreenHeight())),
       origin_(screen_width_ / 2, screen_height_ / 2),
       parallax_factor_(parallax_factor) {
-  graphics_->SetTextureWrap(texture_, TEXTURE_WRAP_REPEAT);
+  graphics_->TextureWrap(texture_, TEXTURE_WRAP_REPEAT);
 }
 
 BackgroundStaticSprite::~BackgroundStaticSprite() {

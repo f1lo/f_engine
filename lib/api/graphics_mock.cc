@@ -48,7 +48,7 @@ int GraphicsMock::ScreenHeight() const {
   return 450;
 }
 
-void GraphicsMock::SetTextureWrap(Texture2D texture, int wrap) const {}
+void GraphicsMock::TextureWrap(Texture2D texture, int wrap) const {}
 
 std::string GraphicsMock::loaded_texture() const {
   return loaded_texture_;

@@ -34,7 +34,7 @@ int Graphics::ScreenHeight() const {
   return GetScreenHeight();
 }
 
-void Graphics::SetTextureWrap(Texture2D texture, int wrap) const {
+void Graphics::TextureWrap(Texture2D texture, int wrap) const {
   SetTextureWrap(texture, wrap);
 }
 

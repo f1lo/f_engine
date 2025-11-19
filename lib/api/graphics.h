@@ -17,7 +17,7 @@ class GraphicsInterface {
                     float rotation, Color tint) = 0;
   virtual int ScreenWidth() const = 0;
   virtual int ScreenHeight() const = 0;
-  virtual void SetTextureWrap(Texture2D texture, int wrap) const = 0;
+  virtual void TextureWrap(Texture2D texture, int wrap) const = 0;
 
   virtual ~GraphicsInterface() {}
 };
@@ -33,7 +33,7 @@ class Graphics : public GraphicsInterface {
             Color tint) override;
   int ScreenWidth() const override;
   int ScreenHeight() const override;
-  void SetTextureWrap(Texture2D texture, int wrap) const override;
+  void TextureWrap(Texture2D texture, int wrap) const override;
 };
 
 }  // namespace api

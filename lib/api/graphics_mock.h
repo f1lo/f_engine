@@ -21,7 +21,7 @@ class GraphicsMock : public GraphicsInterface {
             Color tint) override;
   int ScreenWidth() const override;
   int ScreenHeight() const override;
-  void SetTextureWrap(Texture2D texture, int wrap) const override;
+  void TextureWrap(Texture2D texture, int wrap) const override;
 
   std::string loaded_texture() const;
   Rectangle drawn_texture_source() const;
