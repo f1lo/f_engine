@@ -13,7 +13,7 @@ void Game::Run() {
     auto level_it = levels_.find(current_level);
     CHECK(level_it != levels_.end())
         << "Level " << current_level << " does not exist.";
-    current_level = level_it->second->Run();
+    current_level = level_it->second->Run(stats_);
   }
   // Clear levels_ before closing window.
   // Otherwise, some resources will be freed twice:

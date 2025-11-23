@@ -22,6 +22,7 @@
 #include "lib/api/objects/screen_edge_object.h"
 #include "lib/api/objects/static_object.h"
 #include "lib/api/sprites/sprite_instance.h"
+#include "lib/api/stats.h"
 
 namespace lib {
 namespace api {
@@ -163,7 +164,7 @@ class Level {
  public:
   virtual ~Level() = default;
 
-  LevelId Run();
+  LevelId Run(Stats& stats);
   [[nodiscard]] LevelId id() const { return id_; }
 
  private:

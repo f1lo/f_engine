@@ -9,8 +9,10 @@ cc_library(
     srcs = ["game.cc"],
     hdrs = ["game.h"],
     deps = [
+        ":stats",
         "//lib/api:level",
         "//lib/api/objects:object",
+        "//lib/api/objects:object_type",
         "//lib/api/sprites:sprite_factory",
         "//raylib",
         "@abseil-cpp//absl/container:flat_hash_map",
@@ -23,6 +25,7 @@ cc_library(
     srcs = ["level.cc"],
     hdrs = ["level.h"],
     deps = [
+        ":stats",
         "//lib/api:camera",
         "//lib/api/abilities:ability",
         "//lib/api/abilities:controls",
@@ -142,6 +145,21 @@ cc_library(
     srcs = ["stats.cc"],
     hdrs = ["stats.h"],
     deps = [
+        "//lib/api/objects:object_type",
         "@abseil-cpp//absl/container:flat_hash_map",
+        "@abseil-cpp//absl/time",
+        "@googletest//:gtest",
+    ],
+)
+
+cc_test(
+    name = "stats_test",
+    srcs = ["stats_test.cc"],
+    deps = [
+        ":stats",
+        "//lib/api/objects:object_type",
+        "@abseil-cpp//absl/time",
+        "@googletest//:gtest",
+        "@googletest//:gtest_main",
     ],
 )

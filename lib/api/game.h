@@ -11,7 +11,9 @@
 #include "absl/log/check.h"
 #include "lib/api/level.h"
 #include "lib/api/objects/object.h"
+#include "lib/api/objects/object_type.h"
 #include "lib/api/sprites/sprite_factory.h"
+#include "lib/api/stats.h"
 
 namespace lib {
 namespace api {
@@ -62,6 +64,7 @@ class Game {
   sprites::SpriteFactory sprite_factory_ = sprites::SpriteFactory();
   objects::ObjectTypeFactory object_type_factory_ =
       objects::ObjectTypeFactory();
+  Stats stats_ = Stats();
   bool debug_mode_ = false;
 };
 

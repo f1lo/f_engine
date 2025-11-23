@@ -137,7 +137,7 @@ void Level::DrawBackgrounds() const {
   }
 }
 
-LevelId Level::Run() {
+LevelId Level::Run(Stats& stats) {
   LevelId changed_id = id_;
   while (changed_id == id_) {
     BeginDrawing();

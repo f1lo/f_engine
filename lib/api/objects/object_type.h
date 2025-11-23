@@ -12,6 +12,7 @@ namespace api {
 
 class Game;
 class TitleScreenLevelTest;
+class StatsTest;
 
 namespace objects {
 
@@ -44,7 +45,7 @@ class ObjectType {
 
   explicit ObjectType(uint16_t type);
 
-  const uint16_t type_;
+  uint16_t type_;
 };
 
 class ObjectTypeFactory {
@@ -67,6 +68,7 @@ class ObjectTypeFactory {
  private:
   friend class lib::api::Game;
   friend class lib::api::TitleScreenLevelTest;
+  friend class lib::api::StatsTest;
   FRIEND_TEST(ObjectTypeTest, EqualityWorks);
   FRIEND_TEST(ObjectTypeTest, LessWorks);
   ObjectTypeFactory() = default;
