@@ -5,6 +5,7 @@
 #include "lib/api/abilities/controls_mock.h"
 #include "lib/api/camera.h"
 #include "lib/api/common_types.h"
+#include "lib/api/objects/object_type.h"
 #include "lib/api/objects/static_object.h"
 
 namespace lib {
@@ -16,7 +17,7 @@ using objects::StaticObject;
 
 TEST(ClickAbilityTest, NotClicked) {
   StaticObject static_object = StaticObject(
-      /*kind=*/objects::kEnemy, /*options=*/
+      /*type=*/objects::ObjectTypeFactory::MakeEnemy(), /*options=*/
       StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                      .should_draw_hit_box = false},
       /*hit_box_center=*/std::make_pair(0, 0), /*hit_box_radius=*/3);
@@ -34,7 +35,7 @@ TEST(ClickAbilityTest, NotClicked) {
 
 TEST(ClickAbilityTest, ClickedButMissed) {
   StaticObject static_object = StaticObject(
-      /*kind=*/objects::kEnemy, /*options=*/
+      /*type=*/objects::ObjectTypeFactory::MakeEnemy(), /*options=*/
       StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                      .should_draw_hit_box = false},
       /*hit_box_center=*/std::make_pair(0, 0), /*hit_box_radius=*/3);
@@ -52,7 +53,7 @@ TEST(ClickAbilityTest, ClickedButMissed) {
 
 TEST(ClickAbilityTest, Clicked) {
   StaticObject static_object = StaticObject(
-      /*kind=*/objects::kEnemy, /*options=*/
+      /*type=*/objects::ObjectTypeFactory::MakeEnemy(), /*options=*/
       StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                      .should_draw_hit_box = false},
       /*hit_box_center=*/std::make_pair(0, 0), /*hit_box_radius=*/3);

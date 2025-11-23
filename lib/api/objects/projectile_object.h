@@ -4,6 +4,7 @@
 #include "absl/container/flat_hash_set.h"
 #include "lib/api/objects/movable_object.h"
 #include "lib/api/objects/object.h"
+#include "lib/api/objects/object_type.h"
 #include "lib/api/sprites/sprite_instance.h"
 
 namespace lib {
@@ -18,15 +19,15 @@ class ProjectileObject : public MovableObject {
     double velocity;
     std::pair<double, double> hit_box_center;
     double hit_box_radius;
-    absl::flat_hash_set<Kind> despawn_on_colliding_with_these_objects;
-    absl::flat_hash_set<Kind> reflect_on_colliding_with_these_objects;
-    absl::flat_hash_set<Kind> ignore_these_objects;
+    absl::flat_hash_set<ObjectType> despawn_on_colliding_with_these_objects;
+    absl::flat_hash_set<ObjectType> reflect_on_colliding_with_these_objects;
+    absl::flat_hash_set<ObjectType> ignore_these_objects;
   };
 
   ProjectileObject(
-      const Kind kind, ProjectileObjectOpts options,
+      const ObjectType type, ProjectileObjectOpts options,
       std::unique_ptr<sprites::SpriteInstance> sprite_instance = nullptr)
-      : MovableObject(kind,
+      : MovableObject(type,
                       MovableObjectOpts{
                           .is_hit_box_active = true,
                           .should_draw_hit_box = options.should_draw_hit_box,
@@ -45,9 +46,9 @@ class ProjectileObject : public MovableObject {
 
  private:
   bool despawn_outside_screen_area_;
-  absl::flat_hash_set<Kind> despawn_on_colliding_with_these_objects_;
-  absl::flat_hash_set<Kind> reflect_on_colliding_with_these_objects_;
-  absl::flat_hash_set<Kind> ignore_these_objects_;
+  absl::flat_hash_set<ObjectType> despawn_on_colliding_with_these_objects_;
+  absl::flat_hash_set<ObjectType> reflect_on_colliding_with_these_objects_;
+  absl::flat_hash_set<ObjectType> ignore_these_objects_;
 };
 
 }  // namespace objects

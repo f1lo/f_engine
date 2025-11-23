@@ -8,6 +8,7 @@
 #include "absl/log/check.h"
 #include "lib/api/abilities/ability.h"
 #include "lib/api/objects/movable_object.h"
+#include "lib/api/objects/object_type.h"
 #include "lib/api/objects/static_object.h"
 
 namespace lib {
@@ -16,7 +17,6 @@ namespace api {
 using abilities::Ability;
 using abilities::kKeyEscape;
 using api::ObjectAndAbilities;
-using lib::api::objects::kSpriteBoundingBox;
 using objects::MovableObject;
 using objects::Object;
 using objects::StaticObject;
@@ -34,7 +34,7 @@ StaticObject MakeSpriteBoundingBox(const Object& object) {
   const double lower_right_y = object.center().y + half_sprite_height;
 
   return StaticObject(
-      /*kind=*/kSpriteBoundingBox,
+      /*type=*/objects::ObjectTypeFactory::MakeSpriteBoundingBox(),
       StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                      .should_draw_hit_box = false},
       /*hit_box_vertices=*/

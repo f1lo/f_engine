@@ -6,6 +6,7 @@
 
 #include "absl/container/flat_hash_map.h"
 #include "lib/api/objects/object.h"
+#include "lib/api/objects/object_type.h"
 #include "lib/api/objects/object_utils.h"
 #include "lib/api/sprites/sprite_instance.h"
 #include "lib/internal/geometry/vec.h"
@@ -17,20 +18,20 @@ namespace objects {
 using internal::Vector;
 
 MovableObject::MovableObject(
-    const Kind kind, const MovableObjectOpts& options,
+    const ObjectType type, const MovableObjectOpts& options,
     const std::vector<std::pair<double, double>>& hit_box_vertices,
     std::unique_ptr<sprites::SpriteInstance> sprite_instance)
-    : Object(kind,
+    : Object(type,
              {.is_hit_box_active = options.is_hit_box_active,
               .should_draw_hit_box = options.should_draw_hit_box},
              CreateHitBoxOrDie(hit_box_vertices), std::move(sprite_instance)),
       velocity_(options.velocity) {}
 
 MovableObject::MovableObject(
-    const Kind kind, const MovableObjectOpts& options,
+    const ObjectType type, const MovableObjectOpts& options,
     const std::pair<double, double> hit_box_center, const double hit_box_radius,
     std::unique_ptr<sprites::SpriteInstance> sprite_instance)
-    : Object(kind,
+    : Object(type,
              {.is_hit_box_active = options.is_hit_box_active,
               .should_draw_hit_box = options.should_draw_hit_box},
              CreateCircle(hit_box_center.first, hit_box_center.second,

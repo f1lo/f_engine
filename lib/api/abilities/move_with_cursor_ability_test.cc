@@ -8,6 +8,7 @@
 #include "lib/api/abilities/controls_mock.h"
 #include "lib/api/camera.h"
 #include "lib/api/objects/movable_object.h"
+#include "lib/api/objects/object_type.h"
 #include "lib/api/objects/static_object.h"
 
 namespace lib {
@@ -26,7 +27,7 @@ class DummyMovableObject : public MovableObject {
   DummyMovableObject(const double velocity,
                      const std::pair<double, double> hit_box_center)
       : MovableObject(
-            /*kind=*/objects::kPlayer,
+            /*type=*/objects::ObjectTypeFactory::MakePlayer(),
             MovableObjectOpts{.is_hit_box_active = false,
                               .should_draw_hit_box = false,
                               .attach_camera = false,
@@ -40,7 +41,7 @@ using MoveWithCursorAbilityTestDeathTest = MoveWithCursorAbilityTest;
 
 TEST(MoveWithCursorAbilityDeathTest, NonMovableObject) {
   StaticObject static_object = StaticObject(
-      /*kind=*/objects::kEnemy, /*options=*/
+      /*type=*/objects::ObjectTypeFactory::MakeEnemy(), /*options=*/
       StaticObject::StaticObjectOpts{.is_hit_box_active = false,
                                      .should_draw_hit_box = false},
       /*hit_box_center=*/std::make_pair(0, 0), /*hit_box_radius=*/3);

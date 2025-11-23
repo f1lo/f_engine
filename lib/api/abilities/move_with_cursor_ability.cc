@@ -10,6 +10,7 @@
 #include "lib/api/common_types.h"
 #include "lib/api/objects/movable_object.h"
 #include "lib/api/objects/object.h"
+#include "lib/api/objects/object_type.h"
 #include "lib/api/objects/static_object.h"
 
 namespace lib {
@@ -17,7 +18,6 @@ namespace api {
 namespace abilities {
 
 using api::Camera;
-using lib::api::objects::kMousePointer;
 using objects::MovableObject;
 using objects::Object;
 
@@ -26,7 +26,7 @@ std::list<ObjectAndAbilities> MoveWithCursorAbility::Use(const Camera& camera) {
   CHECK(movable_user) << "User not movable.";
   if (cursor_last_clicked_pos_.has_value()) {
     if (movable_user->CollidesWith(objects::StaticObject(
-            /*kind=*/kMousePointer,
+            /*type=*/objects::ObjectTypeFactory::MakeMousePointer(),
             /*options=*/
             {/*is_hit_box_active=*/true,
              /*should_draw_hit_box=*/false},

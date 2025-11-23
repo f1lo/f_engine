@@ -7,6 +7,7 @@
 #include "gmock/gmock-matchers.h"
 #include "gtest/gtest.h"
 #include "lib/api/common_types.h"
+#include "lib/api/objects/object_type.h"
 #include "lib/api/objects/object_utils.h"
 #include "lib/internal/hit_box.h"
 
@@ -39,7 +40,7 @@ using ObjectDeathTest = ObjectTest;
 TEST(ObjectDeathTest, ObjectCreationFails) {
   EXPECT_DEATH(
       DummyObject(
-          /*kind=*/kEnemy,
+          /*type=*/ObjectTypeFactory::MakeEnemy(),
           /*options=*/{.is_hit_box_active = true, .should_draw_hit_box = false},
           /*hit_box=*/
           CreateHitBoxOrDie(std::vector<std::pair<double, double>>{
@@ -49,11 +50,11 @@ TEST(ObjectDeathTest, ObjectCreationFails) {
 
 TEST(ObjectTest, ObjectCreationOk) {
   const DummyObject object = DummyObject(
-      /*kind=*/kPlayer,
+      /*type=*/ObjectTypeFactory::MakePlayer(),
       /*options=*/{.is_hit_box_active = true, .should_draw_hit_box = false},
       /*hit_box=*/CreateCircle(/*x=*/1, /*y=*/1, /*radius=*/3));
 
-  EXPECT_EQ(object.kind(), kPlayer);
+  EXPECT_TRUE(object.type().IsPlayer());
   EXPECT_EQ(object.center(), WorldPosition(1.0, 1.0));
   EXPECT_FALSE(object.deleted());
   EXPECT_FALSE(object.clicked());
@@ -61,11 +62,11 @@ TEST(ObjectTest, ObjectCreationOk) {
 
 TEST(ObjectTest, Collision) {
   const DummyObject circle = DummyObject(
-      /*kind=*/kPlayer,
+      /*type=*/ObjectTypeFactory::MakePlayer(),
       /*options=*/{.is_hit_box_active = true, .should_draw_hit_box = false},
       /*hit_box=*/CreateCircle(/*x=*/1, /*y=*/1, /*radius=*/3));
   const DummyObject rect = DummyObject(
-      /*kind=*/kEnemy,
+      /*type=*/ObjectTypeFactory::MakeEnemy(),
       /*options=*/{.is_hit_box_active = true, .should_draw_hit_box = false},
       /*hit_box=*/
       CreateHitBoxOrDie(std::vector<std::pair<double, double>>{
@@ -77,11 +78,11 @@ TEST(ObjectTest, Collision) {
 
 TEST(ObjectTest, NoCollision) {
   const DummyObject circle = DummyObject(
-      /*kind=*/kPlayer,
+      /*type=*/ObjectTypeFactory::MakePlayer(),
       /*options=*/{.is_hit_box_active = true, .should_draw_hit_box = false},
       /*hit_box=*/CreateCircle(/*x=*/1, /*y=*/1, /*radius=*/3));
   const DummyObject rect = DummyObject(
-      /*kind=*/kEnemy,
+      /*type=*/ObjectTypeFactory::MakeEnemy(),
       /*options=*/{.is_hit_box_active = true, .should_draw_hit_box = false},
       /*hit_box=*/
       CreateHitBoxOrDie(std::vector<std::pair<double, double>>{
@@ -93,11 +94,11 @@ TEST(ObjectTest, NoCollision) {
 
 TEST(ObjectTest, HitBoxDisabledNoCollision) {
   const DummyObject circle = DummyObject(
-      /*kind=*/kPlayer,
+      /*type=*/ObjectTypeFactory::MakePlayer(),
       /*options=*/{.is_hit_box_active = false, .should_draw_hit_box = false},
       /*hit_box=*/CreateCircle(/*x=*/1, /*y=*/1, /*radius=*/3));
   const DummyObject rect = DummyObject(
-      /*kind=*/kEnemy,
+      /*type=*/ObjectTypeFactory::MakeEnemy(),
       /*options=*/{.is_hit_box_active = true, .should_draw_hit_box = false},
       /*hit_box=*/
       CreateHitBoxOrDie(std::vector<std::pair<double, double>>{
@@ -109,11 +110,11 @@ TEST(ObjectTest, HitBoxDisabledNoCollision) {
 
 TEST(ObjectTest, ObjectDeletedNoCollision) {
   DummyObject circle = DummyObject(
-      /*kind=*/kPlayer,
+      /*type=*/ObjectTypeFactory::MakePlayer(),
       /*options=*/{.is_hit_box_active = true, .should_draw_hit_box = false},
       /*hit_box=*/CreateCircle(/*x=*/1, /*y=*/1, /*radius=*/3));
   const DummyObject rect = DummyObject(
-      /*kind=*/kEnemy,
+      /*type=*/ObjectTypeFactory::MakeEnemy(),
       /*options=*/{.is_hit_box_active = true, .should_draw_hit_box = false},
       /*hit_box=*/
       CreateHitBoxOrDie(std::vector<std::pair<double, double>>{
@@ -128,13 +129,13 @@ TEST(ObjectTest, ObjectDeletedNoCollision) {
 
 TEST(ObjectTest, CenterOk) {
   const DummyObject rect = DummyObject(
-      /*kind=*/kEnemy,
+      /*type=*/ObjectTypeFactory::MakeEnemy(),
       /*options=*/{.is_hit_box_active = true, .should_draw_hit_box = false},
       /*hit_box=*/
       CreateHitBoxOrDie(std::vector<std::pair<double, double>>{
           {2, 2}, {10, 2}, {10, 8}, {2, 8}}));
   const DummyObject line = DummyObject(
-      /*kind=*/kEnemy,
+      /*type=*/ObjectTypeFactory::MakeEnemy(),
       /*options=*/{.is_hit_box_active = true, .should_draw_hit_box = false},
       /*hit_box=*/
       CreateHitBoxOrDie(
@@ -146,13 +147,13 @@ TEST(ObjectTest, CenterOk) {
 
 TEST(ObjectTest, ReflectDeletedObjectSameDirection) {
   DummyObject rect = DummyObject(
-      /*kind=*/kEnemy,
+      /*type=*/ObjectTypeFactory::MakeEnemy(),
       /*options=*/{.is_hit_box_active = true, .should_draw_hit_box = false},
       /*hit_box=*/
       CreateHitBoxOrDie(std::vector<std::pair<double, double>>{
           {2, 2}, {10, 2}, {10, 8}, {2, 8}}));
   const DummyObject circle = DummyObject(
-      /*kind=*/kPlayer,
+      /*type=*/ObjectTypeFactory::MakePlayer(),
       /*options=*/{.is_hit_box_active = true, .should_draw_hit_box = false},
       /*hit_box=*/CreateCircle(/*x=*/1, /*y=*/5, /*radius=*/1));
   rect.set_deleted(true);
@@ -162,13 +163,13 @@ TEST(ObjectTest, ReflectDeletedObjectSameDirection) {
 
 TEST(ObjectTest, ReflectHitBoxDisabledSameDirection) {
   const DummyObject rect = DummyObject(
-      /*kind=*/kEnemy,
+      /*type=*/ObjectTypeFactory::MakeEnemy(),
       /*options=*/{.is_hit_box_active = false, .should_draw_hit_box = false},
       /*hit_box=*/
       CreateHitBoxOrDie(std::vector<std::pair<double, double>>{
           {2, 2}, {10, 2}, {10, 8}, {2, 8}}));
   const DummyObject circle = DummyObject(
-      /*kind=*/kPlayer,
+      /*type=*/ObjectTypeFactory::MakePlayer(),
       /*options=*/{.is_hit_box_active = true, .should_draw_hit_box = false},
       /*hit_box=*/CreateCircle(/*x=*/1, /*y=*/5, /*radius=*/1));
 
@@ -177,13 +178,13 @@ TEST(ObjectTest, ReflectHitBoxDisabledSameDirection) {
 
 TEST(ObjectTest, ReflectOk) {
   const DummyObject rect = DummyObject(
-      /*kind=*/kEnemy,
+      /*type=*/ObjectTypeFactory::MakeEnemy(),
       /*options=*/{.is_hit_box_active = true, .should_draw_hit_box = false},
       /*hit_box=*/
       CreateHitBoxOrDie(std::vector<std::pair<double, double>>{
           {2, 2}, {10, 2}, {10, 8}, {2, 8}}));
   const DummyObject circle = DummyObject(
-      /*kind=*/kPlayer,
+      /*type=*/ObjectTypeFactory::MakePlayer(),
       /*options=*/{.is_hit_box_active = true, .should_draw_hit_box = false},
       /*hit_box=*/CreateCircle(/*x=*/1, /*y=*/5, /*radius=*/1));
 
@@ -192,7 +193,7 @@ TEST(ObjectTest, ReflectOk) {
 
 TEST(ObjectTest, YBase) {
   const DummyObject rect = DummyObject(
-      /*kind=*/kEnemy,
+      /*type=*/ObjectTypeFactory::MakeEnemy(),
       /*options=*/{.is_hit_box_active = true, .should_draw_hit_box = false},
       /*hit_box=*/
       CreateHitBoxOrDie(std::vector<std::pair<double, double>>{
@@ -203,7 +204,7 @@ TEST(ObjectTest, YBase) {
 
 TEST(ObjectTest, UpdateInternalIgnoresSameObject) {
   std::unique_ptr<DummyObject> rect = std::make_unique<DummyObject>(
-      /*kind=*/kEnemy,
+      /*type=*/ObjectTypeFactory::MakeEnemy(),
       /*options=*/
       Object::Opts{.is_hit_box_active = true, .should_draw_hit_box = false},
       /*hit_box=*/

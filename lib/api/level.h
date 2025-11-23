@@ -18,6 +18,7 @@
 #include "lib/api/camera.h"
 #include "lib/api/objects/coordinate_object.h"
 #include "lib/api/objects/object.h"
+#include "lib/api/objects/object_type.h"
 #include "lib/api/objects/screen_edge_object.h"
 #include "lib/api/objects/static_object.h"
 #include "lib/api/sprites/sprite_instance.h"
@@ -111,7 +112,7 @@ class LevelBuilder {
                                  const bool should_draw_hitbox = false) {
     std::unique_ptr<objects::StaticObject> x_border =
         std::make_unique<objects::StaticObject>(
-            objects::kWorldBorder,
+            objects::ObjectTypeFactory::MakeWorldBorder(),
             objects::StaticObject::StaticObjectOpts{
                 .is_hit_box_active = true,
                 .should_draw_hit_box = should_draw_hitbox},
@@ -126,7 +127,7 @@ class LevelBuilder {
                                  const bool should_draw_hitbox = false) {
     std::unique_ptr<objects::StaticObject> y_border =
         std::make_unique<objects::StaticObject>(
-            objects::kWorldBorder,
+            objects::ObjectTypeFactory::MakeWorldBorder(),
             objects::StaticObject::StaticObjectOpts{
                 .is_hit_box_active = true,
                 .should_draw_hit_box = should_draw_hitbox},

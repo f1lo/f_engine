@@ -29,6 +29,7 @@ cc_library(
         "//lib/api/objects:coordinate_object",
         "//lib/api/objects:movable_object",
         "//lib/api/objects:object",
+        "//lib/api/objects:object_type",
         "//lib/api/objects:screen_edge_object",
         "//lib/api/objects:static_object",
         "//lib/api/sprites:sprite",
@@ -49,6 +50,7 @@ cc_test(
         ":level",
         "//lib/api/abilities:ability",
         "//lib/api/abilities:controls_mock",
+        "//lib/api/objects:object_type",
         "//lib/api/objects:screen_edge_object",
         "//lib/api/objects:static_object",
         "//lib/api/sprites:sprite_factory",
@@ -80,6 +82,7 @@ cc_test(
         ":level",
         ":title_screen_level",
         "//lib/api/abilities:ability",
+        "//lib/api/objects:object_type",
         "//lib/api/objects:static_object",
         "@googletest//:gtest",
         "@googletest//:gtest_main",
@@ -131,5 +134,14 @@ cc_library(
     hdrs = ["graphics_mock.h"],
     deps = [
         ":graphics",
+    ],
+)
+
+cc_library(
+    name = "stats",
+    srcs = ["stats.cc"],
+    hdrs = ["stats.h"],
+    deps = [
+        "@abseil-cpp//absl/container:flat_hash_map",
     ],
 )

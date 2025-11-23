@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "lib/api/objects/object.h"
+#include "lib/api/objects/object_type.h"
 #include "lib/api/sprites/sprite_instance.h"
 
 namespace lib {
@@ -22,12 +23,12 @@ class MovableObject : public Object {
   };
 
   MovableObject(
-      Kind kind, const MovableObjectOpts& options,
+      ObjectType type, const MovableObjectOpts& options,
       const std::vector<std::pair<double, double>>& hit_box_vertices,
       std::unique_ptr<sprites::SpriteInstance> sprite_instance = nullptr);
 
   MovableObject(
-      Kind kind, const MovableObjectOpts& options,
+      ObjectType type, const MovableObjectOpts& options,
       std::pair<double, double> hit_box_center, double hit_box_radius,
       std::unique_ptr<sprites::SpriteInstance> sprite_instance = nullptr);
 

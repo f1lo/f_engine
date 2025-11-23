@@ -13,6 +13,7 @@
 #include "lib/api/level.h"
 #include "lib/api/objects/movable_object.h"
 #include "lib/api/objects/object.h"
+#include "lib/api/objects/object_type.h"
 #include "lib/api/objects/static_object.h"
 
 using breakout::BrickObject;
@@ -28,9 +29,10 @@ using lib::api::abilities::kKeyD;
 using lib::api::abilities::kKeyS;
 using lib::api::abilities::kKeyW;
 using lib::api::abilities::MoveAbility;
-using lib::api::objects::kEnemy;
 using lib::api::objects::MovableObject;
 using lib::api::objects::Object;
+using lib::api::objects::ObjectType;
+using lib::api::objects::ObjectTypeFactory;
 using lib::api::objects::StaticObject;
 
 constexpr int kPlayerWidth = 300;
@@ -64,7 +66,7 @@ std::vector<std::unique_ptr<BrickObject>> GenerateBricks(int brick_width,
     double y = kScreenOffset + (i + 1) * brick_height;
     while (x + brick_width <= right_limit) {
       std::unique_ptr<BrickObject> brick = std::make_unique<BrickObject>(
-          kEnemy,
+          ObjectTypeFactory::MakeEnemy(),
           StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                          .should_draw_hit_box = true},
           std::vector<std::pair<double, double>>(
@@ -93,8 +95,10 @@ int main() {
   std::unique_ptr<breakout::BallAbility> ability_ball =
       std::make_unique<breakout::BallAbility>(lib::api::abilities::kKeySpace);
 
+  const ObjectType ball_type = game.object_type_factory().MakeNewObjectType();
   std::unique_ptr<Object> player = std::make_unique<PlayerPad>(
       game.screen_width(), game.screen_height(), kPlayerWidth, kPlayerHeight,
+      ball_type,
       MovableObject::MovableObjectOpts{.is_hit_box_active = true,
                                        .should_draw_hit_box = true,
                                        .attach_camera = false,
@@ -103,6 +107,7 @@ int main() {
   std::list<std::unique_ptr<Ability>> player_abilities;
   player_abilities.push_back(std::move(ability_move));
   std::unique_ptr<breakout::Ball> ball = std::make_unique<breakout::Ball>(
+      ball_type,
       MovableObject::MovableObjectOpts{.is_hit_box_active = true,
                                        .should_draw_hit_box = true,
                                        .attach_camera = false,

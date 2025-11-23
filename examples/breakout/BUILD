@@ -13,6 +13,10 @@ cc_binary(
         "//lib/api:level",
         "//lib/api/abilities:ability",
         "//lib/api/abilities:controls",
+        "//lib/api/objects:movable_object",
+        "//lib/api/objects:object",
+        "//lib/api/objects:object_type",
+        "//lib/api/objects:static_object",
         "//raylib",
     ],
 )
@@ -25,6 +29,7 @@ cc_library(
         "//examples/breakout:ball",
         "//lib/api/objects:movable_object",
         "//lib/api/objects:object",
+        "//lib/api/objects:object_type",
     ],
 )
 
@@ -36,6 +41,7 @@ cc_library(
         "//examples/breakout:brick",
         "//lib/api/objects:movable_object",
         "//lib/api/objects:object",
+        "//lib/api/objects:object_type",
         "//lib/api/objects:static_object",
     ],
 )
@@ -59,6 +65,7 @@ cc_library(
     hdrs = ["brick.h"],
     deps = [
         "//lib/api/objects:object",
+        "//lib/api/objects:object_type",
         "//lib/api/objects:static_object",
     ],
 )

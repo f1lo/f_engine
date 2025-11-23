@@ -6,6 +6,7 @@
 #include "gmock/gmock-matchers.h"
 #include "gtest/gtest.h"
 #include "lib/api/common_types.h"
+#include "lib/api/objects/object_type.h"
 
 namespace lib {
 namespace api {
@@ -17,7 +18,7 @@ class DummyMovableObject : public MovableObject {
   DummyMovableObject(const double velocity,
                      const std::pair<double, double> hit_box_center)
       : MovableObject(
-            /*kind=*/kPlayer,
+            /*type=*/ObjectTypeFactory::MakePlayer(),
             MovableObjectOpts{.is_hit_box_active = true,
                               .should_draw_hit_box = false,
                               .attach_camera = false,
@@ -28,7 +29,7 @@ class DummyMovableObject : public MovableObject {
       const double velocity,
       const std::vector<std::pair<double, double>>& hit_box_vertices)
       : MovableObject(
-            /*kind=*/kPlayer,
+            /*type=*/ObjectTypeFactory::MakePlayer(),
             MovableObjectOpts{.is_hit_box_active = true,
                               .should_draw_hit_box = false,
                               .attach_camera = false,

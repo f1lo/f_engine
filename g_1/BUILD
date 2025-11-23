@@ -31,6 +31,7 @@ cc_library(
         "//lib/api/abilities:projectile_ability",
         "//lib/api/objects:movable_object",
         "//lib/api/objects:object",
+        "//lib/api/objects:object_type",
         "//lib/api/objects:projectile_object",
         "//lib/api/objects:static_object",
         "//lib/api/sprites:sprite_factory",

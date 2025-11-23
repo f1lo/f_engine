@@ -9,6 +9,7 @@ cc_library(
     srcs = ["object.cc"],
     hdrs = ["object.h"],
     deps = [
+        ":object_type",
         "//lib/api:common_types",
         "//lib/api/sprites:sprite_instance",
         "//lib/internal:hit_box",
@@ -32,10 +33,31 @@ cc_test(
 )
 
 cc_library(
+    name = "object_type",
+    srcs = ["object_type.cc"],
+    hdrs = ["object_type.h"],
+    deps = [
+        "@abseil-cpp//absl/hash",
+        "@googletest//:gtest",
+    ],
+)
+
+cc_test(
+    name = "object_type_test",
+    srcs = ["object_type_test.cc"],
+    deps = [
+        ":object_type",
+        "@googletest//:gtest",
+        "@googletest//:gtest_main",
+    ],
+)
+
+cc_library(
     name = "movable_object",
     srcs = ["movable_object.cc"],
     hdrs = ["movable_object.h"],
     deps = [
+        ":object_type",
         "//lib/api/objects:object",
         "//lib/api/objects:object_utils",
         "//lib/api/sprites:sprite_instance",
@@ -48,6 +70,7 @@ cc_test(
     srcs = ["movable_object_test.cc"],
     deps = [
         ":movable_object",
+        ":object_type",
         "//lib/api:common_types",
         "@googletest//:gtest",
         "@googletest//:gtest_main",
@@ -86,6 +109,7 @@ cc_library(
     srcs = ["static_object.cc"],
     hdrs = ["static_object.h"],
     deps = [
+        ":object_type",
         "//lib/api/objects:object",
         "//lib/api/objects:object_utils",
         "//lib/api/sprites:sprite_instance",
@@ -136,10 +160,10 @@ cc_library(
     srcs = ["screen_edge_object.cc"],
     hdrs = ["screen_edge_object.h"],
     deps = [
+        ":object_type",
         "//lib/api:common_types",
         "//lib/api/objects:object",
         "//lib/api/objects:object_utils",
-        "@abseil-cpp//absl/log:log",
         "@abseil-cpp//absl/memory",
     ],
 )
@@ -160,6 +184,7 @@ cc_library(
     srcs = ["coordinate_object.cc"],
     hdrs = ["coordinate_object.h"],
     deps = [
+        ":object_type",
         ":object_utils",
         "//lib/api:common_types",
         "//lib/api/objects:object",

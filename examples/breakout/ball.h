@@ -2,17 +2,17 @@
 #define EXAMPLES_BREAKOUT_BALL_H
 
 #include "lib/api/objects/movable_object.h"
+#include "lib/api/objects/object_type.h"
 
 namespace breakout {
 
-inline constexpr int BALL = 1;
-
 class Ball : public lib::api::objects::MovableObject {
  public:
-  Ball(const MovableObjectOpts& options,
+  Ball(const lib::api::objects::ObjectType type,
+       const MovableObjectOpts& options,
        const std::pair<double, double> hit_box_center,
        const double hit_box_radius)
-      : MovableObject(BALL, options, hit_box_center, hit_box_radius),
+      : MovableObject(type, options, hit_box_center, hit_box_radius),
         ball_starting_velocity_(options.velocity),
         has_touched_bottom_(false) {}
 

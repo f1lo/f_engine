@@ -51,12 +51,17 @@ class Game {
   }
   void set_debug_mode(const bool debug_mode) { debug_mode_ = debug_mode; }
   sprites::SpriteFactory& sprite_factory() { return sprite_factory_; }
+  objects::ObjectTypeFactory& object_type_factory() {
+    return object_type_factory_;
+  }
 
  private:
-  explicit Game() = default;
+  Game() = default;
 
   absl::flat_hash_map<LevelId, std::unique_ptr<Level>> levels_;
-  sprites::SpriteFactory sprite_factory_;
+  sprites::SpriteFactory sprite_factory_ = sprites::SpriteFactory();
+  objects::ObjectTypeFactory object_type_factory_ =
+      objects::ObjectTypeFactory();
   bool debug_mode_ = false;
 };
 

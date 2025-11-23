@@ -6,6 +6,7 @@
 
 #include "lib/api/common_types.h"
 #include "lib/api/objects/object.h"
+#include "lib/api/objects/object_type.h"
 
 namespace lib {
 namespace api {
@@ -28,7 +29,7 @@ class ScreenEdgeObject : public Object {
                         double screen_height);
 
  private:
-  ScreenEdgeObject(Kind kind, bool should_draw_hit_box, ScreenPosition a,
+  ScreenEdgeObject(ObjectType type, bool should_draw_hit_box, ScreenPosition a,
                    ScreenPosition b);
 
   void Update(

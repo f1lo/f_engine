@@ -8,6 +8,7 @@
 #include "absl/memory/memory.h"
 #include "lib/api/common_types.h"
 #include "lib/api/objects/object.h"
+#include "lib/api/objects/object_type.h"
 #include "lib/api/objects/object_utils.h"
 
 namespace lib {
@@ -35,7 +36,7 @@ CoordinateObject::CoordinateObject(const ScreenPosition screen_position_start,
                                    const double screen_width,
                                    const double screen_height,
                                    const bool is_x_axis)
-    : Object(kCoordinate,
+    : Object(ObjectTypeFactory::MakeCoordinate(),
              {/*is_hit_box_active*/ false,
               /*should_draw_hitbox=*/true},
              CreateHitBoxOrDie({screen_position_start, screen_position_end})),

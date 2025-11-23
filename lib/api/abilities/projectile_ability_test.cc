@@ -9,6 +9,7 @@
 #include "lib/api/common_types.h"
 #include "lib/api/objects/movable_object.h"
 #include "lib/api/objects/object.h"
+#include "lib/api/objects/object_type.h"
 #include "lib/api/objects/projectile_object.h"
 #include "lib/api/objects/static_object.h"
 
@@ -17,7 +18,6 @@ namespace api {
 namespace abilities {
 namespace {
 
-using objects::Kind;
 using objects::MovableObject;
 using objects::ProjectileObject;
 using objects::StaticObject;
@@ -27,7 +27,7 @@ class DummyMovableObject : public MovableObject {
   DummyMovableObject(const double velocity,
                      const std::pair<double, double> hit_box_center)
       : MovableObject(
-            /*kind=*/objects::kPlayer,
+            /*type=*/objects::ObjectTypeFactory::MakePlayer(),
             MovableObjectOpts{.is_hit_box_active = true,
                               .should_draw_hit_box = false,
                               .attach_camera = false,
@@ -39,7 +39,7 @@ class DummyMovableObject : public MovableObject {
 
 TEST(ProjectileAbilityTest, InputNotPressed) {
   StaticObject static_object = StaticObject(
-      /*kind=*/objects::kPlayer, /*options=*/
+      /*type=*/objects::ObjectTypeFactory::MakePlayer(), /*options=*/
       StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                      .should_draw_hit_box = false},
       /*hit_box_center=*/std::make_pair(0, 0), /*hit_box_radius=*/3);
@@ -48,7 +48,7 @@ TEST(ProjectileAbilityTest, InputNotPressed) {
           /*is_pressed=*/false, /*is_down=*/false, /*is_primary_pressed=*/false,
           /*is_secondary_pressed=*/false,
           /*cursor_pos*/ ScreenPosition{.x = 0, .y = 0}),
-      /*projectile_kind=*/objects::kProjectilePlayer,
+      /*projectile_type=*/objects::ObjectTypeFactory::MakeProjectilePlayer(),
       ProjectileAbility::ProjectileAbilityOpts{.cooldown_sec = 0},
       ProjectileObject::ProjectileObjectOpts{
           .should_draw_hit_box = false,
@@ -57,10 +57,10 @@ TEST(ProjectileAbilityTest, InputNotPressed) {
           .hit_box_center = std::make_pair(5, 0),
           .hit_box_radius = 3,
           .despawn_on_colliding_with_these_objects =
-              absl::flat_hash_set<Kind>{},
+              absl::flat_hash_set<objects::ObjectType>{},
           .reflect_on_colliding_with_these_objects =
-              absl::flat_hash_set<Kind>{},
-          .ignore_these_objects = absl::flat_hash_set<Kind>{}});
+              absl::flat_hash_set<objects::ObjectType>{},
+          .ignore_these_objects = absl::flat_hash_set<objects::ObjectType>{}});
   ability.set_user(&static_object);
 
   const Camera camera;
@@ -72,7 +72,7 @@ TEST(ProjectileAbilityTest, InputNotPressed) {
 
 TEST(ProjectileAbilityTest, OnCooldown) {
   StaticObject static_object = StaticObject(
-      /*kind=*/objects::kPlayer, /*options=*/
+      /*type=*/objects::ObjectTypeFactory::MakePlayer(), /*options=*/
       StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                      .should_draw_hit_box = false},
       /*hit_box_center=*/std::make_pair(0, 0), /*hit_box_radius=*/3);
@@ -81,7 +81,7 @@ TEST(ProjectileAbilityTest, OnCooldown) {
           /*is_pressed=*/false, /*is_down=*/false, /*is_primary_pressed=*/true,
           /*is_secondary_pressed=*/false,
           /*cursor_pos*/ ScreenPosition{.x = 0, .y = 0}),
-      /*projectile_kind=*/objects::kProjectilePlayer,
+      /*projectile_type=*/objects::ObjectTypeFactory::MakeProjectilePlayer(),
       ProjectileAbility::ProjectileAbilityOpts{.cooldown_sec = 0},
       ProjectileObject::ProjectileObjectOpts{
           .should_draw_hit_box = false,
@@ -90,10 +90,10 @@ TEST(ProjectileAbilityTest, OnCooldown) {
           .hit_box_center = std::make_pair(5, 0),
           .hit_box_radius = 3,
           .despawn_on_colliding_with_these_objects =
-              absl::flat_hash_set<Kind>{},
+              absl::flat_hash_set<objects::ObjectType>{},
           .reflect_on_colliding_with_these_objects =
-              absl::flat_hash_set<Kind>{},
-          .ignore_these_objects = absl::flat_hash_set<Kind>{}});
+              absl::flat_hash_set<objects::ObjectType>{},
+          .ignore_these_objects = absl::flat_hash_set<objects::ObjectType>{}});
   ability.set_user(&static_object);
 
   const Camera camera;
@@ -105,7 +105,7 @@ TEST(ProjectileAbilityTest, OnCooldown) {
 
 TEST(ProjectileAbilityTest, ProjectileSpawned) {
   StaticObject static_object = StaticObject(
-      /*kind=*/objects::kPlayer, /*options=*/
+      /*type=*/objects::ObjectTypeFactory::MakePlayer(), /*options=*/
       StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                      .should_draw_hit_box = false},
       /*hit_box_center=*/std::make_pair(0, 0), /*hit_box_radius=*/3);
@@ -114,7 +114,7 @@ TEST(ProjectileAbilityTest, ProjectileSpawned) {
           /*is_pressed=*/false, /*is_down=*/false, /*is_primary_pressed=*/true,
           /*is_secondary_pressed=*/false,
           /*cursor_pos*/ ScreenPosition{.x = 0, .y = 0}),
-      /*projectile_kind=*/objects::kProjectilePlayer,
+      /*projectile_type=*/objects::ObjectTypeFactory::MakeProjectilePlayer(),
       ProjectileAbility::ProjectileAbilityOpts{.cooldown_sec = 0},
       ProjectileObject::ProjectileObjectOpts{
           .should_draw_hit_box = false,
@@ -123,10 +123,10 @@ TEST(ProjectileAbilityTest, ProjectileSpawned) {
           .hit_box_center = std::make_pair(5, 0),
           .hit_box_radius = 3,
           .despawn_on_colliding_with_these_objects =
-              absl::flat_hash_set<Kind>{},
+              absl::flat_hash_set<objects::ObjectType>{},
           .reflect_on_colliding_with_these_objects =
-              absl::flat_hash_set<Kind>{},
-          .ignore_these_objects = absl::flat_hash_set<Kind>{}});
+              absl::flat_hash_set<objects::ObjectType>{},
+          .ignore_these_objects = absl::flat_hash_set<objects::ObjectType>{}});
   ability.set_user(&static_object);
 
   const Camera camera;
@@ -147,7 +147,7 @@ TEST(ProjectileAbilityTest, MovableObjectProjectileSameDirection) {
           /*is_pressed=*/false, /*is_down=*/false, /*is_primary_pressed=*/true,
           /*is_secondary_pressed=*/false,
           /*cursor_pos*/ ScreenPosition{.x = 0, .y = 0}),
-      /*projectile_kind=*/objects::kProjectilePlayer,
+      /*projectile_type=*/objects::ObjectTypeFactory::MakeProjectilePlayer(),
       ProjectileAbility::ProjectileAbilityOpts{.cooldown_sec = 0},
       ProjectileObject::ProjectileObjectOpts{
           .should_draw_hit_box = false,
@@ -156,10 +156,10 @@ TEST(ProjectileAbilityTest, MovableObjectProjectileSameDirection) {
           .hit_box_center = std::make_pair(5, 0),
           .hit_box_radius = 3,
           .despawn_on_colliding_with_these_objects =
-              absl::flat_hash_set<Kind>{},
+              absl::flat_hash_set<objects::ObjectType>{},
           .reflect_on_colliding_with_these_objects =
-              absl::flat_hash_set<Kind>{},
-          .ignore_these_objects = absl::flat_hash_set<Kind>{}});
+              absl::flat_hash_set<objects::ObjectType>{},
+          .ignore_these_objects = absl::flat_hash_set<objects::ObjectType>{}});
   ability.set_user(&movable_object);
 
   Camera camera;
@@ -177,7 +177,7 @@ TEST(ProjectileAbilityTest, MovableObjectProjectileSameDirection) {
 
 TEST(ProjectileAbilityTest, CreatedProjectileDespawnsOnWorldBorderTouch) {
   StaticObject static_object = StaticObject(
-      /*kind=*/objects::kPlayer, /*options=*/
+      /*type=*/objects::ObjectTypeFactory::MakePlayer(), /*options=*/
       StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                      .should_draw_hit_box = false},
       /*hit_box_center=*/std::make_pair(0, 0), /*hit_box_radius=*/3);
@@ -186,7 +186,7 @@ TEST(ProjectileAbilityTest, CreatedProjectileDespawnsOnWorldBorderTouch) {
           /*is_pressed=*/false, /*is_down=*/false, /*is_primary_pressed=*/true,
           /*is_secondary_pressed=*/false,
           /*cursor_pos*/ ScreenPosition{.x = 0, .y = 0}),
-      /*projectile_kind=*/objects::kProjectilePlayer,
+      /*projectile_type=*/objects::ObjectTypeFactory::MakeProjectilePlayer(),
       ProjectileAbility::ProjectileAbilityOpts{.cooldown_sec = 0},
       ProjectileObject::ProjectileObjectOpts{
           .should_draw_hit_box = false,
@@ -195,10 +195,10 @@ TEST(ProjectileAbilityTest, CreatedProjectileDespawnsOnWorldBorderTouch) {
           .hit_box_center = std::make_pair(5, 0),
           .hit_box_radius = 3,
           .despawn_on_colliding_with_these_objects =
-              absl::flat_hash_set<Kind>{},
+              absl::flat_hash_set<objects::ObjectType>{},
           .reflect_on_colliding_with_these_objects =
-              absl::flat_hash_set<Kind>{},
-          .ignore_these_objects = absl::flat_hash_set<Kind>{}});
+              absl::flat_hash_set<objects::ObjectType>{},
+          .ignore_these_objects = absl::flat_hash_set<objects::ObjectType>{}});
   ability.set_user(&static_object);
   Camera camera;
   const std::list<ObjectAndAbilities> objects_and_abilities =
@@ -209,7 +209,7 @@ TEST(ProjectileAbilityTest, CreatedProjectileDespawnsOnWorldBorderTouch) {
   ASSERT_TRUE(projectile != nullptr);
   EXPECT_EQ(projectile->center(), (WorldPosition{.x = 0, .y = 0}));
   StaticObject world_border = StaticObject(
-      /*kind=*/objects::kWorldBorder, /*options=*/
+      /*type=*/objects::ObjectTypeFactory::MakeWorldBorder(), /*options=*/
       StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                      .should_draw_hit_box = false},
       /*hit_box_center=*/std::make_pair(0, 0), /*hit_box_radius=*/3);

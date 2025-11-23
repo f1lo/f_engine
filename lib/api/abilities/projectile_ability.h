@@ -10,6 +10,7 @@
 #include "lib/api/abilities/controls.h"
 #include "lib/api/objects/movable_object.h"
 #include "lib/api/objects/object.h"
+#include "lib/api/objects/object_type.h"
 #include "lib/api/objects/projectile_object.h"
 
 namespace lib {
@@ -24,16 +25,17 @@ class ProjectileAbility : public Ability {
 
   ProjectileAbility(
       std::unique_ptr<const ControlsInterface> controls,
-      const objects::Kind projectile_kind, const ProjectileAbilityOpts& opts,
+      const objects::ObjectType projectile_type,
+      const ProjectileAbilityOpts& opts,
       objects::ProjectileObject::ProjectileObjectOpts projectile_object_opts)
       : Ability(std::move(controls), {.cooldown_sec = opts.cooldown_sec}),
-        projectile_kind_(projectile_kind),
+        projectile_type_(projectile_type),
         projectile_object_opts_(std::move(projectile_object_opts)) {}
 
   std::list<ObjectAndAbilities> Use(const Camera& camera) override;
 
  private:
-  objects::Kind projectile_kind_;
+  objects::ObjectType projectile_type_;
   objects::ProjectileObject::ProjectileObjectOpts projectile_object_opts_;
 };
 

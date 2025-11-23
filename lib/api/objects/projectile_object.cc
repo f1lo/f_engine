@@ -9,25 +9,22 @@ namespace objects {
 
 bool ProjectileObject::OnCollisionCallback(Object& other_object) {
   if (despawn_outside_screen_area_) {
-    if (other_object.kind() == kScreenLeft ||
-        other_object.kind() == kScreenRight ||
-        other_object.kind() == kScreenTop ||
-        other_object.kind() == kScreenBottom) {
+    if (other_object.type().IsScreenEdge()) {
       set_deleted(true);
       return true;
     }
   }
 
-  if (ignore_these_objects_.contains(other_object.kind())) {
+  if (ignore_these_objects_.contains(other_object.type())) {
     return false;
   }
 
-  if (despawn_on_colliding_with_these_objects_.contains(other_object.kind())) {
+  if (despawn_on_colliding_with_these_objects_.contains(other_object.type())) {
     set_deleted(true);
     return true;
   }
 
-  if (reflect_on_colliding_with_these_objects_.contains(other_object.kind())) {
+  if (reflect_on_colliding_with_these_objects_.contains(other_object.type())) {
     auto [dir_x, dir_y] =
         other_object.Reflect(*this, direction_x(), direction_y());
 

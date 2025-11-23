@@ -7,6 +7,7 @@
 
 #include "absl/container/flat_hash_map.h"
 #include "lib/api/objects/object.h"
+#include "lib/api/objects/object_type.h"
 #include "lib/api/sprites/sprite_instance.h"
 
 namespace lib {
@@ -21,12 +22,12 @@ class StaticObject : public Object {
   };
 
   StaticObject(
-      Kind kind, StaticObjectOpts options,
+      ObjectType type, StaticObjectOpts options,
       const std::vector<std::pair<double, double>>& hit_box_vertices,
       std::unique_ptr<sprites::SpriteInstance> sprite_instance = nullptr);
 
   StaticObject(
-      Kind kind, StaticObjectOpts options,
+      ObjectType type, StaticObjectOpts options,
       std::pair<double, double> hit_box_center, double hit_box_radius,
       std::unique_ptr<sprites::SpriteInstance> sprite_instance = nullptr);
 

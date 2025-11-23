@@ -3,6 +3,7 @@
 #include "gmock/gmock-matchers.h"
 #include "gtest/gtest.h"
 #include "lib/api/graphics_mock.h"
+#include "lib/api/objects/object_type.h"
 #include "lib/api/sprites/sprite_factory.h"
 
 namespace lib {
@@ -33,7 +34,7 @@ namespace {
 
 TEST_F(StaticObjectTest, CircleYBaseWithSprite) {
   StaticObject static_object = StaticObject(
-      /*kind=*/objects::kEnemy, /*options=*/
+      /*type=*/ObjectTypeFactory::MakeEnemy(), /*options=*/
       StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                      .should_draw_hit_box = false},
       /*hit_box_center=*/std::make_pair(0, 0), /*hit_box_radius=*/3,
@@ -44,7 +45,7 @@ TEST_F(StaticObjectTest, CircleYBaseWithSprite) {
 
 TEST_F(StaticObjectTest, RectangleYBaseWithSprite) {
   StaticObject static_object = StaticObject(
-      /*kind=*/objects::kEnemy, /*options=*/
+      /*type=*/ObjectTypeFactory::MakeEnemy(), /*options=*/
       StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                      .should_draw_hit_box = false},
       /*hit_box_vertices=*/
@@ -56,7 +57,7 @@ TEST_F(StaticObjectTest, RectangleYBaseWithSprite) {
 
 TEST_F(StaticObjectTest, OnCollisionCallbackDoesNothing) {
   StaticObject static_object = StaticObject(
-      /*kind=*/objects::kEnemy, /*options=*/
+      /*type=*/ObjectTypeFactory::MakeEnemy(), /*options=*/
       StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                      .should_draw_hit_box = false},
       /*hit_box_vertices=*/

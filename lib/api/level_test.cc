@@ -8,6 +8,7 @@
 #include "lib/api/abilities/controls.h"
 #include "lib/api/abilities/controls_mock.h"
 #include "lib/api/graphics_mock.h"
+#include "lib/api/objects/object_type.h"
 #include "lib/api/objects/screen_edge_object.h"
 #include "lib/api/objects/static_object.h"
 #include "lib/api/sprites/sprite_factory.h"
@@ -19,15 +20,8 @@ namespace api {
 using abilities::Ability;
 using abilities::kKeyA;
 using abilities::MoveAbility;
-using objects::kCoordinate;
-using objects::kEnemy;
-using objects::Kind;
-using objects::kPlayer;
-using objects::kScreenBottom;
-using objects::kScreenLeft;
-using objects::kScreenRight;
-using objects::kScreenTop;
-using objects::kWorldBorder;
+using objects::ObjectType;
+using objects::ObjectTypeFactory;
 using objects::StaticObject;
 using sprites::SpriteFactory;
 using sprites::SpriteInstance;
@@ -69,7 +63,7 @@ TEST_F(LevelDeathTest, CleanUpOrDieOutOfSync) {
   LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel);
 
   dummy_builder.AddObject(std::make_unique<StaticObject>(
-      /*kind=*/kPlayer,
+      /*type=*/ObjectTypeFactory::MakePlayer(),
       StaticObject::StaticObjectOpts{.is_hit_box_active = false,
                                      .should_draw_hit_box = false},
       /*hit_box_vertices=*/
@@ -99,7 +93,7 @@ TEST_F(LevelDeathTest, CoordinateObjectsAreAddedTwice) {
 TEST_F(LevelTest, CleanupOrDie) {
   LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel);
   std::unique_ptr<StaticObject> static_object = std::make_unique<StaticObject>(
-      /*kind=*/kPlayer,
+      /*type=*/ObjectTypeFactory::MakePlayer(),
       StaticObject::StaticObjectOpts{.is_hit_box_active = false,
                                      .should_draw_hit_box = false},
       /*hit_box_vertices=*/
@@ -127,13 +121,13 @@ TEST_F(LevelTest, ObjectsAreAdded) {
   LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel);
 
   dummy_builder.AddObject(std::make_unique<StaticObject>(
-      /*kind=*/kPlayer,
+      /*type=*/ObjectTypeFactory::MakePlayer(),
       StaticObject::StaticObjectOpts{.is_hit_box_active = false,
                                      .should_draw_hit_box = false},
       /*hit_box_vertices=*/
       std::vector<std::pair<double, double>>({{0, 0}, {0, 1}})));
   dummy_builder.AddObject(std::make_unique<StaticObject>(
-      /*kind=*/kEnemy,
+      /*type=*/ObjectTypeFactory::MakeEnemy(),
       StaticObject::StaticObjectOpts{.is_hit_box_active = false,
                                      .should_draw_hit_box = false},
       /*hit_box_vertices=*/
@@ -142,9 +136,9 @@ TEST_F(LevelTest, ObjectsAreAdded) {
 
   ASSERT_EQ(dummy_level->objects_.size(), 2);
   auto it = dummy_level->objects_.begin();
-  EXPECT_EQ((*it)->kind(), kPlayer);
+  EXPECT_TRUE((*it)->type().IsPlayer());
   ++it;
-  EXPECT_EQ((*it)->kind(), kEnemy);
+  EXPECT_TRUE((*it)->type().IsEnemy());
 }
 
 TEST_F(LevelTest, ObjectsAndAbilitiesAreAdded) {
@@ -159,7 +153,7 @@ TEST_F(LevelTest, ObjectsAndAbilitiesAreAdded) {
 
   dummy_builder.AddObjectAndAbilities(
       std::make_unique<StaticObject>(
-          /*kind=*/kPlayer,
+          /*type=*/ObjectTypeFactory::MakePlayer(),
           StaticObject::StaticObjectOpts{.is_hit_box_active = false,
                                          .should_draw_hit_box = false},
           /*hit_box_vertices=*/
@@ -169,7 +163,7 @@ TEST_F(LevelTest, ObjectsAndAbilitiesAreAdded) {
 
   ASSERT_EQ(dummy_level->objects_.size(), 1);
   ASSERT_EQ(dummy_level->abilities_.size(), 1);
-  EXPECT_EQ(dummy_level->objects_.front()->kind(), kPlayer);
+  EXPECT_TRUE(dummy_level->objects_.front()->type().IsPlayer());
 }
 
 TEST_F(LevelTest, ScreenEdgeObjects) {
@@ -179,20 +173,25 @@ TEST_F(LevelTest, ScreenEdgeObjects) {
 
   ASSERT_EQ(dummy_level->objects_.size(), 4);
   ASSERT_EQ(dummy_level->screen_edge_objects_.size(), 4);
-  std::vector<Kind> object_kinds;
-  std::vector<Kind> screen_edge_kinds;
+  std::vector<ObjectType> object_types;
+  std::vector<ObjectType> screen_edge_types;
   for (const auto& object : dummy_level->objects_) {
-    object_kinds.push_back(object->kind());
+    object_types.push_back(object->type());
   }
   for (const auto& object : dummy_level->screen_edge_objects_) {
-    screen_edge_kinds.push_back(object->kind());
+    screen_edge_types.push_back(object->type());
   }
   dummy_level->UpdateScreenEdges();
 
-  EXPECT_THAT(object_kinds, ElementsAre(kScreenLeft, kScreenRight, kScreenTop,
-                                        kScreenBottom));
-  EXPECT_THAT(screen_edge_kinds, ElementsAre(kScreenLeft, kScreenRight,
-                                             kScreenTop, kScreenBottom));
+  EXPECT_THAT(object_types, ElementsAre(ObjectTypeFactory::MakeScreenLeft(),
+                                        ObjectTypeFactory::MakeScreenRight(),
+                                        ObjectTypeFactory::MakeScreenTop(),
+                                        ObjectTypeFactory::MakeScreenBottom()));
+  EXPECT_THAT(screen_edge_types,
+              ElementsAre(ObjectTypeFactory::MakeScreenLeft(),
+                          ObjectTypeFactory::MakeScreenRight(),
+                          ObjectTypeFactory::MakeScreenTop(),
+                          ObjectTypeFactory::MakeScreenBottom()));
 }
 
 TEST_F(LevelTest, CoordinateObjects) {
@@ -202,18 +201,21 @@ TEST_F(LevelTest, CoordinateObjects) {
 
   ASSERT_EQ(dummy_level->objects_.size(), 2);
   ASSERT_EQ(dummy_level->coordinate_objects_.size(), 2);
-  std::vector<Kind> object_kinds;
-  std::vector<Kind> coordinate_kinds;
+  std::vector<ObjectType> object_types;
+  std::vector<ObjectType> coordinate_types;
   for (const auto& object : dummy_level->objects_) {
-    object_kinds.push_back(object->kind());
+    object_types.push_back(object->type());
   }
   for (const auto& object : dummy_level->coordinate_objects_) {
-    coordinate_kinds.push_back(object->kind());
+    coordinate_types.push_back(object->type());
   }
   dummy_level->UpdateCoordinateAxes();
 
-  EXPECT_THAT(object_kinds, ElementsAre(kCoordinate, kCoordinate));
-  EXPECT_THAT(coordinate_kinds, ElementsAre(kCoordinate, kCoordinate));
+  EXPECT_THAT(object_types, ElementsAre(ObjectTypeFactory::MakeCoordinate(),
+                                        ObjectTypeFactory::MakeCoordinate()));
+  EXPECT_THAT(coordinate_types,
+              ElementsAre(ObjectTypeFactory::MakeCoordinate(),
+                          ObjectTypeFactory::MakeCoordinate()));
 }
 
 TEST_F(LevelTest, WorldBorderObjects) {
@@ -226,10 +228,10 @@ TEST_F(LevelTest, WorldBorderObjects) {
   ASSERT_EQ(dummy_level->objects_.size(), 2);
   ASSERT_EQ(dummy_level->world_border_objects_.size(), 2);
   auto it = dummy_level->world_border_objects_.begin();
-  EXPECT_THAT((*it)->kind(), kWorldBorder);
+  EXPECT_TRUE((*it)->type().IsWorldBorder());
   EXPECT_THAT((*it)->center().x, 1000);
   ++it;
-  EXPECT_THAT((*it)->kind(), kWorldBorder);
+  EXPECT_TRUE((*it)->type().IsWorldBorder());
   EXPECT_THAT((*it)->center().y, 200);
 }
 
@@ -237,7 +239,7 @@ TEST_F(LevelTest, DrawsNoScreenEdgeObjects) {
   LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel);
   const std::unique_ptr<DummyLevel> dummy_level = dummy_builder.Build();
   const StaticObject object = StaticObject(
-      /*kind=*/kPlayer,
+      /*type=*/ObjectTypeFactory::MakePlayer(),
       StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                      .should_draw_hit_box = false},
       /*hit_box_vertices=*/
@@ -271,7 +273,7 @@ TEST_F(LevelTest, DrawsFullyInsideScreenOnlyHitBox) {
   dummy_level->screen_edge_objects_.push_back(screen_top.get());
   dummy_level->screen_edge_objects_.push_back(screen_bottom.get());
   const StaticObject object = StaticObject(
-      /*kind=*/kPlayer,
+      /*type=*/ObjectTypeFactory::MakePlayer(),
       StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                      .should_draw_hit_box = false},
       /*hit_box_vertices=*/
@@ -305,7 +307,7 @@ TEST_F(LevelTest, DrawsFullyInsideScreen) {
   dummy_level->screen_edge_objects_.push_back(screen_top.get());
   dummy_level->screen_edge_objects_.push_back(screen_bottom.get());
   const StaticObject object = StaticObject(
-      /*kind=*/kPlayer,
+      /*type=*/ObjectTypeFactory::MakePlayer(),
       StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                      .should_draw_hit_box = false},
       /*hit_box_vertices=*/
@@ -342,7 +344,7 @@ TEST_F(LevelTest, DrawsPartiallyOutsideScreenOnlyHitBox) {
 
   {
     const StaticObject object_left = StaticObject(
-        /*kind=*/kPlayer,
+        /*type=*/ObjectTypeFactory::MakePlayer(),
         StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                        .should_draw_hit_box = false},
         /*hit_box_vertices=*/
@@ -353,7 +355,7 @@ TEST_F(LevelTest, DrawsPartiallyOutsideScreenOnlyHitBox) {
 
   {
     const StaticObject object_right = StaticObject(
-        /*kind=*/kPlayer,
+        /*type=*/ObjectTypeFactory::MakePlayer(),
         StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                        .should_draw_hit_box = false},
         /*hit_box_vertices=*/
@@ -365,7 +367,7 @@ TEST_F(LevelTest, DrawsPartiallyOutsideScreenOnlyHitBox) {
 
   {
     const StaticObject object_top = StaticObject(
-        /*kind=*/kPlayer,
+        /*type=*/ObjectTypeFactory::MakePlayer(),
         StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                        .should_draw_hit_box = false},
         /*hit_box_vertices=*/
@@ -377,7 +379,7 @@ TEST_F(LevelTest, DrawsPartiallyOutsideScreenOnlyHitBox) {
 
   {
     const StaticObject object_bottom = StaticObject(
-        /*kind=*/kPlayer,
+        /*type=*/ObjectTypeFactory::MakePlayer(),
         StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                        .should_draw_hit_box = false},
         /*hit_box_vertices=*/
@@ -414,7 +416,7 @@ TEST_F(LevelTest, DrawsPartiallyOutsideScreen) {
 
   {
     const StaticObject object_left = StaticObject(
-        /*kind=*/kPlayer,
+        /*type=*/ObjectTypeFactory::MakePlayer(),
         StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                        .should_draw_hit_box = false},
         /*hit_box_vertices=*/
@@ -426,7 +428,7 @@ TEST_F(LevelTest, DrawsPartiallyOutsideScreen) {
 
   {
     const StaticObject object_right = StaticObject(
-        /*kind=*/kPlayer,
+        /*type=*/ObjectTypeFactory::MakePlayer(),
         StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                        .should_draw_hit_box = false},
         /*hit_box_vertices=*/
@@ -439,7 +441,7 @@ TEST_F(LevelTest, DrawsPartiallyOutsideScreen) {
 
   {
     const StaticObject object_top = StaticObject(
-        /*kind=*/kPlayer,
+        /*type=*/ObjectTypeFactory::MakePlayer(),
         StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                        .should_draw_hit_box = false},
         /*hit_box_vertices=*/
@@ -452,7 +454,7 @@ TEST_F(LevelTest, DrawsPartiallyOutsideScreen) {
 
   {
     const StaticObject object_bottom = StaticObject(
-        /*kind=*/kPlayer,
+        /*type=*/ObjectTypeFactory::MakePlayer(),
         StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                        .should_draw_hit_box = false},
         /*hit_box_vertices=*/
@@ -490,7 +492,7 @@ TEST_F(LevelTest, DoesNotDrawOutsideScreenOnlyHitBox) {
 
   {
     const StaticObject object_left = StaticObject(
-        /*kind=*/kPlayer,
+        /*type=*/ObjectTypeFactory::MakePlayer(),
         StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                        .should_draw_hit_box = false},
         /*hit_box_vertices=*/
@@ -501,7 +503,7 @@ TEST_F(LevelTest, DoesNotDrawOutsideScreenOnlyHitBox) {
 
   {
     const StaticObject object_right = StaticObject(
-        /*kind=*/kPlayer,
+        /*type=*/ObjectTypeFactory::MakePlayer(),
         StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                        .should_draw_hit_box = false},
         /*hit_box_vertices=*/
@@ -513,7 +515,7 @@ TEST_F(LevelTest, DoesNotDrawOutsideScreenOnlyHitBox) {
 
   {
     const StaticObject object_top = StaticObject(
-        /*kind=*/kPlayer,
+        /*type=*/ObjectTypeFactory::MakePlayer(),
         StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                        .should_draw_hit_box = false},
         /*hit_box_vertices=*/
@@ -525,7 +527,7 @@ TEST_F(LevelTest, DoesNotDrawOutsideScreenOnlyHitBox) {
 
   {
     const StaticObject object_bottom = StaticObject(
-        /*kind=*/kPlayer,
+        /*type=*/ObjectTypeFactory::MakePlayer(),
         StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                        .should_draw_hit_box = false},
         /*hit_box_vertices=*/
@@ -562,7 +564,7 @@ TEST_F(LevelTest, DoesNotDrawOutsideScreen) {
 
   {
     const StaticObject object_left = StaticObject(
-        /*kind=*/kPlayer,
+        /*type=*/ObjectTypeFactory::MakePlayer(),
         StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                        .should_draw_hit_box = false},
         /*hit_box_vertices=*/
@@ -574,7 +576,7 @@ TEST_F(LevelTest, DoesNotDrawOutsideScreen) {
 
   {
     const StaticObject object_right = StaticObject(
-        /*kind=*/kPlayer,
+        /*type=*/ObjectTypeFactory::MakePlayer(),
         StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                        .should_draw_hit_box = false},
         /*hit_box_vertices=*/
@@ -587,7 +589,7 @@ TEST_F(LevelTest, DoesNotDrawOutsideScreen) {
 
   {
     const StaticObject object_top = StaticObject(
-        /*kind=*/kPlayer,
+        /*type=*/ObjectTypeFactory::MakePlayer(),
         StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                        .should_draw_hit_box = false},
         /*hit_box_vertices=*/
@@ -600,7 +602,7 @@ TEST_F(LevelTest, DoesNotDrawOutsideScreen) {
 
   {
     const StaticObject object_bottom = StaticObject(
-        /*kind=*/kPlayer,
+        /*type=*/ObjectTypeFactory::MakePlayer(),
         StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                        .should_draw_hit_box = false},
         /*hit_box_vertices=*/

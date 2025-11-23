@@ -6,6 +6,7 @@
 #include "gtest/gtest.h"
 #include "lib/api/abilities/ability.h"
 #include "lib/api/level.h"
+#include "lib/api/objects/object_type.h"
 #include "lib/api/objects/static_object.h"
 
 namespace lib {
@@ -13,22 +14,29 @@ namespace api {
 
 using abilities::Ability;
 using abilities::MoveAbility;
-using objects::Kind;
+using objects::ObjectType;
+using objects::ObjectTypeFactory;
 using objects::StaticObject;
 using ::testing::UnorderedElementsAre;
 
-class TitleScreenLevelTest : public ::testing::Test {};
+class TitleScreenLevelTest : public ::testing::Test {
+ public:
+  TitleScreenLevelTest() : object_type_factory_(ObjectTypeFactory()) {}
+
+ protected:
+  ObjectTypeFactory object_type_factory_;
+};
 
 using TitleScreenLevelDeathTest = TitleScreenLevelTest;
 
 TEST_F(TitleScreenLevelDeathTest, StartButtonNotAdded) {
   TitleScreenLevelBuilder builder;
 
-  Kind kExitButton = 0;
+  ObjectType kExitButton = object_type_factory_.MakeNewObjectType();
   EXPECT_DEATH(
       builder
           .AddExitButton(std::make_unique<StaticObject>(
-              /*kind=*/kExitButton,
+              /*type=*/kExitButton,
               StaticObject::StaticObjectOpts{.is_hit_box_active = false,
                                              .should_draw_hit_box = false},
               /*hit_box_vertices=*/
@@ -40,11 +48,11 @@ TEST_F(TitleScreenLevelDeathTest, StartButtonNotAdded) {
 TEST_F(TitleScreenLevelDeathTest, ExitButtonNotAdded) {
   TitleScreenLevelBuilder builder;
 
-  Kind kStartButton = 0;
+  ObjectType kStartButton = object_type_factory_.MakeNewObjectType();
   EXPECT_DEATH(
       builder
           .AddStartButton(std::make_unique<StaticObject>(
-              /*kind=*/kStartButton,
+              /*type=*/kStartButton,
               StaticObject::StaticObjectOpts{.is_hit_box_active = false,
                                              .should_draw_hit_box = false},
               /*hit_box_vertices=*/
@@ -56,17 +64,17 @@ TEST_F(TitleScreenLevelDeathTest, ExitButtonNotAdded) {
 TEST_F(TitleScreenLevelDeathTest, StartButtonAddedTwice) {
   TitleScreenLevelBuilder builder;
 
-  Kind kStartButton = 0;
+  ObjectType kStartButton = object_type_factory_.MakeNewObjectType();
   EXPECT_DEATH(
       builder
           .AddStartButton(std::make_unique<StaticObject>(
-              /*kind=*/kStartButton,
+              /*type=*/kStartButton,
               StaticObject::StaticObjectOpts{.is_hit_box_active = false,
                                              .should_draw_hit_box = false},
               /*hit_box_vertices=*/
               std::vector<std::pair<double, double>>({{0, 0}, {0, 1}})))
           .AddStartButton(std::make_unique<StaticObject>(
-              /*kind=*/kStartButton,
+              /*type=*/kStartButton,
               StaticObject::StaticObjectOpts{.is_hit_box_active = false,
                                              .should_draw_hit_box = false},
               /*hit_box_vertices=*/
@@ -78,17 +86,17 @@ TEST_F(TitleScreenLevelDeathTest, StartButtonAddedTwice) {
 TEST_F(TitleScreenLevelDeathTest, ExitButtonAddedTwice) {
   TitleScreenLevelBuilder builder;
 
-  Kind kExitButton = 0;
+  ObjectType kExitButton = object_type_factory_.MakeNewObjectType();
   EXPECT_DEATH(
       builder
           .AddExitButton(std::make_unique<StaticObject>(
-              /*kind=*/kExitButton,
+              /*type=*/kExitButton,
               StaticObject::StaticObjectOpts{.is_hit_box_active = false,
                                              .should_draw_hit_box = false},
               /*hit_box_vertices=*/
               std::vector<std::pair<double, double>>({{0, 0}, {0, 1}})))
           .AddExitButton(std::make_unique<StaticObject>(
-              /*kind=*/kExitButton,
+              /*type=*/kExitButton,
               StaticObject::StaticObjectOpts{.is_hit_box_active = false,
                                              .should_draw_hit_box = false},
               /*hit_box_vertices=*/
@@ -101,18 +109,18 @@ TEST_F(TitleScreenLevelDeathTest, ExitButtonAddedTwice) {
 TEST_F(TitleScreenLevelTest, StartAndExitAddedOk) {
   TitleScreenLevelBuilder builder;
 
-  Kind kStartButton = 0;
-  Kind kExitButton = 0;
+  ObjectType kStartButton = object_type_factory_.MakeNewObjectType();
+  ObjectType kExitButton = object_type_factory_.MakeNewObjectType();
   const std::unique_ptr<TitleScreenLevel> level =
       builder
           .AddStartButton(std::make_unique<StaticObject>(
-              /*kind=*/kStartButton,
+              /*type=*/kStartButton,
               StaticObject::StaticObjectOpts{.is_hit_box_active = false,
                                              .should_draw_hit_box = false},
               /*hit_box_vertices=*/
               std::vector<std::pair<double, double>>({{0, 0}, {0, 1}})))
           .AddExitButton(std::make_unique<StaticObject>(
-              /*kind=*/kExitButton,
+              /*type=*/kExitButton,
               StaticObject::StaticObjectOpts{.is_hit_box_active = false,
                                              .should_draw_hit_box = false},
               /*hit_box_vertices=*/
@@ -121,9 +129,9 @@ TEST_F(TitleScreenLevelTest, StartAndExitAddedOk) {
 
   ASSERT_EQ(level->objects_.size(), 2);
   auto it = level->objects_.begin();
-  EXPECT_EQ((*it)->kind(), kStartButton);
+  EXPECT_EQ((*it)->type(), kStartButton);
   ++it;
-  EXPECT_EQ((*it)->kind(), kExitButton);
+  EXPECT_EQ((*it)->type(), kExitButton);
   EXPECT_EQ(level->abilities_.size(), 2);
 }
 

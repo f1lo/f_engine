@@ -2,6 +2,7 @@
 
 #include <list>
 
+#include "lib/api/objects/object_type.h"
 #include "lib/api/sprites/sprite_instance.h"
 
 namespace lib {
@@ -10,9 +11,10 @@ namespace objects {
 
 using sprites::SpriteInstance;
 
-Object::Object(const Kind kind, const Opts& options, internal::HitBox hit_box,
+Object::Object(const ObjectType type, const Opts& options,
+               internal::HitBox hit_box,
                std::unique_ptr<SpriteInstance> sprite_instance)
-    : kind_(kind),
+    : type_(type),
       hit_box_(std::move(hit_box)),
       deleted_(false),
       clicked_(false),

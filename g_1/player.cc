@@ -4,10 +4,8 @@
 
 namespace g_1 {
 
-using lib::api::objects::kProjectilePlayer;
-
 bool Player::OnCollisionCallback(Object& other_object) {
-  if (other_object.kind() == kProjectilePlayer) {
+  if (other_object.type().IsProjectilePlayer()) {
     return false;
   }
 

@@ -16,8 +16,10 @@ int main(const int argc, char** argv) {
       /*full_screen=*/absl::GetFlag(FLAGS_is_full_screen));
 
   game.AddLevel(g_1::MakeTitleScreenLevel(game.sprite_factory(),
+                                          game.object_type_factory(),
                                           absl::GetFlag(FLAGS_is_debug_mode)));
   game.AddLevel(g_1::MakeOpeningLevel(game.sprite_factory(),
+                                      game.object_type_factory(),
                                       absl::GetFlag(FLAGS_is_debug_mode)));
 
   game.Run();

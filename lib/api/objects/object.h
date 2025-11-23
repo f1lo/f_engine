@@ -6,29 +6,13 @@
 
 #include "absl/base/nullability.h"
 #include "lib/api/common_types.h"
+#include "lib/api/objects/object_type.h"
 #include "lib/api/sprites/sprite_instance.h"
 #include "lib/internal/hit_box.h"
 
 namespace lib {
 namespace api {
 namespace objects {
-
-typedef uint32_t Kind;
-
-static constexpr Kind kPlayer = std::numeric_limits<uint32_t>::max() - 1;
-static constexpr Kind kEnemy = std::numeric_limits<uint32_t>::max() - 2;
-static constexpr Kind kScreenLeft = std::numeric_limits<uint32_t>::max() - 3;
-static constexpr Kind kScreenRight = std::numeric_limits<uint32_t>::max() - 4;
-static constexpr Kind kScreenTop = std::numeric_limits<uint32_t>::max() - 5;
-static constexpr Kind kScreenBottom = std::numeric_limits<uint32_t>::max() - 6;
-static constexpr Kind kMousePointer = std::numeric_limits<uint32_t>::max() - 7;
-static constexpr Kind kButton = std::numeric_limits<uint32_t>::max() - 8;
-static constexpr Kind kProjectilePlayer =
-    std::numeric_limits<uint32_t>::max() - 9;
-static constexpr Kind kCoordinate = std::numeric_limits<uint32_t>::max() - 10;
-static constexpr Kind kWorldBorder = std::numeric_limits<uint32_t>::max() - 11;
-static constexpr Kind kSpriteBoundingBox =
-    std::numeric_limits<uint32_t>::max() - 12;
 
 class Object {
  public:
@@ -38,7 +22,7 @@ class Object {
   };
 
   explicit Object(
-      Kind kind, const Opts& options, internal::HitBox hit_box,
+      ObjectType type, const Opts& options, internal::HitBox hit_box,
       std::unique_ptr<sprites::SpriteInstance> sprite_instance = nullptr);
 
   virtual ~Object() = default;
@@ -56,7 +40,7 @@ class Object {
   [[nodiscard]] WorldPosition center() const {
     return {.x = hit_box().center_x(), .y = hit_box().center_y()};
   }
-  [[nodiscard]] Kind kind() const { return kind_; }
+  [[nodiscard]] ObjectType type() const { return type_; }
   [[nodiscard]] bool deleted() const { return deleted_; }
   [[nodiscard]] bool clicked() const { return clicked_; }
 
@@ -80,7 +64,7 @@ class Object {
   [[nodiscard]] const internal::HitBox& hit_box() const { return hit_box_; }
 
  private:
-  Kind kind_;
+  ObjectType type_;
   internal::HitBox hit_box_;
   bool deleted_;
   bool clicked_;
