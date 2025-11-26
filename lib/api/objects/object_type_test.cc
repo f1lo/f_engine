@@ -8,9 +8,9 @@ namespace api {
 namespace objects {
 TEST(ObjectTypeTest, EqualityWorks) {
   ObjectTypeFactory factory = ObjectTypeFactory();
-  ObjectType type = factory.MakeNewObjectType();
-  ObjectType copy_type = type;
-  ObjectType different_type = factory.MakeNewObjectType();
+  const ObjectType type = factory.MakeNewObjectType();
+  const ObjectType copy_type = type;
+  const ObjectType different_type = factory.MakeNewObjectType();
 
   EXPECT_EQ(type, copy_type);
   EXPECT_NE(type, different_type);
@@ -18,8 +18,8 @@ TEST(ObjectTypeTest, EqualityWorks) {
 
 TEST(ObjectTypeTest, LessWorks) {
   ObjectTypeFactory factory = ObjectTypeFactory();
-  ObjectType type_1 = factory.MakeNewObjectType();
-  ObjectType type_2 = factory.MakeNewObjectType();
+  const ObjectType type_1 = factory.MakeNewObjectType();
+  const ObjectType type_2 = factory.MakeNewObjectType();
 
   EXPECT_LT(type_1, type_2);
 }

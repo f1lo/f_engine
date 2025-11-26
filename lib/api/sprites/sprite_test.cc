@@ -8,11 +8,8 @@
 #include "lib/api/common_types.h"
 #include "lib/api/graphics_mock.h"
 #include "lib/api/sprites/animated_sprite.h"
-#include "lib/api/sprites/background_static_sprite.h"
-#include "lib/api/sprites/sprite.h"
 #include "lib/api/sprites/sprite_factory.h"
 #include "lib/api/sprites/sprite_instance.h"
-#include "lib/api/sprites/static_sprite.h"
 
 namespace lib {
 namespace api {
@@ -45,7 +42,7 @@ namespace {
 
 TEST_F(SpriteDeathTest, SpriteFactoryParallaxFactorBellowZero) {
   const std::string resource_path = "a/b/picture.png";
-  const float parallax_factor = -0.1;
+  constexpr float parallax_factor = -0.1;
 
   EXPECT_DEATH(sprite_factory_.MakeBackgroundStaticSprite(resource_path,
                                                           parallax_factor),
@@ -54,7 +51,7 @@ TEST_F(SpriteDeathTest, SpriteFactoryParallaxFactorBellowZero) {
 
 TEST_F(SpriteDeathTest, SpriteFactoryParallaxFactorAboveOne) {
   const std::string resource_path = "a/b/picture.png";
-  const float parallax_factor = 1.1;
+  constexpr float parallax_factor = 1.1;
 
   EXPECT_DEATH(sprite_factory_.MakeBackgroundStaticSprite(resource_path,
                                                           parallax_factor),

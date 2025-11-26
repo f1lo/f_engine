@@ -2,8 +2,6 @@
 
 #include "lib/api/graphics_mock.h"
 
-#include "lib/api/graphics.h"
-
 namespace lib {
 namespace api {
 

@@ -3,7 +3,6 @@
 
 #include <list>
 #include <memory>
-#include <optional>
 
 #include "lib/api/common_types.h"
 #include "lib/api/objects/object.h"

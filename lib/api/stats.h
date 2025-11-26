@@ -5,7 +5,6 @@
 
 #include "absl/container/flat_hash_map.h"
 #include "absl/time/time.h"
-#include "gtest/gtest_prod.h"
 #include "lib/api/objects/object_type.h"
 
 namespace lib {

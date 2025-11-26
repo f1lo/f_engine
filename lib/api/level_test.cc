@@ -1,5 +1,6 @@
 #include "lib/api/level.h"
 
+#include <filesystem>
 #include <memory>
 
 #include "gmock/gmock-matchers.h"
@@ -38,7 +39,9 @@ class DummyLevel : public Level {
  public:
   explicit DummyLevel(const LevelId id) : Level(id) {}
 
-  LevelId MaybeChangeLevel() const override { return kInvalidLevel; }
+  [[nodiscard]] LevelId MaybeChangeLevel() const override {
+    return kInvalidLevel;
+  }
 };
 
 }  // namespace
@@ -256,18 +259,18 @@ TEST_F(LevelTest, DrawsFullyInsideScreenOnlyHitBox) {
   dummy_level->screen_edge_objects_.clear();
   constexpr double screen_width = 200;
   constexpr double screen_height = 100;
-  std::unique_ptr<objects::ScreenEdgeObject> screen_left =
+  const std::unique_ptr<objects::ScreenEdgeObject> screen_left =
       objects::ScreenEdgeObject::MakeLeft(screen_height,
-                                          /*should_draw_hitbox=*/false);
-  std::unique_ptr<objects::ScreenEdgeObject> screen_right =
+                                          /*should_draw_hit_box=*/false);
+  const std::unique_ptr<objects::ScreenEdgeObject> screen_right =
       objects::ScreenEdgeObject::MakeRight(screen_width, screen_height,
-                                           /*should_draw_hitbox=*/false);
-  std::unique_ptr<objects::ScreenEdgeObject> screen_top =
+                                           /*should_draw_hit_box=*/false);
+  const std::unique_ptr<objects::ScreenEdgeObject> screen_top =
       objects::ScreenEdgeObject::MakeTop(screen_width,
-                                         /*should_draw_hitbox=*/false);
-  std::unique_ptr<objects::ScreenEdgeObject> screen_bottom =
+                                         /*should_draw_hit_box=*/false);
+  const std::unique_ptr<objects::ScreenEdgeObject> screen_bottom =
       objects::ScreenEdgeObject::MakeBottom(screen_width, screen_height,
-                                            /*should_draw_hitbox=*/false);
+                                            /*should_draw_hit_box=*/false);
   dummy_level->screen_edge_objects_.push_back(screen_left.get());
   dummy_level->screen_edge_objects_.push_back(screen_right.get());
   dummy_level->screen_edge_objects_.push_back(screen_top.get());
@@ -290,18 +293,18 @@ TEST_F(LevelTest, DrawsFullyInsideScreen) {
   dummy_level->screen_edge_objects_.clear();
   constexpr double screen_width = 200;
   constexpr double screen_height = 100;
-  std::unique_ptr<objects::ScreenEdgeObject> screen_left =
+  const std::unique_ptr<objects::ScreenEdgeObject> screen_left =
       objects::ScreenEdgeObject::MakeLeft(screen_height,
-                                          /*should_draw_hitbox=*/false);
-  std::unique_ptr<objects::ScreenEdgeObject> screen_right =
+                                          /*should_draw_hit_box=*/false);
+  const std::unique_ptr<objects::ScreenEdgeObject> screen_right =
       objects::ScreenEdgeObject::MakeRight(screen_width, screen_height,
-                                           /*should_draw_hitbox=*/false);
-  std::unique_ptr<objects::ScreenEdgeObject> screen_top =
+                                           /*should_draw_hit_box=*/false);
+  const std::unique_ptr<objects::ScreenEdgeObject> screen_top =
       objects::ScreenEdgeObject::MakeTop(screen_width,
-                                         /*should_draw_hitbox=*/false);
-  std::unique_ptr<objects::ScreenEdgeObject> screen_bottom =
+                                         /*should_draw_hit_box=*/false);
+  const std::unique_ptr<objects::ScreenEdgeObject> screen_bottom =
       objects::ScreenEdgeObject::MakeBottom(screen_width, screen_height,
-                                            /*should_draw_hitbox=*/false);
+                                            /*should_draw_hit_box=*/false);
   dummy_level->screen_edge_objects_.push_back(screen_left.get());
   dummy_level->screen_edge_objects_.push_back(screen_right.get());
   dummy_level->screen_edge_objects_.push_back(screen_top.get());
@@ -325,18 +328,18 @@ TEST_F(LevelTest, DrawsPartiallyOutsideScreenOnlyHitBox) {
   dummy_level->screen_edge_objects_.clear();
   constexpr double screen_width = 200;
   constexpr double screen_height = 100;
-  std::unique_ptr<objects::ScreenEdgeObject> screen_left =
+  const std::unique_ptr<objects::ScreenEdgeObject> screen_left =
       objects::ScreenEdgeObject::MakeLeft(screen_height,
-                                          /*should_draw_hitbox=*/false);
-  std::unique_ptr<objects::ScreenEdgeObject> screen_right =
+                                          /*should_draw_hit_box=*/false);
+  const std::unique_ptr<objects::ScreenEdgeObject> screen_right =
       objects::ScreenEdgeObject::MakeRight(screen_width, screen_height,
-                                           /*should_draw_hitbox=*/false);
-  std::unique_ptr<objects::ScreenEdgeObject> screen_top =
+                                           /*should_draw_hit_box=*/false);
+  const std::unique_ptr<objects::ScreenEdgeObject> screen_top =
       objects::ScreenEdgeObject::MakeTop(screen_width,
-                                         /*should_draw_hitbox=*/false);
-  std::unique_ptr<objects::ScreenEdgeObject> screen_bottom =
+                                         /*should_draw_hit_box=*/false);
+  const std::unique_ptr<objects::ScreenEdgeObject> screen_bottom =
       objects::ScreenEdgeObject::MakeBottom(screen_width, screen_height,
-                                            /*should_draw_hitbox=*/false);
+                                            /*should_draw_hit_box=*/false);
   dummy_level->screen_edge_objects_.push_back(screen_left.get());
   dummy_level->screen_edge_objects_.push_back(screen_right.get());
   dummy_level->screen_edge_objects_.push_back(screen_top.get());
@@ -397,18 +400,18 @@ TEST_F(LevelTest, DrawsPartiallyOutsideScreen) {
   dummy_level->screen_edge_objects_.clear();
   constexpr double screen_width = 200;
   constexpr double screen_height = 100;
-  std::unique_ptr<objects::ScreenEdgeObject> screen_left =
+  const std::unique_ptr<objects::ScreenEdgeObject> screen_left =
       objects::ScreenEdgeObject::MakeLeft(screen_height,
-                                          /*should_draw_hitbox=*/false);
-  std::unique_ptr<objects::ScreenEdgeObject> screen_right =
+                                          /*should_draw_hit_box=*/false);
+  const std::unique_ptr<objects::ScreenEdgeObject> screen_right =
       objects::ScreenEdgeObject::MakeRight(screen_width, screen_height,
-                                           /*should_draw_hitbox=*/false);
-  std::unique_ptr<objects::ScreenEdgeObject> screen_top =
+                                           /*should_draw_hit_box=*/false);
+  const std::unique_ptr<objects::ScreenEdgeObject> screen_top =
       objects::ScreenEdgeObject::MakeTop(screen_width,
-                                         /*should_draw_hitbox=*/false);
-  std::unique_ptr<objects::ScreenEdgeObject> screen_bottom =
+                                         /*should_draw_hit_box=*/false);
+  const std::unique_ptr<objects::ScreenEdgeObject> screen_bottom =
       objects::ScreenEdgeObject::MakeBottom(screen_width, screen_height,
-                                            /*should_draw_hitbox=*/false);
+                                            /*should_draw_hit_box=*/false);
   dummy_level->screen_edge_objects_.push_back(screen_left.get());
   dummy_level->screen_edge_objects_.push_back(screen_right.get());
   dummy_level->screen_edge_objects_.push_back(screen_top.get());
@@ -473,18 +476,18 @@ TEST_F(LevelTest, DoesNotDrawOutsideScreenOnlyHitBox) {
   dummy_level->screen_edge_objects_.clear();
   constexpr double screen_width = 200;
   constexpr double screen_height = 100;
-  std::unique_ptr<objects::ScreenEdgeObject> screen_left =
+  const std::unique_ptr<objects::ScreenEdgeObject> screen_left =
       objects::ScreenEdgeObject::MakeLeft(screen_height,
-                                          /*should_draw_hitbox=*/false);
-  std::unique_ptr<objects::ScreenEdgeObject> screen_right =
+                                          /*should_draw_hit_box=*/false);
+  const std::unique_ptr<objects::ScreenEdgeObject> screen_right =
       objects::ScreenEdgeObject::MakeRight(screen_width, screen_height,
-                                           /*should_draw_hitbox=*/false);
-  std::unique_ptr<objects::ScreenEdgeObject> screen_top =
+                                           /*should_draw_hit_box=*/false);
+  const std::unique_ptr<objects::ScreenEdgeObject> screen_top =
       objects::ScreenEdgeObject::MakeTop(screen_width,
-                                         /*should_draw_hitbox=*/false);
-  std::unique_ptr<objects::ScreenEdgeObject> screen_bottom =
+                                         /*should_draw_hit_box=*/false);
+  const std::unique_ptr<objects::ScreenEdgeObject> screen_bottom =
       objects::ScreenEdgeObject::MakeBottom(screen_width, screen_height,
-                                            /*should_draw_hitbox=*/false);
+                                            /*should_draw_hit_box=*/false);
   dummy_level->screen_edge_objects_.push_back(screen_left.get());
   dummy_level->screen_edge_objects_.push_back(screen_right.get());
   dummy_level->screen_edge_objects_.push_back(screen_top.get());
@@ -545,18 +548,18 @@ TEST_F(LevelTest, DoesNotDrawOutsideScreen) {
   dummy_level->screen_edge_objects_.clear();
   constexpr double screen_width = 200;
   constexpr double screen_height = 100;
-  std::unique_ptr<objects::ScreenEdgeObject> screen_left =
+  const std::unique_ptr<objects::ScreenEdgeObject> screen_left =
       objects::ScreenEdgeObject::MakeLeft(screen_height,
-                                          /*should_draw_hitbox=*/false);
-  std::unique_ptr<objects::ScreenEdgeObject> screen_right =
+                                          /*should_draw_hit_box=*/false);
+  const std::unique_ptr<objects::ScreenEdgeObject> screen_right =
       objects::ScreenEdgeObject::MakeRight(screen_width, screen_height,
-                                           /*should_draw_hitbox=*/false);
-  std::unique_ptr<objects::ScreenEdgeObject> screen_top =
+                                           /*should_draw_hit_box=*/false);
+  const std::unique_ptr<objects::ScreenEdgeObject> screen_top =
       objects::ScreenEdgeObject::MakeTop(screen_width,
-                                         /*should_draw_hitbox=*/false);
-  std::unique_ptr<objects::ScreenEdgeObject> screen_bottom =
+                                         /*should_draw_hit_box=*/false);
+  const std::unique_ptr<objects::ScreenEdgeObject> screen_bottom =
       objects::ScreenEdgeObject::MakeBottom(screen_width, screen_height,
-                                            /*should_draw_hitbox=*/false);
+                                            /*should_draw_hit_box=*/false);
   dummy_level->screen_edge_objects_.push_back(screen_left.get());
   dummy_level->screen_edge_objects_.push_back(screen_right.get());
   dummy_level->screen_edge_objects_.push_back(screen_top.get());
@@ -615,10 +618,12 @@ TEST_F(LevelTest, DoesNotDrawOutsideScreen) {
 }
 
 TEST_F(LevelTest, DrawBackground) {
-  const std::string resource_path_0 = "a/b/picture_0.png";
-  const std::string resource_path_1 = "a/b/picture_1.png";
-  const float parallax_factor_0 = 0.5f;
-  const float parallax_factor_1 = 0.8f;
+  const std::string resource_path_0 =
+      std::filesystem::path("a/b/picture_0.png").make_preferred().string();
+  const std::string resource_path_1 =
+      std::filesystem::path("a/b/picture_1.png").make_preferred().string();
+  constexpr float parallax_factor_0 = 0.5f;
+  constexpr float parallax_factor_1 = 0.8f;
   std::unique_ptr<SpriteInstance> sprite_0 =
       sprite_factory_.MakeBackgroundStaticSprite(resource_path_0,
                                                  parallax_factor_0);

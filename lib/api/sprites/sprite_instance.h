@@ -19,9 +19,9 @@ class SpriteInstance {
   void Draw(WorldPosition draw_destination);
   void RotateAndDraw(WorldPosition draw_destination, int rotation_degree);
   void Reset();
-  int SpriteWidth() const;
-  int SpriteHeight() const;
-  const GraphicsInterface* GraphicsForTesting() const;
+  [[nodiscard]] int SpriteWidth() const;
+  [[nodiscard]] int SpriteHeight() const;
+  [[nodiscard]] const GraphicsInterface* GraphicsForTesting() const;
 
  private:
   friend class SpriteFactory;

@@ -116,7 +116,7 @@ void Level::Draw() const {
   // Y-sorting.
   std::vector<std::pair<int, Object*>> objects_by_y_base;
   for (const auto& object : objects_) {
-    objects_by_y_base.push_back(std::make_pair(object->YBase(), object.get()));
+    objects_by_y_base.emplace_back(object->YBase(), object.get());
   }
   std::ranges::sort(objects_by_y_base);
   for (const auto& y_and_object : objects_by_y_base) {

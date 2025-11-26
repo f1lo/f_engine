@@ -31,7 +31,7 @@ class BackgroundStaticSprite : public Sprite {
   BackgroundStaticSprite(std::unique_ptr<GraphicsInterface> graphics,
                          const std::string& resource_path,
                          float parallax_factor);
-  Texture2D texture() const;
+  [[nodiscard]] Texture2D texture() const;
 
  private:
   [[nodiscard]] const GraphicsInterface* GraphicsForTesting() const override;

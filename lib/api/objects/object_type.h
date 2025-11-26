@@ -1,8 +1,6 @@
 #ifndef LIB_API_OBJECTS_OBJECT_TYPE_H
 #define LIB_API_OBJECTS_OBJECT_TYPE_H
 
-#include <cstdint>
-
 #include "absl/hash/hash.h"
 
 #include "gtest/gtest_prod.h"
@@ -26,19 +24,19 @@ class ObjectType {
     return H::combine(std::move(h), t.type_);
   }
 
-  bool IsPlayer() const;
-  bool IsEnemy() const;
-  bool IsScreenLeft() const;
-  bool IsScreenRight() const;
-  bool IsScreenTop() const;
-  bool IsScreenBottom() const;
-  bool IsScreenEdge() const;
-  bool IsMousePointer() const;
-  bool IsButton() const;
-  bool IsProjectilePlayer() const;
-  bool IsCoordinate() const;
-  bool IsWorldBorder() const;
-  bool IsSpriteBoundingBox() const;
+  [[nodiscard]] bool IsPlayer() const;
+  [[nodiscard]] bool IsEnemy() const;
+  [[nodiscard]] bool IsScreenLeft() const;
+  [[nodiscard]] bool IsScreenRight() const;
+  [[nodiscard]] bool IsScreenTop() const;
+  [[nodiscard]] bool IsScreenBottom() const;
+  [[nodiscard]] bool IsScreenEdge() const;
+  [[nodiscard]] bool IsMousePointer() const;
+  [[nodiscard]] bool IsButton() const;
+  [[nodiscard]] bool IsProjectilePlayer() const;
+  [[nodiscard]] bool IsCoordinate() const;
+  [[nodiscard]] bool IsWorldBorder() const;
+  [[nodiscard]] bool IsSpriteBoundingBox() const;
 
  private:
   friend class ObjectTypeFactory;

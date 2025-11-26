@@ -33,7 +33,7 @@ class StaticSprite : public Sprite {
 
   StaticSprite(std::unique_ptr<GraphicsInterface> graphics,
                const std::string& resource_path);
-  Texture2D texture() const;
+  [[nodiscard]] Texture2D texture() const;
 
  private:
   [[nodiscard]] const GraphicsInterface* GraphicsForTesting() const override;

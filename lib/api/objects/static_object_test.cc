@@ -2,7 +2,6 @@
 
 #include "gmock/gmock-matchers.h"
 #include "gtest/gtest.h"
-#include "lib/api/graphics_mock.h"
 #include "lib/api/objects/object_type.h"
 #include "lib/api/sprites/sprite_factory.h"
 

@@ -11,7 +11,6 @@
 #include "lib/api/graphics_mock.h"
 #include "lib/api/sprites/animated_sprite.h"
 #include "lib/api/sprites/background_static_sprite.h"
-#include "lib/api/sprites/sprite.h"
 #include "lib/api/sprites/sprite_instance.h"
 #include "lib/api/sprites/static_sprite.h"
 

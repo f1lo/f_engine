@@ -1,25 +1,23 @@
 #include "lib/api/objects/object_type.h"
 
-#include <cstdint>
-
 namespace lib {
 namespace api {
 namespace objects {
 
 namespace {
 
-static constexpr uint16_t kPlayer = 0;
-static constexpr uint16_t kEnemy = 1;
-static constexpr uint16_t kScreenLeft = 2;
-static constexpr uint16_t kScreenRight = 3;
-static constexpr uint16_t kScreenTop = 4;
-static constexpr uint16_t kScreenBottom = 5;
-static constexpr uint16_t kMousePointer = 6;
-static constexpr uint16_t kButton = 7;
-static constexpr uint16_t kProjectilePlayer = 8;
-static constexpr uint16_t kCoordinate = 9;
-static constexpr uint16_t kWorldBorder = 10;
-static constexpr uint16_t kSpriteBoundingBox = 11;
+constexpr uint16_t kPlayer = 0;
+constexpr uint16_t kEnemy = 1;
+constexpr uint16_t kScreenLeft = 2;
+constexpr uint16_t kScreenRight = 3;
+constexpr uint16_t kScreenTop = 4;
+constexpr uint16_t kScreenBottom = 5;
+constexpr uint16_t kMousePointer = 6;
+constexpr uint16_t kButton = 7;
+constexpr uint16_t kProjectilePlayer = 8;
+constexpr uint16_t kCoordinate = 9;
+constexpr uint16_t kWorldBorder = 10;
+constexpr uint16_t kSpriteBoundingBox = 11;
 
 }  // namespace
 

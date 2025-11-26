@@ -15,7 +15,7 @@ void Stats::AddCollision(objects::ObjectType type_1,
   }
 
   auto [collisions_it_, _] =
-      collisions_.try_emplace({type_1, type_2}, Stats::CollisionData{});
+      collisions_.try_emplace({type_1, type_2}, CollisionData{});
   collisions_it_->second.collision_count++;
   collisions_it_->second.last_collision_time = absl::Now();
 }
