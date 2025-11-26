@@ -2,15 +2,11 @@
 #define LIB_API_SPRITES_SPRITE_FACTORY_H
 
 #include <memory>
-#include <optional>
 #include <string>
 #include <string_view>
-#include <vector>
 
 #include "absl/container/flat_hash_map.h"
-#include "absl/memory/memory.h"
 #include "absl/time/time.h"
-#include "gtest/gtest_prod.h"
 #include "lib/api/sprites/sprite.h"
 #include "lib/api/sprites/sprite_instance.h"
 

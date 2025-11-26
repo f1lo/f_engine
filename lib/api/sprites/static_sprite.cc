@@ -2,6 +2,7 @@
 
 #include "lib/api/sprites/static_sprite.h"
 
+#include <filesystem>
 #include <memory>
 #include <string>
 
@@ -15,7 +16,8 @@ namespace sprites {
 StaticSprite::StaticSprite(std::unique_ptr<GraphicsInterface> graphics,
                            const std::string& resource_path)
     : graphics_(std::move(graphics)),
-      texture_(graphics_->Load(resource_path.c_str())),
+      texture_(graphics_->Load(
+          std::filesystem::path(resource_path).make_preferred().string())),
       source_({0.0f, 0.0f, static_cast<float>(texture_.width),
                static_cast<float>(texture_.height)}),
       origin_(texture_.width / 2, texture_.height / 2) {}

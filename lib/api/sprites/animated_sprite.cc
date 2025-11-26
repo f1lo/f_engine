@@ -2,12 +2,12 @@
 
 #include "lib/api/sprites/animated_sprite.h"
 
+#include <filesystem>
 #include <memory>
 #include <string>
 
 #include "lib/api/common_types.h"
 #include "lib/api/graphics.h"
-#include "lib/api/sprites/sprite.h"
 
 namespace lib {
 namespace api {
@@ -17,7 +17,8 @@ AnimatedSprite::AnimatedSprite(std::unique_ptr<GraphicsInterface> graphics,
                                const std::string& resource_path,
                                const int frame_count)
     : graphics_(std::move(graphics)),
-      texture_(graphics_->Load(resource_path)),
+      texture_(graphics_->Load(
+          std::filesystem::path(resource_path).make_preferred().string())),
       frame_count_(frame_count),
       animation_frame_width_(static_cast<float>(texture_.width) /
                              static_cast<float>(frame_count_)),

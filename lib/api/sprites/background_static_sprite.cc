@@ -2,6 +2,7 @@
 
 #include "lib/api/sprites/background_static_sprite.h"
 
+#include <filesystem>
 #include <memory>
 #include <string>
 
@@ -16,7 +17,8 @@ BackgroundStaticSprite::BackgroundStaticSprite(
     std::unique_ptr<GraphicsInterface> graphics,
     const std::string& resource_path, const float parallax_factor)
     : graphics_(std::move(graphics)),
-      texture_(graphics_->Load(resource_path.c_str())),
+      texture_(graphics_->Load(
+          std::filesystem::path(resource_path).make_preferred().string())),
       screen_width_(static_cast<float>(graphics_->ScreenWidth())),
       screen_height_(static_cast<float>(graphics_->ScreenHeight())),
       origin_(screen_width_ / 2, screen_height_ / 2),
