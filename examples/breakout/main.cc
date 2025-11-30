@@ -83,8 +83,14 @@ std::vector<std::unique_ptr<BrickObject>> GenerateBricks(int brick_width,
 }
 
 int main() {
-  Game& game = Game::Create(/*width=*/1500, /*height=*/1000, "Breakout",
-                            /*full_screen=*/false);
+  Game& game = Game::Create({
+      .native_screen_width = 1500,
+      .native_screen_height = 1000,
+      .screen_width = 1500,
+      .screen_height = 1000,
+      .full_screen = false,
+      .title = "Breakout",
+  });
 
   MoveAbility::MoveAbilityOpts opts = {.key_left = kKeyA,
                                        .key_right = kKeyD,
