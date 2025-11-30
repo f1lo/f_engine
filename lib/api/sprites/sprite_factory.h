@@ -39,14 +39,17 @@ class SpriteFactory {
   friend class lib::api::LevelTest;
   friend class SpriteTest;
   friend class objects::StaticObjectTest;
-  SpriteFactory();
+  SpriteFactory(float native_screen_width, float native_screen_height);
   // For testing only.
-  SpriteFactory(unsigned int id, int texture_width, int texture_height);
+  SpriteFactory(unsigned int id, int texture_width, int texture_height,
+                float native_screen_width, float native_screen_height);
 
   const bool make_mock_sprites_;
   const unsigned int id_testing_;
   const int texture_width_testing_;
   const int texture_height_testing_;
+  const float native_screen_width_;
+  const float native_screen_height_;
   absl::flat_hash_map<std::string, std::unique_ptr<Sprite>> sprites_;
 };
 

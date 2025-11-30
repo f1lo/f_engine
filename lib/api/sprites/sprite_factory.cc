@@ -18,18 +18,25 @@ namespace lib {
 namespace api {
 namespace sprites {
 
-SpriteFactory::SpriteFactory()
+SpriteFactory::SpriteFactory(const float native_screen_width,
+                             const float native_screen_height)
     : make_mock_sprites_(false),
       id_testing_(0),
       texture_width_testing_(0),
-      texture_height_testing_(0) {}
+      texture_height_testing_(0),
+      native_screen_width_(native_screen_width),
+      native_screen_height_(native_screen_height) {}
 
 SpriteFactory::SpriteFactory(const unsigned int id, const int texture_width,
-                             const int texture_height)
+                             const int texture_height,
+                             const float native_screen_width,
+                             const float native_screen_height)
     : make_mock_sprites_(true),
       id_testing_(id),
       texture_width_testing_(texture_width),
-      texture_height_testing_(texture_height) {}
+      texture_height_testing_(texture_height),
+      native_screen_width_(native_screen_width),
+      native_screen_height_(native_screen_height) {}
 
 std::unique_ptr<SpriteInstance> SpriteFactory::MakeStaticSprite(
     const std::string_view resource_path) {
@@ -37,12 +44,15 @@ std::unique_ptr<SpriteInstance> SpriteFactory::MakeStaticSprite(
   if (inserted) {
     if (make_mock_sprites_) {
       sprite_it->second = absl::WrapUnique(new StaticSprite(
-          std::make_unique<GraphicsMock>(id_testing_, texture_width_testing_,
-                                         texture_height_testing_),
+          std::make_unique<GraphicsMock>(
+              id_testing_, texture_width_testing_, texture_height_testing_,
+              native_screen_width_, native_screen_height_),
           std::string(resource_path)));
     } else {
-      sprite_it->second = absl::WrapUnique(new StaticSprite(
-          std::make_unique<Graphics>(), std::string(resource_path)));
+      sprite_it->second = absl::WrapUnique(
+          new StaticSprite(std::make_unique<Graphics>(native_screen_width_,
+                                                      native_screen_height_),
+                           std::string(resource_path)));
     }
   }
 
@@ -62,13 +72,15 @@ std::unique_ptr<SpriteInstance> SpriteFactory::MakeBackgroundStaticSprite(
   if (inserted) {
     if (make_mock_sprites_) {
       sprite_it->second = absl::WrapUnique(new BackgroundStaticSprite(
-          std::make_unique<GraphicsMock>(id_testing_, texture_width_testing_,
-                                         texture_height_testing_),
+          std::make_unique<GraphicsMock>(
+              id_testing_, texture_width_testing_, texture_height_testing_,
+              native_screen_width_, native_screen_height_),
           std::string(resource_path), parallax_factor));
     } else {
       sprite_it->second = absl::WrapUnique(new BackgroundStaticSprite(
-          std::make_unique<Graphics>(), std::string(resource_path),
-          parallax_factor));
+          std::make_unique<Graphics>(native_screen_width_,
+                                     native_screen_height_),
+          std::string(resource_path), parallax_factor));
     }
   }
 
@@ -85,11 +97,13 @@ std::unique_ptr<SpriteInstance> SpriteFactory::MakeAnimatedSprite(
   if (inserted) {
     if (make_mock_sprites_) {
       sprite_it->second = absl::WrapUnique(new AnimatedSprite(
-          std::make_unique<GraphicsMock>(id_testing_, texture_width_testing_,
-                                         texture_height_testing_),
+          std::make_unique<GraphicsMock>(
+              id_testing_, texture_width_testing_, texture_height_testing_,
+              native_screen_width_, native_screen_height_),
           std::string(resource_path), frame_count));
     } else {
-      new AnimatedSprite(std::make_unique<Graphics>(),
+      new AnimatedSprite(std::make_unique<Graphics>(native_screen_width_,
+                                                    native_screen_height_),
                          std::string(resource_path), frame_count);
     }
   }

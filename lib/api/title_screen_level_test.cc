@@ -19,6 +19,9 @@ using objects::ObjectTypeFactory;
 using objects::StaticObject;
 using ::testing::UnorderedElementsAre;
 
+constexpr float kNativeScreenWidth = 1000;
+constexpr float kNativeScreenHeight = 500;
+
 class TitleScreenLevelTest : public ::testing::Test {
  public:
   TitleScreenLevelTest() : object_type_factory_(ObjectTypeFactory()) {}
@@ -30,7 +33,7 @@ class TitleScreenLevelTest : public ::testing::Test {
 using TitleScreenLevelDeathTest = TitleScreenLevelTest;
 
 TEST_F(TitleScreenLevelDeathTest, StartButtonNotAdded) {
-  TitleScreenLevelBuilder builder;
+  TitleScreenLevelBuilder builder(kNativeScreenWidth, kNativeScreenHeight);
 
   ObjectType kExitButton = object_type_factory_.MakeNewObjectType();
   EXPECT_DEATH(
@@ -46,7 +49,7 @@ TEST_F(TitleScreenLevelDeathTest, StartButtonNotAdded) {
 }
 
 TEST_F(TitleScreenLevelDeathTest, ExitButtonNotAdded) {
-  TitleScreenLevelBuilder builder;
+  TitleScreenLevelBuilder builder(kNativeScreenWidth, kNativeScreenHeight);
 
   ObjectType kStartButton = object_type_factory_.MakeNewObjectType();
   EXPECT_DEATH(
@@ -62,7 +65,7 @@ TEST_F(TitleScreenLevelDeathTest, ExitButtonNotAdded) {
 }
 
 TEST_F(TitleScreenLevelDeathTest, StartButtonAddedTwice) {
-  TitleScreenLevelBuilder builder;
+  TitleScreenLevelBuilder builder(kNativeScreenWidth, kNativeScreenHeight);
 
   ObjectType kStartButton = object_type_factory_.MakeNewObjectType();
   EXPECT_DEATH(
@@ -84,7 +87,7 @@ TEST_F(TitleScreenLevelDeathTest, StartButtonAddedTwice) {
 }
 
 TEST_F(TitleScreenLevelDeathTest, ExitButtonAddedTwice) {
-  TitleScreenLevelBuilder builder;
+  TitleScreenLevelBuilder builder(kNativeScreenWidth, kNativeScreenHeight);
 
   ObjectType kExitButton = object_type_factory_.MakeNewObjectType();
   EXPECT_DEATH(
@@ -107,7 +110,7 @@ TEST_F(TitleScreenLevelDeathTest, ExitButtonAddedTwice) {
 }
 
 TEST_F(TitleScreenLevelTest, StartAndExitAddedOk) {
-  TitleScreenLevelBuilder builder;
+  TitleScreenLevelBuilder builder(kNativeScreenWidth, kNativeScreenHeight);
 
   ObjectType kStartButton = object_type_factory_.MakeNewObjectType();
   ObjectType kExitButton = object_type_factory_.MakeNewObjectType();

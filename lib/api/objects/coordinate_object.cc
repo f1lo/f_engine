@@ -16,7 +16,7 @@ namespace api {
 namespace objects {
 
 std::unique_ptr<CoordinateObject> CoordinateObject::MakeX(
-    const double screen_width, const double screen_height) {
+    const float screen_width, const float screen_height) {
   return absl::WrapUnique(new CoordinateObject(
       ScreenPosition{0, kAxisOffset}, ScreenPosition{screen_width, kAxisOffset},
       screen_width, screen_height,
@@ -24,7 +24,7 @@ std::unique_ptr<CoordinateObject> CoordinateObject::MakeX(
 }
 
 std::unique_ptr<CoordinateObject> CoordinateObject::MakeY(
-    const double screen_width, const double screen_height) {
+    const float screen_width, const float screen_height) {
   return absl::WrapUnique(new CoordinateObject(
       ScreenPosition{kAxisOffset, 0},
       ScreenPosition{kAxisOffset, screen_height}, screen_width, screen_height,
@@ -33,8 +33,8 @@ std::unique_ptr<CoordinateObject> CoordinateObject::MakeY(
 
 CoordinateObject::CoordinateObject(const ScreenPosition screen_position_start,
                                    const ScreenPosition screen_position_end,
-                                   const double screen_width,
-                                   const double screen_height,
+                                   const float screen_width,
+                                   const float screen_height,
                                    const bool is_x_axis)
     : Object(ObjectTypeFactory::MakeCoordinate(),
              {/*is_hit_box_active*/ false,
@@ -60,7 +60,7 @@ void CoordinateObject::DrawX() const {
         /*posX=*/screen_top_left_pos_.x - kAxisOffset + kNumbersOffsetY,
         /*posY=*/screen_top_left_pos_.y + increment,
         /*fontSize=*/kFontSize,
-        /*color=*/GREEN);
+        /*color=*/BLACK);
     if (increment != 0) {
       DrawLineEx(
           Vector2(static_cast<float>(screen_top_left_pos_.x),
@@ -75,7 +75,7 @@ void CoordinateObject::DrawX() const {
 }
 
 void CoordinateObject::DrawY() const {
-  double increment = 0;
+  float increment = 0;
   while (increment < screen_width_) {
     DrawText(
         std::to_string(static_cast<int>(screen_top_left_pos_.x + increment))
@@ -83,7 +83,7 @@ void CoordinateObject::DrawY() const {
         /*posX=*/screen_top_left_pos_.x + increment,
         /*posY=*/screen_top_left_pos_.y - kAxisOffset + kNumbersOffsetX,
         /*fontSize=*/kFontSize,
-        /*color=*/GREEN);
+        /*color=*/BLACK);
     if (increment != 0) {
       DrawLineEx(
           Vector2(static_cast<float>(screen_top_left_pos_.x + increment),
@@ -107,21 +107,23 @@ void CoordinateObject::Draw() const {
 }
 
 void CoordinateObject::ReAdjustToScreen(const WorldPosition screen_top_left_pos,
-                                        const double screen_width,
-                                        const double screen_height) {
+                                        const float screen_width,
+                                        const float screen_height) {
+  screen_width_ = screen_width;
+  screen_height_ = screen_height;
   screen_top_left_pos_ = {screen_top_left_pos.x + kAxisOffset,
                           screen_top_left_pos.y + kAxisOffset};
 
   if (is_x_axis_) {
     mutable_hit_box().Move(
-        screen_width / 2 + screen_top_left_pos_.x - center().x,
+        screen_width_ / 2 + screen_top_left_pos_.x - center().x,
         screen_top_left_pos_.y - center().y);
     return;
   }
 
   mutable_hit_box().Move(
       screen_top_left_pos_.x - center().x,
-      screen_top_left_pos_.y + screen_height / 2 - center().y);
+      screen_top_left_pos_.y + screen_height_ / 2 - center().y);
 }
 
 }  // namespace objects

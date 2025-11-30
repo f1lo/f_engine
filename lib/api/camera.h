@@ -11,9 +11,9 @@ namespace api {
 
 class Camera {
  public:
-  Camera()
-      : camera_({.offset = {.x = static_cast<float>(GetScreenWidth()) / 2.0f,
-                            .y = static_cast<float>(GetScreenHeight()) / 2.0f},
+  Camera(const float native_screen_width, const float native_screen_height)
+      : camera_({.offset = {.x = native_screen_width / 2.0f,
+                            .y = native_screen_height / 2.0f},
                  .target = {.x = 0.0f, .y = 0.0f},
                  .rotation = 0.0f,
                  .zoom = 1.0f}),

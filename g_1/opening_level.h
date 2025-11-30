@@ -9,8 +9,10 @@ namespace g_1 {
 
 class OpeningLevel : public lib::api::Level {
  public:
-  explicit OpeningLevel(const lib::api::LevelId id)
-      : Level(id), player_(nullptr) {}
+  OpeningLevel(const lib::api::LevelId id, const float native_screen_width,
+               const float native_screen_height)
+      : Level(id, native_screen_width, native_screen_height),
+        player_(nullptr) {}
   [[nodiscard]] lib::api::LevelId MaybeChangeLevel() const override;
 
  protected:
@@ -20,7 +22,10 @@ class OpeningLevel : public lib::api::Level {
 
 class OpeningLevelBuilder : public lib::api::LevelBuilder<OpeningLevel> {
  public:
-  explicit OpeningLevelBuilder(const lib::api::LevelId id) : LevelBuilder(id) {}
+  OpeningLevelBuilder(const lib::api::LevelId id,
+                      const float native_screen_width,
+                      const float native_screen_height)
+      : LevelBuilder(id, native_screen_width, native_screen_height) {}
 
   OpeningLevelBuilder& AddPlayerAndAbilities(
       std::unique_ptr<Player> player,

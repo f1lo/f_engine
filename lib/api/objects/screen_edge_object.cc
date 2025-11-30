@@ -13,14 +13,14 @@ namespace api {
 namespace objects {
 
 std::unique_ptr<ScreenEdgeObject> ScreenEdgeObject::MakeTop(
-    const double screen_width, const bool should_draw_hit_box) {
+    const float screen_width, const bool should_draw_hit_box) {
   return absl::WrapUnique(new ScreenEdgeObject(
       ObjectTypeFactory::MakeScreenTop(), should_draw_hit_box,
       ScreenPosition{0, 0}, ScreenPosition{screen_width, 0}));
 }
 
 std::unique_ptr<ScreenEdgeObject> ScreenEdgeObject::MakeBottom(
-    const double screen_width, const double screen_height,
+    const float screen_width, const float screen_height,
     const bool should_draw_hit_box) {
   return absl::WrapUnique(new ScreenEdgeObject(
       ObjectTypeFactory::MakeScreenBottom(), should_draw_hit_box,
@@ -29,14 +29,14 @@ std::unique_ptr<ScreenEdgeObject> ScreenEdgeObject::MakeBottom(
 }
 
 std::unique_ptr<ScreenEdgeObject> ScreenEdgeObject::MakeLeft(
-    const double screen_height, const bool should_draw_hit_box) {
+    const float screen_height, const bool should_draw_hit_box) {
   return absl::WrapUnique(new ScreenEdgeObject(
       ObjectTypeFactory::MakeScreenLeft(), should_draw_hit_box,
       ScreenPosition{0, 0}, ScreenPosition{0, screen_height}));
 }
 
 std::unique_ptr<ScreenEdgeObject> ScreenEdgeObject::MakeRight(
-    const double screen_width, const double screen_height,
+    const float screen_width, const float screen_height,
     const bool should_draw_hit_box) {
   return absl::WrapUnique(
       new ScreenEdgeObject(ObjectTypeFactory::MakeScreenRight(),
@@ -53,8 +53,8 @@ ScreenEdgeObject::ScreenEdgeObject(const ObjectType type,
              CreateHitBoxOrDie({a, b})) {}
 
 void ScreenEdgeObject::ReAdjustToScreen(const WorldPosition screen_top_left_pos,
-                                        const double screen_width,
-                                        const double screen_height) {
+                                        const float screen_width,
+                                        const float screen_height) {
   if (type().IsScreenTop()) {
     mutable_hit_box().Move(
         screen_width / 2 + screen_top_left_pos.x - center().x,

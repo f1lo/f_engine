@@ -22,12 +22,16 @@ int main(const int argc, char** argv) {
       .title = "FG",
   });
 
-  game.AddLevel(g_1::MakeTitleScreenLevel(game.sprite_factory(),
-                                          game.object_type_factory(),
-                                          absl::GetFlag(FLAGS_is_debug_mode)));
-  game.AddLevel(g_1::MakeOpeningLevel(game.sprite_factory(),
-                                      game.object_type_factory(),
-                                      absl::GetFlag(FLAGS_is_debug_mode)));
+  game.AddLevel(g_1::MakeTitleScreenLevel(
+      game.sprite_factory(), game.object_type_factory(),
+      static_cast<float>(game.native_screen_width()),
+      static_cast<float>(game.native_screen_height()),
+      absl::GetFlag(FLAGS_is_debug_mode)));
+  game.AddLevel(
+      g_1::MakeOpeningLevel(game.sprite_factory(), game.object_type_factory(),
+                            static_cast<float>(game.native_screen_width()),
+                            static_cast<float>(game.native_screen_height()),
+                            absl::GetFlag(FLAGS_is_debug_mode)));
 
   game.Run();
   return 0;

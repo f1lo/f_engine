@@ -34,10 +34,14 @@ namespace {
 constexpr unsigned int kTextureId = 7;
 constexpr int kTextureWidth = 30;
 constexpr int kTextureHeight = 20;
+constexpr float kNativeScreenWidth = 1000;
+constexpr float kNativeScreenHeight = 500;
 
 class DummyLevel : public Level {
  public:
-  explicit DummyLevel(const LevelId id) : Level(id) {}
+  explicit DummyLevel(const LevelId id, const float native_screen_width,
+                      const float native_screen_height)
+      : Level(id, native_screen_width, native_screen_height) {}
 
   [[nodiscard]] LevelId MaybeChangeLevel() const override {
     return kInvalidLevel;
@@ -49,8 +53,9 @@ class DummyLevel : public Level {
 class LevelTest : public ::testing::Test {
  public:
   LevelTest()
-      : sprite_factory_(
-            SpriteFactory(kTextureId, kTextureWidth, kTextureHeight)) {}
+      : sprite_factory_(SpriteFactory(kTextureId, kTextureWidth, kTextureHeight,
+                                      kNativeScreenWidth,
+                                      kNativeScreenHeight)) {}
 
   std::unique_ptr<SpriteInstance> MakeSprite() {
     return sprite_factory_.MakeStaticSprite("a/b/picture.png");
@@ -63,7 +68,8 @@ class LevelTest : public ::testing::Test {
 using LevelDeathTest = LevelTest;
 
 TEST_F(LevelDeathTest, CleanUpOrDieOutOfSync) {
-  LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel);
+  LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel, kNativeScreenWidth,
+                                         kNativeScreenHeight);
 
   dummy_builder.AddObject(std::make_unique<StaticObject>(
       /*type=*/ObjectTypeFactory::MakePlayer(),
@@ -80,21 +86,24 @@ TEST_F(LevelDeathTest, CleanUpOrDieOutOfSync) {
 }
 
 TEST_F(LevelDeathTest, ScreenEdgeObjectsAreAddedTwice) {
-  LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel);
+  LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel, kNativeScreenWidth,
+                                         kNativeScreenHeight);
 
   EXPECT_DEATH(dummy_builder.WithScreenObjects().WithScreenObjects(),
                HasSubstr("WithScreenObjects() has already been called."));
 }
 
 TEST_F(LevelDeathTest, CoordinateObjectsAreAddedTwice) {
-  LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel);
+  LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel, kNativeScreenWidth,
+                                         kNativeScreenHeight);
 
   EXPECT_DEATH(dummy_builder.WithCoordinates().WithCoordinates(),
                HasSubstr("WithCoordinates() has already been called."));
 }
 
 TEST_F(LevelTest, CleanupOrDie) {
-  LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel);
+  LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel, kNativeScreenWidth,
+                                         kNativeScreenHeight);
   std::unique_ptr<StaticObject> static_object = std::make_unique<StaticObject>(
       /*type=*/ObjectTypeFactory::MakePlayer(),
       StaticObject::StaticObjectOpts{.is_hit_box_active = false,
@@ -121,7 +130,8 @@ TEST_F(LevelTest, CleanupOrDie) {
 }
 
 TEST_F(LevelTest, ObjectsAreAdded) {
-  LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel);
+  LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel, kNativeScreenWidth,
+                                         kNativeScreenHeight);
 
   dummy_builder.AddObject(std::make_unique<StaticObject>(
       /*type=*/ObjectTypeFactory::MakePlayer(),
@@ -145,7 +155,8 @@ TEST_F(LevelTest, ObjectsAreAdded) {
 }
 
 TEST_F(LevelTest, ObjectsAndAbilitiesAreAdded) {
-  LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel);
+  LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel, kNativeScreenWidth,
+                                         kNativeScreenHeight);
   std::list<std::unique_ptr<Ability>> abilities;
   abilities.push_back(std::make_unique<MoveAbility>(
       std::make_unique<abilities::ControlsMock>(),
@@ -170,7 +181,8 @@ TEST_F(LevelTest, ObjectsAndAbilitiesAreAdded) {
 }
 
 TEST_F(LevelTest, ScreenEdgeObjects) {
-  LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel);
+  LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel, kNativeScreenWidth,
+                                         kNativeScreenHeight);
   const std::unique_ptr<DummyLevel> dummy_level =
       dummy_builder.WithScreenObjects().Build();
 
@@ -198,7 +210,8 @@ TEST_F(LevelTest, ScreenEdgeObjects) {
 }
 
 TEST_F(LevelTest, CoordinateObjects) {
-  LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel);
+  LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel, kNativeScreenWidth,
+                                         kNativeScreenHeight);
   const std::unique_ptr<DummyLevel> dummy_level =
       dummy_builder.WithCoordinates().Build();
 
@@ -222,7 +235,8 @@ TEST_F(LevelTest, CoordinateObjects) {
 }
 
 TEST_F(LevelTest, WorldBorderObjects) {
-  LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel);
+  LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel, kNativeScreenWidth,
+                                         kNativeScreenHeight);
   const std::unique_ptr<DummyLevel> dummy_level =
       dummy_builder.WithWorldBorderX(/*x=*/1000)
           .WithWorldBorderY(/*y=*/200)
@@ -239,7 +253,8 @@ TEST_F(LevelTest, WorldBorderObjects) {
 }
 
 TEST_F(LevelTest, DrawsNoScreenEdgeObjects) {
-  LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel);
+  LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel, kNativeScreenWidth,
+                                         kNativeScreenHeight);
   const std::unique_ptr<DummyLevel> dummy_level = dummy_builder.Build();
   const StaticObject object = StaticObject(
       /*type=*/ObjectTypeFactory::MakePlayer(),
@@ -253,7 +268,8 @@ TEST_F(LevelTest, DrawsNoScreenEdgeObjects) {
 }
 
 TEST_F(LevelTest, DrawsFullyInsideScreenOnlyHitBox) {
-  LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel);
+  LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel, kNativeScreenWidth,
+                                         kNativeScreenHeight);
   const std::unique_ptr<DummyLevel> dummy_level =
       dummy_builder.WithScreenObjects().Build();
   dummy_level->screen_edge_objects_.clear();
@@ -287,7 +303,8 @@ TEST_F(LevelTest, DrawsFullyInsideScreenOnlyHitBox) {
 }
 
 TEST_F(LevelTest, DrawsFullyInsideScreen) {
-  LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel);
+  LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel, kNativeScreenWidth,
+                                         kNativeScreenHeight);
   const std::unique_ptr<DummyLevel> dummy_level =
       dummy_builder.WithScreenObjects().Build();
   dummy_level->screen_edge_objects_.clear();
@@ -322,7 +339,8 @@ TEST_F(LevelTest, DrawsFullyInsideScreen) {
 }
 
 TEST_F(LevelTest, DrawsPartiallyOutsideScreenOnlyHitBox) {
-  LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel);
+  LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel, kNativeScreenWidth,
+                                         kNativeScreenHeight);
   const std::unique_ptr<DummyLevel> dummy_level =
       dummy_builder.WithScreenObjects().Build();
   dummy_level->screen_edge_objects_.clear();
@@ -394,7 +412,8 @@ TEST_F(LevelTest, DrawsPartiallyOutsideScreenOnlyHitBox) {
 }
 
 TEST_F(LevelTest, DrawsPartiallyOutsideScreen) {
-  LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel);
+  LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel, kNativeScreenWidth,
+                                         kNativeScreenHeight);
   const std::unique_ptr<DummyLevel> dummy_level =
       dummy_builder.WithScreenObjects().Build();
   dummy_level->screen_edge_objects_.clear();
@@ -470,7 +489,8 @@ TEST_F(LevelTest, DrawsPartiallyOutsideScreen) {
 }
 
 TEST_F(LevelTest, DoesNotDrawOutsideScreenOnlyHitBox) {
-  LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel);
+  LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel, kNativeScreenWidth,
+                                         kNativeScreenHeight);
   const std::unique_ptr<DummyLevel> dummy_level =
       dummy_builder.WithScreenObjects().Build();
   dummy_level->screen_edge_objects_.clear();
@@ -542,7 +562,8 @@ TEST_F(LevelTest, DoesNotDrawOutsideScreenOnlyHitBox) {
 }
 
 TEST_F(LevelTest, DoesNotDrawOutsideScreen) {
-  LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel);
+  LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel, kNativeScreenWidth,
+                                         kNativeScreenHeight);
   const std::unique_ptr<DummyLevel> dummy_level =
       dummy_builder.WithScreenObjects().Build();
   dummy_level->screen_edge_objects_.clear();
@@ -636,7 +657,8 @@ TEST_F(LevelTest, DrawBackground) {
   const GraphicsMock* graphics_1 =
       dynamic_cast<const GraphicsMock*>(sprite_1->GraphicsForTesting());
   ASSERT_NE(graphics_1, nullptr);
-  LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel);
+  LevelBuilder<DummyLevel> dummy_builder(kInvalidLevel, kNativeScreenWidth,
+                                         kNativeScreenHeight);
   dummy_builder.AddBackgroundLayer(std::move(sprite_0));
   dummy_builder.AddBackgroundLayer(std::move(sprite_1));
   const std::unique_ptr<DummyLevel> dummy_level = dummy_builder.Build();
@@ -645,31 +667,35 @@ TEST_F(LevelTest, DrawBackground) {
 
   {
     EXPECT_EQ(graphics_0->loaded_texture(), resource_path_0);
-    EXPECT_EQ(graphics_0->drawn_texture_source().x, 0);
-    EXPECT_EQ(graphics_0->drawn_texture_source().y, 0);
-    EXPECT_EQ(graphics_0->drawn_texture_source().width,
-              static_cast<float>(graphics_0->ScreenWidth()));
-    EXPECT_EQ(graphics_0->drawn_texture_source().height,
-              static_cast<float>(graphics_0->ScreenHeight()));
-    EXPECT_EQ(graphics_0->drawn_texture_origin().x,
-              static_cast<float>(graphics_0->ScreenWidth()) / 2);
-    EXPECT_EQ(graphics_0->drawn_texture_origin().y,
-              static_cast<float>(graphics_0->ScreenHeight()) / 2);
+    EXPECT_EQ(graphics_0->drawn_texture_source().x,
+              kNativeScreenWidth * parallax_factor_0 / 2);
+    EXPECT_EQ(graphics_0->drawn_texture_source().y,
+              kNativeScreenHeight * parallax_factor_0 / 2);
+    EXPECT_FLOAT_EQ(graphics_0->drawn_texture_source().width,
+                    graphics_0->NativeScreenWidth());
+    EXPECT_FLOAT_EQ(graphics_0->drawn_texture_source().height,
+                    graphics_0->NativeScreenHeight());
+    EXPECT_FLOAT_EQ(graphics_0->drawn_texture_origin().x,
+                    graphics_0->NativeScreenWidth() / 2);
+    EXPECT_FLOAT_EQ(graphics_0->drawn_texture_origin().y,
+                    graphics_0->NativeScreenHeight() / 2);
     EXPECT_EQ(graphics_0->drawn_texture().id, kTextureId);
     EXPECT_EQ(graphics_0->rotation(), 0);
   }
   {
     EXPECT_EQ(graphics_1->loaded_texture(), resource_path_1);
-    EXPECT_EQ(graphics_1->drawn_texture_source().x, 0);
-    EXPECT_EQ(graphics_1->drawn_texture_source().y, 0);
-    EXPECT_EQ(graphics_1->drawn_texture_source().width,
-              static_cast<float>(graphics_1->ScreenWidth()));
-    EXPECT_EQ(graphics_1->drawn_texture_source().height,
-              static_cast<float>(graphics_1->ScreenHeight()));
-    EXPECT_EQ(graphics_1->drawn_texture_origin().x,
-              static_cast<float>(graphics_1->ScreenWidth()) / 2);
-    EXPECT_EQ(graphics_1->drawn_texture_origin().y,
-              static_cast<float>(graphics_1->ScreenHeight()) / 2);
+    EXPECT_EQ(graphics_1->drawn_texture_source().x,
+              kNativeScreenWidth * parallax_factor_1 / 2);
+    EXPECT_EQ(graphics_1->drawn_texture_source().y,
+              kNativeScreenHeight * parallax_factor_1 / 2);
+    EXPECT_FLOAT_EQ(graphics_1->drawn_texture_source().width,
+                    graphics_1->NativeScreenWidth());
+    EXPECT_FLOAT_EQ(graphics_1->drawn_texture_source().height,
+                    graphics_1->NativeScreenHeight());
+    EXPECT_FLOAT_EQ(graphics_1->drawn_texture_origin().x,
+                    graphics_1->NativeScreenWidth() / 2);
+    EXPECT_FLOAT_EQ(graphics_1->drawn_texture_origin().y,
+                    graphics_1->NativeScreenHeight() / 2);
     EXPECT_EQ(graphics_1->drawn_texture().id, kTextureId);
     EXPECT_EQ(graphics_1->rotation(), 0);
   }

@@ -42,8 +42,12 @@ template <typename LevelT>
 class LevelBuilder {
  public:
   virtual ~LevelBuilder() = default;
-  explicit LevelBuilder(const LevelId id) {
-    level_ = absl::WrapUnique(new LevelT(id));
+  explicit LevelBuilder(const LevelId id, const float native_screen_width,
+                        const float native_screen_height)
+      : native_screen_width_(native_screen_width),
+        native_screen_height_(native_screen_height) {
+    level_ = absl::WrapUnique(
+        new LevelT(id, native_screen_width_, native_screen_height_));
   }
 
   LevelBuilder& AddObjectAndAbilities(
@@ -86,18 +90,18 @@ class LevelBuilder {
   LevelBuilder& WithScreenObjects(const bool should_draw_hitbox = false) {
     CHECK(level_->screen_edge_objects_.empty())
         << "WithScreenObjects() has already been called.";
-    const int screen_width = GetScreenWidth();
-    const int screen_height = GetScreenHeight();
     std::unique_ptr<objects::ScreenEdgeObject> screen_left =
-        objects::ScreenEdgeObject::MakeLeft(screen_height, should_draw_hitbox);
+        objects::ScreenEdgeObject::MakeLeft(native_screen_height_,
+                                            should_draw_hitbox);
     std::unique_ptr<objects::ScreenEdgeObject> screen_right =
-        objects::ScreenEdgeObject::MakeRight(screen_width, screen_height,
-                                             should_draw_hitbox);
+        objects::ScreenEdgeObject::MakeRight(
+            native_screen_width_, native_screen_height_, should_draw_hitbox);
     std::unique_ptr<objects::ScreenEdgeObject> screen_top =
-        objects::ScreenEdgeObject::MakeTop(screen_width, should_draw_hitbox);
+        objects::ScreenEdgeObject::MakeTop(native_screen_width_,
+                                           should_draw_hitbox);
     std::unique_ptr<objects::ScreenEdgeObject> screen_bottom =
-        objects::ScreenEdgeObject::MakeBottom(screen_width, screen_height,
-                                              should_draw_hitbox);
+        objects::ScreenEdgeObject::MakeBottom(
+            native_screen_width_, native_screen_height_, should_draw_hitbox);
 
     level_->screen_edge_objects_.emplace_back(screen_left.get());
     level_->screen_edge_objects_.emplace_back(screen_right.get());
@@ -142,12 +146,12 @@ class LevelBuilder {
   LevelBuilder& WithCoordinates() {
     CHECK(level_->coordinate_objects_.empty())
         << "WithCoordinates() has already been called.";
-    const int screen_width = GetScreenWidth();
-    const int screen_height = GetScreenHeight();
     std::unique_ptr<objects::CoordinateObject> x_axis =
-        objects::CoordinateObject::MakeX(screen_width, screen_height);
+        objects::CoordinateObject::MakeX(native_screen_width_,
+                                         native_screen_height_);
     std::unique_ptr<objects::CoordinateObject> y_axis =
-        objects::CoordinateObject::MakeY(screen_width, screen_height);
+        objects::CoordinateObject::MakeY(native_screen_width_,
+                                         native_screen_height_);
 
     level_->coordinate_objects_.emplace_back(x_axis.get());
     level_->coordinate_objects_.emplace_back(y_axis.get());
@@ -157,6 +161,9 @@ class LevelBuilder {
   virtual std::unique_ptr<LevelT> Build() { return std::move(level_); }
 
  protected:
+  const float native_screen_width_;
+  const float native_screen_height_;
+
   std::unique_ptr<LevelT> level_;
 };
 
@@ -181,8 +188,13 @@ class Level {
   LevelId id_;
 
  protected:
-  explicit Level(const LevelId id)
-      : id_(id), controls_(std::make_unique<abilities::Controls>()) {}
+  Level(const LevelId id, const float native_screen_width,
+        const float native_screen_height)
+      : id_(id),
+        camera_(native_screen_width, native_screen_height),
+        controls_(std::make_unique<abilities::Controls>()),
+        native_screen_width_(native_screen_width),
+        native_screen_height_(native_screen_height) {}
   // This separation is required so that cyclic dependency is not introduced
   // between Object and Ability classes.
   FRIEND_TEST(LevelTest, ObjectsAreAdded);
@@ -209,6 +221,9 @@ class Level {
   Camera camera_;
   std::unique_ptr<const abilities::Controls> controls_;
   std::vector<std::unique_ptr<sprites::SpriteInstance>> background_layers_;
+
+  const float native_screen_width_;
+  const float native_screen_height_;
 };
 
 }  // namespace api

@@ -8,7 +8,9 @@ namespace breakout {
 
 class LevelMain final : public lib::api::Level {
  public:
-  explicit LevelMain(const lib::api::LevelId id) : Level(id) {}
+  LevelMain(const lib::api::LevelId id, const float native_screen_width,
+            const float native_screen_height)
+      : Level(id, native_screen_width, native_screen_height) {}
   ~LevelMain() override = default;
 
   [[nodiscard]] lib::api::LevelId MaybeChangeLevel() const override;
@@ -20,8 +22,9 @@ class LevelMain final : public lib::api::Level {
 
 class LevelMainBuilder : public lib::api::LevelBuilder<LevelMain> {
  public:
-  explicit LevelMainBuilder(const lib::api::LevelId id, const Ball* ball)
-      : LevelBuilder(id) {
+  LevelMainBuilder(const lib::api::LevelId id, const float native_screen_width,
+                   const float native_screen_height, const Ball* ball)
+      : LevelBuilder(id, native_screen_width, native_screen_height) {
     level_->ball_ = ball;
   }
 };

@@ -34,19 +34,27 @@ class Game {
       opts.screen_width = GetScreenWidth();
       opts.screen_height = GetScreenHeight();
     }
-    Game::screen_width_ = opts.screen_width;
-    Game::screen_height_ = opts.screen_height;
+
     static bool init_window = [opts]() {
-      InitWindow(opts.screen_width, opts.screen_height, opts.title.c_str());
+      unsigned int flags = FLAG_VSYNC_HINT;
       if (opts.full_screen) {
-        ToggleBorderlessWindowed();
+        flags |= FLAG_WINDOW_UNDECORATED;
+      }
+      SetConfigFlags(flags);
+      InitWindow(opts.screen_width, opts.screen_height, opts.title.c_str());
+
+      if (opts.full_screen) {
+        SetWindowPosition(0, 0);
       }
 
       return IsWindowReady();
     }();
     QCHECK(init_window);
 
-    static Game game;
+    Game::screen_width_ = GetScreenWidth();
+    Game::screen_height_ = GetScreenHeight();
+
+    static Game game(opts.native_screen_width, opts.native_screen_height);
     return game;
   }
   ~Game();
@@ -56,8 +64,10 @@ class Game {
 
   void Run();
 
-  static int screen_width() { return screen_width_; }
-  static int screen_height() { return screen_height_; }
+  int screen_width() { return screen_width_; }
+  int screen_height() { return screen_height_; }
+  int native_screen_width() { return native_screen_width_; }
+  int native_screen_height() { return native_screen_height_; }
   void AddLevel(std::unique_ptr<Level> level) {
     CHECK(levels_.find(level->id()) == levels_.end())
         << "Level " << level->id() << " already exists.";
@@ -70,16 +80,23 @@ class Game {
   }
 
  private:
-  Game() = default;
+  Game(const float native_screen_width, const float native_screen_height)
+      : native_screen_width_(native_screen_width),
+        native_screen_height_(native_screen_height),
+        sprite_factory_(sprites::SpriteFactory(native_screen_width_,
+                                               native_screen_height_)) {}
 
   absl::flat_hash_map<LevelId, std::unique_ptr<Level>> levels_;
-  sprites::SpriteFactory sprite_factory_ = sprites::SpriteFactory();
   objects::ObjectTypeFactory object_type_factory_ =
       objects::ObjectTypeFactory();
   Stats stats_ = Stats();
   bool debug_mode_ = false;
   static inline int screen_width_ = 0;
   static inline int screen_height_ = 0;
+  const int native_screen_width_;
+  const int native_screen_height_;
+
+  sprites::SpriteFactory sprite_factory_;
 };
 
 }  // namespace api

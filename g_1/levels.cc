@@ -164,13 +164,15 @@ std::vector<std::unique_ptr<StaticObject>> MakeStaticObjects(
 
 std::unique_ptr<Level> MakeOpeningLevel(SpriteFactory& sprite_factory,
                                         ObjectTypeFactory& object_type_factory,
+                                        const float native_screen_width,
+                                        const float native_screen_height,
                                         const bool debug_mode) {
   std::unique_ptr<Player> player = MakePlayer(sprite_factory, debug_mode);
   std::vector<std::unique_ptr<StaticObject>> static_objects =
       MakeStaticObjects(sprite_factory, debug_mode);
 
-  OpeningLevelBuilder level_builder =
-      OpeningLevelBuilder(lib::api::kFirstLevel);
+  OpeningLevelBuilder level_builder = OpeningLevelBuilder(
+      lib::api::kFirstLevel, native_screen_width, native_screen_height);
   level_builder.AddPlayerAndAbilities(std::move(player),
                                       MakePlayerAbilities(debug_mode));
   for (auto& static_object : static_objects) {
@@ -195,6 +197,7 @@ std::unique_ptr<Level> MakeOpeningLevel(SpriteFactory& sprite_factory,
 
 std::unique_ptr<Level> MakeTitleScreenLevel(
     SpriteFactory& sprite_factory, ObjectTypeFactory& object_type_factory,
+    const float native_screen_width, const float native_screen_height,
     const bool debug_mode) {
   std::unique_ptr<StaticObject> start_button = std::make_unique<StaticObject>(
       /*type=*/ObjectTypeFactory::MakeButton(),
@@ -222,7 +225,8 @@ std::unique_ptr<Level> MakeTitleScreenLevel(
            {kButtonOffsetX + kButtonLengthX,
             kButtonOffsetY + 2 * kButtonLengthY + kOffsetBetweenButtons}}));
 
-  TitleScreenLevelBuilder level_builder;
+  TitleScreenLevelBuilder level_builder =
+      TitleScreenLevelBuilder(native_screen_width, native_screen_height);
   return level_builder.AddStartButton(std::move(start_button))
       .AddExitButton(std::move(exit_button))
       .Build();

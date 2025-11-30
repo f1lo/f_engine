@@ -19,8 +19,8 @@ BackgroundStaticSprite::BackgroundStaticSprite(
     : graphics_(std::move(graphics)),
       texture_(graphics_->Load(
           std::filesystem::path(resource_path).make_preferred().string())),
-      screen_width_(static_cast<float>(graphics_->ScreenWidth())),
-      screen_height_(static_cast<float>(graphics_->ScreenHeight())),
+      screen_width_(graphics_->NativeScreenWidth()),
+      screen_height_(graphics_->NativeScreenHeight()),
       origin_(screen_width_ / 2, screen_height_ / 2),
       parallax_factor_(parallax_factor) {
   graphics_->TextureWrap(texture_, TEXTURE_WRAP_REPEAT);
@@ -41,7 +41,7 @@ void BackgroundStaticSprite::RotateAndDraw(const WorldPosition draw_destination,
        .height = screen_height_},
       {static_cast<float>(draw_destination.x),
        static_cast<float>(draw_destination.y), screen_width_, screen_height_},
-      origin_, static_cast<float>(degree), WHITE);
+      origin_, /*rotation=*/0.0, WHITE);
 }
 
 const GraphicsInterface* BackgroundStaticSprite::GraphicsForTesting() const {

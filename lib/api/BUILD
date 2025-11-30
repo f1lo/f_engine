@@ -127,7 +127,6 @@ cc_library(
     hdrs = ["graphics.h"],
     deps = [
         "//raylib",
-        "@abseil-cpp//absl/log:check",
     ],
 )
 

@@ -21,6 +21,9 @@ using objects::MovableObject;
 using objects::StaticObject;
 using ::testing::HasSubstr;
 
+constexpr float kNativeScreenWidth = 1000;
+constexpr float kNativeScreenHeight = 500;
+
 class MoveAbilityTest : public ::testing::Test {};
 
 class DummyMovableObject : public MovableObject {
@@ -56,7 +59,7 @@ TEST(MoveAbilityDeathTest, UserNotMovable) {
 
   ability.set_user(&static_object);
 
-  const Camera camera;
+  const Camera camera(kNativeScreenWidth, kNativeScreenHeight);
   EXPECT_DEATH(ability.Use(camera),
                HasSubstr("ability user is not of correct type."));
 }
@@ -73,7 +76,7 @@ TEST(MoveAbilityTest, Move) {
                                                .key_bottom = std::nullopt});
   ability.set_user(&movable_object);
 
-  const Camera camera;
+  const Camera camera(kNativeScreenWidth, kNativeScreenHeight);
   const std::list<ObjectAndAbilities> objects_and_abilities =
       ability.Use(camera);
 
@@ -96,7 +99,7 @@ TEST(MoveAbilityTest, MoveLeft) {
                                    .key_bottom = std::nullopt});
   ability.set_user(&movable_object);
 
-  const Camera camera;
+  const Camera camera(kNativeScreenWidth, kNativeScreenHeight);
   const std::list<ObjectAndAbilities> objects_and_abilities =
       ability.Use(camera);
 
@@ -119,7 +122,7 @@ TEST(MoveAbilityTest, MoveRight) {
                                    .key_bottom = std::nullopt});
   ability.set_user(&movable_object);
 
-  const Camera camera;
+  const Camera camera(kNativeScreenWidth, kNativeScreenHeight);
   const std::list<ObjectAndAbilities> objects_and_abilities =
       ability.Use(camera);
 
@@ -142,7 +145,7 @@ TEST(MoveAbilityTest, MoveTop) {
                                    .key_bottom = std::nullopt});
   ability.set_user(&movable_object);
 
-  const Camera camera;
+  const Camera camera(kNativeScreenWidth, kNativeScreenHeight);
   const std::list<ObjectAndAbilities> objects_and_abilities =
       ability.Use(camera);
 
@@ -165,7 +168,7 @@ TEST(MoveAbilityTest, MoveBottom) {
                                    .key_bottom = kKeyA});
   ability.set_user(&movable_object);
 
-  const Camera camera;
+  const Camera camera(kNativeScreenWidth, kNativeScreenHeight);
   const std::list<ObjectAndAbilities> objects_and_abilities =
       ability.Use(camera);
 

@@ -6,7 +6,9 @@ namespace lib {
 namespace api {
 
 GraphicsMock::GraphicsMock(const unsigned int id, const int texture_width,
-                           const int texture_height)
+                           const int texture_height,
+                           const float native_screen_width,
+                           const float native_screen_height)
     : texture_source_(Rectangle{}),
       unloaded_texture_id_(0),
       texture_to_be_drawn_({
@@ -18,7 +20,9 @@ GraphicsMock::GraphicsMock(const unsigned int id, const int texture_width,
       }),
       texture_origin_(),
       drawn_texture_(),
-      rotation_(0) {}
+      rotation_(0),
+      native_screen_width_(native_screen_width),
+      native_screen_height_(native_screen_height) {}
 
 Texture2D GraphicsMock::Load(const std::string resource_path) {
   loaded_texture_ = resource_path;
@@ -38,12 +42,12 @@ void GraphicsMock::Unload(const Texture2D& texture) {
   unloaded_texture_id_ = texture.id;
 }
 
-int GraphicsMock::ScreenWidth() const {
-  return 600;
+float GraphicsMock::NativeScreenWidth() const {
+  return native_screen_width_;
 }
 
-int GraphicsMock::ScreenHeight() const {
-  return 450;
+float GraphicsMock::NativeScreenHeight() const {
+  return native_screen_height_;
 }
 
 void GraphicsMock::TextureWrap(Texture2D texture, int wrap) const {}

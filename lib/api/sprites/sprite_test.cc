@@ -19,6 +19,8 @@ namespace {
 constexpr unsigned int kTextureId = 7;
 constexpr int kTextureWidth = 300;
 constexpr int kTextureHeight = 200;
+constexpr float kNativeScreenWidth = 1000;
+constexpr float kNativeScreenHeight = 500;
 constexpr absl::Duration kAdvanceToNextFrameAfter = absl::Milliseconds(200);
 constexpr absl::Duration kSmallIncrement = absl::Milliseconds(20);
 
@@ -29,8 +31,9 @@ using ::testing::HasSubstr;
 class SpriteTest : public ::testing::Test {
  public:
   SpriteTest()
-      : sprite_factory_(
-            SpriteFactory(kTextureId, kTextureWidth, kTextureHeight)) {}
+      : sprite_factory_(SpriteFactory(kTextureId, kTextureWidth, kTextureHeight,
+                                      kNativeScreenWidth,
+                                      kNativeScreenHeight)) {}
 
  protected:
   SpriteFactory sprite_factory_;
@@ -333,14 +336,14 @@ TEST_F(SpriteTest, SpriteFactoryBackgroundStaticSpriteDraw) {
                   draw_destination.x * parallax_factor);
   EXPECT_FLOAT_EQ(graphics->drawn_texture_source().y,
                   draw_destination.y * parallax_factor);
-  EXPECT_EQ(graphics->drawn_texture_source().width,
-            static_cast<float>(graphics->ScreenWidth()));
-  EXPECT_EQ(graphics->drawn_texture_source().height,
-            static_cast<float>(graphics->ScreenHeight()));
-  EXPECT_EQ(graphics->drawn_texture_origin().x,
-            static_cast<float>(graphics->ScreenWidth()) / 2);
-  EXPECT_EQ(graphics->drawn_texture_origin().y,
-            static_cast<float>(graphics->ScreenHeight()) / 2);
+  EXPECT_FLOAT_EQ(graphics->drawn_texture_source().width,
+                  graphics->NativeScreenWidth());
+  EXPECT_FLOAT_EQ(graphics->drawn_texture_source().height,
+                  graphics->NativeScreenHeight());
+  EXPECT_FLOAT_EQ(graphics->drawn_texture_origin().x,
+                  graphics->NativeScreenWidth() / 2);
+  EXPECT_FLOAT_EQ(graphics->drawn_texture_origin().y,
+                  graphics->NativeScreenHeight() / 2);
   EXPECT_EQ(graphics->drawn_texture().id, kTextureId);
   EXPECT_EQ(sprite->SpriteWidth(), kTextureWidth);
   EXPECT_EQ(sprite->SpriteHeight(), kTextureHeight);
@@ -362,16 +365,17 @@ TEST_F(SpriteTest, SpriteFactoryBackgroundStaticSpriteAlreadyExists) {
   EXPECT_EQ(graphics->loaded_texture(), resource_path);
   EXPECT_EQ(graphics->drawn_texture_source().x, draw_destination.x);
   EXPECT_EQ(graphics->drawn_texture_source().y, draw_destination.y);
-  EXPECT_EQ(graphics->drawn_texture_source().width,
-            static_cast<float>(graphics->ScreenWidth()));
-  EXPECT_EQ(graphics->drawn_texture_source().height,
-            static_cast<float>(graphics->ScreenHeight()));
-  EXPECT_EQ(graphics->drawn_texture_origin().x,
-            static_cast<float>(graphics->ScreenWidth()) / 2);
-  EXPECT_EQ(graphics->drawn_texture_origin().y,
-            static_cast<float>(graphics->ScreenHeight()) / 2);
+  EXPECT_FLOAT_EQ(graphics->drawn_texture_source().width,
+                  graphics->NativeScreenWidth());
+  EXPECT_FLOAT_EQ(graphics->drawn_texture_source().height,
+                  graphics->NativeScreenHeight());
+  EXPECT_FLOAT_EQ(graphics->drawn_texture_origin().x,
+                  graphics->NativeScreenWidth() / 2);
+  EXPECT_FLOAT_EQ(graphics->drawn_texture_origin().y,
+                  graphics->NativeScreenHeight() / 2);
   EXPECT_EQ(graphics->drawn_texture().id, kTextureId);
-  EXPECT_EQ(graphics->rotation(), static_cast<float>(degree));
+  // Rotation is ignored for background sprites.
+  EXPECT_EQ(graphics->rotation(), 0);
   EXPECT_EQ(sprite->SpriteWidth(), kTextureWidth);
   EXPECT_EQ(sprite->SpriteHeight(), kTextureHeight);
 }

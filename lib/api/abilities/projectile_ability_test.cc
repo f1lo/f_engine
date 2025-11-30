@@ -18,6 +18,9 @@ namespace api {
 namespace abilities {
 namespace {
 
+constexpr float kNativeScreenWidth = 1000;
+constexpr float kNativeScreenHeight = 500;
+
 using objects::MovableObject;
 using objects::ProjectileObject;
 using objects::StaticObject;
@@ -63,7 +66,7 @@ TEST(ProjectileAbilityTest, InputNotPressed) {
           .ignore_these_objects = absl::flat_hash_set<objects::ObjectType>{}});
   ability.set_user(&static_object);
 
-  const Camera camera;
+  const Camera camera(kNativeScreenWidth, kNativeScreenHeight);
   const std::list<ObjectAndAbilities> objects_and_abilities =
       ability.Use(camera);
 
@@ -96,7 +99,7 @@ TEST(ProjectileAbilityTest, OnCooldown) {
           .ignore_these_objects = absl::flat_hash_set<objects::ObjectType>{}});
   ability.set_user(&static_object);
 
-  const Camera camera;
+  const Camera camera(kNativeScreenWidth, kNativeScreenHeight);
   std::list<ObjectAndAbilities> objects_and_abilities = ability.Use(camera);
   objects_and_abilities = ability.Use(camera);
 
@@ -129,7 +132,7 @@ TEST(ProjectileAbilityTest, ProjectileSpawned) {
           .ignore_these_objects = absl::flat_hash_set<objects::ObjectType>{}});
   ability.set_user(&static_object);
 
-  const Camera camera;
+  const Camera camera(kNativeScreenWidth, kNativeScreenHeight);
   const std::list<ObjectAndAbilities> objects_and_abilities =
       ability.Use(camera);
 
@@ -162,7 +165,7 @@ TEST(ProjectileAbilityTest, MovableObjectProjectileSameDirection) {
           .ignore_these_objects = absl::flat_hash_set<objects::ObjectType>{}});
   ability.set_user(&movable_object);
 
-  Camera camera;
+  const Camera camera(kNativeScreenWidth, kNativeScreenHeight);
   const std::list<ObjectAndAbilities> objects_and_abilities =
       ability.Use(camera);
 
@@ -200,7 +203,7 @@ TEST(ProjectileAbilityTest, CreatedProjectileDespawnsOnWorldBorderTouch) {
               absl::flat_hash_set<objects::ObjectType>{},
           .ignore_these_objects = absl::flat_hash_set<objects::ObjectType>{}});
   ability.set_user(&static_object);
-  Camera camera;
+  const Camera camera(kNativeScreenWidth, kNativeScreenHeight);
   const std::list<ObjectAndAbilities> objects_and_abilities =
       ability.Use(camera);
   EXPECT_EQ(objects_and_abilities.size(), 1);

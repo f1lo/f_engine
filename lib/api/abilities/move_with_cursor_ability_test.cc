@@ -20,6 +20,9 @@ using objects::MovableObject;
 using objects::StaticObject;
 using ::testing::HasSubstr;
 
+constexpr float kNativeScreenWidth = 1000;
+constexpr float kNativeScreenHeight = 500;
+
 class MoveWithCursorAbilityTest {};
 
 class DummyMovableObject : public MovableObject {
@@ -50,7 +53,7 @@ TEST(MoveWithCursorAbilityDeathTest, NonMovableObject) {
 
   ability.set_user(&static_object);
 
-  Camera camera;
+  const Camera camera(kNativeScreenWidth, kNativeScreenHeight);
   EXPECT_DEATH(ability.Use(camera), HasSubstr("User not movable"));
 }
 
@@ -65,7 +68,7 @@ TEST(MoveWithCursorAbilityTest, MoveNotPressedDirectionNotChanged) {
   movable_object.SetDirectionGlobal(-1, 0);
   ability.set_user(&movable_object);
 
-  Camera camera;
+  const Camera camera(kNativeScreenWidth, kNativeScreenHeight);
   const std::list<ObjectAndAbilities> objects_and_abilities =
       ability.Use(camera);
 
@@ -84,7 +87,7 @@ TEST(MoveWithCursorAbilityTest, MoveNotPressedDirectionChanges) {
           /*cursor_pos*/ ScreenPosition{.x = -1, .y = 0}));
   ability.set_user(&movable_object);
 
-  Camera camera;
+  const Camera camera(kNativeScreenWidth, kNativeScreenHeight);
   const std::list<ObjectAndAbilities> objects_and_abilities =
       ability.Use(camera);
 

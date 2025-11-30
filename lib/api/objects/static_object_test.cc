@@ -16,14 +16,17 @@ namespace {
 constexpr unsigned int kTextureId = 7;
 constexpr int kTextureWidth = 300;
 constexpr int kTextureHeight = 200;
+constexpr float kNativeScreenWidth = 1000;
+constexpr float kNativeScreenHeight = 500;
 
 }  // namespace
 
 class StaticObjectTest : public ::testing::Test {
  public:
   StaticObjectTest()
-      : sprite_factory_(
-            SpriteFactory(kTextureId, kTextureWidth, kTextureHeight)) {}
+      : sprite_factory_(SpriteFactory(kTextureId, kTextureWidth, kTextureHeight,
+                                      kNativeScreenWidth,
+                                      kNativeScreenHeight)) {}
 
  protected:
   SpriteFactory sprite_factory_;

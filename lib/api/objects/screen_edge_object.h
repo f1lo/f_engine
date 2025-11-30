@@ -14,19 +14,19 @@ namespace objects {
 
 class ScreenEdgeObject : public Object {
  public:
-  static std::unique_ptr<ScreenEdgeObject> MakeTop(double screen_width,
+  static std::unique_ptr<ScreenEdgeObject> MakeTop(float screen_width,
                                                    bool should_draw_hit_box);
-  static std::unique_ptr<ScreenEdgeObject> MakeBottom(double screen_width,
-                                                      double screen_height,
+  static std::unique_ptr<ScreenEdgeObject> MakeBottom(float screen_width,
+                                                      float screen_height,
                                                       bool should_draw_hit_box);
-  static std::unique_ptr<ScreenEdgeObject> MakeLeft(double screen_height,
+  static std::unique_ptr<ScreenEdgeObject> MakeLeft(float screen_height,
                                                     bool should_draw_hit_box);
-  static std::unique_ptr<ScreenEdgeObject> MakeRight(double screen_width,
-                                                     double screen_height,
+  static std::unique_ptr<ScreenEdgeObject> MakeRight(float screen_width,
+                                                     float screen_height,
                                                      bool should_draw_hit_box);
 
-  void ReAdjustToScreen(WorldPosition screen_top_left_pos, double screen_width,
-                        double screen_height);
+  void ReAdjustToScreen(WorldPosition screen_top_left_pos, float screen_width,
+                        float screen_height);
 
  private:
   ScreenEdgeObject(ObjectType type, bool should_draw_hit_box, ScreenPosition a,

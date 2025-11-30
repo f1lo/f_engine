@@ -4,8 +4,6 @@
 
 #include <string>
 
-#include "absl/log/check.h"
-
 namespace lib {
 namespace api {
 
@@ -24,14 +22,12 @@ void Graphics::Unload(const Texture2D& texture) {
   UnloadTexture(texture);
 }
 
-int Graphics::ScreenWidth() const {
-  CHECK(IsWindowReady());
-  return GetScreenWidth();
+float Graphics::NativeScreenWidth() const {
+  return native_screen_width_;
 }
 
-int Graphics::ScreenHeight() const {
-  CHECK(IsWindowReady());
-  return GetScreenHeight();
+float Graphics::NativeScreenHeight() const {
+  return native_screen_height_;
 }
 
 void Graphics::TextureWrap(Texture2D texture, int wrap) const {

@@ -98,14 +98,16 @@ void Level::CleanUpOrDie() {
 void Level::UpdateScreenEdges() const {
   for (auto& screen_edge_object : screen_edge_objects_) {
     screen_edge_object->ReAdjustToScreen(camera_.GetWorldPosition({0.0, 0.0}),
-                                         GetScreenWidth(), GetScreenHeight());
+                                         native_screen_width_,
+                                         native_screen_height_);
   }
 }
 
 void Level::UpdateCoordinateAxes() const {
   for (auto& coordinate_object : coordinate_objects_) {
     coordinate_object->ReAdjustToScreen(camera_.GetWorldPosition({0.0, 0.0}),
-                                        GetScreenWidth(), GetScreenHeight());
+                                        native_screen_width_,
+                                        native_screen_height_);
   }
 }
 
@@ -129,7 +131,7 @@ void Level::Draw() const {
 
 void Level::DrawBackgrounds() const {
   const WorldPosition center_world_pos = camera_.GetWorldPosition(
-      {.x = GetScreenWidth() / 2.0, .y = GetScreenHeight() / 2.0});
+      {.x = native_screen_width_ / 2.0, .y = native_screen_height_ / 2.0});
   for (const auto& background_layer : background_layers_) {
     background_layer->Draw(
         /*draw_destination=*/{.x = center_world_pos.x,
@@ -139,8 +141,24 @@ void Level::DrawBackgrounds() const {
 
 LevelId Level::Run(Stats& stats) {
   LevelId changed_id = id_;
+
+  const float screen_width = static_cast<float>(GetScreenWidth());
+  const float screen_height = static_cast<float>(GetScreenHeight());
+  RenderTexture2D target =
+      LoadRenderTexture(native_screen_width_, native_screen_height_);
+  SetTextureFilter(target.texture, TEXTURE_FILTER_BILINEAR);
+  float scale = std::min(screen_width / native_screen_width_,
+                         screen_height / native_screen_height_);
+  const Rectangle source = {0.0f, 0.0f,
+                            static_cast<float>(target.texture.width),
+                            -static_cast<float>(target.texture.height)};
+  const Rectangle dest = {
+      (screen_width - (native_screen_width_ * scale)) * 0.5f,
+      (screen_height - (native_screen_height_ * scale)) * 0.5f,
+      native_screen_width_ * scale, native_screen_height_ * scale};
+
   while (changed_id == id_) {
-    BeginDrawing();
+    BeginTextureMode(target);
     ClearBackground(RAYWHITE);
     CleanUpOrDie();
     camera_.MaybeActivate();
@@ -173,6 +191,11 @@ LevelId Level::Run(Stats& stats) {
     }
 
     camera_.MaybeDeactivate();
+    EndTextureMode();
+    BeginDrawing();
+    ClearBackground(BLACK);
+    DrawTexturePro(target.texture, source, dest, /*origin=*/{0, 0},
+                   /*rotation=*/0.0f, WHITE);
     EndDrawing();
     changed_id = MaybeChangeLevel();
   }

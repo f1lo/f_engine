@@ -84,10 +84,10 @@ std::vector<std::unique_ptr<BrickObject>> GenerateBricks(int brick_width,
 
 int main() {
   Game& game = Game::Create({
-      .native_screen_width = 1500,
-      .native_screen_height = 1000,
-      .screen_width = 1500,
-      .screen_height = 1000,
+      .native_screen_width = 1920,
+      .native_screen_height = 1080,
+      .screen_width = 2500,
+      .screen_height = 1500,
       .full_screen = false,
       .title = "Breakout",
   });
@@ -103,8 +103,8 @@ int main() {
 
   const ObjectType ball_type = game.object_type_factory().MakeNewObjectType();
   std::unique_ptr<Object> player = std::make_unique<PlayerPad>(
-      game.screen_width(), game.screen_height(), kPlayerWidth, kPlayerHeight,
-      ball_type,
+      game.native_screen_width(), game.native_screen_height(), kPlayerWidth,
+      kPlayerHeight, ball_type,
       MovableObject::MovableObjectOpts{.is_hit_box_active = true,
                                        .should_draw_hit_box = true,
                                        .attach_camera = false,
@@ -119,22 +119,24 @@ int main() {
                                        .attach_camera = false,
                                        .velocity = kBallVelocity},
       /*hit_box_center=*/
-      std::make_pair(game.screen_width() / 2,
-                     game.screen_height() - breakout::kPadOffset -
+      std::make_pair(game.native_screen_width() / 2,
+                     game.native_screen_height() - breakout::kPadOffset -
                          kPlayerHeight - breakout::kBallOffset - kBallRadius),
       kBallRadius);
   std::list<std::unique_ptr<Ability>> ball_abilities;
   ball_abilities.push_back(std::move(ability_ball));
-  LevelMainBuilder level_builder =
-      LevelMainBuilder(/*id=*/lib::api::kTitleScreenLevel, ball.get());
+  LevelMainBuilder level_builder = LevelMainBuilder(
+      /*id=*/lib::api::kTitleScreenLevel,
+      static_cast<float>(game.native_screen_width()),
+      static_cast<float>(game.native_screen_height()), ball.get());
   level_builder
       .AddObjectAndAbilities(std::move(player), std::move(player_abilities))
       .AddObjectAndAbilities(std::move(ball), std::move(ball_abilities))
       .WithScreenObjects();
 
   std::vector<std::unique_ptr<BrickObject>> bricks =
-      GenerateBricks(kBrickWidth, kBrickHeight, game.screen_width(),
-                     game.screen_height(), /*num_brick_lines=*/5);
+      GenerateBricks(kBrickWidth, kBrickHeight, game.native_screen_width(),
+                     game.native_screen_height(), /*num_brick_lines=*/5);
   for (auto& brick : bricks) {
     level_builder.AddObject(std::move(brick));
   }

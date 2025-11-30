@@ -27,13 +27,19 @@ class TitleScreenLevel : public Level {
   const objects::StaticObject* exit_button_;
 
  protected:
-  explicit TitleScreenLevel(const LevelId id)
-      : Level(id), start_button_(nullptr), exit_button_(nullptr) {}
+  TitleScreenLevel(const LevelId id, const float native_screen_width,
+                   const float native_screen_height)
+      : Level(id, native_screen_width, native_screen_height),
+        start_button_(nullptr),
+        exit_button_(nullptr) {}
 };
 
 class TitleScreenLevelBuilder : LevelBuilder<TitleScreenLevel> {
  public:
-  explicit TitleScreenLevelBuilder() : LevelBuilder(kTitleScreenLevel) {}
+  TitleScreenLevelBuilder(const float native_screen_width,
+                          const float native_screen_height)
+      : LevelBuilder(kTitleScreenLevel, native_screen_width,
+                     native_screen_height) {}
 
   TitleScreenLevelBuilder& AddStartButton(
       std::unique_ptr<objects::StaticObject> start_button) {
