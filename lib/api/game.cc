@@ -15,6 +15,9 @@ void Game::Run() {
         << "Level " << current_level << " does not exist.";
     current_level = level_it->second->Run(stats_);
   }
+}
+
+Game::~Game() {
   // Clear levels_ before closing window.
   // Otherwise, some resources will be freed twice:
   // * By calling levels_/sprites_ destructor.

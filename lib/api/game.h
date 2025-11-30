@@ -20,15 +20,25 @@ namespace api {
 
 class Game {
  public:
-  static Game& Create(int width, int height, const std::string& title,
-                      bool full_screen) {
-    if (full_screen) {
-      width = GetScreenWidth();
-      height = GetScreenHeight();
+  struct GameOpts {
+    int native_screen_width;
+    int native_screen_height;
+    int screen_width;
+    int screen_height;
+    bool full_screen;
+    std::string title;
+  };
+
+  static Game& Create(GameOpts opts) {
+    if (opts.full_screen) {
+      opts.screen_width = GetScreenWidth();
+      opts.screen_height = GetScreenHeight();
     }
-    static bool init_window = [width, height, title, full_screen]() {
-      InitWindow(width, height, title.c_str());
-      if (full_screen) {
+    Game::screen_width_ = opts.screen_width;
+    Game::screen_height_ = opts.screen_height;
+    static bool init_window = [opts]() {
+      InitWindow(opts.screen_width, opts.screen_height, opts.title.c_str());
+      if (opts.full_screen) {
         ToggleBorderlessWindowed();
       }
 
@@ -39,13 +49,15 @@ class Game {
     static Game game;
     return game;
   }
+  ~Game();
 
   Game(const Game& other) = delete;
+  Game& operator=(const Game&) = delete;
 
   void Run();
 
-  static int screen_width() { return GetScreenWidth(); }
-  static int screen_height() { return GetScreenHeight(); }
+  static int screen_width() { return screen_width_; }
+  static int screen_height() { return screen_height_; }
   void AddLevel(std::unique_ptr<Level> level) {
     CHECK(levels_.find(level->id()) == levels_.end())
         << "Level " << level->id() << " already exists.";
@@ -66,6 +78,8 @@ class Game {
       objects::ObjectTypeFactory();
   Stats stats_ = Stats();
   bool debug_mode_ = false;
+  static inline int screen_width_ = 0;
+  static inline int screen_height_ = 0;
 };
 
 }  // namespace api
