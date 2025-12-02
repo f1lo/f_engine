@@ -10,6 +10,7 @@ cc_library(
     hdrs = ["ability.h"],
     deps = [
         "//lib/api:camera",
+        "//lib/api:common_types",
         "//lib/api/abilities:controls",
         "//lib/api/objects:movable_object",
         "//lib/api/objects:object",
@@ -39,7 +40,6 @@ cc_library(
     srcs = ["click_ability.cc"],
     hdrs = ["click_ability.h"],
     deps = [
-        "//lib/api:camera",
         "//lib/api:common_types",
         "//lib/api/abilities:ability",
         "//lib/api/abilities:controls",
@@ -69,7 +69,6 @@ cc_library(
     srcs = ["move_with_cursor_ability.cc"],
     hdrs = ["move_with_cursor_ability.h"],
     deps = [
-        "//lib/api:camera",
         "//lib/api:common_types",
         "//lib/api/abilities:ability",
         "//lib/api/abilities:controls",
@@ -87,6 +86,7 @@ cc_test(
         ":controls_mock",
         ":move_with_cursor_ability",
         "//lib/api:camera",
+        "//lib/api:common_types",
         "//lib/api/objects:movable_object",
         "//lib/api/objects:object_type",
         "//lib/api/objects:static_object",
@@ -100,7 +100,6 @@ cc_library(
     srcs = ["projectile_ability.cc"],
     hdrs = ["projectile_ability.h"],
     deps = [
-        "//lib/api:camera",
         "//lib/api:common_types",
         "//lib/api/abilities:ability",
         "//lib/api/abilities:controls",

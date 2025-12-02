@@ -21,8 +21,10 @@ using objects::MovableObject;
 using objects::StaticObject;
 using ::testing::HasSubstr;
 
-constexpr float kNativeScreenWidth = 1000;
-constexpr float kNativeScreenHeight = 500;
+constexpr float kScreenWidth = 400;
+constexpr float kScreenHeight = 300;
+constexpr float kNativeScreenWidth = 1500;
+constexpr float kNativeScreenHeight = 900;
 
 class MoveAbilityTest : public ::testing::Test {};
 
@@ -60,8 +62,11 @@ TEST(MoveAbilityDeathTest, UserNotMovable) {
   ability.set_user(&static_object);
 
   const Camera camera(kNativeScreenWidth, kNativeScreenHeight);
-  EXPECT_DEATH(ability.Use(camera),
-               HasSubstr("ability user is not of correct type."));
+  const ViewPortContext view_port_context(
+      kScreenWidth, kScreenHeight, kNativeScreenWidth, kNativeScreenHeight);
+  EXPECT_DEATH(
+      ability.Use({.camera = camera, .view_port_ctx = view_port_context}),
+      HasSubstr("ability user is not of correct type."));
 }
 
 TEST(MoveAbilityTest, Move) {
@@ -77,8 +82,10 @@ TEST(MoveAbilityTest, Move) {
   ability.set_user(&movable_object);
 
   const Camera camera(kNativeScreenWidth, kNativeScreenHeight);
+  const ViewPortContext view_port_context(
+      kScreenWidth, kScreenHeight, kNativeScreenWidth, kNativeScreenHeight);
   const std::list<ObjectAndAbilities> objects_and_abilities =
-      ability.Use(camera);
+      ability.Use({.camera = camera, .view_port_ctx = view_port_context});
 
   EXPECT_TRUE(objects_and_abilities.empty());
   EXPECT_EQ(movable_object.direction_x(), 1);
@@ -100,8 +107,10 @@ TEST(MoveAbilityTest, MoveLeft) {
   ability.set_user(&movable_object);
 
   const Camera camera(kNativeScreenWidth, kNativeScreenHeight);
+  const ViewPortContext view_port_context(
+      kScreenWidth, kScreenHeight, kNativeScreenWidth, kNativeScreenHeight);
   const std::list<ObjectAndAbilities> objects_and_abilities =
-      ability.Use(camera);
+      ability.Use({.camera = camera, .view_port_ctx = view_port_context});
 
   EXPECT_TRUE(objects_and_abilities.empty());
   EXPECT_EQ(movable_object.direction_x(), -1);
@@ -123,8 +132,10 @@ TEST(MoveAbilityTest, MoveRight) {
   ability.set_user(&movable_object);
 
   const Camera camera(kNativeScreenWidth, kNativeScreenHeight);
+  const ViewPortContext view_port_context(
+      kScreenWidth, kScreenHeight, kNativeScreenWidth, kNativeScreenHeight);
   const std::list<ObjectAndAbilities> objects_and_abilities =
-      ability.Use(camera);
+      ability.Use({.camera = camera, .view_port_ctx = view_port_context});
 
   EXPECT_TRUE(objects_and_abilities.empty());
   EXPECT_EQ(movable_object.direction_x(), 1);
@@ -146,8 +157,10 @@ TEST(MoveAbilityTest, MoveTop) {
   ability.set_user(&movable_object);
 
   const Camera camera(kNativeScreenWidth, kNativeScreenHeight);
+  const ViewPortContext view_port_context(
+      kScreenWidth, kScreenHeight, kNativeScreenWidth, kNativeScreenHeight);
   const std::list<ObjectAndAbilities> objects_and_abilities =
-      ability.Use(camera);
+      ability.Use({.camera = camera, .view_port_ctx = view_port_context});
 
   EXPECT_TRUE(objects_and_abilities.empty());
   EXPECT_EQ(movable_object.direction_x(), 0);
@@ -169,8 +182,10 @@ TEST(MoveAbilityTest, MoveBottom) {
   ability.set_user(&movable_object);
 
   const Camera camera(kNativeScreenWidth, kNativeScreenHeight);
+  const ViewPortContext view_port_context(
+      kScreenWidth, kScreenHeight, kNativeScreenWidth, kNativeScreenHeight);
   const std::list<ObjectAndAbilities> objects_and_abilities =
-      ability.Use(camera);
+      ability.Use({.camera = camera, .view_port_ctx = view_port_context});
 
   EXPECT_TRUE(objects_and_abilities.empty());
   EXPECT_EQ(movable_object.direction_x(), 0);

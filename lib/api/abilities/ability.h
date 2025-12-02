@@ -3,9 +3,11 @@
 
 #include <list>
 #include <memory>
+#include <optional>
 
 #include "lib/api/abilities/controls.h"
 #include "lib/api/camera.h"
+#include "lib/api/common_types.h"
 #include "lib/api/objects/object.h"
 
 namespace lib {
@@ -25,6 +27,11 @@ typedef std::pair<std::unique_ptr<objects::Object>,
 
 namespace abilities {
 
+struct AbilityContext {
+  const Camera& camera;
+  const ViewPortContext& view_port_ctx;
+};
+
 class Ability {
  public:
   struct AbilityOpts {
@@ -36,7 +43,7 @@ class Ability {
       : controls_(std::move(controls)), user_(nullptr), opts_(opts) {}
   virtual ~Ability() = default;
 
-  virtual std::list<ObjectAndAbilities> Use(const Camera& camera) = 0;
+  virtual std::list<ObjectAndAbilities> Use(const AbilityContext& ctx) = 0;
   void set_user(objects::Object* user) { user_ = user; }
   [[nodiscard]] objects::Object* user() const { return user_; }
 
@@ -44,6 +51,8 @@ class Ability {
   template <typename LevelT>
   friend class lib::api::LevelBuilder;
   [[nodiscard]] bool IsOnCooldown() const;
+  [[nodiscard]] std::optional<WorldPosition> GetMouseWorldPosition(
+      const AbilityContext& ctx) const;
   // TODO(f1lo): Temporary hack, switch to absl::Time.
   double last_used_sec_ = -100;
   std::unique_ptr<const ControlsInterface> controls_;
@@ -72,7 +81,7 @@ class MoveAbility : public Ability {
   ~MoveAbility() override = default;
 
   [[nodiscard]] std::list<ObjectAndAbilities> Use(
-      const Camera& camera) override;
+      const AbilityContext& ctx) override;
 
  private:
   std::optional<Button> key_left_;

@@ -27,6 +27,7 @@ cc_library(
     deps = [
         ":stats",
         "//lib/api:camera",
+        "//lib/api:common_types",
         "//lib/api/abilities:ability",
         "//lib/api/abilities:controls",
         "//lib/api/objects:coordinate_object",
@@ -108,7 +109,7 @@ cc_library(
     name = "common_types",
     srcs = ["common_types.cc"],
     hdrs = ["common_types.h"],
-    deps = [],
+    deps = ["@abseil-cpp//absl/log:check"],
 )
 
 cc_test(

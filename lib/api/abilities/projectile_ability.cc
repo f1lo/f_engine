@@ -7,7 +7,6 @@
 
 #include "lib/api/abilities/ability.h"
 #include "lib/api/abilities/controls.h"
-#include "lib/api/camera.h"
 #include "lib/api/objects/movable_object.h"
 #include "lib/api/objects/object.h"
 #include "lib/api/objects/projectile_object.h"
@@ -19,7 +18,8 @@ namespace abilities {
 using objects::MovableObject;
 using objects::ProjectileObject;
 
-std::list<ObjectAndAbilities> ProjectileAbility::Use(const Camera& camera) {
+std::list<ObjectAndAbilities> ProjectileAbility::Use(
+    const AbilityContext& ctx) {
   if (IsOnCooldown()) {
     return {};
   }

@@ -32,7 +32,7 @@ class ProjectileAbility : public Ability {
         projectile_type_(projectile_type),
         projectile_object_opts_(std::move(projectile_object_opts)) {}
 
-  std::list<ObjectAndAbilities> Use(const Camera& camera) override;
+  std::list<ObjectAndAbilities> Use(const AbilityContext& ctx) override;
 
  private:
   objects::ObjectType projectile_type_;

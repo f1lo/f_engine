@@ -4,17 +4,18 @@
 
 #include <list>
 #include <memory>
+#include <optional>
 
 #include "absl/log/check.h"
 #include "lib/api/abilities/controls.h"
 #include "lib/api/camera.h"
+#include "lib/api/common_types.h"
 #include "lib/api/objects/movable_object.h"
 
 namespace lib {
 namespace api {
 namespace abilities {
 
-using api::Camera;
 using objects::MovableObject;
 using objects::Object;
 
@@ -22,7 +23,17 @@ bool Ability::IsOnCooldown() const {
   return GetTime() - last_used_sec_ <= static_cast<double>(opts_.cooldown_sec);
 }
 
-std::list<ObjectAndAbilities> MoveAbility::Use(const Camera& camera) {
+std::optional<WorldPosition> Ability::GetMouseWorldPosition(
+    const AbilityContext& ctx) const {
+  std::optional<ScreenPosition> native_screen_pos =
+      controls_->GetCursorPos().ToNative(ctx.view_port_ctx);
+  if (!native_screen_pos.has_value()) {
+    return std::nullopt;
+  }
+  return ctx.camera.GetWorldPosition(*native_screen_pos);
+}
+
+std::list<ObjectAndAbilities> MoveAbility::Use(const AbilityContext& ctx) {
   // Generally move should have no cooldown - so ignore it.
   auto* cast_user = dynamic_cast<MovableObject*>(user());
   CHECK(cast_user) << " ability user is not of correct type.";

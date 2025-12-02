@@ -7,6 +7,7 @@
 
 #include "absl/log/check.h"
 #include "lib/api/abilities/ability.h"
+#include "lib/api/common_types.h"
 #include "lib/api/objects/movable_object.h"
 #include "lib/api/objects/object_type.h"
 #include "lib/api/objects/static_object.h"
@@ -144,18 +145,19 @@ LevelId Level::Run(Stats& stats) {
 
   const float screen_width = static_cast<float>(GetScreenWidth());
   const float screen_height = static_cast<float>(GetScreenHeight());
+  ViewPortContext view_port_ctx(screen_width, screen_height,
+                                native_screen_width_, native_screen_height_);
   RenderTexture2D target =
       LoadRenderTexture(native_screen_width_, native_screen_height_);
   SetTextureFilter(target.texture, TEXTURE_FILTER_BILINEAR);
-  float scale = std::min(screen_width / native_screen_width_,
-                         screen_height / native_screen_height_);
   const Rectangle source = {0.0f, 0.0f,
                             static_cast<float>(target.texture.width),
                             -static_cast<float>(target.texture.height)};
   const Rectangle dest = {
-      (screen_width - (native_screen_width_ * scale)) * 0.5f,
-      (screen_height - (native_screen_height_ * scale)) * 0.5f,
-      native_screen_width_ * scale, native_screen_height_ * scale};
+      (screen_width - (native_screen_width_ * view_port_ctx.scale())) * 0.5f,
+      (screen_height - (native_screen_height_ * view_port_ctx.scale())) * 0.5f,
+      native_screen_width_ * view_port_ctx.scale(),
+      native_screen_height_ * view_port_ctx.scale()};
 
   while (changed_id == id_) {
     BeginTextureMode(target);
@@ -171,7 +173,7 @@ LevelId Level::Run(Stats& stats) {
     while (object_it != objects_.end() && ability_it != abilities_.end()) {
       for (const auto& ability : *ability_it) {
         std::list<ObjectAndAbilities> new_objects_and_abilities_current =
-            ability->Use(camera_);
+            ability->Use({.camera = camera_, .view_port_ctx = view_port_ctx});
         new_objects_and_abilities.splice(new_objects_and_abilities.end(),
                                          new_objects_and_abilities_current);
       }
@@ -199,6 +201,7 @@ LevelId Level::Run(Stats& stats) {
     EndDrawing();
     changed_id = MaybeChangeLevel();
   }
+  UnloadRenderTexture(target);
   return changed_id;
 }
 

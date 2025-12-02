@@ -6,7 +6,6 @@
 
 #include "lib/api/abilities/ability.h"
 #include "lib/api/abilities/controls.h"
-#include "lib/api/camera.h"
 #include "lib/api/objects/object.h"
 
 namespace breakout {
@@ -19,7 +18,7 @@ class BallAbility : public lib::api::abilities::Ability {
         activation_button_(activation_button) {}
 
   std::list<lib::api::ObjectAndAbilities> Use(
-      const lib::api::Camera& camera) override;
+      const lib::api::abilities::AbilityContext& ctx) override;
 
  private:
   lib::api::abilities::Button activation_button_;

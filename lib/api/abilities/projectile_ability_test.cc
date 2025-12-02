@@ -18,6 +18,8 @@ namespace api {
 namespace abilities {
 namespace {
 
+constexpr float kScreenWidth = 500;
+constexpr float kScreenHeight = 250;
 constexpr float kNativeScreenWidth = 1000;
 constexpr float kNativeScreenHeight = 500;
 
@@ -67,8 +69,10 @@ TEST(ProjectileAbilityTest, InputNotPressed) {
   ability.set_user(&static_object);
 
   const Camera camera(kNativeScreenWidth, kNativeScreenHeight);
+  const ViewPortContext view_port_context(
+      kScreenWidth, kScreenHeight, kNativeScreenWidth, kNativeScreenHeight);
   const std::list<ObjectAndAbilities> objects_and_abilities =
-      ability.Use(camera);
+      ability.Use({.camera = camera, .view_port_ctx = view_port_context});
 
   EXPECT_TRUE(objects_and_abilities.empty());
 }
@@ -100,8 +104,12 @@ TEST(ProjectileAbilityTest, OnCooldown) {
   ability.set_user(&static_object);
 
   const Camera camera(kNativeScreenWidth, kNativeScreenHeight);
-  std::list<ObjectAndAbilities> objects_and_abilities = ability.Use(camera);
-  objects_and_abilities = ability.Use(camera);
+  const ViewPortContext view_port_context(
+      kScreenWidth, kScreenHeight, kNativeScreenWidth, kNativeScreenHeight);
+  std::list<ObjectAndAbilities> objects_and_abilities =
+      ability.Use({.camera = camera, .view_port_ctx = view_port_context});
+  objects_and_abilities =
+      ability.Use({.camera = camera, .view_port_ctx = view_port_context});
 
   EXPECT_TRUE(objects_and_abilities.empty());
 }
@@ -133,8 +141,10 @@ TEST(ProjectileAbilityTest, ProjectileSpawned) {
   ability.set_user(&static_object);
 
   const Camera camera(kNativeScreenWidth, kNativeScreenHeight);
+  const ViewPortContext view_port_context(
+      kScreenWidth, kScreenHeight, kNativeScreenWidth, kNativeScreenHeight);
   const std::list<ObjectAndAbilities> objects_and_abilities =
-      ability.Use(camera);
+      ability.Use({.camera = camera, .view_port_ctx = view_port_context});
 
   EXPECT_EQ(objects_and_abilities.size(), 1);
   EXPECT_EQ(objects_and_abilities.begin()->first->center(),
@@ -166,8 +176,10 @@ TEST(ProjectileAbilityTest, MovableObjectProjectileSameDirection) {
   ability.set_user(&movable_object);
 
   const Camera camera(kNativeScreenWidth, kNativeScreenHeight);
+  const ViewPortContext view_port_context(
+      kScreenWidth, kScreenHeight, kNativeScreenWidth, kNativeScreenHeight);
   const std::list<ObjectAndAbilities> objects_and_abilities =
-      ability.Use(camera);
+      ability.Use({.camera = camera, .view_port_ctx = view_port_context});
 
   EXPECT_EQ(objects_and_abilities.size(), 1);
   ProjectileObject* projectile = dynamic_cast<ProjectileObject*>(
@@ -204,8 +216,10 @@ TEST(ProjectileAbilityTest, CreatedProjectileDespawnsOnWorldBorderTouch) {
           .ignore_these_objects = absl::flat_hash_set<objects::ObjectType>{}});
   ability.set_user(&static_object);
   const Camera camera(kNativeScreenWidth, kNativeScreenHeight);
+  const ViewPortContext view_port_context(
+      kScreenWidth, kScreenHeight, kNativeScreenWidth, kNativeScreenHeight);
   const std::list<ObjectAndAbilities> objects_and_abilities =
-      ability.Use(camera);
+      ability.Use({.camera = camera, .view_port_ctx = view_port_context});
   EXPECT_EQ(objects_and_abilities.size(), 1);
   ProjectileObject* projectile = dynamic_cast<ProjectileObject*>(
       objects_and_abilities.begin()->first.get());

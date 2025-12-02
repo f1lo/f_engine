@@ -7,7 +7,6 @@
 
 #include "lib/api/abilities/ability.h"
 #include "lib/api/abilities/controls.h"
-#include "lib/api/camera.h"
 #include "lib/api/objects/object.h"
 
 namespace lib {
@@ -22,7 +21,7 @@ class MoveWithCursorAbility : public Ability {
         cursor_last_clicked_pos_(std::nullopt) {}
   ~MoveWithCursorAbility() override = default;
 
-  std::list<ObjectAndAbilities> Use(const Camera& camera) override;
+  std::list<ObjectAndAbilities> Use(const AbilityContext& ctx) override;
 
  private:
   std::optional<WorldPosition> cursor_last_clicked_pos_;

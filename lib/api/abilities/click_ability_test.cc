@@ -15,8 +15,10 @@ namespace {
 
 using objects::StaticObject;
 
-constexpr float kNativeScreenWidth = 1000;
-constexpr float kNativeScreenHeight = 500;
+constexpr float kScreenWidth = 600;
+constexpr float kScreenHeight = 300;
+constexpr float kNativeScreenWidth = 1500;
+constexpr float kNativeScreenHeight = 900;
 
 TEST(ClickAbilityTest, NotClicked) {
   StaticObject static_object = StaticObject(
@@ -31,7 +33,10 @@ TEST(ClickAbilityTest, NotClicked) {
   ability.set_user(&static_object);
 
   const Camera camera(kNativeScreenWidth, kNativeScreenHeight);
-  const auto& objects_and_abilities = ability.Use(camera);
+  const ViewPortContext view_port_context(
+      kScreenWidth, kScreenHeight, kNativeScreenWidth, kNativeScreenHeight);
+  const auto& objects_and_abilities =
+      ability.Use({.camera = camera, .view_port_ctx = view_port_context});
 
   EXPECT_FALSE(static_object.clicked());
 }
@@ -49,12 +54,15 @@ TEST(ClickAbilityTest, ClickedButMissed) {
   ability.set_user(&static_object);
 
   const Camera camera(kNativeScreenWidth, kNativeScreenHeight);
-  const auto& objects_and_abilities = ability.Use(camera);
+  const ViewPortContext view_port_context(
+      kScreenWidth, kScreenHeight, kNativeScreenWidth, kNativeScreenHeight);
+  const auto& objects_and_abilities =
+      ability.Use({.camera = camera, .view_port_ctx = view_port_context});
 
   EXPECT_FALSE(static_object.clicked());
 }
 
-TEST(ClickAbilityTest, Clicked) {
+TEST(ClickAbilityTest, ClickedButMissedBecauseOfResolutionScaling) {
   StaticObject static_object = StaticObject(
       /*type=*/objects::ObjectTypeFactory::MakeEnemy(), /*options=*/
       StaticObject::StaticObjectOpts{.is_hit_box_active = true,
@@ -67,7 +75,31 @@ TEST(ClickAbilityTest, Clicked) {
   ability.set_user(&static_object);
 
   const Camera camera(kNativeScreenWidth, kNativeScreenHeight);
-  const auto& objects_and_abilities = ability.Use(camera);
+  const ViewPortContext view_port_context(
+      kScreenWidth, kScreenHeight, kNativeScreenWidth, kNativeScreenHeight);
+  const auto& objects_and_abilities =
+      ability.Use({.camera = camera, .view_port_ctx = view_port_context});
+
+  EXPECT_FALSE(static_object.clicked());
+}
+
+TEST(ClickAbilityTest, Clicked) {
+  StaticObject static_object = StaticObject(
+      /*type=*/objects::ObjectTypeFactory::MakeEnemy(), /*options=*/
+      StaticObject::StaticObjectOpts{.is_hit_box_active = true,
+                                     .should_draw_hit_box = false},
+      /*hit_box_center=*/std::make_pair(750, 450), /*hit_box_radius=*/4);
+  ClickAbility ability = ClickAbility(std::make_unique<ControlsMock>(
+      /*is_pressed=*/false, /*is_down=*/false, /*is_primary_pressed=*/true,
+      /*is_secondary_pressed=*/false,
+      /*cursor_pos*/ ScreenPosition{.x = 301, .y = 150}));
+  ability.set_user(&static_object);
+
+  const Camera camera(kNativeScreenWidth, kNativeScreenHeight);
+  const ViewPortContext view_port_context(
+      kScreenWidth, kScreenHeight, kNativeScreenWidth, kNativeScreenHeight);
+  const auto& objects_and_abilities =
+      ability.Use({.camera = camera, .view_port_ctx = view_port_context});
 
   EXPECT_TRUE(static_object.clicked());
 }

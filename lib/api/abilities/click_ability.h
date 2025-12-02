@@ -6,7 +6,6 @@
 
 #include "lib/api/abilities/ability.h"
 #include "lib/api/abilities/controls.h"
-#include "lib/api/camera.h"
 #include "lib/api/objects/object.h"
 
 namespace lib {
@@ -19,7 +18,7 @@ class ClickAbility : public Ability {
       : Ability(std::move(controls), {.cooldown_sec = 0}) {}
   ~ClickAbility() override = default;
 
-  std::list<ObjectAndAbilities> Use(const Camera& camera) override;
+  std::list<ObjectAndAbilities> Use(const AbilityContext& ctx) override;
 };
 
 }  // namespace abilities

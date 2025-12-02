@@ -2,11 +2,11 @@
 
 #include <list>
 #include <memory>
+#include <optional>
 
 #include "absl/log/check.h"
 #include "lib/api/abilities/ability.h"
 #include "lib/api/abilities/controls.h"
-#include "lib/api/camera.h"
 #include "lib/api/common_types.h"
 #include "lib/api/objects/movable_object.h"
 #include "lib/api/objects/object.h"
@@ -17,11 +17,11 @@ namespace lib {
 namespace api {
 namespace abilities {
 
-using api::Camera;
 using objects::MovableObject;
 using objects::Object;
 
-std::list<ObjectAndAbilities> MoveWithCursorAbility::Use(const Camera& camera) {
+std::list<ObjectAndAbilities> MoveWithCursorAbility::Use(
+    const AbilityContext& ctx) {
   MovableObject* const movable_user = dynamic_cast<MovableObject*>(user());
   CHECK(movable_user) << "User not movable.";
   if (cursor_last_clicked_pos_.has_value()) {
@@ -40,10 +40,13 @@ std::list<ObjectAndAbilities> MoveWithCursorAbility::Use(const Camera& camera) {
   if (!controls_->IsSecondaryPressed()) {
     return {};
   }
-  const WorldPosition cursor_pos_world =
-      camera.GetWorldPosition(controls_->GetCursorPos());
-  cursor_last_clicked_pos_ = cursor_pos_world;
-  movable_user->SetDirectionRelative(cursor_pos_world.x, cursor_pos_world.y);
+  std::optional<const WorldPosition> cursor_pos_world =
+      GetMouseWorldPosition(ctx);
+  if (!cursor_pos_world.has_value()) {
+    return {};
+  }
+  cursor_last_clicked_pos_ = *cursor_pos_world;
+  movable_user->SetDirectionRelative(cursor_pos_world->x, cursor_pos_world->y);
   return {};
 }
 
