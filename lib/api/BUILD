@@ -109,7 +109,7 @@ cc_library(
     name = "common_types",
     srcs = ["common_types.cc"],
     hdrs = ["common_types.h"],
-    deps = ["@abseil-cpp//absl/log:check"],
+    deps = ["@abseil-cpp//absl/log:check", "@abseil-cpp//absl/strings"],
 )
 
 cc_test(

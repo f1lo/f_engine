@@ -1,6 +1,7 @@
 #ifndef LIB_API_COMMON_TYPES_H
 #define LIB_API_COMMON_TYPES_H
 
+#include <cstdint>
 #include <iostream>
 #include <optional>
 
@@ -45,6 +46,15 @@ struct WorldPosition {
   bool operator==(const WorldPosition& other) const;
   bool operator!=(const WorldPosition& other) const;
   friend std::ostream& operator<<(std::ostream& os, const WorldPosition& pos);
+};
+
+struct ColorRGBA {
+  uint8_t r;
+  uint8_t g;
+  uint8_t b;
+  uint8_t a;
+
+  friend std::ostream& operator<<(std::ostream& os, const ColorRGBA& color);
 };
 
 }  // namespace api

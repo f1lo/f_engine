@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <cmath>
 #include "absl/log/check.h"
+#include "absl/strings/substitute.h"
 
 inline constexpr double kEps = 1e-9;
 
@@ -85,6 +86,13 @@ bool WorldPosition::operator!=(const WorldPosition& other) const {
 
 std::ostream& operator<<(std::ostream& os, const WorldPosition& pos) {
   os << "WorldPosition (" << pos.x << ", " << pos.y << ")";
+  return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const ColorRGBA& color) {
+  os << absl::Substitute("ColorRGBA (r: $0, g: $1, b: $2, a: $3)",
+                         static_cast<int>(color.r), static_cast<int>(color.g),
+                         static_cast<int>(color.b), static_cast<int>(color.a));
   return os;
 }
 
