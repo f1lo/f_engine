@@ -10,7 +10,7 @@ bool ProjectileObject::OnCollisionCallback(Object& other_object) {
   if (despawn_outside_screen_area_) {
     if (other_object.type().IsScreenEdge()) {
       set_deleted(true);
-      return true;
+      return false;
     }
   }
 
@@ -20,7 +20,7 @@ bool ProjectileObject::OnCollisionCallback(Object& other_object) {
 
   if (despawn_on_colliding_with_these_objects_.contains(other_object.type())) {
     set_deleted(true);
-    return true;
+    return false;
   }
 
   if (reflect_on_colliding_with_these_objects_.contains(other_object.type())) {

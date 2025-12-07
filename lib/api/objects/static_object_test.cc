@@ -32,8 +32,6 @@ class StaticObjectTest : public ::testing::Test {
   SpriteFactory sprite_factory_;
 };
 
-namespace {
-
 TEST_F(StaticObjectTest, CircleYBaseWithSprite) {
   StaticObject static_object = StaticObject(
       /*type=*/ObjectTypeFactory::MakeEnemy(), /*options=*/
@@ -69,7 +67,6 @@ TEST_F(StaticObjectTest, OnCollisionCallbackDoesNothing) {
   EXPECT_FALSE(static_object.OnCollisionCallback(static_object));
 }
 
-}  // namespace
 }  // namespace objects
 }  // namespace api
 }  // namespace lib

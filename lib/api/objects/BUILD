@@ -114,6 +114,7 @@ cc_library(
         "//lib/api/objects:object_utils",
         "//lib/api/sprites:sprite_instance",
         "@abseil-cpp//absl/container:flat_hash_map",
+        "@googletest//:gtest",
     ],
 )
 
@@ -152,6 +153,18 @@ cc_test(
         ":static_object",
         "@googletest//:gtest",
         "@googletest//:gtest_main",
+    ],
+)
+
+cc_library(
+    name = "rectangle_button_object",
+    srcs = ["rectangle_button_object.cc"],
+    hdrs = ["rectangle_button_object.h"],
+    deps = [
+        ":object_type",
+        ":static_object",
+        "//lib/api:common_types",
+        "//raylib",
     ],
 )
 

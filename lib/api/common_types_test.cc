@@ -101,6 +101,15 @@ TEST(CommonTypesTest, ScreenPositionToString) {
   EXPECT_EQ(oss.str(), "ScreenPosition (1.3, 2.7)");
 }
 
+TEST(CommonTypesTest, ColorRGBAToString) {
+  constexpr ColorRGBA color = {.r = 1, .g = 2, .b = 3, .a = 4};
+
+  std::ostringstream oss;
+  oss << color;
+
+  EXPECT_EQ(oss.str(), "ColorRGBA (r: 1, g: 2, b: 3, a: 4)");
+}
+
 }  // namespace
 }  // namespace api
 }  // namespace lib

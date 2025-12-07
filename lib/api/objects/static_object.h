@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "absl/container/flat_hash_map.h"
+#include "gtest/gtest_prod.h"
 #include "lib/api/objects/object.h"
 #include "lib/api/objects/object_type.h"
 #include "lib/api/sprites/sprite_instance.h"
@@ -33,7 +34,9 @@ class StaticObject : public Object {
 
   void Update(const std::list<std::unique_ptr<Object>>& other_objects) override;
 
-  bool OnCollisionCallback(Object& other_object) override;
+ protected:
+  FRIEND_TEST(StaticObjectTest, OnCollisionCallbackDoesNothing);
+  virtual bool OnCollisionCallback(Object& other_object) override;
 };
 }  // namespace objects
 }  // namespace api
