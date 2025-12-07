@@ -2,10 +2,23 @@
 
 #include "lib/api/controls.h"
 
+#include <optional>
+
 #include "lib/api/common_types.h"
 
 namespace lib {
 namespace api {
+
+std::optional<WorldPosition> GetMouseWorldPosition(
+    const Camera& camera, const ViewPortContext& ctx,
+    const ControlsInterface& controls) {
+  std::optional<ScreenPosition> native_screen_pos =
+      controls.GetCursorPos().ToNative(ctx);
+  if (!native_screen_pos.has_value()) {
+    return std::nullopt;
+  }
+  return camera.GetWorldPosition(*native_screen_pos);
+}
 
 bool Controls::IsPressed(const Button button) const {
   return IsKeyPressed(button);

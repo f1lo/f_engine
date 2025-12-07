@@ -172,6 +172,7 @@ cc_library(
     srcs = ["controls.cc"],
     hdrs = ["controls.h"],
     deps = [
+        ":camera",
         "//lib/api:common_types",
         "//raylib",
     ],

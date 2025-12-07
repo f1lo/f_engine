@@ -24,7 +24,7 @@ std::list<ObjectAndAbilities> ClickAbility::Use(const AbilityContext& ctx) {
   }
 
   std::optional<const WorldPosition> cursor_pos_world =
-      GetMouseWorldPosition(ctx);
+      GetMouseWorldPosition(ctx.camera, ctx.view_port_ctx, *controls_.get());
   if (!cursor_pos_world.has_value()) {
     return {};
   }

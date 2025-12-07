@@ -3,6 +3,9 @@
 
 #include "raylib/include/raylib.h"
 
+#include <optional>
+
+#include "lib/api/camera.h"
 #include "lib/api/common_types.h"
 
 namespace lib {
@@ -38,6 +41,10 @@ class Controls : public ControlsInterface {
   [[nodiscard]] bool IsSecondaryPressed() const override;
   [[nodiscard]] ScreenPosition GetCursorPos() const override;
 };
+
+[[nodiscard]] std::optional<WorldPosition> GetMouseWorldPosition(
+    const Camera& camera, const ViewPortContext& ctx,
+    const ControlsInterface& controls);
 
 }  // namespace api
 }  // namespace lib
