@@ -14,8 +14,8 @@
 #include "absl/memory/memory.h"
 #include "gtest/gtest_prod.h"
 #include "lib/api/abilities/ability.h"
-#include "lib/api/abilities/controls.h"
 #include "lib/api/camera.h"
+#include "lib/api/controls.h"
 #include "lib/api/objects/coordinate_object.h"
 #include "lib/api/objects/object.h"
 #include "lib/api/objects/object_type.h"
@@ -192,7 +192,7 @@ class Level {
         const float native_screen_height)
       : id_(id),
         camera_(native_screen_width, native_screen_height),
-        controls_(std::make_unique<abilities::Controls>()),
+        controls_(std::make_unique<Controls>()),
         native_screen_width_(native_screen_width),
         native_screen_height_(native_screen_height) {}
   // This separation is required so that cyclic dependency is not introduced
@@ -219,7 +219,7 @@ class Level {
   std::list<objects::CoordinateObject*> coordinate_objects_;
   std::list<objects::StaticObject*> world_border_objects_;
   Camera camera_;
-  std::unique_ptr<const abilities::Controls> controls_;
+  std::unique_ptr<const Controls> controls_;
   std::vector<std::unique_ptr<sprites::SpriteInstance>> background_layers_;
 
   const float native_screen_width_;

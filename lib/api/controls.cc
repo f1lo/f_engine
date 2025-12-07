@@ -1,12 +1,11 @@
 #include "raylib/include/raylib.h"
 
-#include "lib/api/abilities/controls.h"
+#include "lib/api/controls.h"
 
 #include "lib/api/common_types.h"
 
 namespace lib {
 namespace api {
-namespace abilities {
 
 bool Controls::IsPressed(const Button button) const {
   return IsKeyPressed(button);
@@ -29,6 +28,5 @@ ScreenPosition Controls::GetCursorPos() const {
           .y = static_cast<double>(GetMouseY())};
 }
 
-}  // namespace abilities
 }  // namespace api
 }  // namespace lib

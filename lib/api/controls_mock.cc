@@ -1,10 +1,9 @@
-#include "lib/api/abilities/controls_mock.h"
+#include "lib/api/controls_mock.h"
 
 #include "lib/api/common_types.h"
 
 namespace lib {
 namespace api {
-namespace abilities {
 
 // TODO(f1lo): Add a constructor which sets or unsets all controls.
 // Delete this one.
@@ -45,6 +44,5 @@ ScreenPosition ControlsMock::GetCursorPos() const {
   return cursor_pos_;
 }
 
-}  // namespace abilities
 }  // namespace api
 }  // namespace lib

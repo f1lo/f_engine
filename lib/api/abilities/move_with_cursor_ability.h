@@ -6,7 +6,7 @@
 #include <optional>
 
 #include "lib/api/abilities/ability.h"
-#include "lib/api/abilities/controls.h"
+#include "lib/api/controls.h"
 #include "lib/api/objects/object.h"
 
 namespace lib {

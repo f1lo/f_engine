@@ -16,7 +16,6 @@ namespace lib {
 namespace api {
 
 using abilities::Ability;
-using abilities::kKeyEscape;
 using api::ObjectAndAbilities;
 using objects::MovableObject;
 using objects::Object;

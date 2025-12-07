@@ -1,13 +1,12 @@
-#ifndef LIB_API_ABILITIES_CONTROLS_MOCK_H
-#define LIB_API_ABILITIES_CONTROLS_MOCK_H
+#ifndef LIB_API_CONTROLS_MOCK_H
+#define LIB_API_CONTROLS_MOCK_H
 
-#include "lib/api/abilities/controls.h"
+#include "lib/api/controls.h"
 
 #include "lib/api/common_types.h"
 
 namespace lib {
 namespace api {
-namespace abilities {
 
 class ControlsMock : public ControlsInterface {
  public:
@@ -29,8 +28,7 @@ class ControlsMock : public ControlsInterface {
   const ScreenPosition cursor_pos_;
 };
 
-}  // namespace abilities
 }  // namespace api
 }  // namespace lib
 
-#endif  // LIB_API_ABILITIES_CONTROLS_MOCK_H
+#endif  // LIB_API_CONTROLS_MOCK_H

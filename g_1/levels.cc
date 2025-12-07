@@ -6,9 +6,9 @@
 #include "g_1/opening_level.h"
 #include "g_1/player.h"
 #include "lib/api/abilities/ability.h"
-#include "lib/api/abilities/controls.h"
 #include "lib/api/abilities/move_with_cursor_ability.h"
 #include "lib/api/abilities/projectile_ability.h"
+#include "lib/api/controls.h"
 #include "lib/api/level.h"
 #include "lib/api/objects/movable_object.h"
 #include "lib/api/objects/object.h"
@@ -43,15 +43,15 @@ static const char* kLayer0 = "g_1/resources/sample_layer_0.png";
 namespace g_1 {
 namespace {
 
+using lib::api::Controls;
+using lib::api::kKeyA;
+using lib::api::kKeyD;
+using lib::api::kKeyS;
+using lib::api::kKeyW;
 using lib::api::kTitleScreenLevel;
 using lib::api::Level;
 using lib::api::TitleScreenLevelBuilder;
 using lib::api::abilities::Ability;
-using lib::api::abilities::Controls;
-using lib::api::abilities::kKeyA;
-using lib::api::abilities::kKeyD;
-using lib::api::abilities::kKeyS;
-using lib::api::abilities::kKeyW;
 using lib::api::abilities::MoveAbility;
 using lib::api::abilities::MoveWithCursorAbility;
 using lib::api::abilities::ProjectileAbility;

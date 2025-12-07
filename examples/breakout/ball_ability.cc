@@ -4,7 +4,7 @@
 #include <memory>
 
 #include "examples/breakout/ball.h"
-#include "lib/api/abilities/controls.h"
+#include "lib/api/controls.h"
 
 namespace breakout {
 

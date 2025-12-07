@@ -8,7 +8,7 @@
 #include "examples/breakout/level_main.h"
 #include "examples/breakout/player_pad.h"
 #include "lib/api/abilities/ability.h"
-#include "lib/api/abilities/controls.h"
+#include "lib/api/controls.h"
 #include "lib/api/game.h"
 #include "lib/api/level.h"
 #include "lib/api/objects/movable_object.h"
@@ -20,14 +20,14 @@ using breakout::BrickObject;
 using breakout::LevelMain;
 using breakout::LevelMainBuilder;
 using breakout::PlayerPad;
+using lib::api::Controls;
 using lib::api::Game;
+using lib::api::kKeyA;
+using lib::api::kKeyD;
+using lib::api::kKeyS;
+using lib::api::kKeyW;
 using lib::api::Level;
 using lib::api::abilities::Ability;
-using lib::api::abilities::Controls;
-using lib::api::abilities::kKeyA;
-using lib::api::abilities::kKeyD;
-using lib::api::abilities::kKeyS;
-using lib::api::abilities::kKeyW;
 using lib::api::abilities::MoveAbility;
 using lib::api::objects::MovableObject;
 using lib::api::objects::Object;
@@ -99,7 +99,7 @@ int main() {
   std::unique_ptr<MoveAbility> ability_move =
       std::make_unique<MoveAbility>(std::make_unique<Controls>(), opts);
   std::unique_ptr<breakout::BallAbility> ability_ball =
-      std::make_unique<breakout::BallAbility>(lib::api::abilities::kKeySpace);
+      std::make_unique<breakout::BallAbility>(lib::api::kKeySpace);
 
   const ObjectType ball_type = game.object_type_factory().MakeNewObjectType();
   std::unique_ptr<Object> player = std::make_unique<PlayerPad>(

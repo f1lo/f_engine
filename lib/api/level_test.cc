@@ -6,8 +6,8 @@
 #include "gmock/gmock-matchers.h"
 #include "gtest/gtest.h"
 #include "lib/api/abilities/ability.h"
-#include "lib/api/abilities/controls.h"
-#include "lib/api/abilities/controls_mock.h"
+#include "lib/api/controls.h"
+#include "lib/api/controls_mock.h"
 #include "lib/api/graphics_mock.h"
 #include "lib/api/objects/object_type.h"
 #include "lib/api/objects/screen_edge_object.h"
@@ -19,7 +19,6 @@ namespace lib {
 namespace api {
 
 using abilities::Ability;
-using abilities::kKeyA;
 using abilities::MoveAbility;
 using objects::ObjectType;
 using objects::ObjectTypeFactory;
@@ -113,7 +112,7 @@ TEST_F(LevelTest, CleanupOrDie) {
   StaticObject* static_object_raw = static_object.get();
   std::list<std::unique_ptr<Ability>> abilities;
   abilities.push_back(std::make_unique<MoveAbility>(
-      std::make_unique<abilities::ControlsMock>(),
+      std::make_unique<ControlsMock>(),
       MoveAbility::MoveAbilityOpts{.key_left = kKeyA,
                                    .key_right = kKeyA,
                                    .key_top = kKeyA,
@@ -159,7 +158,7 @@ TEST_F(LevelTest, ObjectsAndAbilitiesAreAdded) {
                                          kNativeScreenHeight);
   std::list<std::unique_ptr<Ability>> abilities;
   abilities.push_back(std::make_unique<MoveAbility>(
-      std::make_unique<abilities::ControlsMock>(),
+      std::make_unique<ControlsMock>(),
       MoveAbility::MoveAbilityOpts{.key_left = kKeyA,
                                    .key_right = kKeyA,
                                    .key_top = kKeyA,

@@ -23,10 +23,10 @@ cc_library(
     hdrs = ["levels.h"],
     deps = [
         "//g_1:opening_level",
+        "//lib/api:controls",
         "//lib/api:level",
         "//lib/api:title_screen_level",
         "//lib/api/abilities:ability",
-        "//lib/api/abilities:controls",
         "//lib/api/abilities:move_with_cursor_ability",
         "//lib/api/abilities:projectile_ability",
         "//lib/api/objects:movable_object",
@@ -46,9 +46,9 @@ cc_library(
     hdrs = ["opening_level.h"],
     deps = [
         "//g_1:player",
+        "//lib/api:controls",
         "//lib/api:level",
         "//lib/api/abilities:ability",
-        "//lib/api/abilities:controls",
     ],
 )
 

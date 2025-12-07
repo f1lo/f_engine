@@ -5,15 +5,15 @@
 #include <memory>
 
 #include "lib/api/abilities/ability.h"
-#include "lib/api/abilities/controls.h"
+#include "lib/api/controls.h"
 #include "lib/api/objects/object.h"
 
 namespace breakout {
 
 class BallAbility : public lib::api::abilities::Ability {
  public:
-  explicit BallAbility(const lib::api::abilities::Button activation_button)
-      : Ability(std::make_unique<lib::api::abilities::Controls>(),
+  explicit BallAbility(const lib::api::Button activation_button)
+      : Ability(std::make_unique<lib::api::Controls>(),
                 /*opts*/ {.cooldown_sec = 0}),
         activation_button_(activation_button) {}
 
@@ -21,7 +21,7 @@ class BallAbility : public lib::api::abilities::Ability {
       const lib::api::abilities::AbilityContext& ctx) override;
 
  private:
-  lib::api::abilities::Button activation_button_;
+  lib::api::Button activation_button_;
 
   bool used_ = false;
 };

@@ -1,5 +1,5 @@
-#ifndef LIB_API_ABILITIES_CONTROLS_H
-#define LIB_API_ABILITIES_CONTROLS_H
+#ifndef LIB_API_CONTROLS_H
+#define LIB_API_CONTROLS_H
 
 #include "raylib/include/raylib.h"
 
@@ -7,7 +7,6 @@
 
 namespace lib {
 namespace api {
-namespace abilities {
 
 typedef int Button;
 
@@ -40,8 +39,7 @@ class Controls : public ControlsInterface {
   [[nodiscard]] ScreenPosition GetCursorPos() const override;
 };
 
-}  // namespace abilities
 }  // namespace api
 }  // namespace lib
 
-#endif  // LIB_API_ABILITIES_CONTROLS_H
+#endif  // LIB_API_CONTROLS_H

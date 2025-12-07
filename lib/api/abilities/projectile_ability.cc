@@ -6,7 +6,7 @@
 #include <memory>
 
 #include "lib/api/abilities/ability.h"
-#include "lib/api/abilities/controls.h"
+#include "lib/api/controls.h"
 #include "lib/api/objects/movable_object.h"
 #include "lib/api/objects/object.h"
 #include "lib/api/objects/projectile_object.h"

@@ -9,10 +9,10 @@ cc_binary(
         "//examples/breakout:brick",
         "//examples/breakout:level_main",
         "//examples/breakout:player_pad",
+        "//lib/api:controls",
         "//lib/api:game",
         "//lib/api:level",
         "//lib/api/abilities:ability",
-        "//lib/api/abilities:controls",
         "//lib/api/objects:movable_object",
         "//lib/api/objects:object",
         "//lib/api/objects:object_type",
@@ -53,8 +53,8 @@ cc_library(
     deps = [
         "//examples/breakout:ball",
         "//examples/breakout:player_pad",
+        "//lib/api:controls",
         "//lib/api/abilities:ability",
-        "//lib/api/abilities:controls",
     ],
 )
 

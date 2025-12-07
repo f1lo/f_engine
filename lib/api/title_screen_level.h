@@ -5,7 +5,7 @@
 
 #include "abilities/click_ability.h"
 #include "absl/log/check.h"
-#include "lib/api/abilities/controls.h"
+#include "lib/api/controls.h"
 #include "lib/api/level.h"
 #include "lib/api/objects/static_object.h"
 
@@ -49,7 +49,7 @@ class TitleScreenLevelBuilder : LevelBuilder<TitleScreenLevel> {
 
     std::list<std::unique_ptr<abilities::Ability>> start_ability;
     start_ability.emplace_back(std::make_unique<abilities::ClickAbility>(
-        std::make_unique<abilities::Controls>()));
+        std::make_unique<Controls>()));
     AddObjectAndAbilities(std::move(start_button), std::move(start_ability));
 
     return *this;
@@ -63,7 +63,7 @@ class TitleScreenLevelBuilder : LevelBuilder<TitleScreenLevel> {
 
     std::list<std::unique_ptr<abilities::Ability>> start_ability;
     start_ability.emplace_back(std::make_unique<abilities::ClickAbility>(
-        std::make_unique<abilities::Controls>()));
+        std::make_unique<Controls>()));
     AddObjectAndAbilities(std::move(exit_button), std::move(start_ability));
 
     return *this;

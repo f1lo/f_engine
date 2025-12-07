@@ -4,8 +4,8 @@
 #include <memory>
 #include <optional>
 
-#include "lib/api/abilities/controls.h"
 #include "lib/api/common_types.h"
+#include "lib/api/controls.h"
 #include "lib/api/objects/object.h"
 #include "lib/api/objects/object_type.h"
 #include "lib/api/objects/static_object.h"

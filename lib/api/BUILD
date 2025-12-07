@@ -28,8 +28,8 @@ cc_library(
         ":stats",
         "//lib/api:camera",
         "//lib/api:common_types",
+        "//lib/api:controls",
         "//lib/api/abilities:ability",
-        "//lib/api/abilities:controls",
         "//lib/api/objects:coordinate_object",
         "//lib/api/objects:movable_object",
         "//lib/api/objects:object",
@@ -52,8 +52,8 @@ cc_test(
     deps = [
         ":graphics_mock",
         ":level",
+        "//lib/api:controls_mock",
         "//lib/api/abilities:ability",
-        "//lib/api/abilities:controls_mock",
         "//lib/api/objects:object_type",
         "//lib/api/objects:screen_edge_object",
         "//lib/api/objects:static_object",
@@ -69,10 +69,10 @@ cc_library(
     srcs = ["title_screen_level.cc"],
     hdrs = ["title_screen_level.h"],
     deps = [
+        "//lib/api:controls",
         "//lib/api:level",
         "//lib/api/abilities:ability",
         "//lib/api/abilities:click_ability",
-        "//lib/api/abilities:controls",
         "//lib/api/objects:object",
         "//lib/api/objects:static_object",
         "//raylib",
@@ -164,5 +164,25 @@ cc_test(
         "@abseil-cpp//absl/time",
         "@googletest//:gtest",
         "@googletest//:gtest_main",
+    ],
+)
+
+cc_library(
+    name = "controls",
+    srcs = ["controls.cc"],
+    hdrs = ["controls.h"],
+    deps = [
+        "//lib/api:common_types",
+        "//raylib",
+    ],
+)
+
+cc_library(
+    name = "controls_mock",
+    srcs = ["controls_mock.cc"],
+    hdrs = ["controls_mock.h"],
+    deps = [
+        ":controls",
+        "//lib/api:common_types",
     ],
 )

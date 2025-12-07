@@ -2,9 +2,9 @@
 
 #include "gmock/gmock-matchers.h"
 #include "gtest/gtest.h"
-#include "lib/api/abilities/controls_mock.h"
 #include "lib/api/camera.h"
 #include "lib/api/common_types.h"
+#include "lib/api/controls_mock.h"
 #include "lib/api/objects/object_type.h"
 #include "lib/api/objects/static_object.h"
 
