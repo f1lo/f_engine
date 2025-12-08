@@ -43,4 +43,4 @@ class ProjectileAbility : public Ability {
 }  // namespace api
 }  // namespace lib
 
-#endif  //LIB_API_ABILITIES_PROJECTILE_ABILITY_H
+#endif  // LIB_API_ABILITIES_PROJECTILE_ABILITY_H

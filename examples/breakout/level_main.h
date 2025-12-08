@@ -31,4 +31,4 @@ class LevelMainBuilder : public lib::api::LevelBuilder<LevelMain> {
 
 }  // namespace breakout
 
-#endif  //EXAMPLES_BREAKOUT_LEVEL_MAIN_H
+#endif  // EXAMPLES_BREAKOUT_LEVEL_MAIN_H

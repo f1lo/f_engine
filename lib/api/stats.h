@@ -35,4 +35,4 @@ class Stats {
 }  // namespace api
 }  // namespace lib
 
-#endif  //LIB_API_STATS_H
+#endif  // LIB_API_STATS_H

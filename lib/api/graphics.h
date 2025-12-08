@@ -45,4 +45,4 @@ class Graphics : public GraphicsInterface {
 }  // namespace api
 }  // namespace lib
 
-#endif  //LIB_API_GRAPHICS_H
+#endif  // LIB_API_GRAPHICS_H

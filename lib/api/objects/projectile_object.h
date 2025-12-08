@@ -55,4 +55,4 @@ class ProjectileObject : public MovableObject {
 }  // namespace api
 }  // namespace lib
 
-#endif  //LIB_API_OBJECTS_PROJECTILE_OBJECT_H
+#endif  // LIB_API_OBJECTS_PROJECTILE_OBJECT_H

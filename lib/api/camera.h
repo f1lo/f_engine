@@ -41,4 +41,4 @@ class Camera {
 }  // namespace api
 }  // namespace lib
 
-#endif  //LIB_API_CAMERA_H
+#endif  // LIB_API_CAMERA_H
