@@ -72,7 +72,6 @@ cc_library(
         "//lib/api:controls",
         "//lib/api:level",
         "//lib/api/abilities:ability",
-        "//lib/api/abilities:click_ability",
         "//lib/api/objects:object",
         "//lib/api/objects:static_object",
         "//raylib",

@@ -8,6 +8,7 @@
 #include "absl/log/check.h"
 #include "lib/api/abilities/ability.h"
 #include "lib/api/common_types.h"
+#include "lib/api/controls.h"
 #include "lib/api/objects/movable_object.h"
 #include "lib/api/objects/object_type.h"
 #include "lib/api/objects/static_object.h"
@@ -139,32 +140,67 @@ void Level::DrawBackgrounds() const {
   }
 }
 
+void Level::MaybeClick(const ViewPortContext& ctx) {
+  // If not clicked or clicked outside of the screen set every object's clicked
+  // state to false.
+  std::optional<const WorldPosition> cursor_pos_world =
+      GetMouseWorldPosition(camera_, ctx, *controls_);
+  if (!controls_->IsPrimaryPressed() || !cursor_pos_world.has_value()) {
+    for (auto& object : objects_) {
+      object->set_clicked(false);
+    }
+    return;
+  }
+
+  const StaticObject mouse_pointer = StaticObject(
+      /*type=*/objects::ObjectTypeFactory::MakeMousePointer(),
+      /*options=*/
+      {.is_hit_box_active = true, .should_draw_hit_box = false},
+      /*hit_box_vertices=*/
+      {{cursor_pos_world->x, cursor_pos_world->y}});
+  for (auto& object : objects_) {
+    if (object->CollidesWith(mouse_pointer)) {
+      object->set_clicked(true);
+    }
+  }
+}
+
 LevelId Level::Run(Stats& stats) {
   LevelId changed_id = id_;
 
+  // Game does not always run in the same resolution as its logic. For the most
+  // part, game will assume that it is running in native resolution and draw
+  // everything on a virtual `native_screen_width_` X `native_screen_height_`
+  // canvas.
   const float screen_width = static_cast<float>(GetScreenWidth());
   const float screen_height = static_cast<float>(GetScreenHeight());
   ViewPortContext view_port_ctx(screen_width, screen_height,
                                 native_screen_width_, native_screen_height_);
+  // `target` is the virtual canvas.
   RenderTexture2D target =
       LoadRenderTexture(native_screen_width_, native_screen_height_);
   SetTextureFilter(target.texture, TEXTURE_FILTER_BILINEAR);
   const Rectangle source = {0.0f, 0.0f,
                             static_cast<float>(target.texture.width),
                             -static_cast<float>(target.texture.height)};
+  // The actual screen on which the frame is drawn. Note letterboxing is done if
+  // the ratios do not match.
   const Rectangle dest = {
       (screen_width - (native_screen_width_ * view_port_ctx.scale())) * 0.5f,
       (screen_height - (native_screen_height_ * view_port_ctx.scale())) * 0.5f,
       native_screen_width_ * view_port_ctx.scale(),
       native_screen_height_ * view_port_ctx.scale()};
 
+  // Loop while the level is unchanged.
   while (changed_id == id_) {
     BeginTextureMode(target);
     ClearBackground(RAYWHITE);
+    // Get rid of deleted objects.
     CleanUpOrDie();
     camera_.MaybeActivate();
     UpdateScreenEdges();
     UpdateCoordinateAxes();
+    MaybeClick(view_port_ctx);
 
     auto object_it = objects_.begin();
     auto ability_it = abilities_.begin();
@@ -185,7 +221,7 @@ LevelId Level::Run(Stats& stats) {
     DrawBackgrounds();
     Draw();
 
-    // Add all accumulated objects from abilities.
+    // Add all accumulated objects which abilities have spawned.
     for (auto& [object, abilities] : new_objects_and_abilities) {
       objects_.push_back(std::move(object));
       abilities_.push_back(std::move(abilities));
@@ -195,6 +231,7 @@ LevelId Level::Run(Stats& stats) {
     EndTextureMode();
     BeginDrawing();
     ClearBackground(BLACK);
+    // Draw virtual canvas on the actual screen.
     DrawTexturePro(target.texture, source, dest, /*origin=*/{0, 0},
                    /*rotation=*/0.0f, WHITE);
     EndDrawing();

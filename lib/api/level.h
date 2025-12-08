@@ -15,6 +15,7 @@
 #include "gtest/gtest_prod.h"
 #include "lib/api/abilities/ability.h"
 #include "lib/api/camera.h"
+#include "lib/api/common_types.h"
 #include "lib/api/controls.h"
 #include "lib/api/objects/coordinate_object.h"
 #include "lib/api/objects/object.h"
@@ -178,13 +179,15 @@ class Level {
   template <typename LevelT>
   friend class LevelBuilder;
 
-  void CleanUpOrDie();
   [[nodiscard]] virtual LevelId MaybeChangeLevel() const;
+  [[nodiscard]] bool ShouldDraw(const objects::Object& object) const;
+  void CleanUpOrDie();
   void UpdateScreenEdges() const;
   void UpdateCoordinateAxes() const;
-  [[nodiscard]] bool ShouldDraw(const objects::Object& object) const;
   void Draw() const;
   void DrawBackgrounds() const;
+  void MaybeClick(const ViewPortContext& ctx);
+
   LevelId id_;
 
  protected:

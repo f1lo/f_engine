@@ -36,35 +36,6 @@ cc_test(
 )
 
 cc_library(
-    name = "click_ability",
-    srcs = ["click_ability.cc"],
-    hdrs = ["click_ability.h"],
-    deps = [
-        "//lib/api:common_types",
-        "//lib/api:controls",
-        "//lib/api/abilities:ability",
-        "//lib/api/objects:object",
-        "//lib/api/objects:object_type",
-        "//lib/api/objects:static_object",
-    ],
-)
-
-cc_test(
-    name = "click_ability_test",
-    srcs = ["click_ability_test.cc"],
-    deps = [
-        ":click_ability",
-        "//lib/api:camera",
-        "//lib/api:common_types",
-        "//lib/api:controls_mock",
-        "//lib/api/objects:object_type",
-        "//lib/api/objects:static_object",
-        "@googletest//:gtest",
-        "@googletest//:gtest_main",
-    ],
-)
-
-cc_library(
     name = "move_with_cursor_ability",
     srcs = ["move_with_cursor_ability.cc"],
     hdrs = ["move_with_cursor_ability.h"],

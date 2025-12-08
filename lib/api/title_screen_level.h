@@ -3,7 +3,6 @@
 
 #include <memory>
 
-#include "abilities/click_ability.h"
 #include "absl/log/check.h"
 #include "lib/api/controls.h"
 #include "lib/api/level.h"
@@ -48,9 +47,7 @@ class TitleScreenLevelBuilder : LevelBuilder<TitleScreenLevel> {
     level_->start_button_ = start_button.get();
 
     std::list<std::unique_ptr<abilities::Ability>> start_ability;
-    start_ability.emplace_back(std::make_unique<abilities::ClickAbility>(
-        std::make_unique<Controls>()));
-    AddObjectAndAbilities(std::move(start_button), std::move(start_ability));
+    AddObject(std::move(start_button));
 
     return *this;
   }
@@ -62,9 +59,7 @@ class TitleScreenLevelBuilder : LevelBuilder<TitleScreenLevel> {
     level_->exit_button_ = exit_button.get();
 
     std::list<std::unique_ptr<abilities::Ability>> start_ability;
-    start_ability.emplace_back(std::make_unique<abilities::ClickAbility>(
-        std::make_unique<Controls>()));
-    AddObjectAndAbilities(std::move(exit_button), std::move(start_ability));
+    AddObject(std::move(exit_button));
 
     return *this;
   }
@@ -80,4 +75,4 @@ class TitleScreenLevelBuilder : LevelBuilder<TitleScreenLevel> {
 }  // namespace api
 }  // namespace lib
 
-#endif  //LIB_API_TITLE_SCREEN_LEVEL_H
+#endif  // LIB_API_TITLE_SCREEN_LEVEL_H
