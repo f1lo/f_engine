@@ -8,12 +8,14 @@
 #include "lib/api/abilities/ability.h"
 #include "lib/api/abilities/move_with_cursor_ability.h"
 #include "lib/api/abilities/projectile_ability.h"
+#include "lib/api/common_types.h"
 #include "lib/api/controls.h"
 #include "lib/api/level.h"
 #include "lib/api/objects/movable_object.h"
 #include "lib/api/objects/object.h"
 #include "lib/api/objects/object_type.h"
 #include "lib/api/objects/projectile_object.h"
+#include "lib/api/objects/rectangle_button_object.h"
 #include "lib/api/objects/static_object.h"
 #include "lib/api/sprites/sprite_factory.h"
 #include "lib/api/sprites/sprite_instance.h"
@@ -43,6 +45,7 @@ static const char* kLayer0 = "g_1/resources/sample_layer_0.png";
 namespace g_1 {
 namespace {
 
+using lib::api::ColorRGBA;
 using lib::api::Controls;
 using lib::api::kKeyA;
 using lib::api::kKeyD;
@@ -51,6 +54,7 @@ using lib::api::kKeyW;
 using lib::api::kTitleScreenLevel;
 using lib::api::Level;
 using lib::api::TitleScreenLevelBuilder;
+using lib::api::WorldPosition;
 using lib::api::abilities::Ability;
 using lib::api::abilities::MoveAbility;
 using lib::api::abilities::MoveWithCursorAbility;
@@ -60,6 +64,7 @@ using lib::api::objects::Object;
 using lib::api::objects::ObjectType;
 using lib::api::objects::ObjectTypeFactory;
 using lib::api::objects::ProjectileObject;
+using lib::api::objects::RectangleButtonObject;
 using lib::api::objects::StaticObject;
 using lib::api::sprites::SpriteFactory;
 using lib::api::sprites::SpriteInstance;
@@ -199,31 +204,34 @@ std::unique_ptr<Level> MakeTitleScreenLevel(
     SpriteFactory& sprite_factory, ObjectTypeFactory& object_type_factory,
     const float native_screen_width, const float native_screen_height,
     const bool debug_mode) {
-  std::unique_ptr<StaticObject> start_button = std::make_unique<StaticObject>(
-      /*type=*/ObjectTypeFactory::MakeButton(),
-      StaticObject::StaticObjectOpts{.is_hit_box_active = true,
-                                     .should_draw_hit_box = debug_mode},
-      /*hit_box_vertices=*/
-      std::vector<std::pair<double, double>>(
-          {{kButtonOffsetX, kButtonOffsetY},
-           {kButtonOffsetX, kButtonOffsetY + kButtonLengthY},
-           {kButtonOffsetX + kButtonLengthX, kButtonOffsetY},
-           {kButtonOffsetX + kButtonLengthX,
-            kButtonOffsetY + kButtonLengthY}}));
-  std::unique_ptr<StaticObject> exit_button = std::make_unique<StaticObject>(
-      /*type=*/ObjectTypeFactory::MakeButton(),
-      StaticObject::StaticObjectOpts{.is_hit_box_active = true,
-                                     .should_draw_hit_box = debug_mode},
-      /*hit_box_vertices=*/
-      std::vector<std::pair<double, double>>(
-          {{kButtonOffsetX,
-            kButtonOffsetY + kButtonLengthY + kOffsetBetweenButtons},
-           {kButtonOffsetX,
-            kButtonOffsetY + 2 * kButtonLengthY + kOffsetBetweenButtons},
-           {kButtonOffsetX + kButtonLengthX,
-            kButtonOffsetY + kButtonLengthY + kOffsetBetweenButtons},
-           {kButtonOffsetX + kButtonLengthX,
-            kButtonOffsetY + 2 * kButtonLengthY + kOffsetBetweenButtons}}));
+  std::unique_ptr<RectangleButtonObject> start_button =
+      std::make_unique<RectangleButtonObject>(
+          /*type=*/
+          ObjectTypeFactory::MakeButton(),
+          WorldPosition{.x = kButtonOffsetX, .y = kButtonOffsetY},
+          kButtonLengthX, kButtonLengthY, "Start",
+          RectangleButtonObject::RectangleButtonObjectOpts{
+              .has_round_corners = true,
+              .border_thickness = 3.0f,
+              .font_size = 1.5f,
+              .border_color = {.r = 0, .g = 0, .b = 255, .a = 255},
+              .text_color = {.r = 100, .g = 0, .b = 30, .a = 255},
+              .fill_color = ColorRGBA::MakeTransparent()});
+  std::unique_ptr<RectangleButtonObject> exit_button =
+      std::make_unique<RectangleButtonObject>(
+          /*type=*/
+          ObjectTypeFactory::MakeButton(),
+          WorldPosition{
+              .x = kButtonOffsetX,
+              .y = kButtonOffsetY + kButtonLengthY + kOffsetBetweenButtons},
+          kButtonLengthX, kButtonLengthY, "Exit",
+          RectangleButtonObject::RectangleButtonObjectOpts{
+              .has_round_corners = false,
+              .border_thickness = 5.0f,
+              .font_size = 1.5f,
+              .border_color = {.r = 255, .g = 0, .b = 0, .a = 255},
+              .text_color = {.r = 100, .g = 0, .b = 30, .a = 255},
+              .fill_color = {.r = 100, .g = 0, .b = 0, .a = 255}});
 
   TitleScreenLevelBuilder level_builder =
       TitleScreenLevelBuilder(native_screen_width, native_screen_height);

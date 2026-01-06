@@ -54,6 +54,8 @@ struct ColorRGBA {
   uint8_t b;
   uint8_t a;
 
+  static ColorRGBA MakeTransparent();
+
   friend std::ostream& operator<<(std::ostream& os, const ColorRGBA& color);
 };
 

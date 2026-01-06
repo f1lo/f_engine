@@ -89,6 +89,10 @@ std::ostream& operator<<(std::ostream& os, const WorldPosition& pos) {
   return os;
 }
 
+ColorRGBA ColorRGBA::MakeTransparent() {
+  return {.r = 0, .g = 0, .b = 0, .a = 0};
+}
+
 std::ostream& operator<<(std::ostream& os, const ColorRGBA& color) {
   os << absl::Substitute("ColorRGBA (r: $0, g: $1, b: $2, a: $3)",
                          static_cast<int>(color.r), static_cast<int>(color.g),
