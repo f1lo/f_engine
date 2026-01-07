@@ -161,8 +161,8 @@ TEST(ProjectileObjectTest, OnCollisionCallbackReflects) {
 
   projectile.OnCollisionCallback(collided_object);
 
-  EXPECT_DOUBLE_EQ(projectile.direction_x(), -1);
-  EXPECT_DOUBLE_EQ(projectile.direction_y(), 0);
+  EXPECT_FLOAT_EQ(projectile.direction_x(), -1.0f);
+  EXPECT_FLOAT_EQ(projectile.direction_y(), 0.0f);
 }
 
 TEST(ProjectileObjectTest, OnCollisionCallbackIgnores) {
@@ -190,8 +190,8 @@ TEST(ProjectileObjectTest, OnCollisionCallbackIgnores) {
 
   projectile.OnCollisionCallback(collided_object);
 
-  EXPECT_DOUBLE_EQ(projectile.direction_x(), 1);
-  EXPECT_DOUBLE_EQ(projectile.direction_y(), 0);
+  EXPECT_FLOAT_EQ(projectile.direction_x(), 1.0f);
+  EXPECT_FLOAT_EQ(projectile.direction_y(), 0.0f);
   EXPECT_FALSE(projectile.deleted());
 }
 

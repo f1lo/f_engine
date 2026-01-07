@@ -31,16 +31,16 @@ TEST(ObjectUtilsDeathTest, CreateHitBoxOrDieScreenPosition) {
 TEST(ObjectUtilsTest, CreateCircle) {
   const internal::HitBox circle = CreateCircle(/*x=*/1, /*y=*/2, /*radius=*/5);
 
-  EXPECT_DOUBLE_EQ(circle.center_x(), 1);
-  EXPECT_DOUBLE_EQ(circle.center_y(), 2);
+  EXPECT_FLOAT_EQ(circle.center_x(), 1.0f);
+  EXPECT_FLOAT_EQ(circle.center_y(), 2.0f);
 }
 
 TEST(ObjectUtilsTest, CreateLine) {
   const internal::HitBox line =
       CreateHitBoxOrDie(std::vector<ScreenPosition>{{0, 0}, {0, 1}});
 
-  EXPECT_DOUBLE_EQ(line.center_x(), 0);
-  EXPECT_DOUBLE_EQ(line.center_y(), 0.5);
+  EXPECT_FLOAT_EQ(line.center_x(), 0.0f);
+  EXPECT_FLOAT_EQ(line.center_y(), 0.5f);
 }
 
 }  // namespace

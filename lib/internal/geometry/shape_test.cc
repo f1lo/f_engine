@@ -19,28 +19,28 @@ TEST(ShapeTest, PointInternalDistanceZero) {
   const PointInternal a{1, 2};
   const PointInternal b{1, 2};
 
-  EXPECT_DOUBLE_EQ(a.Distance(b), 0);
+  EXPECT_FLOAT_EQ(a.Distance(b), 0.0f);
 }
 
 TEST(ShapeTest, PointInternalDistance) {
   const PointInternal a{0, 0};
   const PointInternal b{3, 4};
 
-  EXPECT_DOUBLE_EQ(a.Distance(b), 5);
+  EXPECT_FLOAT_EQ(a.Distance(b), 5.0f);
 }
 
 TEST(ShapeTest, PointInternalCenter) {
   const PointInternal a{1, 2};
 
-  EXPECT_DOUBLE_EQ(a.center_x(), 1);
-  EXPECT_DOUBLE_EQ(a.center_y(), 2);
+  EXPECT_FLOAT_EQ(a.center_x(), 1.0f);
+  EXPECT_FLOAT_EQ(a.center_y(), 2.0f);
 }
 
 TEST(ShapeTest, LineCenter) {
   const LineInternal a{PointInternal{1, 2}, PointInternal{1, 4}};
 
-  EXPECT_DOUBLE_EQ(a.center_x(), 1);
-  EXPECT_DOUBLE_EQ(a.center_y(), 3);
+  EXPECT_FLOAT_EQ(a.center_x(), 1.0f);
+  EXPECT_FLOAT_EQ(a.center_y(), 3.0f);
 }
 
 TEST(ShapeTest, LineIsOnLine) {
@@ -71,8 +71,8 @@ TEST(ShapeTest, LineXAligned) {
 TEST(ShapeTest, RectangleCenter) {
   const RectangleInternal a{PointInternal{0, 4}, PointInternal{4, 0}};
 
-  EXPECT_DOUBLE_EQ(a.center_x(), 2);
-  EXPECT_DOUBLE_EQ(a.center_y(), 2);
+  EXPECT_FLOAT_EQ(a.center_x(), 2.0f);
+  EXPECT_FLOAT_EQ(a.center_y(), 2.0f);
 }
 
 }  // namespace
