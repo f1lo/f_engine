@@ -15,7 +15,7 @@ namespace lib {
 namespace internal {
 
 namespace {
-double square(const double& a) {
+float square(const float& a) {
   return a * a;
 }
 }  // namespace
@@ -32,19 +32,17 @@ bool CounterClockwise(const PointInternal& a, const PointInternal& b,
 
 // Draw methods.
 void PointInternal::Draw() const {
-  DrawPixelV(Vector2(static_cast<float>(x), static_cast<float>(y)), RED);
+  DrawPixelV(Vector2(x, y), RED);
 }
 void LineInternal::Draw() const {
-  DrawLineEx(Vector2(static_cast<float>(a.x), static_cast<float>(a.y)),
-             Vector2(static_cast<float>(b.x), static_cast<float>(b.y)),
+  DrawLineEx(Vector2(a.x, a.y), Vector2(b.x, b.y),
              /*thick=*/10.0, RED);
 }
 void RectangleInternal::Draw() const {
   DrawRectangleLines(b.x, b.y, /*width=*/c.x - b.x, /*height*/ a.y - b.y, RED);
 }
 void CircleInternal::Draw() const {
-  DrawCircleLinesV(Vector2(static_cast<float>(a.x), static_cast<float>(a.y)),
-                   /*radius*/ static_cast<float>(r), RED);
+  DrawCircleLinesV(Vector2(a.x, a.y), /*radius*/ r, RED);
 }
 
 Vector LineInternal::Reflect(const Vector& vec) const {
@@ -58,17 +56,17 @@ Vector LineInternal::Reflect(const Vector& vec) const {
 }
 
 // Move methods.
-void PointInternal::Move(const double x, const double y) {
+void PointInternal::Move(const float x, const float y) {
   this->x += x;
   this->y += y;
 }
-void LineInternal::Move(const double x, const double y) {
+void LineInternal::Move(const float x, const float y) {
   this->a.x += x;
   this->a.y += y;
   this->b.x += x;
   this->b.y += y;
 }
-void RectangleInternal::Move(const double x, const double y) {
+void RectangleInternal::Move(const float x, const float y) {
   this->a.x += x;
   this->a.y += y;
   this->b.x += x;
@@ -78,7 +76,7 @@ void RectangleInternal::Move(const double x, const double y) {
   this->d.x += x;
   this->d.y += y;
 }
-void CircleInternal::Move(const double x, const double y) {
+void CircleInternal::Move(const float x, const float y) {
   this->a.x += x;
   this->a.y += y;
 }
@@ -106,7 +104,7 @@ bool PointInternal::IsLowerLeft(const PointInternal& other) const {
   return this->x <= other.x && this->y < other.y;
 }
 
-double PointInternal::Distance(const PointInternal& other) const {
+float PointInternal::Distance(const PointInternal& other) const {
   return sqrt(square(this->x - other.x) + square(this->y - other.y));
 }
 
@@ -155,7 +153,7 @@ bool LineInternal::Collides(const CircleInternal& circle) const {
     return true;
   }
 
-  double t =
+  float t =
       ((circle.a.x - a.x) * (b.x - a.x) + (circle.a.y - a.y) * (b.y - a.y)) /
       ((b.x - a.x) * (b.x - a.x) + (b.y - a.y) * (b.y - a.y));
   if (t < 0 || t > 1) {

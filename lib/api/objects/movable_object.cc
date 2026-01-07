@@ -19,7 +19,7 @@ using internal::Vector;
 
 MovableObject::MovableObject(
     const ObjectType type, const MovableObjectOpts& options,
-    const std::vector<std::pair<double, double>>& hit_box_vertices,
+    const std::vector<std::pair<float, float>>& hit_box_vertices,
     std::unique_ptr<sprites::SpriteInstance> sprite_instance)
     : Object(type,
              {.is_hit_box_active = options.is_hit_box_active,
@@ -29,7 +29,7 @@ MovableObject::MovableObject(
 
 MovableObject::MovableObject(
     const ObjectType type, const MovableObjectOpts& options,
-    const std::pair<double, double> hit_box_center, const double hit_box_radius,
+    const std::pair<float, float> hit_box_center, const float hit_box_radius,
     std::unique_ptr<sprites::SpriteInstance> sprite_instance)
     : Object(type,
              {.is_hit_box_active = options.is_hit_box_active,
@@ -39,7 +39,7 @@ MovableObject::MovableObject(
              std::move(sprite_instance)),
       velocity_(options.velocity) {}
 
-void MovableObject::SetDirectionGlobal(const double x, const double y) {
+void MovableObject::SetDirectionGlobal(const float x, const float y) {
   frozen_until_next_set_direction_ = false;
   const Vector v = Vector{x, y};
   if (v.IsZero()) {
@@ -52,7 +52,7 @@ void MovableObject::SetDirectionGlobal(const double x, const double y) {
   direction_y_ = unit.y;
 }
 
-void MovableObject::SetDirectionRelative(const double x, const double y) {
+void MovableObject::SetDirectionRelative(const float x, const float y) {
   frozen_until_next_set_direction_ = false;
   const WorldPosition world_position = center();
   const Vector v = Vector{x - world_position.x, y - world_position.y};

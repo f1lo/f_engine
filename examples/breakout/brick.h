@@ -9,7 +9,7 @@ namespace breakout {
 class BrickObject : public lib::api::objects::StaticObject {
  public:
   BrickObject(lib::api::objects::ObjectType type, StaticObjectOpts options,
-              const std::vector<std::pair<double, double>>& hit_box_vertices)
+              const std::vector<std::pair<float, float>>& hit_box_vertices)
       : StaticObject(type, options, hit_box_vertices) {}
 };
 

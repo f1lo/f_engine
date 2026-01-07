@@ -47,8 +47,8 @@ bool Object::CollidesWith(const Object& other) const {
   return hit_box_.CollidesWith(other.hit_box_);
 }
 
-std::pair<double, double> Object::Reflect(const Object& other, double x,
-                                          double y) const {
+std::pair<float, float> Object::Reflect(const Object& other, float x,
+                                        float y) const {
   // Hitbox not present or object deleted.
   if (deleted() || !is_hit_box_active()) {
     return {x, y};

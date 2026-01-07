@@ -75,7 +75,7 @@ TEST_F(LevelDeathTest, CleanUpOrDieOutOfSync) {
       StaticObject::StaticObjectOpts{.is_hit_box_active = false,
                                      .should_draw_hit_box = false},
       /*hit_box_vertices=*/
-      std::vector<std::pair<double, double>>({{0, 0}, {0, 1}})));
+      std::vector<std::pair<float, float>>({{0, 0}, {0, 1}})));
   const std::unique_ptr<DummyLevel> dummy_level = dummy_builder.Build();
   dummy_level->abilities_.clear();
 
@@ -108,7 +108,7 @@ TEST_F(LevelTest, CleanupOrDie) {
       StaticObject::StaticObjectOpts{.is_hit_box_active = false,
                                      .should_draw_hit_box = false},
       /*hit_box_vertices=*/
-      std::vector<std::pair<double, double>>({{0, 0}, {0, 1}}));
+      std::vector<std::pair<float, float>>({{0, 0}, {0, 1}}));
   StaticObject* static_object_raw = static_object.get();
   std::list<std::unique_ptr<Ability>> abilities;
   abilities.push_back(std::make_unique<MoveAbility>(
@@ -137,13 +137,13 @@ TEST_F(LevelTest, ObjectsAreAdded) {
       StaticObject::StaticObjectOpts{.is_hit_box_active = false,
                                      .should_draw_hit_box = false},
       /*hit_box_vertices=*/
-      std::vector<std::pair<double, double>>({{0, 0}, {0, 1}})));
+      std::vector<std::pair<float, float>>({{0, 0}, {0, 1}})));
   dummy_builder.AddObject(std::make_unique<StaticObject>(
       /*type=*/ObjectTypeFactory::MakeEnemy(),
       StaticObject::StaticObjectOpts{.is_hit_box_active = false,
                                      .should_draw_hit_box = false},
       /*hit_box_vertices=*/
-      std::vector<std::pair<double, double>>({{0, 0}, {0, 1}})));
+      std::vector<std::pair<float, float>>({{0, 0}, {0, 1}})));
   const std::unique_ptr<DummyLevel> dummy_level = dummy_builder.Build();
 
   ASSERT_EQ(dummy_level->objects_.size(), 2);
@@ -170,7 +170,7 @@ TEST_F(LevelTest, ObjectsAndAbilitiesAreAdded) {
           StaticObject::StaticObjectOpts{.is_hit_box_active = false,
                                          .should_draw_hit_box = false},
           /*hit_box_vertices=*/
-          std::vector<std::pair<double, double>>({{0, 0}, {0, 1}})),
+          std::vector<std::pair<float, float>>({{0, 0}, {0, 1}})),
       std::move(abilities));
   const std::unique_ptr<DummyLevel> dummy_level = dummy_builder.Build();
 
@@ -260,7 +260,7 @@ TEST_F(LevelTest, DrawsNoScreenEdgeObjects) {
       StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                      .should_draw_hit_box = false},
       /*hit_box_vertices=*/
-      std::vector<std::pair<double, double>>(
+      std::vector<std::pair<float, float>>(
           {{-1, 50}, {-1, 49}, {1, 50}, {1, 49}}));
 
   EXPECT_TRUE(dummy_level->ShouldDraw(object));
@@ -272,8 +272,8 @@ TEST_F(LevelTest, DrawsFullyInsideScreenOnlyHitBox) {
   const std::unique_ptr<DummyLevel> dummy_level =
       dummy_builder.WithScreenObjects().Build();
   dummy_level->screen_edge_objects_.clear();
-  constexpr double screen_width = 200;
-  constexpr double screen_height = 100;
+  constexpr float screen_width = 200;
+  constexpr float screen_height = 100;
   const std::unique_ptr<objects::ScreenEdgeObject> screen_left =
       objects::ScreenEdgeObject::MakeLeft(screen_height,
                                           /*should_draw_hit_box=*/false);
@@ -295,7 +295,7 @@ TEST_F(LevelTest, DrawsFullyInsideScreenOnlyHitBox) {
       StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                      .should_draw_hit_box = false},
       /*hit_box_vertices=*/
-      std::vector<std::pair<double, double>>(
+      std::vector<std::pair<float, float>>(
           {{5, 50}, {5, 49}, {90, 50}, {90, 49}}));
 
   EXPECT_TRUE(dummy_level->ShouldDraw(object));
@@ -307,8 +307,8 @@ TEST_F(LevelTest, DrawsFullyInsideScreen) {
   const std::unique_ptr<DummyLevel> dummy_level =
       dummy_builder.WithScreenObjects().Build();
   dummy_level->screen_edge_objects_.clear();
-  constexpr double screen_width = 200;
-  constexpr double screen_height = 100;
+  constexpr float screen_width = 200;
+  constexpr float screen_height = 100;
   const std::unique_ptr<objects::ScreenEdgeObject> screen_left =
       objects::ScreenEdgeObject::MakeLeft(screen_height,
                                           /*should_draw_hit_box=*/false);
@@ -330,7 +330,7 @@ TEST_F(LevelTest, DrawsFullyInsideScreen) {
       StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                      .should_draw_hit_box = false},
       /*hit_box_vertices=*/
-      std::vector<std::pair<double, double>>(
+      std::vector<std::pair<float, float>>(
           {{5, 50}, {5, 49}, {90, 50}, {90, 49}}),
       MakeSprite());
 
@@ -343,8 +343,8 @@ TEST_F(LevelTest, DrawsPartiallyOutsideScreenOnlyHitBox) {
   const std::unique_ptr<DummyLevel> dummy_level =
       dummy_builder.WithScreenObjects().Build();
   dummy_level->screen_edge_objects_.clear();
-  constexpr double screen_width = 200;
-  constexpr double screen_height = 100;
+  constexpr float screen_width = 200;
+  constexpr float screen_height = 100;
   const std::unique_ptr<objects::ScreenEdgeObject> screen_left =
       objects::ScreenEdgeObject::MakeLeft(screen_height,
                                           /*should_draw_hit_box=*/false);
@@ -368,7 +368,7 @@ TEST_F(LevelTest, DrawsPartiallyOutsideScreenOnlyHitBox) {
         StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                        .should_draw_hit_box = false},
         /*hit_box_vertices=*/
-        std::vector<std::pair<double, double>>(
+        std::vector<std::pair<float, float>>(
             {{-1, 50}, {-1, 49}, {1, 50}, {1, 49}}));
     EXPECT_TRUE(dummy_level->ShouldDraw(object_left));
   }
@@ -379,7 +379,7 @@ TEST_F(LevelTest, DrawsPartiallyOutsideScreenOnlyHitBox) {
         StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                        .should_draw_hit_box = false},
         /*hit_box_vertices=*/
-        std::vector<std::pair<double, double>>(
+        std::vector<std::pair<float, float>>(
             {{190, 50}, {190, 49}, {400, 50}, {400, 49}}));
 
     EXPECT_TRUE(dummy_level->ShouldDraw(object_right));
@@ -391,7 +391,7 @@ TEST_F(LevelTest, DrawsPartiallyOutsideScreenOnlyHitBox) {
         StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                        .should_draw_hit_box = false},
         /*hit_box_vertices=*/
-        std::vector<std::pair<double, double>>(
+        std::vector<std::pair<float, float>>(
             {{3, 5}, {13, 5}, {3, -1}, {13, -1}}));
 
     EXPECT_TRUE(dummy_level->ShouldDraw(object_top));
@@ -403,7 +403,7 @@ TEST_F(LevelTest, DrawsPartiallyOutsideScreenOnlyHitBox) {
         StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                        .should_draw_hit_box = false},
         /*hit_box_vertices=*/
-        std::vector<std::pair<double, double>>(
+        std::vector<std::pair<float, float>>(
             {{3, 90}, {13, 90}, {3, 200}, {13, 200}}));
 
     EXPECT_TRUE(dummy_level->ShouldDraw(object_bottom));
@@ -416,8 +416,8 @@ TEST_F(LevelTest, DrawsPartiallyOutsideScreen) {
   const std::unique_ptr<DummyLevel> dummy_level =
       dummy_builder.WithScreenObjects().Build();
   dummy_level->screen_edge_objects_.clear();
-  constexpr double screen_width = 200;
-  constexpr double screen_height = 100;
+  constexpr float screen_width = 200;
+  constexpr float screen_height = 100;
   const std::unique_ptr<objects::ScreenEdgeObject> screen_left =
       objects::ScreenEdgeObject::MakeLeft(screen_height,
                                           /*should_draw_hit_box=*/false);
@@ -441,7 +441,7 @@ TEST_F(LevelTest, DrawsPartiallyOutsideScreen) {
         StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                        .should_draw_hit_box = false},
         /*hit_box_vertices=*/
-        std::vector<std::pair<double, double>>(
+        std::vector<std::pair<float, float>>(
             {{-2, 50}, {-2, 49}, {-1, 50}, {-1, 49}}),
         MakeSprite());
     EXPECT_TRUE(dummy_level->ShouldDraw(object_left));
@@ -453,7 +453,7 @@ TEST_F(LevelTest, DrawsPartiallyOutsideScreen) {
         StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                        .should_draw_hit_box = false},
         /*hit_box_vertices=*/
-        std::vector<std::pair<double, double>>(
+        std::vector<std::pair<float, float>>(
             {{201, 50}, {201, 49}, {202, 50}, {202, 49}}),
         MakeSprite());
 
@@ -466,7 +466,7 @@ TEST_F(LevelTest, DrawsPartiallyOutsideScreen) {
         StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                        .should_draw_hit_box = false},
         /*hit_box_vertices=*/
-        std::vector<std::pair<double, double>>(
+        std::vector<std::pair<float, float>>(
             {{3, -2}, {13, -2}, {3, -1}, {13, -1}}),
         MakeSprite());
 
@@ -479,7 +479,7 @@ TEST_F(LevelTest, DrawsPartiallyOutsideScreen) {
         StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                        .should_draw_hit_box = false},
         /*hit_box_vertices=*/
-        std::vector<std::pair<double, double>>(
+        std::vector<std::pair<float, float>>(
             {{3, 101}, {13, 101}, {3, 102}, {13, 102}}),
         MakeSprite());
 
@@ -493,8 +493,8 @@ TEST_F(LevelTest, DoesNotDrawOutsideScreenOnlyHitBox) {
   const std::unique_ptr<DummyLevel> dummy_level =
       dummy_builder.WithScreenObjects().Build();
   dummy_level->screen_edge_objects_.clear();
-  constexpr double screen_width = 200;
-  constexpr double screen_height = 100;
+  constexpr float screen_width = 200;
+  constexpr float screen_height = 100;
   const std::unique_ptr<objects::ScreenEdgeObject> screen_left =
       objects::ScreenEdgeObject::MakeLeft(screen_height,
                                           /*should_draw_hit_box=*/false);
@@ -518,7 +518,7 @@ TEST_F(LevelTest, DoesNotDrawOutsideScreenOnlyHitBox) {
         StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                        .should_draw_hit_box = false},
         /*hit_box_vertices=*/
-        std::vector<std::pair<double, double>>(
+        std::vector<std::pair<float, float>>(
             {{-100, 50}, {-100, 49}, {-1, 50}, {-1, 49}}));
     EXPECT_FALSE(dummy_level->ShouldDraw(object_left));
   }
@@ -529,7 +529,7 @@ TEST_F(LevelTest, DoesNotDrawOutsideScreenOnlyHitBox) {
         StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                        .should_draw_hit_box = false},
         /*hit_box_vertices=*/
-        std::vector<std::pair<double, double>>(
+        std::vector<std::pair<float, float>>(
             {{210, 50}, {210, 49}, {400, 50}, {400, 49}}));
 
     EXPECT_FALSE(dummy_level->ShouldDraw(object_right));
@@ -541,7 +541,7 @@ TEST_F(LevelTest, DoesNotDrawOutsideScreenOnlyHitBox) {
         StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                        .should_draw_hit_box = false},
         /*hit_box_vertices=*/
-        std::vector<std::pair<double, double>>(
+        std::vector<std::pair<float, float>>(
             {{3, -1}, {13, -1}, {3, -100}, {13, -100}}));
 
     EXPECT_FALSE(dummy_level->ShouldDraw(object_top));
@@ -553,7 +553,7 @@ TEST_F(LevelTest, DoesNotDrawOutsideScreenOnlyHitBox) {
         StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                        .should_draw_hit_box = false},
         /*hit_box_vertices=*/
-        std::vector<std::pair<double, double>>(
+        std::vector<std::pair<float, float>>(
             {{3, 120}, {13, 120}, {3, 200}, {13, 200}}));
 
     EXPECT_FALSE(dummy_level->ShouldDraw(object_bottom));
@@ -566,8 +566,8 @@ TEST_F(LevelTest, DoesNotDrawOutsideScreen) {
   const std::unique_ptr<DummyLevel> dummy_level =
       dummy_builder.WithScreenObjects().Build();
   dummy_level->screen_edge_objects_.clear();
-  constexpr double screen_width = 200;
-  constexpr double screen_height = 100;
+  constexpr float screen_width = 200;
+  constexpr float screen_height = 100;
   const std::unique_ptr<objects::ScreenEdgeObject> screen_left =
       objects::ScreenEdgeObject::MakeLeft(screen_height,
                                           /*should_draw_hit_box=*/false);
@@ -591,7 +591,7 @@ TEST_F(LevelTest, DoesNotDrawOutsideScreen) {
         StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                        .should_draw_hit_box = false},
         /*hit_box_vertices=*/
-        std::vector<std::pair<double, double>>(
+        std::vector<std::pair<float, float>>(
             {{-100, 50}, {-100, 49}, {-50, 50}, {-50, 49}}),
         MakeSprite());
     EXPECT_FALSE(dummy_level->ShouldDraw(object_left));
@@ -603,7 +603,7 @@ TEST_F(LevelTest, DoesNotDrawOutsideScreen) {
         StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                        .should_draw_hit_box = false},
         /*hit_box_vertices=*/
-        std::vector<std::pair<double, double>>(
+        std::vector<std::pair<float, float>>(
             {{210, 50}, {210, 49}, {400, 50}, {400, 49}}),
         MakeSprite());
 
@@ -616,7 +616,7 @@ TEST_F(LevelTest, DoesNotDrawOutsideScreen) {
         StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                        .should_draw_hit_box = false},
         /*hit_box_vertices=*/
-        std::vector<std::pair<double, double>>(
+        std::vector<std::pair<float, float>>(
             {{3, -1}, {13, -1}, {3, -100}, {13, -100}}),
         MakeSprite());
 
@@ -629,7 +629,7 @@ TEST_F(LevelTest, DoesNotDrawOutsideScreen) {
         StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                        .should_draw_hit_box = false},
         /*hit_box_vertices=*/
-        std::vector<std::pair<double, double>>(
+        std::vector<std::pair<float, float>>(
             {{3, 120}, {13, 120}, {3, 200}, {13, 200}}),
         MakeSprite());
 

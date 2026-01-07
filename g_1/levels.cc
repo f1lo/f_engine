@@ -27,16 +27,16 @@ constexpr int kButtonLengthX = 400;
 constexpr int kButtonLengthY = 100;
 constexpr int kOffsetBetweenButtons = 50;
 
-constexpr double kProjectileRadius = 8;
-constexpr double kProjectileSpeed = 5;
+constexpr float kProjectileRadius = 8;
+constexpr float kProjectileSpeed = 5;
 
-constexpr double kPlayerSpeed = 7;
+constexpr float kPlayerSpeed = 7;
 constexpr int kPlayerX = 0;
 constexpr int kPlayerY = 0;
 constexpr float kPlayerWidth = 50;
 constexpr float kPlayerHeight = 100;
 
-constexpr double kWorldBorderSize = 2000;
+constexpr float kWorldBorderSize = 2000;
 
 static const char* kTreePath = "g_1/resources/sample_tree.png";
 static const char* kPlayerPath = "g_1/resources/sample_player.png";
@@ -83,7 +83,7 @@ std::unique_ptr<Player> MakePlayer(SpriteFactory& sprite_factory,
                                        .attach_camera = true,
                                        .velocity = kPlayerSpeed},
       /*hit_box_vertices=*/
-      std::vector<std::pair<double, double>>(
+      std::vector<std::pair<float, float>>(
           {{kPlayerX, kPlayerY},
            {kPlayerX, kPlayerY + kPlayerHeight},
            {kPlayerX + kPlayerWidth, kPlayerY},
@@ -141,7 +141,7 @@ std::vector<std::unique_ptr<StaticObject>> MakeStaticObjects(
       StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                      .should_draw_hit_box = debug_mode},
       /*hit_box_vertices=*/
-      std::vector<std::pair<double, double>>(
+      std::vector<std::pair<float, float>>(
           {{700, -300}, {700, -100}, {800, -100}, {800, -300}}),
       std::move(tree_1)));
 
@@ -150,7 +150,7 @@ std::vector<std::unique_ptr<StaticObject>> MakeStaticObjects(
       StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                      .should_draw_hit_box = debug_mode},
       /*hit_box_vertices=*/
-      std::vector<std::pair<double, double>>(
+      std::vector<std::pair<float, float>>(
           {{500, -300}, {500, -100}, {600, -100}, {600, -300}}),
       std::move(tree_2)));
 
@@ -159,7 +159,7 @@ std::vector<std::unique_ptr<StaticObject>> MakeStaticObjects(
       StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                      .should_draw_hit_box = debug_mode},
       /*hit_box_vertices=*/
-      std::vector<std::pair<double, double>>(
+      std::vector<std::pair<float, float>>(
           {{200, 200}, {200, 0}, {300, 0}, {300, 200}}),
       std::move(tree_3)));
   return static_objects;

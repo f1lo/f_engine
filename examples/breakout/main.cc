@@ -62,14 +62,14 @@ std::vector<std::unique_ptr<BrickObject>> GenerateBricks(int brick_width,
   }
 
   for (int i = 0; i < num_brick_lines; i++) {
-    double x = (i % 2 == 0) ? brick_offset_close : brick_offset_far;
-    double y = kScreenOffset + (i + 1) * brick_height;
+    float x = (i % 2 == 0) ? brick_offset_close : brick_offset_far;
+    float y = kScreenOffset + (i + 1) * brick_height;
     while (x + brick_width <= right_limit) {
       std::unique_ptr<BrickObject> brick = std::make_unique<BrickObject>(
           ObjectTypeFactory::MakeEnemy(),
           StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                          .should_draw_hit_box = true},
-          std::vector<std::pair<double, double>>(
+          std::vector<std::pair<float, float>>(
               {{x, y},
                {x, y - brick_height},
                {x + brick_width, y - brick_height},

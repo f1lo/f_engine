@@ -17,7 +17,7 @@ class ObjectUtilsTest : public ::testing::Test {};
 using ObjectUtilsDeathTest = ObjectUtilsTest;
 
 TEST(ObjectUtilsDeathTest, CreateHitBoxOrDieTrianlge) {
-  EXPECT_DEATH(CreateHitBoxOrDie(std::vector<std::pair<double, double>>{
+  EXPECT_DEATH(CreateHitBoxOrDie(std::vector<std::pair<float, float>>{
                    {0, 0}, {1, 1}, {2, 0}}),
                HasSubstr("HitBox::CreateHitBox() failed"));
 }

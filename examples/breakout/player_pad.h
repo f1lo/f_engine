@@ -6,13 +6,13 @@
 
 namespace breakout {
 
-constexpr double kPadOffset = 10;
-constexpr double kBallOffset = 3;
+constexpr float kPadOffset = 10;
+constexpr float kBallOffset = 3;
 
 class PlayerPad final : public lib::api::objects::MovableObject {
  public:
-  PlayerPad(const double screen_width, const double screen_height,
-            const double player_width, const double player_height,
+  PlayerPad(const float screen_width, const float screen_height,
+            const float player_width, const float player_height,
             const lib::api::objects::ObjectType ball_type,
             const MovableObjectOpts& options)
       : MovableObject(lib::api::objects::ObjectTypeFactory::MakePlayer(),
@@ -37,10 +37,10 @@ class PlayerPad final : public lib::api::objects::MovableObject {
   bool OnCollisionCallback(Object& other_object) override;
 
  private:
-  const double screen_width_;
-  const double screen_height_;
-  const double player_width_;
-  const double player_height_;
+  const float screen_width_;
+  const float screen_height_;
+  const float player_width_;
+  const float player_height_;
   const lib::api::objects::ObjectType ball_type_;
 };
 

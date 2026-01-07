@@ -31,8 +31,8 @@ class Object {
       const std::list<std::unique_ptr<Object>>& other_objects) = 0;
   virtual void Draw() const;
 
-  [[nodiscard]] std::pair<double, double> Reflect(const Object& other, double x,
-                                                  double y) const;
+  [[nodiscard]] std::pair<float, float> Reflect(const Object& other, float x,
+                                                float y) const;
   [[nodiscard]] bool CollidesWith(const Object& other) const;
   [[nodiscard]] int YBase() const;
 

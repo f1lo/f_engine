@@ -19,30 +19,30 @@ class MovableObject : public Object {
     bool is_hit_box_active;
     bool should_draw_hit_box;
     bool attach_camera;
-    double velocity;
+    float velocity;
   };
 
   MovableObject(
       ObjectType type, const MovableObjectOpts& options,
-      const std::vector<std::pair<double, double>>& hit_box_vertices,
+      const std::vector<std::pair<float, float>>& hit_box_vertices,
       std::unique_ptr<sprites::SpriteInstance> sprite_instance = nullptr);
 
   MovableObject(
       ObjectType type, const MovableObjectOpts& options,
-      std::pair<double, double> hit_box_center, double hit_box_radius,
+      std::pair<float, float> hit_box_center, float hit_box_radius,
       std::unique_ptr<sprites::SpriteInstance> sprite_instance = nullptr);
 
   void Update(const std::list<std::unique_ptr<Object>>& other_objects) override;
 
-  void set_velocity(const double velocity) { velocity_ = velocity; }
+  void set_velocity(const float velocity) { velocity_ = velocity; }
   void freeze_until_next_set_direction() {
     frozen_until_next_set_direction_ = true;
   }
-  [[nodiscard]] double velocity() const { return velocity_; }
-  void SetDirectionGlobal(double x, double y);
-  void SetDirectionRelative(double x, double y);
-  [[nodiscard]] double direction_x() const { return direction_x_; }
-  [[nodiscard]] double direction_y() const { return direction_y_; }
+  [[nodiscard]] float velocity() const { return velocity_; }
+  void SetDirectionGlobal(float x, float y);
+  void SetDirectionRelative(float x, float y);
+  [[nodiscard]] float direction_x() const { return direction_x_; }
+  [[nodiscard]] float direction_y() const { return direction_y_; }
 
  protected:
   virtual void Move();
@@ -51,11 +51,11 @@ class MovableObject : public Object {
  private:
   [[nodiscard]] bool IsFrozen() const;
 
-  double velocity_;
-  double direction_x_ = 0.0;
-  double direction_y_ = 0.0;
-  double last_direction_x_ = 0.0;
-  double last_direction_y_ = 0.0;
+  float velocity_;
+  float direction_x_ = 0.0;
+  float direction_y_ = 0.0;
+  float last_direction_x_ = 0.0;
+  float last_direction_y_ = 0.0;
 
   bool frozen_until_next_set_direction_ = false;
 };

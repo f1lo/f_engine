@@ -12,7 +12,7 @@ namespace internal {
 
 class HitBox {
  public:
-  static HitBox CreateHitBox(PointInternal center, const double radius) {
+  static HitBox CreateHitBox(PointInternal center, const float radius) {
     return {std::make_unique<CircleInternal>(
                 CircleInternal{std::move(center), radius}),
             ShapeType::CIRCLE};
@@ -21,13 +21,13 @@ class HitBox {
       std::vector<PointInternal> vertices);
 
   [[nodiscard]] bool CollidesWith(const HitBox& other) const;
-  [[nodiscard]] std::pair<double, double> Reflect(const HitBox& other, double x,
-                                                  double y) const;
+  [[nodiscard]] std::pair<float, float> Reflect(const HitBox& other, float x,
+                                                float y) const;
   void Draw() const;
-  void Move(const double x, const double y) const { shape_->Move(x, y); }
+  void Move(const float x, const float y) const { shape_->Move(x, y); }
 
-  double center_x() const { return shape_->center_x(); }
-  double center_y() const { return shape_->center_y(); }
+  float center_x() const { return shape_->center_x(); }
+  float center_y() const { return shape_->center_y(); }
 
  private:
   // TODO(f1lo): Make this type agnostic.

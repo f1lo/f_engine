@@ -16,8 +16,8 @@ class HitBoxTest : public ::testing::Test {
       : point_(HitBoxOrDie(HitBox::CreateHitBox({PointInternal{0, 0}}))),
         different_point_(
             HitBoxOrDie(HitBox::CreateHitBox({PointInternal{1, 3}}))),
-        line_(HitBoxOrDie(
-            HitBox::CreateHitBox({PointInternal{-8, 2}, PointInternal{4, 8}}))),
+        line_(HitBoxOrDie(HitBox::CreateHitBox(
+            {PointInternal{-8.0f, 2.0f}, PointInternal{4.0f, 8.0f}}))),
         intersecting_line_(HitBoxOrDie(HitBox::CreateHitBox(
             {PointInternal{-2, -6}, PointInternal{-2, 6}}))),
         parallel_line_(HitBoxOrDie(HitBox::CreateHitBox(
@@ -112,7 +112,8 @@ TEST_F(HitBoxTest, PointInternalsDoNotMatch) {
 }
 
 TEST_F(HitBoxTest, PointInternalOnLine) {
-  const HitBox point_on_line = HitBoxOrDie(HitBox::CreateHitBox({{0, 6}}));
+  const HitBox point_on_line =
+      HitBoxOrDie(HitBox::CreateHitBox({{0.0f, 6.0f}}));
 
   EXPECT_TRUE(line_.CollidesWith(point_on_line));
   EXPECT_TRUE(point_on_line.CollidesWith(line_));

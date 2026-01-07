@@ -31,16 +31,15 @@ HitBox CreateHitBoxOrDieInternal(const std::vector<T>& vertices) {
 
 }  // namespace
 
-HitBox CreateHitBoxOrDie(
-    const std::vector<std::pair<double, double>>& vertices) {
-  return CreateHitBoxOrDieInternal<std::pair<double, double>>(vertices);
+HitBox CreateHitBoxOrDie(const std::vector<std::pair<float, float>>& vertices) {
+  return CreateHitBoxOrDieInternal<std::pair<float, float>>(vertices);
 }
 
 HitBox CreateHitBoxOrDie(const std::vector<ScreenPosition>& vertices) {
   return CreateHitBoxOrDieInternal<ScreenPosition>(vertices);
 }
 
-HitBox CreateCircle(const double x, const double y, const double radius) {
+HitBox CreateCircle(const float x, const float y, const float radius) {
   return HitBox::CreateHitBox(PointInternal{x, y}, radius);
 }
 

@@ -6,7 +6,7 @@
 namespace breakout {
 
 bool Ball::OnCollisionCallback(Object& other_object) {
-  std::pair<double, double> reflected_direction;
+  std::pair<float, float> reflected_direction;
   BrickObject* cast_brick;
   if (other_object.type().IsScreenLeft() ||
       other_object.type().IsScreenRight()) {

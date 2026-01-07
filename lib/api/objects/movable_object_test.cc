@@ -15,8 +15,8 @@ namespace {
 
 class DummyMovableObject : public MovableObject {
  public:
-  DummyMovableObject(const double velocity,
-                     const std::pair<double, double> hit_box_center)
+  DummyMovableObject(const float velocity,
+                     const std::pair<float, float> hit_box_center)
       : MovableObject(
             /*type=*/ObjectTypeFactory::MakePlayer(),
             MovableObjectOpts{.is_hit_box_active = true,
@@ -26,8 +26,8 @@ class DummyMovableObject : public MovableObject {
             hit_box_center, /*hit_box_radius=*/3) {}
 
   DummyMovableObject(
-      const double velocity,
-      const std::vector<std::pair<double, double>>& hit_box_vertices)
+      const float velocity,
+      const std::vector<std::pair<float, float>>& hit_box_vertices)
       : MovableObject(
             /*type=*/ObjectTypeFactory::MakePlayer(),
             MovableObjectOpts{.is_hit_box_active = true,
@@ -50,8 +50,8 @@ TEST(MovableObjectTest, SetDirectionGlobal) {
 
   movable_object.SetDirectionGlobal(3, 4);
 
-  EXPECT_DOUBLE_EQ(movable_object.direction_x(), 0.6);
-  EXPECT_DOUBLE_EQ(movable_object.direction_y(), 0.8);
+  EXPECT_FLOAT_EQ(movable_object.direction_x(), 0.6f);
+  EXPECT_FLOAT_EQ(movable_object.direction_y(), 0.8f);
 }
 
 TEST(MovableObjectTest, SetDirectionRelative) {
@@ -60,8 +60,8 @@ TEST(MovableObjectTest, SetDirectionRelative) {
 
   movable_object.SetDirectionRelative(1, 4);
 
-  EXPECT_DOUBLE_EQ(movable_object.direction_x(), 0);
-  EXPECT_DOUBLE_EQ(movable_object.direction_y(), 1);
+  EXPECT_FLOAT_EQ(movable_object.direction_x(), 0.0f);
+  EXPECT_FLOAT_EQ(movable_object.direction_y(), 1.0f);
 }
 
 TEST(MovableObjectTest, Move) {
@@ -120,7 +120,7 @@ TEST(MovableObjectTest, SetDirectionRelativeUnfreezes) {
 
 TEST(MovableObjectTest, NoDirectionSet) {
   DummyMovableObject movable_object = DummyMovableObject(
-      /*velocity=*/5, std::vector<std::pair<double, double>>{{0, 0}, {0, 2}});
+      /*velocity=*/5, std::vector<std::pair<float, float>>{{0, 0}, {0, 2}});
 
   movable_object.Move();
 
@@ -129,11 +129,11 @@ TEST(MovableObjectTest, NoDirectionSet) {
 
 TEST(MovableObjectTest, UpdateWorks) {
   DummyMovableObject movable_object_1 = DummyMovableObject(
-      /*velocity=*/5, std::vector<std::pair<double, double>>{{1, 0}, {5, 0}});
+      /*velocity=*/5, std::vector<std::pair<float, float>>{{1, 0}, {5, 0}});
   std::unique_ptr<DummyMovableObject> movable_object_2 =
       std::make_unique<DummyMovableObject>(
           /*velocity=*/5,
-          std::vector<std::pair<double, double>>{{2, -1}, {4, 2}});
+          std::vector<std::pair<float, float>>{{2, -1}, {4, 2}});
   std::list<std::unique_ptr<Object>> objs;
   objs.push_back(std::move(movable_object_2));
 

@@ -28,7 +28,7 @@
 namespace lib {
 namespace api {
 
-constexpr double kWorldBorderLength = 1000000;
+constexpr float kWorldBorderLength = 1000000;
 
 typedef uint32_t LevelId;
 
@@ -114,7 +114,7 @@ class LevelBuilder {
         .AddObject(std::move(screen_bottom));
   }
 
-  LevelBuilder& WithWorldBorderX(const double x,
+  LevelBuilder& WithWorldBorderX(const float x,
                                  const bool should_draw_hitbox = false) {
     std::unique_ptr<objects::StaticObject> x_border =
         std::make_unique<objects::StaticObject>(
@@ -122,14 +122,14 @@ class LevelBuilder {
             objects::StaticObject::StaticObjectOpts{
                 .is_hit_box_active = true,
                 .should_draw_hit_box = should_draw_hitbox},
-            std::vector<std::pair<double, double>>{{x, -kWorldBorderLength},
-                                                   {x, kWorldBorderLength}});
+            std::vector<std::pair<float, float>>{{x, -kWorldBorderLength},
+                                                 {x, kWorldBorderLength}});
 
     level_->world_border_objects_.emplace_back(x_border.get());
     return AddObject(std::move(x_border));
   }
 
-  LevelBuilder& WithWorldBorderY(const double y,
+  LevelBuilder& WithWorldBorderY(const float y,
                                  const bool should_draw_hitbox = false) {
     std::unique_ptr<objects::StaticObject> y_border =
         std::make_unique<objects::StaticObject>(
@@ -137,8 +137,8 @@ class LevelBuilder {
             objects::StaticObject::StaticObjectOpts{
                 .is_hit_box_active = true,
                 .should_draw_hit_box = should_draw_hitbox},
-            std::vector<std::pair<double, double>>{{-kWorldBorderLength, y},
-                                                   {kWorldBorderLength, y}});
+            std::vector<std::pair<float, float>>{{-kWorldBorderLength, y},
+                                                 {kWorldBorderLength, y}});
 
     level_->world_border_objects_.emplace_back(y_border.get());
     return AddObject(std::move(y_border));

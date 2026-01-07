@@ -24,10 +24,10 @@ struct Shape {
       const RectangleInternal& rectangle) const = 0;
   [[nodiscard]] virtual bool Collides(const CircleInternal& circle) const = 0;
   virtual void Draw() const = 0;
-  virtual void Move(double x, double y) = 0;
+  virtual void Move(float x, float y) = 0;
 
-  [[nodiscard]] virtual double center_x() const = 0;
-  [[nodiscard]] virtual double center_y() const = 0;
+  [[nodiscard]] virtual float center_x() const = 0;
+  [[nodiscard]] virtual float center_y() const = 0;
 
   virtual ~Shape() = default;
 };
@@ -39,24 +39,23 @@ struct PointInternal final : Shape {
       const RectangleInternal& rectangle) const override;
   [[nodiscard]] bool Collides(const CircleInternal& circle) const override;
   void Draw() const override;
-  void Move(double x, double y) override;
+  void Move(float x, float y) override;
 
-  [[nodiscard]] double center_x() const override { return x; }
-  [[nodiscard]] double center_y() const override { return y; }
+  [[nodiscard]] float center_x() const override { return x; }
+  [[nodiscard]] float center_y() const override { return y; }
 
-  PointInternal(const double x, const double y) : x(x), y(y) {}
-  explicit PointInternal(std::pair<double, double> p)
-      : x(p.first), y(p.second) {}
+  PointInternal(const float x, const float y) : x(x), y(y) {}
+  explicit PointInternal(std::pair<float, float> p) : x(p.first), y(p.second) {}
   bool operator==(const PointInternal& v) const { return x == v.x && y == v.y; }
   /*
    * Returns true if current point is located on the lower-left side of the
    * `other` point. Does not return `true` if they are the same points.
    */
   [[nodiscard]] bool IsLowerLeft(const PointInternal& other) const;
-  [[nodiscard]] double Distance(const PointInternal& other) const;
+  [[nodiscard]] float Distance(const PointInternal& other) const;
 
-  double x;
-  double y;
+  float x;
+  float y;
 };
 
 struct LineInternal final : Shape {
@@ -70,12 +69,12 @@ struct LineInternal final : Shape {
   [[nodiscard]] Vector Reflect(const Vector& vec) const;
 
   void Draw() const override;
-  void Move(double x, double y) override;
+  void Move(float x, float y) override;
 
-  [[nodiscard]] double center_x() const override {
+  [[nodiscard]] float center_x() const override {
     return (this->a.x + this->b.x) / 2.0;
   }
-  [[nodiscard]] double center_y() const override {
+  [[nodiscard]] float center_y() const override {
     return (this->a.y + this->b.y) / 2.0;
   }
 
@@ -107,10 +106,10 @@ struct RectangleInternal final : Shape {
       const RectangleInternal& other_rectangle) const override;
   [[nodiscard]] bool Collides(const CircleInternal& circle) const override;
   void Draw() const override;
-  void Move(double x, double y) override;
+  void Move(float x, float y) override;
 
-  [[nodiscard]] double center_x() const override { return (a.x + c.x) / 2.0; }
-  [[nodiscard]] double center_y() const override { return (a.y + c.y) / 2.0; }
+  [[nodiscard]] float center_x() const override { return (a.x + c.x) / 2.0; }
+  [[nodiscard]] float center_y() const override { return (a.y + c.y) / 2.0; }
 
   RectangleInternal(const PointInternal& bottom_left,
                     const PointInternal& top_right)
@@ -138,17 +137,17 @@ struct CircleInternal final : Shape {
   [[nodiscard]] bool Collides(
       const CircleInternal& other_circle) const override;
   void Draw() const override;
-  void Move(double x, double y) override;
+  void Move(float x, float y) override;
 
-  [[nodiscard]] double center_x() const override { return a.x; }
-  [[nodiscard]] double center_y() const override { return a.y; }
+  [[nodiscard]] float center_x() const override { return a.x; }
+  [[nodiscard]] float center_y() const override { return a.y; }
 
-  CircleInternal(const PointInternal& a, const double r) : a(a), r(r) {
+  CircleInternal(const PointInternal& a, const float r) : a(a), r(r) {
     CHECK(this->r > 0) << "Negative radius for circle: " << this->r;
   }
 
   PointInternal a;
-  double r;
+  float r;
 };
 
 bool Clockwise(const PointInternal& a, const PointInternal& b,

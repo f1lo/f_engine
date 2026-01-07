@@ -5,7 +5,7 @@
 #include "absl/log/check.h"
 #include "absl/strings/substitute.h"
 
-inline constexpr double kEps = 1e-9;
+inline constexpr float kEps = 1e-9;
 
 namespace lib {
 namespace api {

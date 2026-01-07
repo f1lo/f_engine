@@ -12,8 +12,8 @@ namespace api {
 namespace objects {
 
 TEST(CoordinateObjectTest, XAxisReadjustement) {
-  constexpr double screen_width = 100;
-  constexpr double screen_height = 80;
+  constexpr float screen_width = 100;
+  constexpr float screen_height = 80;
   const std::unique_ptr<CoordinateObject> x_object =
       CoordinateObject::MakeX(screen_width, screen_height);
 
@@ -27,8 +27,8 @@ TEST(CoordinateObjectTest, XAxisReadjustement) {
 }
 
 TEST(CoordinateObjectTest, YAxisReadjustement) {
-  constexpr double screen_width = 100;
-  constexpr double screen_height = 80;
+  constexpr float screen_width = 100;
+  constexpr float screen_height = 80;
   const std::unique_ptr<CoordinateObject> y_object =
       CoordinateObject::MakeY(screen_width, screen_height);
 

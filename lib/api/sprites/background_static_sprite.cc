@@ -35,12 +35,11 @@ void BackgroundStaticSprite::RotateAndDraw(const WorldPosition draw_destination,
                                            const int frame_to_draw) const {
   graphics_->Draw(
       texture_,
-      {.x = static_cast<float>(draw_destination.x) * parallax_factor_,
-       .y = static_cast<float>(draw_destination.y) * parallax_factor_,
+      {.x = draw_destination.x * parallax_factor_,
+       .y = draw_destination.y * parallax_factor_,
        .width = screen_width_,
        .height = screen_height_},
-      {static_cast<float>(draw_destination.x),
-       static_cast<float>(draw_destination.y), screen_width_, screen_height_},
+      {draw_destination.x, draw_destination.y, screen_width_, screen_height_},
       origin_, /*rotation=*/0.0, WHITE);
 }
 

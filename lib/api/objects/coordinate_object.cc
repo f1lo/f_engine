@@ -52,7 +52,7 @@ bool CoordinateObject::OnCollisionCallback(Object& other_object) {
 }
 
 void CoordinateObject::DrawX() const {
-  double increment = 0;
+  float increment = 0;
   while (increment < screen_height_) {
     DrawText(
         std::to_string(static_cast<int>(screen_top_left_pos_.y + increment))
@@ -63,11 +63,10 @@ void CoordinateObject::DrawX() const {
         /*color=*/BLACK);
     if (increment != 0) {
       DrawLineEx(
-          Vector2(static_cast<float>(screen_top_left_pos_.x),
-                  static_cast<float>(screen_top_left_pos_.y + increment)),
-          Vector2(static_cast<float>(screen_top_left_pos_.x + screen_width_),
-                  static_cast<float>(screen_top_left_pos_.y + increment)),
-          /*thick=*/3.0, BLACK);
+          Vector2(screen_top_left_pos_.x, screen_top_left_pos_.y + increment),
+          Vector2(screen_top_left_pos_.x + screen_width_,
+                  screen_top_left_pos_.y + increment),
+          /*thick=*/3.0f, BLACK);
     }
 
     increment += kDistanceBetweenGrid;
@@ -86,11 +85,10 @@ void CoordinateObject::DrawY() const {
         /*color=*/BLACK);
     if (increment != 0) {
       DrawLineEx(
-          Vector2(static_cast<float>(screen_top_left_pos_.x + increment),
-                  static_cast<float>(screen_top_left_pos_.y)),
-          Vector2(static_cast<float>(screen_top_left_pos_.x + increment),
-                  static_cast<float>(screen_top_left_pos_.y + screen_height_)),
-          /*thick=*/3.0, BLACK);
+          Vector2(screen_top_left_pos_.x + increment, screen_top_left_pos_.y),
+          Vector2(screen_top_left_pos_.x + increment,
+                  screen_top_left_pos_.y + screen_height_),
+          /*thick=*/3.0f, BLACK);
     }
 
     increment += kDistanceBetweenGrid;

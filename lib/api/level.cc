@@ -25,24 +25,25 @@ using objects::StaticObject;
 namespace {
 
 StaticObject MakeSpriteBoundingBox(const Object& object) {
-  const double half_sprite_width =
-      static_cast<double>(object.active_sprite_instance()->SpriteWidth()) / 2;
-  const double half_sprite_height =
-      static_cast<double>(object.active_sprite_instance()->SpriteHeight()) / 2;
-  const double upper_left_x = object.center().x - half_sprite_width;
-  const double upper_left_y = object.center().y - half_sprite_height;
-  const double lower_right_x = object.center().x + half_sprite_width;
-  const double lower_right_y = object.center().y + half_sprite_height;
+  const float half_sprite_width =
+      static_cast<float>(object.active_sprite_instance()->SpriteWidth()) / 2.0f;
+  const float half_sprite_height =
+      static_cast<float>(object.active_sprite_instance()->SpriteHeight()) /
+      2.0f;
+  const float upper_left_x = object.center().x - half_sprite_width;
+  const float upper_left_y = object.center().y - half_sprite_height;
+  const float lower_right_x = object.center().x + half_sprite_width;
+  const float lower_right_y = object.center().y + half_sprite_height;
 
   return StaticObject(
       /*type=*/objects::ObjectTypeFactory::MakeSpriteBoundingBox(),
       StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                      .should_draw_hit_box = false},
       /*hit_box_vertices=*/
-      std::vector<std::pair<double, double>>({{upper_left_x, upper_left_y},
-                                              {upper_left_x, lower_right_y},
-                                              {lower_right_x, upper_left_y},
-                                              {lower_right_x, lower_right_y}}));
+      std::vector<std::pair<float, float>>({{upper_left_x, upper_left_y},
+                                            {upper_left_x, lower_right_y},
+                                            {lower_right_x, upper_left_y},
+                                            {lower_right_x, lower_right_y}}));
 }
 
 }  // namespace
@@ -132,7 +133,7 @@ void Level::Draw() const {
 
 void Level::DrawBackgrounds() const {
   const WorldPosition center_world_pos = camera_.GetWorldPosition(
-      {.x = native_screen_width_ / 2.0, .y = native_screen_height_ / 2.0});
+      {.x = native_screen_width_ / 2.0f, .y = native_screen_height_ / 2.0f});
   for (const auto& background_layer : background_layers_) {
     background_layer->Draw(
         /*draw_destination=*/{.x = center_world_pos.x,

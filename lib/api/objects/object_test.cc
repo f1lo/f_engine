@@ -43,8 +43,8 @@ TEST(ObjectDeathTest, ObjectCreationFails) {
           /*type=*/ObjectTypeFactory::MakeEnemy(),
           /*options=*/{.is_hit_box_active = true, .should_draw_hit_box = false},
           /*hit_box=*/
-          CreateHitBoxOrDie(std::vector<std::pair<double, double>>{
-              {2, 2}, {10, 2}, {10, 8}})),
+          CreateHitBoxOrDie(
+              std::vector<std::pair<float, float>>{{2, 2}, {10, 2}, {10, 8}})),
       HasSubstr("HitBox::CreateHitBox() failed"));
 }
 
@@ -69,7 +69,7 @@ TEST(ObjectTest, Collision) {
       /*type=*/ObjectTypeFactory::MakeEnemy(),
       /*options=*/{.is_hit_box_active = true, .should_draw_hit_box = false},
       /*hit_box=*/
-      CreateHitBoxOrDie(std::vector<std::pair<double, double>>{
+      CreateHitBoxOrDie(std::vector<std::pair<float, float>>{
           {2, 2}, {10, 2}, {10, 8}, {2, 8}}));
 
   EXPECT_TRUE(circle.CollidesWith(rect));
@@ -85,7 +85,7 @@ TEST(ObjectTest, NoCollision) {
       /*type=*/ObjectTypeFactory::MakeEnemy(),
       /*options=*/{.is_hit_box_active = true, .should_draw_hit_box = false},
       /*hit_box=*/
-      CreateHitBoxOrDie(std::vector<std::pair<double, double>>{
+      CreateHitBoxOrDie(std::vector<std::pair<float, float>>{
           {5, 2}, {10, 2}, {10, 8}, {5, 8}}));
 
   EXPECT_FALSE(circle.CollidesWith(rect));
@@ -101,7 +101,7 @@ TEST(ObjectTest, HitBoxDisabledNoCollision) {
       /*type=*/ObjectTypeFactory::MakeEnemy(),
       /*options=*/{.is_hit_box_active = true, .should_draw_hit_box = false},
       /*hit_box=*/
-      CreateHitBoxOrDie(std::vector<std::pair<double, double>>{
+      CreateHitBoxOrDie(std::vector<std::pair<float, float>>{
           {2, 2}, {10, 2}, {10, 8}, {2, 8}}));
 
   EXPECT_FALSE(circle.CollidesWith(rect));
@@ -117,7 +117,7 @@ TEST(ObjectTest, ObjectDeletedNoCollision) {
       /*type=*/ObjectTypeFactory::MakeEnemy(),
       /*options=*/{.is_hit_box_active = true, .should_draw_hit_box = false},
       /*hit_box=*/
-      CreateHitBoxOrDie(std::vector<std::pair<double, double>>{
+      CreateHitBoxOrDie(std::vector<std::pair<float, float>>{
           {2, 2}, {10, 2}, {10, 8}, {2, 8}}));
 
   EXPECT_TRUE(circle.CollidesWith(rect));
@@ -132,14 +132,13 @@ TEST(ObjectTest, CenterOk) {
       /*type=*/ObjectTypeFactory::MakeEnemy(),
       /*options=*/{.is_hit_box_active = true, .should_draw_hit_box = false},
       /*hit_box=*/
-      CreateHitBoxOrDie(std::vector<std::pair<double, double>>{
+      CreateHitBoxOrDie(std::vector<std::pair<float, float>>{
           {2, 2}, {10, 2}, {10, 8}, {2, 8}}));
   const DummyObject line = DummyObject(
       /*type=*/ObjectTypeFactory::MakeEnemy(),
       /*options=*/{.is_hit_box_active = true, .should_draw_hit_box = false},
       /*hit_box=*/
-      CreateHitBoxOrDie(
-          std::vector<std::pair<double, double>>{{0, 0}, {0, 7}}));
+      CreateHitBoxOrDie(std::vector<std::pair<float, float>>{{0, 0}, {0, 7}}));
 
   EXPECT_EQ(rect.center(), WorldPosition(6.0, 5.0));
   EXPECT_EQ(line.center(), WorldPosition(0.0, 3.5));
@@ -150,7 +149,7 @@ TEST(ObjectTest, ReflectDeletedObjectSameDirection) {
       /*type=*/ObjectTypeFactory::MakeEnemy(),
       /*options=*/{.is_hit_box_active = true, .should_draw_hit_box = false},
       /*hit_box=*/
-      CreateHitBoxOrDie(std::vector<std::pair<double, double>>{
+      CreateHitBoxOrDie(std::vector<std::pair<float, float>>{
           {2, 2}, {10, 2}, {10, 8}, {2, 8}}));
   const DummyObject circle = DummyObject(
       /*type=*/ObjectTypeFactory::MakePlayer(),
@@ -158,7 +157,7 @@ TEST(ObjectTest, ReflectDeletedObjectSameDirection) {
       /*hit_box=*/CreateCircle(/*x=*/1, /*y=*/5, /*radius=*/1));
   rect.set_deleted(true);
 
-  EXPECT_EQ(rect.Reflect(circle, 1, -1), std::make_pair(1.0, -1.0));
+  EXPECT_EQ(rect.Reflect(circle, 1, -1), std::make_pair(1.0f, -1.0f));
 }
 
 TEST(ObjectTest, ReflectHitBoxDisabledSameDirection) {
@@ -166,14 +165,14 @@ TEST(ObjectTest, ReflectHitBoxDisabledSameDirection) {
       /*type=*/ObjectTypeFactory::MakeEnemy(),
       /*options=*/{.is_hit_box_active = false, .should_draw_hit_box = false},
       /*hit_box=*/
-      CreateHitBoxOrDie(std::vector<std::pair<double, double>>{
+      CreateHitBoxOrDie(std::vector<std::pair<float, float>>{
           {2, 2}, {10, 2}, {10, 8}, {2, 8}}));
   const DummyObject circle = DummyObject(
       /*type=*/ObjectTypeFactory::MakePlayer(),
       /*options=*/{.is_hit_box_active = true, .should_draw_hit_box = false},
       /*hit_box=*/CreateCircle(/*x=*/1, /*y=*/5, /*radius=*/1));
 
-  EXPECT_EQ(rect.Reflect(circle, 1, -1), std::make_pair(1.0, -1.0));
+  EXPECT_EQ(rect.Reflect(circle, 1, -1), std::make_pair(1.0f, -1.0f));
 }
 
 TEST(ObjectTest, ReflectOk) {
@@ -181,14 +180,14 @@ TEST(ObjectTest, ReflectOk) {
       /*type=*/ObjectTypeFactory::MakeEnemy(),
       /*options=*/{.is_hit_box_active = true, .should_draw_hit_box = false},
       /*hit_box=*/
-      CreateHitBoxOrDie(std::vector<std::pair<double, double>>{
+      CreateHitBoxOrDie(std::vector<std::pair<float, float>>{
           {2, 2}, {10, 2}, {10, 8}, {2, 8}}));
   const DummyObject circle = DummyObject(
       /*type=*/ObjectTypeFactory::MakePlayer(),
       /*options=*/{.is_hit_box_active = true, .should_draw_hit_box = false},
       /*hit_box=*/CreateCircle(/*x=*/1, /*y=*/5, /*radius=*/1));
 
-  EXPECT_EQ(rect.Reflect(circle, 1, -1), std::make_pair(-1.0, -1.0));
+  EXPECT_EQ(rect.Reflect(circle, 1, -1), std::make_pair(-1.0f, -1.0f));
 }
 
 TEST(ObjectTest, YBase) {
@@ -196,7 +195,7 @@ TEST(ObjectTest, YBase) {
       /*type=*/ObjectTypeFactory::MakeEnemy(),
       /*options=*/{.is_hit_box_active = true, .should_draw_hit_box = false},
       /*hit_box=*/
-      CreateHitBoxOrDie(std::vector<std::pair<double, double>>{
+      CreateHitBoxOrDie(std::vector<std::pair<float, float>>{
           {2, 2}, {10, 2}, {10, 8}, {2, 8}}));
 
   EXPECT_EQ(rect.YBase(), 5);
@@ -208,7 +207,7 @@ TEST(ObjectTest, UpdateInternalIgnoresSameObject) {
       /*options=*/
       Object::Opts{.is_hit_box_active = true, .should_draw_hit_box = false},
       /*hit_box=*/
-      CreateHitBoxOrDie(std::vector<std::pair<double, double>>{
+      CreateHitBoxOrDie(std::vector<std::pair<float, float>>{
           {2, 2}, {10, 2}, {10, 8}, {2, 8}}));
   DummyObject* rect_ptr = rect.get();
   std::list<std::unique_ptr<Object>> same_object;

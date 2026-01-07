@@ -99,31 +99,31 @@ bool IsAxisAlignedRectangle(const absl::Span<const PointInternal> vertices) {
 
 enum class LineOrientation { ON_LINE, DOWN, UP };
 
-LineOrientation PointInternalOrientation(const double x, const double y,
-                                         const std::pair<double, double> line) {
-  const double line_y = line.first * x + line.second;
+LineOrientation PointInternalOrientation(const float x, const float y,
+                                         const std::pair<float, float> line) {
+  const float line_y = line.first * x + line.second;
   if (std::abs(line_y - y) <= eps) {
     return LineOrientation::ON_LINE;
   }
   return line_y < y ? LineOrientation::DOWN : LineOrientation::UP;
 }
 
-std::pair<double, double> Build45DegreeLine(const double x, const double y) {
+std::pair<float, float> Build45DegreeLine(const float x, const float y) {
   return {-1, x + y};
 }
 
-std::pair<double, double> Build135DegreeLine(const double x, const double y) {
+std::pair<float, float> Build135DegreeLine(const float x, const float y) {
   return {1, y - x};
 }
 
-std::pair<double, double> ReflectFromRectangle(const RectangleInternal& rec,
-                                               const Vector& v,
-                                               const double center_x,
-                                               const double center_y) {
-  const std::pair<double, double> a = Build45DegreeLine(rec.a.x, rec.a.y);
-  const std::pair<double, double> b = Build135DegreeLine(rec.b.x, rec.b.y);
-  const std::pair<double, double> c = Build45DegreeLine(rec.c.x, rec.c.y);
-  const std::pair<double, double> d = Build135DegreeLine(rec.d.x, rec.d.y);
+std::pair<float, float> ReflectFromRectangle(const RectangleInternal& rec,
+                                             const Vector& v,
+                                             const float center_x,
+                                             const float center_y) {
+  const std::pair<float, float> a = Build45DegreeLine(rec.a.x, rec.a.y);
+  const std::pair<float, float> b = Build135DegreeLine(rec.b.x, rec.b.y);
+  const std::pair<float, float> c = Build45DegreeLine(rec.c.x, rec.c.y);
+  const std::pair<float, float> d = Build135DegreeLine(rec.d.x, rec.d.y);
   // Check if the reflection happened on the vertex of a rectangle.
   if (PointInternalOrientation(center_x, center_y, a) ==
           LineOrientation::ON_LINE ||
@@ -252,8 +252,8 @@ bool HitBox::CollidesWith(const HitBox& other) const {
   }
 }
 
-std::pair<double, double> HitBox::Reflect(const HitBox& other, const double x,
-                                          const double y) const {
+std::pair<float, float> HitBox::Reflect(const HitBox& other, const float x,
+                                        const float y) const {
   CHECK(shape_type_ == ShapeType::LINE || shape_type_ == ShapeType::RECTANGLE)
       << "Reflection is only implemented from LineInternal or "
          "RectangleInternal.";

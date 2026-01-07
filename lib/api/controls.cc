@@ -37,8 +37,8 @@ bool Controls::IsSecondaryPressed() const {
 }
 
 ScreenPosition Controls::GetCursorPos() const {
-  return {.x = static_cast<double>(GetMouseX()),
-          .y = static_cast<double>(GetMouseY())};
+  return {.x = static_cast<float>(GetMouseX()),
+          .y = static_cast<float>(GetMouseY())};
 }
 
 }  // namespace api

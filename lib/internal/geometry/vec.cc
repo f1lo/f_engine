@@ -5,7 +5,7 @@
 namespace lib {
 namespace internal {
 
-double Vector::DotProduct(const Vector& other) const {
+float Vector::DotProduct(const Vector& other) const {
   return this->x * other.x + this->y * other.y;
 }
 
@@ -13,15 +13,15 @@ bool Vector::IsAxisAligned() const {
   return std::abs(this->x) <= eps || std::abs(this->y) <= eps;
 }
 
-double Vector::Square() const {
+float Vector::Square() const {
   return x * x + y * y;
 }
 
-double Vector::Length() const {
+float Vector::Length() const {
   return std::sqrt(Square());
 }
 
-Vector Vector::Multiply(const double x) const {
+Vector Vector::Multiply(const float x) const {
   return {this->x * x, this->y * x};
 }
 
@@ -37,7 +37,7 @@ Vector Vector::Project(const Vector& other) const {
   return {v.x / this->Square(), v.y / this->Square()};
 }
 
-double Vector::Angle(const Vector& other) const {
+float Vector::Angle(const Vector& other) const {
   // Formula is:
   // this * other = |this| * |other| * cos(a).
   //           this * other
@@ -48,7 +48,7 @@ double Vector::Angle(const Vector& other) const {
   return acos(this->DotProduct(other) / (this->Length() * other.Length()));
 }
 
-Vector Vector::Rotate(const double& angle) const {
+Vector Vector::Rotate(const float& angle) const {
   return Vector(x * cos(angle) - y * sin(angle),
                 x * sin(angle) + y * cos(angle));
 }

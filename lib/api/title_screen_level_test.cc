@@ -43,7 +43,7 @@ TEST_F(TitleScreenLevelDeathTest, StartButtonNotAdded) {
               StaticObject::StaticObjectOpts{.is_hit_box_active = false,
                                              .should_draw_hit_box = false},
               /*hit_box_vertices=*/
-              std::vector<std::pair<double, double>>({{0, 0}, {0, 1}})))
+              std::vector<std::pair<float, float>>({{0, 0}, {0, 1}})))
           .Build(),
       "Start button not added.");
 }
@@ -59,7 +59,7 @@ TEST_F(TitleScreenLevelDeathTest, ExitButtonNotAdded) {
               StaticObject::StaticObjectOpts{.is_hit_box_active = false,
                                              .should_draw_hit_box = false},
               /*hit_box_vertices=*/
-              std::vector<std::pair<double, double>>({{0, 0}, {0, 1}})))
+              std::vector<std::pair<float, float>>({{0, 0}, {0, 1}})))
           .Build(),
       "Exit button not added.");
 }
@@ -75,13 +75,13 @@ TEST_F(TitleScreenLevelDeathTest, StartButtonAddedTwice) {
               StaticObject::StaticObjectOpts{.is_hit_box_active = false,
                                              .should_draw_hit_box = false},
               /*hit_box_vertices=*/
-              std::vector<std::pair<double, double>>({{0, 0}, {0, 1}})))
+              std::vector<std::pair<float, float>>({{0, 0}, {0, 1}})))
           .AddStartButton(std::make_unique<StaticObject>(
               /*type=*/kStartButton,
               StaticObject::StaticObjectOpts{.is_hit_box_active = false,
                                              .should_draw_hit_box = false},
               /*hit_box_vertices=*/
-              std::vector<std::pair<double, double>>({{0, 0}, {0, 1}})))
+              std::vector<std::pair<float, float>>({{0, 0}, {0, 1}})))
           .Build(),
       "Cannot add start button more than once.");
 }
@@ -97,13 +97,13 @@ TEST_F(TitleScreenLevelDeathTest, ExitButtonAddedTwice) {
               StaticObject::StaticObjectOpts{.is_hit_box_active = false,
                                              .should_draw_hit_box = false},
               /*hit_box_vertices=*/
-              std::vector<std::pair<double, double>>({{0, 0}, {0, 1}})))
+              std::vector<std::pair<float, float>>({{0, 0}, {0, 1}})))
           .AddExitButton(std::make_unique<StaticObject>(
               /*type=*/kExitButton,
               StaticObject::StaticObjectOpts{.is_hit_box_active = false,
                                              .should_draw_hit_box = false},
               /*hit_box_vertices=*/
-              std::vector<std::pair<double, double>>({{0, 0}, {0, 1}})))
+              std::vector<std::pair<float, float>>({{0, 0}, {0, 1}})))
 
           .Build(),
       "Cannot add exit button more than once.");
@@ -121,13 +121,13 @@ TEST_F(TitleScreenLevelTest, StartAndExitAddedOk) {
               StaticObject::StaticObjectOpts{.is_hit_box_active = false,
                                              .should_draw_hit_box = false},
               /*hit_box_vertices=*/
-              std::vector<std::pair<double, double>>({{0, 0}, {0, 1}})))
+              std::vector<std::pair<float, float>>({{0, 0}, {0, 1}})))
           .AddExitButton(std::make_unique<StaticObject>(
               /*type=*/kExitButton,
               StaticObject::StaticObjectOpts{.is_hit_box_active = false,
                                              .should_draw_hit_box = false},
               /*hit_box_vertices=*/
-              std::vector<std::pair<double, double>>({{0, 0}, {0, 1}})))
+              std::vector<std::pair<float, float>>({{0, 0}, {0, 1}})))
           .Build();
 
   ASSERT_EQ(level->objects_.size(), 2);

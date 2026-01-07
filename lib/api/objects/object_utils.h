@@ -10,9 +10,9 @@ namespace lib {
 namespace api {
 namespace objects {
 
-internal::HitBox CreateCircle(double x, double y, double radius);
+internal::HitBox CreateCircle(float x, float y, float radius);
 internal::HitBox CreateHitBoxOrDie(
-    const std::vector<std::pair<double, double>>& vertices);
+    const std::vector<std::pair<float, float>>& vertices);
 internal::HitBox CreateHitBoxOrDie(const std::vector<ScreenPosition>& vertices);
 
 }  // namespace objects

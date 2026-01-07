@@ -10,8 +10,7 @@ class Ball : public lib::api::objects::MovableObject {
  public:
   Ball(const lib::api::objects::ObjectType type,
        const MovableObjectOpts& options,
-       const std::pair<double, double> hit_box_center,
-       const double hit_box_radius)
+       const std::pair<float, float> hit_box_center, const float hit_box_radius)
       : MovableObject(type, options, hit_box_center, hit_box_radius),
         ball_starting_velocity_(options.velocity),
         has_touched_bottom_(false) {}
@@ -21,7 +20,7 @@ class Ball : public lib::api::objects::MovableObject {
 
  protected:
   bool OnCollisionCallback(Object& other_object) override;
-  double ball_starting_velocity_;
+  float ball_starting_velocity_;
 
  private:
   bool has_touched_bottom_;

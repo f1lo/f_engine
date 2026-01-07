@@ -20,8 +20,8 @@ StaticSprite::StaticSprite(std::unique_ptr<GraphicsInterface> graphics,
           std::filesystem::path(resource_path).make_preferred().string())),
       source_({0.0f, 0.0f, static_cast<float>(texture_.width),
                static_cast<float>(texture_.height)}),
-      origin_(static_cast<float>(texture_.width) / 2,
-              static_cast<float>(texture_.height) / 2) {}
+      origin_(static_cast<float>(texture_.width) / 2.0f,
+              static_cast<float>(texture_.height) / 2.0f) {}
 
 StaticSprite::~StaticSprite() {
   graphics_->Unload(texture_);
@@ -32,8 +32,7 @@ void StaticSprite::RotateAndDraw(const WorldPosition draw_destination,
                                  const int frame_to_draw) const {
   graphics_->Draw(
       texture_, source_,
-      {static_cast<float>(draw_destination.x),
-       static_cast<float>(draw_destination.y),
+      {draw_destination.x, draw_destination.y,
        static_cast<float>(texture_.width), static_cast<float>(texture_.height)},
       origin_, static_cast<float>(degree), WHITE);
 }

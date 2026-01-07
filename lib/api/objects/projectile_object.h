@@ -16,9 +16,9 @@ class ProjectileObject : public MovableObject {
   struct ProjectileObjectOpts {
     bool should_draw_hit_box;
     bool despawn_outside_screen_area;
-    double velocity;
-    std::pair<double, double> hit_box_center;
-    double hit_box_radius;
+    float velocity;
+    std::pair<float, float> hit_box_center;
+    float hit_box_radius;
     absl::flat_hash_set<ObjectType> despawn_on_colliding_with_these_objects;
     absl::flat_hash_set<ObjectType> reflect_on_colliding_with_these_objects;
     absl::flat_hash_set<ObjectType> ignore_these_objects;

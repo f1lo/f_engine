@@ -28,8 +28,8 @@ class ViewPortContext {
 };
 
 struct ScreenPosition {
-  double x;
-  double y;
+  float x;
+  float y;
 
   std::optional<ScreenPosition> ToNative(const ViewPortContext& ctx);
   ScreenPosition ToActual(const ViewPortContext& ctx);
@@ -40,8 +40,8 @@ struct ScreenPosition {
 };
 
 struct WorldPosition {
-  double x;
-  double y;
+  float x;
+  float y;
 
   bool operator==(const WorldPosition& other) const;
   bool operator!=(const WorldPosition& other) const;

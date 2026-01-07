@@ -65,7 +65,7 @@ TEST_F(SpriteTest, StaticSpriteDraw) {
   const std::string resource_path = "a/b/picture.png";
   const std::unique_ptr<SpriteInstance> sprite =
       sprite_factory_.MakeStaticSprite(resource_path);
-  constexpr WorldPosition draw_destination{.x = 100, .y = 200};
+  constexpr WorldPosition draw_destination{.x = 100.0f, .y = 200.0f};
 
   sprite->Draw(draw_destination);
 
@@ -80,9 +80,9 @@ TEST_F(SpriteTest, StaticSpriteDraw) {
   EXPECT_EQ(graphics->drawn_texture_source().height,
             static_cast<float>(kTextureHeight));
   EXPECT_EQ(graphics->drawn_texture_origin().x,
-            static_cast<float>(kTextureWidth) / 2.0);
+            static_cast<float>(kTextureWidth) / 2.0f);
   EXPECT_EQ(graphics->drawn_texture_origin().y,
-            static_cast<float>(kTextureHeight) / 2.0);
+            static_cast<float>(kTextureHeight) / 2.0f);
   EXPECT_EQ(graphics->drawn_texture().id, kTextureId);
   EXPECT_EQ(graphics->rotation(), 0.0f);
   EXPECT_EQ(sprite->SpriteWidth(), kTextureWidth);
@@ -93,7 +93,7 @@ TEST_F(SpriteTest, StaticSpriteRotateAndDraw) {
   const std::string resource_path = "a/b/picture.png";
   const std::unique_ptr<SpriteInstance> sprite =
       sprite_factory_.MakeStaticSprite(resource_path);
-  constexpr WorldPosition draw_destination{.x = 100, .y = 200};
+  constexpr WorldPosition draw_destination{.x = 100.0f, .y = 200.0f};
 
   constexpr int degree = 90;
   sprite->RotateAndDraw(draw_destination, degree);
@@ -109,9 +109,9 @@ TEST_F(SpriteTest, StaticSpriteRotateAndDraw) {
   EXPECT_EQ(graphics->drawn_texture_source().height,
             static_cast<float>(kTextureHeight));
   EXPECT_EQ(graphics->drawn_texture_origin().x,
-            static_cast<float>(kTextureWidth) / 2.0);
+            static_cast<float>(kTextureWidth) / 2.0f);
   EXPECT_EQ(graphics->drawn_texture_origin().y,
-            static_cast<float>(kTextureHeight) / 2.0);
+            static_cast<float>(kTextureHeight) / 2.0f);
   EXPECT_EQ(graphics->drawn_texture().id, kTextureId);
   EXPECT_EQ(graphics->rotation(), static_cast<float>(degree));
   EXPECT_EQ(sprite->SpriteWidth(), kTextureWidth);
@@ -124,7 +124,7 @@ TEST_F(SpriteTest, AnimatedSpriteNoFrameChange) {
   const std::unique_ptr<SpriteInstance> sprite =
       sprite_factory_.MakeAnimatedSprite(resource_path, frame_count,
                                          kAdvanceToNextFrameAfter);
-  constexpr WorldPosition draw_destination{.x = 100, .y = 200};
+  constexpr WorldPosition draw_destination{.x = 100.0f, .y = 200.0f};
 
   absl::SleepFor(kAdvanceToNextFrameAfter / 2);
   sprite->Draw(draw_destination);
@@ -140,9 +140,9 @@ TEST_F(SpriteTest, AnimatedSpriteNoFrameChange) {
   EXPECT_EQ(graphics->drawn_texture_source().height,
             static_cast<float>(kTextureHeight));
   EXPECT_EQ(graphics->drawn_texture_origin().x,
-            static_cast<float>(kTextureWidth) / frame_count / 2.0);
+            static_cast<float>(kTextureWidth) / frame_count / 2.0f);
   EXPECT_EQ(graphics->drawn_texture_origin().y,
-            static_cast<float>(kTextureHeight) / 2.0);
+            static_cast<float>(kTextureHeight) / 2.0f);
   EXPECT_EQ(graphics->drawn_texture().id, kTextureId);
   EXPECT_EQ(graphics->rotation(), 0.0f);
   EXPECT_EQ(sprite->SpriteWidth(), kTextureWidth / frame_count);
@@ -155,7 +155,7 @@ TEST_F(SpriteTest, AnimatedSpriteFrameChange) {
   const std::unique_ptr<SpriteInstance> sprite =
       sprite_factory_.MakeAnimatedSprite(resource_path, frame_count,
                                          kAdvanceToNextFrameAfter);
-  constexpr WorldPosition draw_destination{.x = 100, .y = 200};
+  constexpr WorldPosition draw_destination{.x = 100.0f, .y = 200.0f};
 
   sprite->Draw(draw_destination);
   absl::SleepFor(kAdvanceToNextFrameAfter + kSmallIncrement);
@@ -173,9 +173,9 @@ TEST_F(SpriteTest, AnimatedSpriteFrameChange) {
   EXPECT_EQ(graphics->drawn_texture_source().height,
             static_cast<float>(kTextureHeight));
   EXPECT_EQ(graphics->drawn_texture_origin().x,
-            static_cast<float>(kTextureWidth) / frame_count / 2.0);
+            static_cast<float>(kTextureWidth) / frame_count / 2.0f);
   EXPECT_EQ(graphics->drawn_texture_origin().y,
-            static_cast<float>(kTextureHeight) / 2.0);
+            static_cast<float>(kTextureHeight) / 2.0f);
   EXPECT_EQ(graphics->drawn_texture().id, kTextureId);
   EXPECT_EQ(graphics->rotation(), 0.0f);
   EXPECT_EQ(sprite->SpriteWidth(), kTextureWidth / frame_count);
@@ -188,7 +188,7 @@ TEST_F(SpriteTest, AnimatedSpriteReset) {
   const std::unique_ptr<SpriteInstance> sprite =
       sprite_factory_.MakeAnimatedSprite(resource_path, frame_count,
                                          kAdvanceToNextFrameAfter);
-  constexpr WorldPosition draw_destination{.x = 100, .y = 200};
+  constexpr WorldPosition draw_destination{.x = 100.0f, .y = 200.0f};
   sprite->Draw(draw_destination);
   absl::SleepFor(kAdvanceToNextFrameAfter + kSmallIncrement);
   sprite->Draw(draw_destination);
@@ -207,9 +207,9 @@ TEST_F(SpriteTest, AnimatedSpriteReset) {
   EXPECT_EQ(graphics->drawn_texture_source().height,
             static_cast<float>(kTextureHeight));
   EXPECT_EQ(graphics->drawn_texture_origin().x,
-            static_cast<float>(kTextureWidth) / frame_count / 2.0);
+            static_cast<float>(kTextureWidth) / frame_count / 2.0f);
   EXPECT_EQ(graphics->drawn_texture_origin().y,
-            static_cast<float>(kTextureHeight) / 2.0);
+            static_cast<float>(kTextureHeight) / 2.0f);
   EXPECT_EQ(graphics->drawn_texture().id, kTextureId);
   EXPECT_EQ(graphics->rotation(), 0.0f);
   EXPECT_EQ(sprite->SpriteWidth(), kTextureWidth / frame_count);
@@ -221,7 +221,7 @@ TEST_F(SpriteTest, AnimatedSpriteLoopsBackToStart) {
   constexpr int frame_count = 4;
   std::unique_ptr<SpriteInstance> sprite = sprite_factory_.MakeAnimatedSprite(
       resource_path, frame_count, kAdvanceToNextFrameAfter);
-  constexpr WorldPosition draw_destination{.x = 100, .y = 200};
+  constexpr WorldPosition draw_destination{.x = 100.0f, .y = 200.0f};
 
   sprite->Draw(draw_destination);
   absl::SleepFor(kAdvanceToNextFrameAfter + kSmallIncrement);
@@ -244,9 +244,9 @@ TEST_F(SpriteTest, AnimatedSpriteLoopsBackToStart) {
   EXPECT_EQ(graphics->drawn_texture_source().height,
             static_cast<float>(kTextureHeight));
   EXPECT_EQ(graphics->drawn_texture_origin().x,
-            static_cast<float>(kTextureWidth) / frame_count / 2.0);
+            static_cast<float>(kTextureWidth) / frame_count / 2.0f);
   EXPECT_EQ(graphics->drawn_texture_origin().y,
-            static_cast<float>(kTextureHeight) / 2.0);
+            static_cast<float>(kTextureHeight) / 2.0f);
   EXPECT_EQ(graphics->drawn_texture().id, kTextureId);
   EXPECT_EQ(graphics->rotation(), 0.0f);
   EXPECT_EQ(sprite->SpriteWidth(), kTextureWidth / frame_count);
@@ -259,7 +259,7 @@ TEST_F(SpriteTest, AnimatedSpriteRotateAndDraw) {
   const std::unique_ptr<SpriteInstance> sprite =
       sprite_factory_.MakeAnimatedSprite(resource_path, frame_count,
                                          kAdvanceToNextFrameAfter);
-  constexpr WorldPosition draw_destination{.x = 100, .y = 200};
+  constexpr WorldPosition draw_destination{.x = 100.0f, .y = 200.0f};
 
   absl::SleepFor(kAdvanceToNextFrameAfter / 2);
   constexpr int degree = 90;
@@ -276,9 +276,9 @@ TEST_F(SpriteTest, AnimatedSpriteRotateAndDraw) {
   EXPECT_EQ(graphics->drawn_texture_source().height,
             static_cast<float>(kTextureHeight));
   EXPECT_EQ(graphics->drawn_texture_origin().x,
-            static_cast<float>(kTextureWidth) / frame_count / 2.0);
+            static_cast<float>(kTextureWidth) / frame_count / 2.0f);
   EXPECT_EQ(graphics->drawn_texture_origin().y,
-            static_cast<float>(kTextureHeight) / 2.0);
+            static_cast<float>(kTextureHeight) / 2.0f);
   EXPECT_EQ(graphics->drawn_texture().id, kTextureId);
   EXPECT_EQ(graphics->rotation(), degree);
   EXPECT_EQ(sprite->SpriteWidth(), kTextureWidth / frame_count);
@@ -292,7 +292,7 @@ TEST_F(SpriteTest, SpriteFactoryStaticSpriteAlreadyExists) {
 
   sprite = sprite_factory_.MakeStaticSprite(resource_path);
 
-  constexpr WorldPosition draw_destination{.x = 100, .y = 200};
+  constexpr WorldPosition draw_destination{.x = 100.0f, .y = 200.0f};
   sprite->Draw(draw_destination);
   const GraphicsMock* graphics =
       dynamic_cast<const GraphicsMock*>(sprite->GraphicsForTesting());
@@ -310,7 +310,7 @@ TEST_F(SpriteTest, SpriteFactoryAnimatedSpriteAlreadyExists) {
                                               kAdvanceToNextFrameAfter);
 
   absl::SleepFor(kAdvanceToNextFrameAfter / 2);
-  constexpr WorldPosition draw_destination{.x = 100, .y = 200};
+  constexpr WorldPosition draw_destination{.x = 100.0f, .y = 200.0f};
   sprite->Draw(draw_destination);
   const GraphicsMock* graphics =
       dynamic_cast<const GraphicsMock*>(sprite->GraphicsForTesting());
@@ -324,7 +324,7 @@ TEST_F(SpriteTest, SpriteFactoryBackgroundStaticSpriteDraw) {
   std::unique_ptr<SpriteInstance> sprite =
       sprite_factory_.MakeBackgroundStaticSprite(resource_path,
                                                  parallax_factor);
-  constexpr WorldPosition draw_destination{.x = 100, .y = 200};
+  constexpr WorldPosition draw_destination{.x = 100.0f, .y = 200.0f};
 
   sprite->Draw(draw_destination);
 
@@ -357,7 +357,7 @@ TEST_F(SpriteTest, SpriteFactoryBackgroundStaticSpriteAlreadyExists) {
   sprite = sprite_factory_.MakeBackgroundStaticSprite(resource_path);
 
   constexpr int degree = 90;
-  constexpr WorldPosition draw_destination{.x = 100, .y = 200};
+  constexpr WorldPosition draw_destination{.x = 100.0f, .y = 200.0f};
   sprite->RotateAndDraw(draw_destination, degree);
   const GraphicsMock* graphics =
       dynamic_cast<const GraphicsMock*>(sprite->GraphicsForTesting());

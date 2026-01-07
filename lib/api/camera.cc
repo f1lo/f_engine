@@ -19,9 +19,7 @@ ScreenPosition Camera::GetScreenPosition(const WorldPosition& world_pos) const {
     return {world_pos.x, world_pos.y};
   }
   const Vector2 screen_pos =
-      GetWorldToScreen2D({.x = static_cast<float>(world_pos.x),
-                          .y = static_cast<float>(world_pos.y)},
-                         camera_);
+      GetWorldToScreen2D({.x = world_pos.x, .y = world_pos.y}, camera_);
   return {screen_pos.x, screen_pos.y};
 }
 
@@ -31,9 +29,7 @@ WorldPosition Camera::GetWorldPosition(const ScreenPosition& screen_pos) const {
   }
 
   const Vector2 world_pos =
-      GetScreenToWorld2D({.x = static_cast<float>(screen_pos.x),
-                          .y = static_cast<float>(screen_pos.y)},
-                         camera_);
+      GetScreenToWorld2D({.x = screen_pos.x, .y = screen_pos.y}, camera_);
   return {world_pos.x, world_pos.y};
 }
 
@@ -43,8 +39,8 @@ void Camera::MaybeActivate() {
   }
 
   const WorldPosition world_position = bound_object_->center();
-  camera_.target.x = static_cast<float>(world_position.x);
-  camera_.target.y = static_cast<float>(world_position.y);
+  camera_.target.x = world_position.x;
+  camera_.target.y = world_position.y;
   BeginMode2D(camera_);
 }
 

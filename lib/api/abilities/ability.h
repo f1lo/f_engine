@@ -52,7 +52,7 @@ class Ability {
   friend class lib::api::LevelBuilder;
   [[nodiscard]] bool IsOnCooldown() const;
   // TODO(f1lo): Temporary hack, switch to absl::Time.
-  double last_used_sec_ = -100;
+  float last_used_sec_ = -100;
   std::unique_ptr<const ControlsInterface> controls_;
 
  private:

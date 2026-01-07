@@ -6,7 +6,7 @@
 namespace lib {
 namespace internal {
 
-inline constexpr double eps = 1e-9;
+inline constexpr float eps = 1e-5f;
 
 /*
  * A class to define basic vector arithmetics.
@@ -17,18 +17,18 @@ struct Vector {
   }
 
   [[nodiscard]] Vector Project(const Vector& other) const;
-  [[nodiscard]] double DotProduct(const Vector& other) const;
+  [[nodiscard]] float DotProduct(const Vector& other) const;
   [[nodiscard]] bool IsAxisAligned() const;
-  [[nodiscard]] double Square() const;
-  [[nodiscard]] double Length() const;
-  [[nodiscard]] Vector Multiply(double x) const;
-  [[nodiscard]] double Angle(const Vector& other) const;
-  [[nodiscard]] Vector Rotate(const double& angle) const;
+  [[nodiscard]] float Square() const;
+  [[nodiscard]] float Length() const;
+  [[nodiscard]] Vector Multiply(float x) const;
+  [[nodiscard]] float Angle(const Vector& other) const;
+  [[nodiscard]] Vector Rotate(const float& angle) const;
   [[nodiscard]] Vector ToUnitVector() const;
   [[nodiscard]] bool IsZero() const;
 
-  double x;
-  double y;
+  float x;
+  float y;
 };
 
 }  // namespace internal

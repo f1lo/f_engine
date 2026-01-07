@@ -37,8 +37,7 @@ void AnimatedSprite::RotateAndDraw(const WorldPosition draw_destination,
       {static_cast<float>(frame_to_draw % frame_count_) *
            animation_frame_width_,
        0.0f, animation_frame_width_, static_cast<float>(texture_.height)},
-      {static_cast<float>(draw_destination.x),
-       static_cast<float>(draw_destination.y), animation_frame_width_,
+      {draw_destination.x, draw_destination.y, animation_frame_width_,
        static_cast<float>(texture_.height)},
       origin_, static_cast<float>(degree), WHITE);
 }

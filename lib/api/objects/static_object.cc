@@ -16,7 +16,7 @@ namespace objects {
 
 StaticObject::StaticObject(
     const ObjectType type, const StaticObjectOpts options,
-    const std::vector<std::pair<double, double>>& hit_box_vertices,
+    const std::vector<std::pair<float, float>>& hit_box_vertices,
     std::unique_ptr<sprites::SpriteInstance> sprite_instance)
     : Object(type,
              {.is_hit_box_active = options.is_hit_box_active,
@@ -25,7 +25,7 @@ StaticObject::StaticObject(
 
 StaticObject::StaticObject(
     const ObjectType type, const StaticObjectOpts options,
-    const std::pair<double, double> hit_box_center, const double hit_box_radius,
+    const std::pair<float, float> hit_box_center, const float hit_box_radius,
     std::unique_ptr<sprites::SpriteInstance> sprite_instance)
     : Object(type,
              {.is_hit_box_active = options.is_hit_box_active,

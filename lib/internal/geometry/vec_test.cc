@@ -10,11 +10,11 @@ namespace internal {
 namespace {
 
 TEST(VecTest, SquareWorks) {
-  EXPECT_DOUBLE_EQ(Vector(3, 7).Square(), 58);
+  EXPECT_FLOAT_EQ(Vector(3, 7).Square(), 58);
 }
 
 TEST(VecTest, LengthWorks) {
-  EXPECT_DOUBLE_EQ(Vector(5, 2).Length(), 5.3851648071345037);
+  EXPECT_FLOAT_EQ(Vector(5, 2).Length(), 5.3851648071345037);
 }
 
 TEST(VecTest, IsAxisAlignedOk) {
@@ -34,9 +34,9 @@ TEST(VecTest, MultiplyWorks) {
 }
 
 TEST(VecTest, ScalarProductWorks) {
-  EXPECT_DOUBLE_EQ(Vector(3, 5).DotProduct(Vector{12, 7}), 71);
-  EXPECT_DOUBLE_EQ(Vector(7, 0).DotProduct(Vector{0, 17}), 0);
-  EXPECT_DOUBLE_EQ(Vector(7, 0).DotProduct(Vector{1, 1}), 7);
+  EXPECT_FLOAT_EQ(Vector(3, 5).DotProduct(Vector{12, 7}), 71);
+  EXPECT_FLOAT_EQ(Vector(7, 0).DotProduct(Vector{0, 17}), 0);
+  EXPECT_FLOAT_EQ(Vector(7, 0).DotProduct(Vector{1, 1}), 7);
 }
 
 TEST(VecTest, ProjectionWorks) {
@@ -72,19 +72,19 @@ TEST(VecTest, AngleIsCorrect) {
   constexpr Vector w{1, 0};
   constexpr Vector opposite{-1, 0};
 
-  EXPECT_DOUBLE_EQ(v.Angle(w), atan(2.0));
-  EXPECT_DOUBLE_EQ(w.Angle(v), atan(2.0));
-  EXPECT_DOUBLE_EQ(opposite.Angle(v), std::numbers::pi_v<double> - atan(2.0));
-  EXPECT_DOUBLE_EQ(v.Angle(opposite), std::numbers::pi_v<double> - atan(2.0));
+  EXPECT_FLOAT_EQ(v.Angle(w), atan(2.0));
+  EXPECT_FLOAT_EQ(w.Angle(v), atan(2.0));
+  EXPECT_FLOAT_EQ(opposite.Angle(v), std::numbers::pi_v<float> - atan(2.0));
+  EXPECT_FLOAT_EQ(v.Angle(opposite), std::numbers::pi_v<float> - atan(2.0));
 }
 
 TEST(VecTest, RotateWorks) {
   constexpr Vector v{2, 4};
   const Vector w{sqrt(20), 0};
   const Vector opposite{-sqrt(20), 0};
-  const double rotation_angle_clockwise = -atan(2.0);
-  const double rotation_angle_counter_clockwise =
-      atan(2.0) - std::numbers::pi_v<double>;
+  const float rotation_angle_clockwise = -atan(2.0);
+  const float rotation_angle_counter_clockwise =
+      atan(2.0) - std::numbers::pi_v<float>;
 
   EXPECT_EQ(v.Rotate(rotation_angle_clockwise), w);
   EXPECT_EQ(w.Rotate(-rotation_angle_clockwise), v);

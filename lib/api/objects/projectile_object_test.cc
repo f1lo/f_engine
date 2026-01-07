@@ -42,7 +42,7 @@ TEST(ProjectileObjectTest, OnCollisionCallbackBottomScreenDespawns) {
       StaticObject(ObjectTypeFactory::MakeScreenBottom(),
                    StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                                   .should_draw_hit_box = false},
-                   std::vector<std::pair<double, double>>{{0, 0}, {10, 0}});
+                   std::vector<std::pair<float, float>>{{0, 0}, {10, 0}});
   ProjectileObject projectile = ProjectileObject(
       ObjectTypeFactory::MakeProjectilePlayer(),
       ProjectileObject::ProjectileObjectOpts{
@@ -67,7 +67,7 @@ TEST(ProjectileObjectTest, OnCollisionCallbackTopScreenDespawns) {
       StaticObject(ObjectTypeFactory::MakeScreenTop(),
                    StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                                   .should_draw_hit_box = false},
-                   std::vector<std::pair<double, double>>{{0, 0}, {10, 0}});
+                   std::vector<std::pair<float, float>>{{0, 0}, {10, 0}});
   ProjectileObject projectile = ProjectileObject(
       ObjectTypeFactory::MakeProjectilePlayer(),
       ProjectileObject::ProjectileObjectOpts{
@@ -92,7 +92,7 @@ TEST(ProjectileObjectTest, OnCollisionCallbackLeftScreenDespawns) {
       StaticObject(ObjectTypeFactory::MakeScreenLeft(),
                    StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                                   .should_draw_hit_box = false},
-                   std::vector<std::pair<double, double>>{{0, 0}, {10, 0}});
+                   std::vector<std::pair<float, float>>{{0, 0}, {10, 0}});
   ProjectileObject projectile = ProjectileObject(
       ObjectTypeFactory::MakeProjectilePlayer(),
       ProjectileObject::ProjectileObjectOpts{
@@ -117,7 +117,7 @@ TEST(ProjectileObjectTest, OnCollisionCallbackRightScreenDespawns) {
       StaticObject(ObjectTypeFactory::MakeScreenRight(),
                    StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                                   .should_draw_hit_box = false},
-                   std::vector<std::pair<double, double>>{{0, 0}, {10, 0}});
+                   std::vector<std::pair<float, float>>{{0, 0}, {10, 0}});
   ProjectileObject projectile = ProjectileObject(
       ObjectTypeFactory::MakeProjectilePlayer(),
       ProjectileObject::ProjectileObjectOpts{
@@ -143,7 +143,7 @@ TEST(ProjectileObjectTest, OnCollisionCallbackReflects) {
                    StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                                   .should_draw_hit_box = false},
                    /*hit_box_vertices=*/
-                   std::vector<std::pair<double, double>>{{5, 0}, {5, 10}});
+                   std::vector<std::pair<float, float>>{{5, 0}, {5, 10}});
   ProjectileObject projectile = ProjectileObject(
       ObjectTypeFactory::MakeProjectilePlayer(),
       ProjectileObject::ProjectileObjectOpts{
@@ -171,7 +171,7 @@ TEST(ProjectileObjectTest, OnCollisionCallbackIgnores) {
                    StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                                   .should_draw_hit_box = false},
                    /*hit_box_vertices=*/
-                   std::vector<std::pair<double, double>>{{5, 0}, {5, 10}});
+                   std::vector<std::pair<float, float>>{{5, 0}, {5, 10}});
   ProjectileObject projectile = ProjectileObject(
       ObjectTypeFactory::MakeProjectilePlayer(),
       ProjectileObject::ProjectileObjectOpts{

@@ -20,15 +20,15 @@ using objects::MovableObject;
 using objects::Object;
 
 bool Ability::IsOnCooldown() const {
-  return GetTime() - last_used_sec_ <= static_cast<double>(opts_.cooldown_sec);
+  return GetTime() - last_used_sec_ <= static_cast<float>(opts_.cooldown_sec);
 }
 
 std::list<ObjectAndAbilities> MoveAbility::Use(const AbilityContext& ctx) {
   // Generally move should have no cooldown - so ignore it.
   auto* cast_user = dynamic_cast<MovableObject*>(user());
   CHECK(cast_user) << " ability user is not of correct type.";
-  double dir_x = 0;
-  double dir_y = 0;
+  float dir_x = 0;
+  float dir_y = 0;
   bool was_used_this_frame = false;
   if (key_left_.has_value() && controls_->IsDown(*key_left_)) {
     was_used_this_frame = true;

@@ -44,7 +44,7 @@ std::list<ObjectAndAbilities> ProjectileAbility::Use(
   // TODO(f1lo): If movable object has stopped the directions are zeroed out.
   // This means projectile will not move - probably last known direction
   // needs to be saved to address this.
-  double direction_x = 1, direction_y = -1;
+  float direction_x = 1, direction_y = -1;
   MovableObject* user_movable = dynamic_cast<MovableObject*>(user());
   if (user_movable != nullptr) {
     direction_x = user_movable->direction_x();

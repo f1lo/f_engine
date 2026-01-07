@@ -29,8 +29,8 @@ using objects::StaticObject;
 
 class DummyMovableObject : public MovableObject {
  public:
-  DummyMovableObject(const double velocity,
-                     const std::pair<double, double> hit_box_center)
+  DummyMovableObject(const float velocity,
+                     const std::pair<float, float> hit_box_center)
       : MovableObject(
             /*type=*/objects::ObjectTypeFactory::MakePlayer(),
             MovableObjectOpts{.is_hit_box_active = true,
@@ -186,8 +186,8 @@ TEST(ProjectileAbilityTest, MovableObjectProjectileSameDirection) {
       objects_and_abilities.begin()->first.get());
   ASSERT_TRUE(projectile != nullptr);
   EXPECT_EQ(projectile->center(), (WorldPosition{.x = 0, .y = 0}));
-  EXPECT_DOUBLE_EQ(projectile->direction_x(), 0.6);
-  EXPECT_DOUBLE_EQ(projectile->direction_y(), 0.8);
+  EXPECT_FLOAT_EQ(projectile->direction_x(), 0.6f);
+  EXPECT_FLOAT_EQ(projectile->direction_y(), 0.8f);
 }
 
 TEST(ProjectileAbilityTest, CreatedProjectileDespawnsOnWorldBorderTouch) {

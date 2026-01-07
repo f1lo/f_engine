@@ -30,8 +30,8 @@ class MoveAbilityTest : public ::testing::Test {};
 
 class DummyMovableObject : public MovableObject {
  public:
-  DummyMovableObject(const double velocity,
-                     const std::pair<double, double> hit_box_center)
+  DummyMovableObject(const float velocity,
+                     const std::pair<float, float> hit_box_center)
       : MovableObject(
             /*type=*/objects::ObjectTypeFactory::MakePlayer(),
             MovableObjectOpts{.is_hit_box_active = false,

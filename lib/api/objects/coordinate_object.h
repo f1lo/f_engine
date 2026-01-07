@@ -11,10 +11,10 @@ namespace lib {
 namespace api {
 namespace objects {
 
-static constexpr double kAxisOffset = 60;
-static constexpr double kNumbersOffsetX = 30;
-static constexpr double kNumbersOffsetY = 5;
-static constexpr double kFontSize = 20;
+static constexpr float kAxisOffset = 60;
+static constexpr float kNumbersOffsetX = 30;
+static constexpr float kNumbersOffsetY = 5;
+static constexpr float kFontSize = 20;
 static constexpr float kDistanceBetweenGrid = 200;
 
 class CoordinateObject : public Object {

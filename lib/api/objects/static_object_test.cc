@@ -49,7 +49,7 @@ TEST_F(StaticObjectTest, RectangleYBaseWithSprite) {
       StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                      .should_draw_hit_box = false},
       /*hit_box_vertices=*/
-      std::vector<std::pair<double, double>>({{0, 0}, {0, 2}, {2, 2}, {2, 0}}),
+      std::vector<std::pair<float, float>>({{0, 0}, {0, 2}, {2, 2}, {2, 0}}),
       sprite_factory_.MakeStaticSprite("a/b/picture.png"));
 
   EXPECT_EQ(static_object.YBase(), kTextureHeight / 2 + 1);
@@ -61,7 +61,7 @@ TEST_F(StaticObjectTest, OnCollisionCallbackDoesNothing) {
       StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                      .should_draw_hit_box = false},
       /*hit_box_vertices=*/
-      std::vector<std::pair<double, double>>({{0, 0}, {0, 2}, {2, 2}, {2, 0}}),
+      std::vector<std::pair<float, float>>({{0, 0}, {0, 2}, {2, 2}, {2, 0}}),
       sprite_factory_.MakeStaticSprite("a/b/picture.png"));
 
   EXPECT_FALSE(static_object.OnCollisionCallback(static_object));
