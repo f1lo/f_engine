@@ -195,6 +195,7 @@ LevelId Level::Run(Stats& stats) {
   while (changed_id == id_) {
     BeginTextureMode(target);
     ClearBackground(RAYWHITE);
+    DrawFPS(0, 0);
     // Get rid of deleted objects.
     CleanUpOrDie();
     camera_.MaybeActivate();
