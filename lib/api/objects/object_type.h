@@ -31,7 +31,7 @@ class ObjectType {
   [[nodiscard]] bool IsScreenTop() const;
   [[nodiscard]] bool IsScreenBottom() const;
   [[nodiscard]] bool IsScreenEdge() const;
-  [[nodiscard]] bool IsMousePointer() const;
+  [[nodiscard]] bool IsMousePointInternaler() const;
   [[nodiscard]] bool IsButton() const;
   [[nodiscard]] bool IsProjectilePlayer() const;
   [[nodiscard]] bool IsCoordinate() const;
@@ -56,7 +56,7 @@ class ObjectTypeFactory {
   static ObjectType MakeScreenRight();
   static ObjectType MakeScreenTop();
   static ObjectType MakeScreenBottom();
-  static ObjectType MakeMousePointer();
+  static ObjectType MakeMousePointInternaler();
   static ObjectType MakeButton();
   static ObjectType MakeProjectilePlayer();
   static ObjectType MakeCoordinate();

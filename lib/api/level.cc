@@ -153,7 +153,7 @@ void Level::MaybeClick(const ViewPortContext& ctx) {
   }
 
   const StaticObject mouse_pointer = StaticObject(
-      /*type=*/objects::ObjectTypeFactory::MakeMousePointer(),
+      /*type=*/objects::ObjectTypeFactory::MakeMousePointInternaler(),
       /*options=*/
       {.is_hit_box_active = true, .should_draw_hit_box = false},
       /*hit_box_vertices=*/

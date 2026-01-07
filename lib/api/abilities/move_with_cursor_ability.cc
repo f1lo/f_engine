@@ -26,7 +26,7 @@ std::list<ObjectAndAbilities> MoveWithCursorAbility::Use(
   CHECK(movable_user) << "User not movable.";
   if (cursor_last_clicked_pos_.has_value()) {
     if (movable_user->CollidesWith(objects::StaticObject(
-            /*type=*/objects::ObjectTypeFactory::MakeMousePointer(),
+            /*type=*/objects::ObjectTypeFactory::MakeMousePointInternaler(),
             /*options=*/
             {/*is_hit_box_active=*/true,
              /*should_draw_hit_box=*/false},

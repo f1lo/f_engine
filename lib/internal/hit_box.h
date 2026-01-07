@@ -12,11 +12,13 @@ namespace internal {
 
 class HitBox {
  public:
-  static HitBox CreateHitBox(Point center, const double radius) {
-    return {std::make_unique<Circle>(Circle{std::move(center), radius}),
+  static HitBox CreateHitBox(PointInternal center, const double radius) {
+    return {std::make_unique<CircleInternal>(
+                CircleInternal{std::move(center), radius}),
             ShapeType::CIRCLE};
   }
-  static absl::StatusOr<HitBox> CreateHitBox(std::vector<Point> vertices);
+  static absl::StatusOr<HitBox> CreateHitBox(
+      std::vector<PointInternal> vertices);
 
   [[nodiscard]] bool CollidesWith(const HitBox& other) const;
   [[nodiscard]] std::pair<double, double> Reflect(const HitBox& other, double x,

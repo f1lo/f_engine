@@ -12,16 +12,17 @@
 namespace lib {
 namespace internal {
 
-struct Point;
-struct Line;
-struct Rectangle;
-struct Circle;
+struct PointInternal;
+struct LineInternal;
+struct RectangleInternal;
+struct CircleInternal;
 
 struct Shape {
-  [[nodiscard]] virtual bool Collides(const Point& point) const = 0;
-  [[nodiscard]] virtual bool Collides(const Line& line) const = 0;
-  [[nodiscard]] virtual bool Collides(const Rectangle& rectangle) const = 0;
-  [[nodiscard]] virtual bool Collides(const Circle& circle) const = 0;
+  [[nodiscard]] virtual bool Collides(const PointInternal& point) const = 0;
+  [[nodiscard]] virtual bool Collides(const LineInternal& line) const = 0;
+  [[nodiscard]] virtual bool Collides(
+      const RectangleInternal& rectangle) const = 0;
+  [[nodiscard]] virtual bool Collides(const CircleInternal& circle) const = 0;
   virtual void Draw() const = 0;
   virtual void Move(double x, double y) = 0;
 
@@ -31,38 +32,41 @@ struct Shape {
   virtual ~Shape() = default;
 };
 
-struct Point final : Shape {
-  [[nodiscard]] bool Collides(const Point& other_point) const override;
-  [[nodiscard]] bool Collides(const Line& line) const override;
-  [[nodiscard]] bool Collides(const Rectangle& rectangle) const override;
-  [[nodiscard]] bool Collides(const Circle& circle) const override;
+struct PointInternal final : Shape {
+  [[nodiscard]] bool Collides(const PointInternal& other_point) const override;
+  [[nodiscard]] bool Collides(const LineInternal& line) const override;
+  [[nodiscard]] bool Collides(
+      const RectangleInternal& rectangle) const override;
+  [[nodiscard]] bool Collides(const CircleInternal& circle) const override;
   void Draw() const override;
   void Move(double x, double y) override;
 
   [[nodiscard]] double center_x() const override { return x; }
   [[nodiscard]] double center_y() const override { return y; }
 
-  Point(const double x, const double y) : x(x), y(y) {}
-  explicit Point(std::pair<double, double> p) : x(p.first), y(p.second) {}
-  bool operator==(const Point& v) const { return x == v.x && y == v.y; }
+  PointInternal(const double x, const double y) : x(x), y(y) {}
+  explicit PointInternal(std::pair<double, double> p)
+      : x(p.first), y(p.second) {}
+  bool operator==(const PointInternal& v) const { return x == v.x && y == v.y; }
   /*
    * Returns true if current point is located on the lower-left side of the
    * `other` point. Does not return `true` if they are the same points.
    */
-  [[nodiscard]] bool IsLowerLeft(const Point& other) const;
-  [[nodiscard]] double Distance(const Point& other) const;
+  [[nodiscard]] bool IsLowerLeft(const PointInternal& other) const;
+  [[nodiscard]] double Distance(const PointInternal& other) const;
 
   double x;
   double y;
 };
 
-struct Line final : Shape {
+struct LineInternal final : Shape {
   enum class Aligned { X, Y, NOT };
 
-  [[nodiscard]] bool Collides(const Point& point) const override;
-  [[nodiscard]] bool Collides(const Line& other_line) const override;
-  [[nodiscard]] bool Collides(const Rectangle& rectangle) const override;
-  [[nodiscard]] bool Collides(const Circle& circle) const override;
+  [[nodiscard]] bool Collides(const PointInternal& point) const override;
+  [[nodiscard]] bool Collides(const LineInternal& other_line) const override;
+  [[nodiscard]] bool Collides(
+      const RectangleInternal& rectangle) const override;
+  [[nodiscard]] bool Collides(const CircleInternal& circle) const override;
   [[nodiscard]] Vector Reflect(const Vector& vec) const;
 
   void Draw() const override;
@@ -75,7 +79,7 @@ struct Line final : Shape {
     return (this->a.y + this->b.y) / 2.0;
   }
 
-  Line(const Point& a, const Point& b) : a(a), b(b) {
+  LineInternal(const PointInternal& a, const PointInternal& b) : a(a), b(b) {
     if (std::abs(this->a.x - this->b.x) <= eps) {
       axis_aligned = Aligned::Y;
     }
@@ -87,27 +91,29 @@ struct Line final : Shape {
   [[nodiscard]] Vector MakeVector() const {
     return {this->b.x - this->a.x, this->b.y - this->a.y};
   }
-  [[nodiscard]] bool IsOnLine(const Point& p) const;
+  [[nodiscard]] bool IsOnLine(const PointInternal& p) const;
 
-  Point a;
-  Point b;
+  PointInternal a;
+  PointInternal b;
   Aligned axis_aligned = Aligned::NOT;
 };
 
 // TODO(f1lo): Make this a class and make sure that invariants hold. i.e.
 // ordered vertices and 90 degree angles.
-struct Rectangle final : Shape {
-  [[nodiscard]] bool Collides(const Point& point) const override;
-  [[nodiscard]] bool Collides(const Line& line) const override;
-  [[nodiscard]] bool Collides(const Rectangle& other_rectangle) const override;
-  [[nodiscard]] bool Collides(const Circle& circle) const override;
+struct RectangleInternal final : Shape {
+  [[nodiscard]] bool Collides(const PointInternal& point) const override;
+  [[nodiscard]] bool Collides(const LineInternal& line) const override;
+  [[nodiscard]] bool Collides(
+      const RectangleInternal& other_rectangle) const override;
+  [[nodiscard]] bool Collides(const CircleInternal& circle) const override;
   void Draw() const override;
   void Move(double x, double y) override;
 
   [[nodiscard]] double center_x() const override { return (a.x + c.x) / 2.0; }
   [[nodiscard]] double center_y() const override { return (a.y + c.y) / 2.0; }
 
-  Rectangle(const Point& bottom_left, const Point& top_right)
+  RectangleInternal(const PointInternal& bottom_left,
+                    const PointInternal& top_right)
       : a(bottom_left),
         b(bottom_left.x, top_right.y),
         c(top_right),
@@ -118,33 +124,37 @@ struct Rectangle final : Shape {
         << absl::Substitute(", ($0 $1)", top_right.x, top_right.y);
   }
 
-  Point a;
-  Point b;
-  Point c;
-  Point d;
+  PointInternal a;
+  PointInternal b;
+  PointInternal c;
+  PointInternal d;
 };
 
-struct Circle final : Shape {
-  [[nodiscard]] bool Collides(const Point& point) const override;
-  [[nodiscard]] bool Collides(const Line& line) const override;
-  [[nodiscard]] bool Collides(const Rectangle& rectangle) const override;
-  [[nodiscard]] bool Collides(const Circle& other_circle) const override;
+struct CircleInternal final : Shape {
+  [[nodiscard]] bool Collides(const PointInternal& point) const override;
+  [[nodiscard]] bool Collides(const LineInternal& line) const override;
+  [[nodiscard]] bool Collides(
+      const RectangleInternal& rectangle) const override;
+  [[nodiscard]] bool Collides(
+      const CircleInternal& other_circle) const override;
   void Draw() const override;
   void Move(double x, double y) override;
 
   [[nodiscard]] double center_x() const override { return a.x; }
   [[nodiscard]] double center_y() const override { return a.y; }
 
-  Circle(const Point& a, const double r) : a(a), r(r) {
+  CircleInternal(const PointInternal& a, const double r) : a(a), r(r) {
     CHECK(this->r > 0) << "Negative radius for circle: " << this->r;
   }
 
-  Point a;
+  PointInternal a;
   double r;
 };
 
-bool Clockwise(const Point& a, const Point& b, const Point& c);
-bool CounterClockwise(const Point& a, const Point& b, const Point& c);
+bool Clockwise(const PointInternal& a, const PointInternal& b,
+               const PointInternal& c);
+bool CounterClockwise(const PointInternal& a, const PointInternal& b,
+                      const PointInternal& c);
 
 }  // namespace internal
 }  // namespace lib

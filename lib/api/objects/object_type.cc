@@ -12,7 +12,7 @@ constexpr uint16_t kScreenLeft = 2;
 constexpr uint16_t kScreenRight = 3;
 constexpr uint16_t kScreenTop = 4;
 constexpr uint16_t kScreenBottom = 5;
-constexpr uint16_t kMousePointer = 6;
+constexpr uint16_t kMousePointInternaler = 6;
 constexpr uint16_t kButton = 7;
 constexpr uint16_t kProjectilePlayer = 8;
 constexpr uint16_t kCoordinate = 9;
@@ -52,8 +52,8 @@ bool ObjectType::IsScreenBottom() const {
 bool ObjectType::IsScreenEdge() const {
   return IsScreenTop() || IsScreenBottom() || IsScreenLeft() || IsScreenRight();
 }
-bool ObjectType::IsMousePointer() const {
-  return type_ == kMousePointer;
+bool ObjectType::IsMousePointInternaler() const {
+  return type_ == kMousePointInternaler;
 }
 bool ObjectType::IsButton() const {
   return type_ == kButton;
@@ -93,8 +93,8 @@ ObjectType ObjectTypeFactory::MakeScreenTop() {
 ObjectType ObjectTypeFactory::MakeScreenBottom() {
   return ObjectType(kScreenBottom);
 }
-ObjectType ObjectTypeFactory::MakeMousePointer() {
-  return ObjectType(kMousePointer);
+ObjectType ObjectTypeFactory::MakeMousePointInternaler() {
+  return ObjectType(kMousePointInternaler);
 }
 ObjectType ObjectTypeFactory::MakeButton() {
   return ObjectType(kButton);

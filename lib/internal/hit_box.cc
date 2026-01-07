@@ -19,16 +19,18 @@ namespace {
  * Constructs convex hull from provided vertices.
  * Returns vertices which are necessary to construct a convex hull.
  */
-std::vector<Point> ConstructConvexHull(std::vector<Point>& vertices) {
+std::vector<PointInternal> ConstructConvexHull(
+    std::vector<PointInternal>& vertices) {
   if (vertices.size() == 1)
     return {vertices[0]};
 
-  std::ranges::sort(vertices, [](const Point& a, const Point& b) {
-    return a.x < b.x || (a.x == b.x && a.y < b.y);
-  });
-  const Point point_1 = vertices[0];
-  const Point point_2 = vertices.back();
-  std::vector<Point> up, down;
+  std::ranges::sort(vertices,
+                    [](const PointInternal& a, const PointInternal& b) {
+                      return a.x < b.x || (a.x == b.x && a.y < b.y);
+                    });
+  const PointInternal point_1 = vertices[0];
+  const PointInternal point_2 = vertices.back();
+  std::vector<PointInternal> up, down;
   up.push_back(point_1);
   down.push_back(point_1);
   for (size_t i = 1; i < vertices.size(); ++i) {
@@ -48,7 +50,7 @@ std::vector<Point> ConstructConvexHull(std::vector<Point>& vertices) {
     }
   }
 
-  std::vector<Point> hull_vertices;
+  std::vector<PointInternal> hull_vertices;
   for (const auto& i : up)
     hull_vertices.push_back(i);
   for (size_t i = down.size() - 2; i > 0; --i)
@@ -62,7 +64,7 @@ std::vector<Point> ConstructConvexHull(std::vector<Point>& vertices) {
  * Assumes clockwise or counterclockwise order.
  * For now only allows rectangles which are aligned to the X, Y axis.
  */
-bool IsAxisAlignedRectangle(const absl::Span<const Point> vertices) {
+bool IsAxisAlignedRectangle(const absl::Span<const PointInternal> vertices) {
   if (vertices.size() != 4) {
     return false;
   }
@@ -76,10 +78,10 @@ bool IsAxisAlignedRectangle(const absl::Span<const Point> vertices) {
   //        |----------------|
   // vertices[0]  side_4
 
-  const Line side_1{vertices[0], vertices[1]};
-  const Line side_4{vertices[0], vertices[3]};
-  const Line side_2{vertices[1], vertices[2]};
-  const Line side_3{vertices[3], vertices[2]};
+  const LineInternal side_1{vertices[0], vertices[1]};
+  const LineInternal side_4{vertices[0], vertices[3]};
+  const LineInternal side_2{vertices[1], vertices[2]};
+  const LineInternal side_3{vertices[3], vertices[2]};
 
   // Not a rectangle.
   if (side_1.MakeVector().DotProduct(side_4.MakeVector()) != 0 ||
@@ -97,8 +99,8 @@ bool IsAxisAlignedRectangle(const absl::Span<const Point> vertices) {
 
 enum class LineOrientation { ON_LINE, DOWN, UP };
 
-LineOrientation PointOrientation(const double x, const double y,
-                                 const std::pair<double, double> line) {
+LineOrientation PointInternalOrientation(const double x, const double y,
+                                         const std::pair<double, double> line) {
   const double line_y = line.first * x + line.second;
   if (std::abs(line_y - y) <= eps) {
     return LineOrientation::ON_LINE;
@@ -114,7 +116,7 @@ std::pair<double, double> Build135DegreeLine(const double x, const double y) {
   return {1, y - x};
 }
 
-std::pair<double, double> ReflectFromRectangle(const Rectangle& rec,
+std::pair<double, double> ReflectFromRectangle(const RectangleInternal& rec,
                                                const Vector& v,
                                                const double center_x,
                                                const double center_y) {
@@ -123,35 +125,43 @@ std::pair<double, double> ReflectFromRectangle(const Rectangle& rec,
   const std::pair<double, double> c = Build45DegreeLine(rec.c.x, rec.c.y);
   const std::pair<double, double> d = Build135DegreeLine(rec.d.x, rec.d.y);
   // Check if the reflection happened on the vertex of a rectangle.
-  if (PointOrientation(center_x, center_y, a) == LineOrientation::ON_LINE ||
-      PointOrientation(center_x, center_y, b) == LineOrientation::ON_LINE ||
-      PointOrientation(center_x, center_y, c) == LineOrientation::ON_LINE ||
-      PointOrientation(center_x, center_y, d) == LineOrientation::ON_LINE) {
+  if (PointInternalOrientation(center_x, center_y, a) ==
+          LineOrientation::ON_LINE ||
+      PointInternalOrientation(center_x, center_y, b) ==
+          LineOrientation::ON_LINE ||
+      PointInternalOrientation(center_x, center_y, c) ==
+          LineOrientation::ON_LINE ||
+      PointInternalOrientation(center_x, center_y, d) ==
+          LineOrientation::ON_LINE) {
     return {-v.x, -v.y};
   }
 
   // Reflected from (rec.a, rec.d) line.
-  if (PointOrientation(center_x, center_y, a) == LineOrientation::DOWN &&
-      PointOrientation(center_x, center_y, d) == LineOrientation::DOWN) {
-    const auto [x, y] = Line(rec.a, rec.d).Reflect(v);
+  if (PointInternalOrientation(center_x, center_y, a) ==
+          LineOrientation::DOWN &&
+      PointInternalOrientation(center_x, center_y, d) ==
+          LineOrientation::DOWN) {
+    const auto [x, y] = LineInternal(rec.a, rec.d).Reflect(v);
     return {x, y};
   }
   // Reflected from (rec.b, rec.c) line.
-  if (PointOrientation(center_x, center_y, b) == LineOrientation::UP &&
-      PointOrientation(center_x, center_y, c) == LineOrientation::UP) {
-    const auto [x, y] = Line(rec.b, rec.c).Reflect(v);
+  if (PointInternalOrientation(center_x, center_y, b) == LineOrientation::UP &&
+      PointInternalOrientation(center_x, center_y, c) == LineOrientation::UP) {
+    const auto [x, y] = LineInternal(rec.b, rec.c).Reflect(v);
     return {x, y};
   }
   // Reflected from (rec.a, rec.b) line.
-  if (PointOrientation(center_x, center_y, a) == LineOrientation::UP &&
-      PointOrientation(center_x, center_y, b) == LineOrientation::DOWN) {
-    auto [x, y] = Line(rec.a, rec.b).Reflect(v);
+  if (PointInternalOrientation(center_x, center_y, a) == LineOrientation::UP &&
+      PointInternalOrientation(center_x, center_y, b) ==
+          LineOrientation::DOWN) {
+    auto [x, y] = LineInternal(rec.a, rec.b).Reflect(v);
     return {x, y};
   }
   // Reflected from (rec.c, rec.d) line.
-  if (PointOrientation(center_x, center_y, c) == LineOrientation::DOWN &&
-      PointOrientation(center_x, center_y, d) == LineOrientation::UP) {
-    auto [x, y] = Line(rec.c, rec.d).Reflect(v);
+  if (PointInternalOrientation(center_x, center_y, c) ==
+          LineOrientation::DOWN &&
+      PointInternalOrientation(center_x, center_y, d) == LineOrientation::UP) {
+    auto [x, y] = LineInternal(rec.c, rec.d).Reflect(v);
     return {x, y};
   }
 
@@ -166,13 +176,15 @@ std::pair<double, double> ReflectFromRectangle(const Rectangle& rec,
 
 }  // namespace
 
-absl::StatusOr<HitBox> HitBox::CreateHitBox(std::vector<Point> vertices) {
+absl::StatusOr<HitBox> HitBox::CreateHitBox(
+    std::vector<PointInternal> vertices) {
   if (vertices.empty()) {
     return absl::InvalidArgumentError(
         "empty vertex set while constructing a hit box");
   }
   const size_t old_size = vertices.size();
-  const std::vector<Point> normalized_vertices = ConstructConvexHull(vertices);
+  const std::vector<PointInternal> normalized_vertices =
+      ConstructConvexHull(vertices);
   // Some of the vertices have been discarded.
   if (old_size > normalized_vertices.size()) {
     return absl::InvalidArgumentError(
@@ -188,14 +200,15 @@ absl::StatusOr<HitBox> HitBox::CreateHitBox(std::vector<Point> vertices) {
 
   switch (normalized_vertices.size()) {
     case 1:
-      return HitBox(std::make_unique<Point>(Point{normalized_vertices[0].x,
-                                                  normalized_vertices[0].y}),
+      return HitBox(std::make_unique<PointInternal>(PointInternal{
+                        normalized_vertices[0].x, normalized_vertices[0].y}),
                     ShapeType::POINT);
     case 2:
       return HitBox(
-          std::make_unique<Line>(
-              Line{Point{normalized_vertices[0].x, normalized_vertices[0].y},
-                   Point{normalized_vertices[1].x, normalized_vertices[1].y}}),
+          std::make_unique<LineInternal>(LineInternal{
+              PointInternal{normalized_vertices[0].x, normalized_vertices[0].y},
+              PointInternal{normalized_vertices[1].x,
+                            normalized_vertices[1].y}}),
           ShapeType::LINE);
     case 4:
       // Check if it is a rectangle.
@@ -203,7 +216,7 @@ absl::StatusOr<HitBox> HitBox::CreateHitBox(std::vector<Point> vertices) {
       // class.
       if (IsAxisAlignedRectangle(normalized_vertices)) {
         return HitBox(
-            std::make_unique<Rectangle>(Rectangle{
+            std::make_unique<RectangleInternal>(RectangleInternal{
                 {normalized_vertices[1].x, normalized_vertices[1].y},
                 {normalized_vertices[3].x, normalized_vertices[3].y}}),
             ShapeType::RECTANGLE);
@@ -220,14 +233,17 @@ bool HitBox::CollidesWith(const HitBox& other) const {
   switch (other.shape_type_) {
     // Potentially unsafe if not careful.
     case ShapeType::POINT:
-      return this->shape_->Collides(*static_cast<Point*>(other.shape_.get()));
+      return this->shape_->Collides(
+          *static_cast<PointInternal*>(other.shape_.get()));
     case ShapeType::LINE:
-      return this->shape_->Collides(*static_cast<Line*>(other.shape_.get()));
+      return this->shape_->Collides(
+          *static_cast<LineInternal*>(other.shape_.get()));
     case ShapeType::RECTANGLE:
       return this->shape_->Collides(
-          *static_cast<Rectangle*>(other.shape_.get()));
+          *static_cast<RectangleInternal*>(other.shape_.get()));
     case ShapeType::CIRCLE:
-      return this->shape_->Collides(*static_cast<Circle*>(other.shape_.get()));
+      return this->shape_->Collides(
+          *static_cast<CircleInternal*>(other.shape_.get()));
     default:
       // This should never happen.
       // `StatusOr` can be returned here, but it could hurt performance.
@@ -239,17 +255,18 @@ bool HitBox::CollidesWith(const HitBox& other) const {
 std::pair<double, double> HitBox::Reflect(const HitBox& other, const double x,
                                           const double y) const {
   CHECK(shape_type_ == ShapeType::LINE || shape_type_ == ShapeType::RECTANGLE)
-      << "Reflection is only implemented from Line or Rectangle.";
+      << "Reflection is only implemented from LineInternal or "
+         "RectangleInternal.";
   const Vector v = {x, y};
   switch (shape_type_) {
     case ShapeType::LINE: {
-      const auto [x, y] = static_cast<Line*>(shape_.get())->Reflect(v);
+      const auto [x, y] = static_cast<LineInternal*>(shape_.get())->Reflect(v);
       return {x, y};
     }
     case ShapeType::RECTANGLE:
-      return ReflectFromRectangle(*static_cast<Rectangle*>(shape_.get()), v,
-                                  other.shape_->center_x(),
-                                  other.shape_->center_y());
+      return ReflectFromRectangle(
+          *static_cast<RectangleInternal*>(shape_.get()), v,
+          other.shape_->center_x(), other.shape_->center_y());
     default:
       CHECK(false) << "HitBox::Reflect: invalid shape type";
       return {};

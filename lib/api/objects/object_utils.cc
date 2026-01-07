@@ -11,13 +11,13 @@ namespace api {
 namespace objects {
 
 using internal::HitBox;
-using internal::Point;
+using internal::PointInternal;
 
 namespace {
 
 template <typename T>
 HitBox CreateHitBoxOrDieInternal(const std::vector<T>& vertices) {
-  std::vector<Point> points;
+  std::vector<PointInternal> points;
   points.reserve(vertices.size());
   for (const auto& [x, y] : vertices) {
     points.emplace_back(x, y);
@@ -41,7 +41,7 @@ HitBox CreateHitBoxOrDie(const std::vector<ScreenPosition>& vertices) {
 }
 
 HitBox CreateCircle(const double x, const double y, const double radius) {
-  return HitBox::CreateHitBox(Point{x, y}, radius);
+  return HitBox::CreateHitBox(PointInternal{x, y}, radius);
 }
 
 }  // namespace objects
