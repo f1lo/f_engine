@@ -110,6 +110,45 @@ TEST(CommonTypesTest, ColorRGBAToString) {
   EXPECT_EQ(oss.str(), "ColorRGBA (r: 1, g: 2, b: 3, a: 4)");
 }
 
+TEST(CommonTypesTest, FPointToString) {
+  constexpr FPoint point = {.x = 1, .y = 2};
+
+  std::ostringstream oss;
+  oss << point;
+
+  EXPECT_EQ(oss.str(), "FPoint (x: 1, y: 2)");
+}
+
+TEST(CommonTypesTest, FLineToString) {
+  constexpr FLine line = {.a = {.x = 1, .y = 2}, .b = {.x = 3, .y = 4}};
+
+  std::ostringstream oss;
+  oss << line;
+
+  EXPECT_EQ(oss.str(),
+            "FLine (a: FPoint (x: 1, y: 2), b: FPoint (x: 3, y: 4))");
+}
+
+TEST(CommonTypesTest, FRectangleToString) {
+  constexpr FRectangle rectangle = {
+      .top_left = {.x = 1, .y = 2}, .width = 3, .height = 4};
+
+  std::ostringstream oss;
+  oss << rectangle;
+
+  EXPECT_EQ(oss.str(),
+            "FRectangle (top_left: FPoint (x: 1, y: 2), width: 3, height: 4)");
+}
+
+TEST(CommonTypesTest, FCircleToString) {
+  constexpr FCircle circle = {.center = {.x = 1, .y = 2}, .radius = 3};
+
+  std::ostringstream oss;
+  oss << circle;
+
+  EXPECT_EQ(oss.str(), "FCircle (center: FPoint (x: 1, y: 2), radius: 3)");
+}
+
 }  // namespace
 }  // namespace api
 }  // namespace lib

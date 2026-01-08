@@ -59,6 +59,36 @@ struct ColorRGBA {
   friend std::ostream& operator<<(std::ostream& os, const ColorRGBA& color);
 };
 
+struct FPoint {
+  float x;
+  float y;
+
+  friend std::ostream& operator<<(std::ostream& os, const FPoint& point);
+};
+
+struct FLine {
+  FPoint a;
+  FPoint b;
+
+  friend std::ostream& operator<<(std::ostream& os, const FLine& line);
+};
+
+struct FRectangle {
+  FPoint top_left;
+  float width;
+  float height;
+
+  friend std::ostream& operator<<(std::ostream& os,
+                                  const FRectangle& rectangle);
+};
+
+struct FCircle {
+  FPoint center;
+  float radius;
+
+  friend std::ostream& operator<<(std::ostream& os, const FCircle& circle);
+};
+
 }  // namespace api
 }  // namespace lib
 

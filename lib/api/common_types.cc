@@ -100,5 +100,25 @@ std::ostream& operator<<(std::ostream& os, const ColorRGBA& color) {
   return os;
 }
 
+std::ostream& operator<<(std::ostream& os, const FPoint& point) {
+  os << absl::Substitute("FPoint (x: $0, y: $1)", point.x, point.y);
+  return os;
+}
+std::ostream& operator<<(std::ostream& os, const FLine& line) {
+  os << "FLine (a: " << line.a << ", b: " << line.b << ")";
+  return os;
+}
+std::ostream& operator<<(std::ostream& os, const FRectangle& rectangle) {
+  os << "FRectangle (top_left: " << rectangle.top_left
+     << ", width: " << rectangle.width << ", height: " << rectangle.height
+     << ")";
+  return os;
+}
+std::ostream& operator<<(std::ostream& os, const FCircle& circle) {
+  os << "FCircle (center: " << circle.center << ", radius: " << circle.radius
+     << ")";
+  return os;
+}
+
 }  // namespace api
 }  // namespace lib
