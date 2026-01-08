@@ -24,7 +24,6 @@ cc_test(
     srcs = ["object_test.cc"],
     deps = [
         ":object",
-        ":object_utils",
         "//lib/api:common_types",
         "//lib/internal:hit_box",
         "@googletest//:gtest",
@@ -59,7 +58,6 @@ cc_library(
     deps = [
         ":object_type",
         "//lib/api/objects:object",
-        "//lib/api/objects:object_utils",
         "//lib/api/sprites:sprite_instance",
         "//lib/internal/geometry:vec",
     ],
@@ -72,33 +70,7 @@ cc_test(
         ":movable_object",
         ":object_type",
         "//lib/api:common_types",
-        "@googletest//:gtest",
-        "@googletest//:gtest_main",
-    ],
-)
-
-cc_library(
-    name = "object_utils",
-    srcs = ["object_utils.cc"],
-    hdrs = ["object_utils.h"],
-    visibility = ["//visibility:private"],
-    deps = [
-        "//lib/api:common_types",
         "//lib/api/objects:object",
-        "//lib/internal:hit_box",
-        "//lib/internal/geometry:shape",
-        "//raylib",
-        "@abseil-cpp//absl/log:check",
-    ],
-)
-
-cc_test(
-    name = "object_utils_test",
-    srcs = ["object_utils_test.cc"],
-    deps = [
-        ":object_utils",
-        "//lib/api:common_types",
-        "//lib/internal:hit_box",
         "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
@@ -110,8 +82,8 @@ cc_library(
     hdrs = ["static_object.h"],
     deps = [
         ":object_type",
+        "//lib/api:common_types",
         "//lib/api/objects:object",
-        "//lib/api/objects:object_utils",
         "//lib/api/sprites:sprite_instance",
         "@abseil-cpp//absl/container:flat_hash_map",
         "@googletest//:gtest",
@@ -123,9 +95,9 @@ cc_test(
     srcs = ["static_object_test.cc"],
     deps = [
         ":static_object",
+        "//lib/api:common_types",
         "//lib/api:graphics_mock",
         "//lib/api/objects:object",
-        "//lib/api/objects:object_utils",
         "//lib/api/sprites:sprite_factory",
         "//lib/api/sprites:sprite_instance",
         "@googletest//:gtest",
@@ -138,6 +110,7 @@ cc_library(
     srcs = ["projectile_object.cc"],
     hdrs = ["projectile_object.h"],
     deps = [
+        "//lib/api:common_types",
         "//lib/api/objects:movable_object",
         "//lib/api/objects:object",
         "//lib/api/sprites:sprite_instance",
@@ -151,6 +124,7 @@ cc_test(
     deps = [
         ":projectile_object",
         ":static_object",
+        "//lib/api:common_types",
         "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
@@ -176,7 +150,6 @@ cc_library(
         ":object_type",
         "//lib/api:common_types",
         "//lib/api/objects:object",
-        "//lib/api/objects:object_utils",
         "@abseil-cpp//absl/memory",
     ],
 )
@@ -198,7 +171,6 @@ cc_library(
     hdrs = ["coordinate_object.h"],
     deps = [
         ":object_type",
-        ":object_utils",
         "//lib/api:common_types",
         "//lib/api/objects:object",
         "//raylib",

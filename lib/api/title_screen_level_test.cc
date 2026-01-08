@@ -5,6 +5,7 @@
 #include "gmock/gmock-matchers.h"
 #include "gtest/gtest.h"
 #include "lib/api/abilities/ability.h"
+#include "lib/api/common_types.h"
 #include "lib/api/level.h"
 #include "lib/api/objects/object_type.h"
 #include "lib/api/objects/static_object.h"
@@ -42,8 +43,7 @@ TEST_F(TitleScreenLevelDeathTest, StartButtonNotAdded) {
               /*type=*/kExitButton,
               StaticObject::StaticObjectOpts{.is_hit_box_active = false,
                                              .should_draw_hit_box = false},
-              /*hit_box_vertices=*/
-              std::vector<std::pair<float, float>>({{0, 0}, {0, 1}})))
+              FLine{.a = {0, 0}, .b = {0, 1}}))
           .Build(),
       "Start button not added.");
 }
@@ -58,8 +58,7 @@ TEST_F(TitleScreenLevelDeathTest, ExitButtonNotAdded) {
               /*type=*/kStartButton,
               StaticObject::StaticObjectOpts{.is_hit_box_active = false,
                                              .should_draw_hit_box = false},
-              /*hit_box_vertices=*/
-              std::vector<std::pair<float, float>>({{0, 0}, {0, 1}})))
+              FLine{.a = {0, 0}, .b = {0, 1}}))
           .Build(),
       "Exit button not added.");
 }
@@ -74,14 +73,12 @@ TEST_F(TitleScreenLevelDeathTest, StartButtonAddedTwice) {
               /*type=*/kStartButton,
               StaticObject::StaticObjectOpts{.is_hit_box_active = false,
                                              .should_draw_hit_box = false},
-              /*hit_box_vertices=*/
-              std::vector<std::pair<float, float>>({{0, 0}, {0, 1}})))
+              FLine{.a = {0, 0}, .b = {0, 1}}))
           .AddStartButton(std::make_unique<StaticObject>(
               /*type=*/kStartButton,
               StaticObject::StaticObjectOpts{.is_hit_box_active = false,
                                              .should_draw_hit_box = false},
-              /*hit_box_vertices=*/
-              std::vector<std::pair<float, float>>({{0, 0}, {0, 1}})))
+              FLine{.a = {0, 0}, .b = {0, 1}}))
           .Build(),
       "Cannot add start button more than once.");
 }
@@ -96,14 +93,12 @@ TEST_F(TitleScreenLevelDeathTest, ExitButtonAddedTwice) {
               /*type=*/kExitButton,
               StaticObject::StaticObjectOpts{.is_hit_box_active = false,
                                              .should_draw_hit_box = false},
-              /*hit_box_vertices=*/
-              std::vector<std::pair<float, float>>({{0, 0}, {0, 1}})))
+              FLine{.a = {0, 0}, .b = {0, 1}}))
           .AddExitButton(std::make_unique<StaticObject>(
               /*type=*/kExitButton,
               StaticObject::StaticObjectOpts{.is_hit_box_active = false,
                                              .should_draw_hit_box = false},
-              /*hit_box_vertices=*/
-              std::vector<std::pair<float, float>>({{0, 0}, {0, 1}})))
+              FLine{.a = {0, 0}, .b = {0, 1}}))
 
           .Build(),
       "Cannot add exit button more than once.");
@@ -120,14 +115,12 @@ TEST_F(TitleScreenLevelTest, StartAndExitAddedOk) {
               /*type=*/kStartButton,
               StaticObject::StaticObjectOpts{.is_hit_box_active = false,
                                              .should_draw_hit_box = false},
-              /*hit_box_vertices=*/
-              std::vector<std::pair<float, float>>({{0, 0}, {0, 1}})))
+              FLine{.a = {0, 0}, .b = {0, 1}}))
           .AddExitButton(std::make_unique<StaticObject>(
               /*type=*/kExitButton,
               StaticObject::StaticObjectOpts{.is_hit_box_active = false,
                                              .should_draw_hit_box = false},
-              /*hit_box_vertices=*/
-              std::vector<std::pair<float, float>>({{0, 0}, {0, 1}})))
+              FLine{.a = {0, 0}, .b = {0, 1}}))
           .Build();
 
   ASSERT_EQ(level->objects_.size(), 2);

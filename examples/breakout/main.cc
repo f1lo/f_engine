@@ -8,6 +8,7 @@
 #include "examples/breakout/level_main.h"
 #include "examples/breakout/player_pad.h"
 #include "lib/api/abilities/ability.h"
+#include "lib/api/common_types.h"
 #include "lib/api/controls.h"
 #include "lib/api/game.h"
 #include "lib/api/level.h"
@@ -21,6 +22,8 @@ using breakout::LevelMain;
 using breakout::LevelMainBuilder;
 using breakout::PlayerPad;
 using lib::api::Controls;
+using lib::api::FCircle;
+using lib::api::FRectangle;
 using lib::api::Game;
 using lib::api::kKeyA;
 using lib::api::kKeyD;
@@ -69,11 +72,9 @@ std::vector<std::unique_ptr<BrickObject>> GenerateBricks(int brick_width,
           ObjectTypeFactory::MakeEnemy(),
           StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                          .should_draw_hit_box = true},
-          std::vector<std::pair<float, float>>(
-              {{x, y},
-               {x, y - brick_height},
-               {x + brick_width, y - brick_height},
-               {x + brick_width, y}}));
+          FRectangle{.top_left = {x, y - brick_height},
+                     .width = static_cast<float>(brick_width),
+                     .height = static_cast<float>(brick_height)});
       bricks.emplace_back(std::move(brick));
       x += brick_width;
     }
@@ -86,8 +87,8 @@ int main() {
   Game& game = Game::Create({
       .native_screen_width = 1920,
       .native_screen_height = 1080,
-      .screen_width = 2500,
-      .screen_height = 1500,
+      .screen_width = 2200,
+      .screen_height = 1280,
       .full_screen = false,
       .title = "Breakout",
   });
@@ -118,11 +119,12 @@ int main() {
                                        .should_draw_hit_box = true,
                                        .attach_camera = false,
                                        .velocity = kBallVelocity},
-      /*hit_box_center=*/
-      std::make_pair(game.native_screen_width() / 2,
+
+      FCircle{
+          .center = {game.native_screen_width() / 2.0f,
                      game.native_screen_height() - breakout::kPadOffset -
-                         kPlayerHeight - breakout::kBallOffset - kBallRadius),
-      kBallRadius);
+                         kPlayerHeight - breakout::kBallOffset - kBallRadius},
+          .radius = kBallRadius});
   std::list<std::unique_ptr<Ability>> ball_abilities;
   ball_abilities.push_back(std::move(ability_ball));
   LevelMainBuilder level_builder = LevelMainBuilder(

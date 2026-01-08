@@ -6,19 +6,17 @@
 
 #include "absl/status/statusor.h"
 #include "geometry/shape.h"
+#include "lib/api/common_types.h"
 
 namespace lib {
 namespace internal {
 
 class HitBox {
  public:
-  static HitBox CreateHitBox(PointInternal center, const float radius) {
-    return {std::make_unique<CircleInternal>(
-                CircleInternal{std::move(center), radius}),
-            ShapeType::CIRCLE};
-  }
-  static absl::StatusOr<HitBox> CreateHitBox(
-      std::vector<PointInternal> vertices);
+  static HitBox CreateHitBox(api::FPoint point);
+  static HitBox CreateHitBox(api::FLine line);
+  static HitBox CreateHitBox(api::FRectangle rectangle);
+  static HitBox CreateHitBox(api::FCircle circle);
 
   [[nodiscard]] bool CollidesWith(const HitBox& other) const;
   [[nodiscard]] std::pair<float, float> Reflect(const HitBox& other, float x,

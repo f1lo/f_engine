@@ -29,15 +29,14 @@ using objects::StaticObject;
 
 class DummyMovableObject : public MovableObject {
  public:
-  DummyMovableObject(const float velocity,
-                     const std::pair<float, float> hit_box_center)
+  DummyMovableObject(const float velocity, const FPoint hit_box_center)
       : MovableObject(
             /*type=*/objects::ObjectTypeFactory::MakePlayer(),
             MovableObjectOpts{.is_hit_box_active = true,
                               .should_draw_hit_box = false,
                               .attach_camera = false,
                               .velocity = velocity},
-            hit_box_center, /*hit_box_radius=*/3) {}
+            FCircle{.center = hit_box_center, .radius = 3}) {}
 
   bool OnCollisionCallback(Object& other_object) override { return false; }
 };
@@ -47,7 +46,7 @@ TEST(ProjectileAbilityTest, InputNotPressed) {
       /*type=*/objects::ObjectTypeFactory::MakePlayer(), /*options=*/
       StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                      .should_draw_hit_box = false},
-      /*hit_box_center=*/std::make_pair(0, 0), /*hit_box_radius=*/3);
+      FCircle{.center = {0, 0}, .radius = 3});
   ProjectileAbility ability = ProjectileAbility(
       std::make_unique<ControlsMock>(
           /*is_pressed=*/false, /*is_down=*/false, /*is_primary_pressed=*/false,
@@ -59,7 +58,7 @@ TEST(ProjectileAbilityTest, InputNotPressed) {
           .should_draw_hit_box = false,
           .despawn_outside_screen_area = true,
           .velocity = 1,
-          .hit_box_center = std::make_pair(5, 0),
+          .hit_box_center = FPoint{5, 0},
           .hit_box_radius = 3,
           .despawn_on_colliding_with_these_objects =
               absl::flat_hash_set<objects::ObjectType>{},
@@ -82,7 +81,7 @@ TEST(ProjectileAbilityTest, OnCooldown) {
       /*type=*/objects::ObjectTypeFactory::MakePlayer(), /*options=*/
       StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                      .should_draw_hit_box = false},
-      /*hit_box_center=*/std::make_pair(0, 0), /*hit_box_radius=*/3);
+      FCircle{.center = {0, 0}, .radius = 3});
   ProjectileAbility ability = ProjectileAbility(
       std::make_unique<ControlsMock>(
           /*is_pressed=*/false, /*is_down=*/false, /*is_primary_pressed=*/true,
@@ -94,7 +93,7 @@ TEST(ProjectileAbilityTest, OnCooldown) {
           .should_draw_hit_box = false,
           .despawn_outside_screen_area = true,
           .velocity = 1,
-          .hit_box_center = std::make_pair(5, 0),
+          .hit_box_center = FPoint{5, 0},
           .hit_box_radius = 3,
           .despawn_on_colliding_with_these_objects =
               absl::flat_hash_set<objects::ObjectType>{},
@@ -119,7 +118,7 @@ TEST(ProjectileAbilityTest, ProjectileSpawned) {
       /*type=*/objects::ObjectTypeFactory::MakePlayer(), /*options=*/
       StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                      .should_draw_hit_box = false},
-      /*hit_box_center=*/std::make_pair(0, 0), /*hit_box_radius=*/3);
+      FCircle{.center = {0, 0}, .radius = 3});
   ProjectileAbility ability = ProjectileAbility(
       std::make_unique<ControlsMock>(
           /*is_pressed=*/false, /*is_down=*/false, /*is_primary_pressed=*/true,
@@ -131,7 +130,7 @@ TEST(ProjectileAbilityTest, ProjectileSpawned) {
           .should_draw_hit_box = false,
           .despawn_outside_screen_area = true,
           .velocity = 1,
-          .hit_box_center = std::make_pair(5, 0),
+          .hit_box_center = FPoint{5, 0},
           .hit_box_radius = 3,
           .despawn_on_colliding_with_these_objects =
               absl::flat_hash_set<objects::ObjectType>{},
@@ -153,7 +152,7 @@ TEST(ProjectileAbilityTest, ProjectileSpawned) {
 
 TEST(ProjectileAbilityTest, MovableObjectProjectileSameDirection) {
   DummyMovableObject movable_object = DummyMovableObject(
-      /*velocity=*/5, /*hit_box_center=*/std::make_pair(0, 0));
+      /*velocity=*/5, /*hit_box_center=*/FPoint{0, 0});
   movable_object.SetDirectionGlobal(3, 4);
   ProjectileAbility ability = ProjectileAbility(
       std::make_unique<ControlsMock>(
@@ -166,7 +165,7 @@ TEST(ProjectileAbilityTest, MovableObjectProjectileSameDirection) {
           .should_draw_hit_box = false,
           .despawn_outside_screen_area = true,
           .velocity = 1,
-          .hit_box_center = std::make_pair(5, 0),
+          .hit_box_center = FPoint{5, 0},
           .hit_box_radius = 3,
           .despawn_on_colliding_with_these_objects =
               absl::flat_hash_set<objects::ObjectType>{},
@@ -195,7 +194,7 @@ TEST(ProjectileAbilityTest, CreatedProjectileDespawnsOnWorldBorderTouch) {
       /*type=*/objects::ObjectTypeFactory::MakePlayer(), /*options=*/
       StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                      .should_draw_hit_box = false},
-      /*hit_box_center=*/std::make_pair(0, 0), /*hit_box_radius=*/3);
+      FCircle{.center = {0, 0}, .radius = 3});
   ProjectileAbility ability = ProjectileAbility(
       std::make_unique<ControlsMock>(
           /*is_pressed=*/false, /*is_down=*/false, /*is_primary_pressed=*/true,
@@ -207,7 +206,7 @@ TEST(ProjectileAbilityTest, CreatedProjectileDespawnsOnWorldBorderTouch) {
           .should_draw_hit_box = false,
           .despawn_outside_screen_area = true,
           .velocity = 1,
-          .hit_box_center = std::make_pair(5, 0),
+          .hit_box_center = FPoint{5, 0},
           .hit_box_radius = 3,
           .despawn_on_colliding_with_these_objects =
               absl::flat_hash_set<objects::ObjectType>{},
@@ -229,7 +228,7 @@ TEST(ProjectileAbilityTest, CreatedProjectileDespawnsOnWorldBorderTouch) {
       /*type=*/objects::ObjectTypeFactory::MakeWorldBorder(), /*options=*/
       StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                      .should_draw_hit_box = false},
-      /*hit_box_center=*/std::make_pair(0, 0), /*hit_box_radius=*/3);
+      FCircle{.center = {0, 0}, .radius = 3});
 
   projectile->OnCollisionCallback(world_border);
 

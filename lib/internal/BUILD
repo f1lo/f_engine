@@ -10,6 +10,7 @@ cc_library(
     srcs = ["hit_box.cc"],
     hdrs = ["hit_box.h"],
     deps = [
+        "//lib/api:common_types",
         "//lib/internal/geometry:shape",
         "@abseil-cpp//absl/log",
         "@abseil-cpp//absl/status:statusor",
@@ -22,6 +23,7 @@ cc_test(
     srcs = ["hit_box_test.cc"],
     deps = [
         ":hit_box",
+        "//lib/api:common_types",
         "//lib/internal/geometry:shape",
         "@abseil-cpp//absl/status:statusor",
         "@googletest//:gtest",

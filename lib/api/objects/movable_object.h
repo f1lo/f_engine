@@ -24,12 +24,7 @@ class MovableObject : public Object {
 
   MovableObject(
       ObjectType type, const MovableObjectOpts& options,
-      const std::vector<std::pair<float, float>>& hit_box_vertices,
-      std::unique_ptr<sprites::SpriteInstance> sprite_instance = nullptr);
-
-  MovableObject(
-      ObjectType type, const MovableObjectOpts& options,
-      std::pair<float, float> hit_box_center, float hit_box_radius,
+      const HitBoxVariant& hit_box,
       std::unique_ptr<sprites::SpriteInstance> sprite_instance = nullptr);
 
   void Update(const std::list<std::unique_ptr<Object>>& other_objects) override;

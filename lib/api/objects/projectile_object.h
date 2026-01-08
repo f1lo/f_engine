@@ -2,6 +2,7 @@
 #define LIB_API_OBJECTS_PROJECTILE_OBJECT_H
 
 #include "absl/container/flat_hash_set.h"
+#include "lib/api/common_types.h"
 #include "lib/api/objects/movable_object.h"
 #include "lib/api/objects/object.h"
 #include "lib/api/objects/object_type.h"
@@ -17,7 +18,7 @@ class ProjectileObject : public MovableObject {
     bool should_draw_hit_box;
     bool despawn_outside_screen_area;
     float velocity;
-    std::pair<float, float> hit_box_center;
+    FPoint hit_box_center;
     float hit_box_radius;
     absl::flat_hash_set<ObjectType> despawn_on_colliding_with_these_objects;
     absl::flat_hash_set<ObjectType> reflect_on_colliding_with_these_objects;
@@ -33,7 +34,8 @@ class ProjectileObject : public MovableObject {
                           .should_draw_hit_box = options.should_draw_hit_box,
                           .attach_camera = false,
                           .velocity = options.velocity},
-                      options.hit_box_center, options.hit_box_radius,
+                      FCircle{.center = options.hit_box_center,
+                              .radius = options.hit_box_radius},
                       std::move(sprite_instance)),
         despawn_outside_screen_area_(options.despawn_outside_screen_area),
         despawn_on_colliding_with_these_objects_(

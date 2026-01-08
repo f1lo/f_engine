@@ -42,6 +42,10 @@ TEST(CommonTypesTest, ViewPortContextOk) {
   EXPECT_FLOAT_EQ(view_port_ctx.native_screen_height(), 1800);
 }
 
+TEST(CommonTypesTest, ScreenPositionToPoint) {
+  EXPECT_EQ(ScreenPosition(400, 950).ToFPoint(), FPoint(400, 950));
+}
+
 TEST(CommonTypesTest, NativeScreenPositionToActualScreenPosition) {
   const ViewPortContext view_port_ctx =
       ViewPortContext(/*screen_width=*/600, /*screen_height=*/1000,
@@ -90,6 +94,10 @@ TEST(CommonTypesTest, WorldPositionToString) {
   oss << pos;
 
   EXPECT_EQ(oss.str(), "WorldPosition (1.3, 2.7)");
+}
+
+TEST(CommonTypesTest, WorldPositionToPoint) {
+  EXPECT_EQ(WorldPosition(400, 950).ToFPoint(), FPoint(400, 950));
 }
 
 TEST(CommonTypesTest, ScreenPositionToString) {
@@ -147,6 +155,11 @@ TEST(CommonTypesTest, FCircleToString) {
   oss << circle;
 
   EXPECT_EQ(oss.str(), "FCircle (center: FPoint (x: 1, y: 2), radius: 3)");
+}
+
+TEST(CommonTypesTest, PointEquality) {
+  EXPECT_EQ(FPoint(1, 2), FPoint(1, 2));
+  EXPECT_NE(FPoint(1, 2), FPoint(1, 3));
 }
 
 }  // namespace

@@ -37,7 +37,7 @@ TEST_F(StaticObjectTest, CircleYBaseWithSprite) {
       /*type=*/ObjectTypeFactory::MakeEnemy(), /*options=*/
       StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                      .should_draw_hit_box = false},
-      /*hit_box_center=*/std::make_pair(0, 0), /*hit_box_radius=*/3,
+      FCircle{.center = {0, 0}, .radius = 3},
       sprite_factory_.MakeStaticSprite("a/b/picture.png"));
 
   EXPECT_EQ(static_object.YBase(), kTextureHeight / 2);
@@ -48,8 +48,7 @@ TEST_F(StaticObjectTest, RectangleYBaseWithSprite) {
       /*type=*/ObjectTypeFactory::MakeEnemy(), /*options=*/
       StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                      .should_draw_hit_box = false},
-      /*hit_box_vertices=*/
-      std::vector<std::pair<float, float>>({{0, 0}, {0, 2}, {2, 2}, {2, 0}}),
+      FRectangle{.top_left = {0, 0}, .width = 2, .height = 2},
       sprite_factory_.MakeStaticSprite("a/b/picture.png"));
 
   EXPECT_EQ(static_object.YBase(), kTextureHeight / 2 + 1);
@@ -60,8 +59,7 @@ TEST_F(StaticObjectTest, OnCollisionCallbackDoesNothing) {
       /*type=*/ObjectTypeFactory::MakeEnemy(), /*options=*/
       StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                      .should_draw_hit_box = false},
-      /*hit_box_vertices=*/
-      std::vector<std::pair<float, float>>({{0, 0}, {0, 2}, {2, 2}, {2, 0}}),
+      FRectangle{.top_left = {0, 0}, .width = 2, .height = 2},
       sprite_factory_.MakeStaticSprite("a/b/picture.png"));
 
   EXPECT_FALSE(static_object.OnCollisionCallback(static_object));

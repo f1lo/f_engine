@@ -122,8 +122,7 @@ class LevelBuilder {
             objects::StaticObject::StaticObjectOpts{
                 .is_hit_box_active = true,
                 .should_draw_hit_box = should_draw_hitbox},
-            std::vector<std::pair<float, float>>{{x, -kWorldBorderLength},
-                                                 {x, kWorldBorderLength}});
+            FLine{.a = {x, -kWorldBorderLength}, .b = {x, kWorldBorderLength}});
 
     level_->world_border_objects_.emplace_back(x_border.get());
     return AddObject(std::move(x_border));
@@ -137,8 +136,7 @@ class LevelBuilder {
             objects::StaticObject::StaticObjectOpts{
                 .is_hit_box_active = true,
                 .should_draw_hit_box = should_draw_hitbox},
-            std::vector<std::pair<float, float>>{{-kWorldBorderLength, y},
-                                                 {kWorldBorderLength, y}});
+            FLine{.a = {-kWorldBorderLength, y}, .b = {kWorldBorderLength, y}});
 
     level_->world_border_objects_.emplace_back(y_border.get());
     return AddObject(std::move(y_border));

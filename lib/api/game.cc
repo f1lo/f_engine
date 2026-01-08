@@ -7,7 +7,7 @@ namespace lib {
 namespace api {
 
 void Game::Run() {
-  SetTargetFPS(90);
+  SetTargetFPS(120);
   LevelId current_level = kTitleScreenLevel;
   while (current_level != kExitLevel) {
     auto level_it = levels_.find(current_level);

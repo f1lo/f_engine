@@ -6,6 +6,7 @@
 #include "gmock/gmock-matchers.h"
 #include "gtest/gtest.h"
 #include "lib/api/abilities/ability.h"
+#include "lib/api/common_types.h"
 #include "lib/api/controls.h"
 #include "lib/api/controls_mock.h"
 #include "lib/api/graphics_mock.h"
@@ -74,8 +75,7 @@ TEST_F(LevelDeathTest, CleanUpOrDieOutOfSync) {
       /*type=*/ObjectTypeFactory::MakePlayer(),
       StaticObject::StaticObjectOpts{.is_hit_box_active = false,
                                      .should_draw_hit_box = false},
-      /*hit_box_vertices=*/
-      std::vector<std::pair<float, float>>({{0, 0}, {0, 1}})));
+      FLine{.a = {0, 0}, .b = {0, 1}}));
   const std::unique_ptr<DummyLevel> dummy_level = dummy_builder.Build();
   dummy_level->abilities_.clear();
 
@@ -107,8 +107,7 @@ TEST_F(LevelTest, CleanupOrDie) {
       /*type=*/ObjectTypeFactory::MakePlayer(),
       StaticObject::StaticObjectOpts{.is_hit_box_active = false,
                                      .should_draw_hit_box = false},
-      /*hit_box_vertices=*/
-      std::vector<std::pair<float, float>>({{0, 0}, {0, 1}}));
+      FLine{.a = {0, 0}, .b = {0, 1}});
   StaticObject* static_object_raw = static_object.get();
   std::list<std::unique_ptr<Ability>> abilities;
   abilities.push_back(std::make_unique<MoveAbility>(
@@ -136,14 +135,12 @@ TEST_F(LevelTest, ObjectsAreAdded) {
       /*type=*/ObjectTypeFactory::MakePlayer(),
       StaticObject::StaticObjectOpts{.is_hit_box_active = false,
                                      .should_draw_hit_box = false},
-      /*hit_box_vertices=*/
-      std::vector<std::pair<float, float>>({{0, 0}, {0, 1}})));
+      FLine{.a = {0, 0}, .b = {0, 1}}));
   dummy_builder.AddObject(std::make_unique<StaticObject>(
       /*type=*/ObjectTypeFactory::MakeEnemy(),
       StaticObject::StaticObjectOpts{.is_hit_box_active = false,
                                      .should_draw_hit_box = false},
-      /*hit_box_vertices=*/
-      std::vector<std::pair<float, float>>({{0, 0}, {0, 1}})));
+      FLine{.a = {0, 0}, .b = {0, 1}}));
   const std::unique_ptr<DummyLevel> dummy_level = dummy_builder.Build();
 
   ASSERT_EQ(dummy_level->objects_.size(), 2);
@@ -169,8 +166,7 @@ TEST_F(LevelTest, ObjectsAndAbilitiesAreAdded) {
           /*type=*/ObjectTypeFactory::MakePlayer(),
           StaticObject::StaticObjectOpts{.is_hit_box_active = false,
                                          .should_draw_hit_box = false},
-          /*hit_box_vertices=*/
-          std::vector<std::pair<float, float>>({{0, 0}, {0, 1}})),
+          FLine{.a = {0, 0}, .b = {0, 0}}),
       std::move(abilities));
   const std::unique_ptr<DummyLevel> dummy_level = dummy_builder.Build();
 
@@ -259,9 +255,7 @@ TEST_F(LevelTest, DrawsNoScreenEdgeObjects) {
       /*type=*/ObjectTypeFactory::MakePlayer(),
       StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                      .should_draw_hit_box = false},
-      /*hit_box_vertices=*/
-      std::vector<std::pair<float, float>>(
-          {{-1, 50}, {-1, 49}, {1, 50}, {1, 49}}));
+      FRectangle{.top_left = {-1, 49}, .width = 2, .height = 1});
 
   EXPECT_TRUE(dummy_level->ShouldDraw(object));
 }
@@ -294,9 +288,7 @@ TEST_F(LevelTest, DrawsFullyInsideScreenOnlyHitBox) {
       /*type=*/ObjectTypeFactory::MakePlayer(),
       StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                      .should_draw_hit_box = false},
-      /*hit_box_vertices=*/
-      std::vector<std::pair<float, float>>(
-          {{5, 50}, {5, 49}, {90, 50}, {90, 49}}));
+      FRectangle{.top_left = {5, 49}, .width = 85, .height = 1});
 
   EXPECT_TRUE(dummy_level->ShouldDraw(object));
 }
@@ -329,10 +321,7 @@ TEST_F(LevelTest, DrawsFullyInsideScreen) {
       /*type=*/ObjectTypeFactory::MakePlayer(),
       StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                      .should_draw_hit_box = false},
-      /*hit_box_vertices=*/
-      std::vector<std::pair<float, float>>(
-          {{5, 50}, {5, 49}, {90, 50}, {90, 49}}),
-      MakeSprite());
+      FRectangle{.top_left = {5, 49}, .width = 85, .height = 1}, MakeSprite());
 
   EXPECT_TRUE(dummy_level->ShouldDraw(object));
 }
@@ -367,9 +356,7 @@ TEST_F(LevelTest, DrawsPartiallyOutsideScreenOnlyHitBox) {
         /*type=*/ObjectTypeFactory::MakePlayer(),
         StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                        .should_draw_hit_box = false},
-        /*hit_box_vertices=*/
-        std::vector<std::pair<float, float>>(
-            {{-1, 50}, {-1, 49}, {1, 50}, {1, 49}}));
+        FRectangle{.top_left = {-1, 49}, .width = 2, .height = 1});
     EXPECT_TRUE(dummy_level->ShouldDraw(object_left));
   }
 
@@ -378,9 +365,7 @@ TEST_F(LevelTest, DrawsPartiallyOutsideScreenOnlyHitBox) {
         /*type=*/ObjectTypeFactory::MakePlayer(),
         StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                        .should_draw_hit_box = false},
-        /*hit_box_vertices=*/
-        std::vector<std::pair<float, float>>(
-            {{190, 50}, {190, 49}, {400, 50}, {400, 49}}));
+        FRectangle{.top_left = {150, 49}, .width = 210, .height = 1});
 
     EXPECT_TRUE(dummy_level->ShouldDraw(object_right));
   }
@@ -390,9 +375,7 @@ TEST_F(LevelTest, DrawsPartiallyOutsideScreenOnlyHitBox) {
         /*type=*/ObjectTypeFactory::MakePlayer(),
         StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                        .should_draw_hit_box = false},
-        /*hit_box_vertices=*/
-        std::vector<std::pair<float, float>>(
-            {{3, 5}, {13, 5}, {3, -1}, {13, -1}}));
+        FRectangle{.top_left = {3, -1}, .width = 10, .height = 6});
 
     EXPECT_TRUE(dummy_level->ShouldDraw(object_top));
   }
@@ -402,9 +385,7 @@ TEST_F(LevelTest, DrawsPartiallyOutsideScreenOnlyHitBox) {
         /*type=*/ObjectTypeFactory::MakePlayer(),
         StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                        .should_draw_hit_box = false},
-        /*hit_box_vertices=*/
-        std::vector<std::pair<float, float>>(
-            {{3, 90}, {13, 90}, {3, 200}, {13, 200}}));
+        FRectangle{.top_left = {3, 90}, .width = 10, .height = 110});
 
     EXPECT_TRUE(dummy_level->ShouldDraw(object_bottom));
   }
@@ -440,9 +421,7 @@ TEST_F(LevelTest, DrawsPartiallyOutsideScreen) {
         /*type=*/ObjectTypeFactory::MakePlayer(),
         StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                        .should_draw_hit_box = false},
-        /*hit_box_vertices=*/
-        std::vector<std::pair<float, float>>(
-            {{-2, 50}, {-2, 49}, {-1, 50}, {-1, 49}}),
+        FRectangle{.top_left = {-2, 49}, .width = 1, .height = 1},
         MakeSprite());
     EXPECT_TRUE(dummy_level->ShouldDraw(object_left));
   }
@@ -452,9 +431,7 @@ TEST_F(LevelTest, DrawsPartiallyOutsideScreen) {
         /*type=*/ObjectTypeFactory::MakePlayer(),
         StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                        .should_draw_hit_box = false},
-        /*hit_box_vertices=*/
-        std::vector<std::pair<float, float>>(
-            {{201, 50}, {201, 49}, {202, 50}, {202, 49}}),
+        FRectangle{.top_left = {201, 49}, .width = 1, .height = 1},
         MakeSprite());
 
     EXPECT_TRUE(dummy_level->ShouldDraw(object_right));
@@ -465,9 +442,7 @@ TEST_F(LevelTest, DrawsPartiallyOutsideScreen) {
         /*type=*/ObjectTypeFactory::MakePlayer(),
         StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                        .should_draw_hit_box = false},
-        /*hit_box_vertices=*/
-        std::vector<std::pair<float, float>>(
-            {{3, -2}, {13, -2}, {3, -1}, {13, -1}}),
+        FRectangle{.top_left = {3, -2}, .width = 10, .height = 1},
         MakeSprite());
 
     EXPECT_TRUE(dummy_level->ShouldDraw(object_top));
@@ -478,9 +453,7 @@ TEST_F(LevelTest, DrawsPartiallyOutsideScreen) {
         /*type=*/ObjectTypeFactory::MakePlayer(),
         StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                        .should_draw_hit_box = false},
-        /*hit_box_vertices=*/
-        std::vector<std::pair<float, float>>(
-            {{3, 101}, {13, 101}, {3, 102}, {13, 102}}),
+        FRectangle{.top_left = {3, 101}, .width = 10, .height = 1},
         MakeSprite());
 
     EXPECT_TRUE(dummy_level->ShouldDraw(object_bottom));
@@ -517,9 +490,7 @@ TEST_F(LevelTest, DoesNotDrawOutsideScreenOnlyHitBox) {
         /*type=*/ObjectTypeFactory::MakePlayer(),
         StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                        .should_draw_hit_box = false},
-        /*hit_box_vertices=*/
-        std::vector<std::pair<float, float>>(
-            {{-100, 50}, {-100, 49}, {-1, 50}, {-1, 49}}));
+        FRectangle{.top_left = {-100, 49}, .width = 99, .height = 1});
     EXPECT_FALSE(dummy_level->ShouldDraw(object_left));
   }
 
@@ -528,9 +499,7 @@ TEST_F(LevelTest, DoesNotDrawOutsideScreenOnlyHitBox) {
         /*type=*/ObjectTypeFactory::MakePlayer(),
         StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                        .should_draw_hit_box = false},
-        /*hit_box_vertices=*/
-        std::vector<std::pair<float, float>>(
-            {{210, 50}, {210, 49}, {400, 50}, {400, 49}}));
+        FRectangle{.top_left = {210, 49}, .width = 190, .height = 1});
 
     EXPECT_FALSE(dummy_level->ShouldDraw(object_right));
   }
@@ -540,9 +509,7 @@ TEST_F(LevelTest, DoesNotDrawOutsideScreenOnlyHitBox) {
         /*type=*/ObjectTypeFactory::MakePlayer(),
         StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                        .should_draw_hit_box = false},
-        /*hit_box_vertices=*/
-        std::vector<std::pair<float, float>>(
-            {{3, -1}, {13, -1}, {3, -100}, {13, -100}}));
+        FRectangle{.top_left = {3, -100}, .width = 10, .height = 99});
 
     EXPECT_FALSE(dummy_level->ShouldDraw(object_top));
   }
@@ -552,9 +519,7 @@ TEST_F(LevelTest, DoesNotDrawOutsideScreenOnlyHitBox) {
         /*type=*/ObjectTypeFactory::MakePlayer(),
         StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                        .should_draw_hit_box = false},
-        /*hit_box_vertices=*/
-        std::vector<std::pair<float, float>>(
-            {{3, 120}, {13, 120}, {3, 200}, {13, 200}}));
+        FRectangle{.top_left = {3, 120}, .width = 10, .height = 80});
 
     EXPECT_FALSE(dummy_level->ShouldDraw(object_bottom));
   }
@@ -590,9 +555,7 @@ TEST_F(LevelTest, DoesNotDrawOutsideScreen) {
         /*type=*/ObjectTypeFactory::MakePlayer(),
         StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                        .should_draw_hit_box = false},
-        /*hit_box_vertices=*/
-        std::vector<std::pair<float, float>>(
-            {{-100, 50}, {-100, 49}, {-50, 50}, {-50, 49}}),
+        FRectangle{.top_left = {-100, 49}, .width = 50, .height = 1},
         MakeSprite());
     EXPECT_FALSE(dummy_level->ShouldDraw(object_left));
   }
@@ -602,9 +565,7 @@ TEST_F(LevelTest, DoesNotDrawOutsideScreen) {
         /*type=*/ObjectTypeFactory::MakePlayer(),
         StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                        .should_draw_hit_box = false},
-        /*hit_box_vertices=*/
-        std::vector<std::pair<float, float>>(
-            {{210, 50}, {210, 49}, {400, 50}, {400, 49}}),
+        FRectangle{.top_left = {210, 49}, .width = 190, .height = 1},
         MakeSprite());
 
     EXPECT_FALSE(dummy_level->ShouldDraw(object_right));
@@ -615,9 +576,7 @@ TEST_F(LevelTest, DoesNotDrawOutsideScreen) {
         /*type=*/ObjectTypeFactory::MakePlayer(),
         StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                        .should_draw_hit_box = false},
-        /*hit_box_vertices=*/
-        std::vector<std::pair<float, float>>(
-            {{3, -1}, {13, -1}, {3, -100}, {13, -100}}),
+        FRectangle{.top_left = {3, -100}, .width = 10, .height = 99},
         MakeSprite());
 
     EXPECT_FALSE(dummy_level->ShouldDraw(object_top));
@@ -628,9 +587,7 @@ TEST_F(LevelTest, DoesNotDrawOutsideScreen) {
         /*type=*/ObjectTypeFactory::MakePlayer(),
         StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                        .should_draw_hit_box = false},
-        /*hit_box_vertices=*/
-        std::vector<std::pair<float, float>>(
-            {{3, 120}, {13, 120}, {3, 200}, {13, 200}}),
+        FRectangle{.top_left = {3, 120}, .width = 10, .height = 80},
         MakeSprite());
 
     EXPECT_FALSE(dummy_level->ShouldDraw(object_bottom));

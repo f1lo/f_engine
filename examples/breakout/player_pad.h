@@ -1,6 +1,7 @@
 #ifndef EXAMPLES_BREAKOUT_PLAYER_PAD_H
 #define EXAMPLES_BREAKOUT_PLAYER_PAD_H
 
+#include "lib/api/common_types.h"
 #include "lib/api/objects/movable_object.h"
 #include "lib/api/objects/object_type.h"
 
@@ -15,18 +16,16 @@ class PlayerPad final : public lib::api::objects::MovableObject {
             const float player_width, const float player_height,
             const lib::api::objects::ObjectType ball_type,
             const MovableObjectOpts& options)
-      : MovableObject(lib::api::objects::ObjectTypeFactory::MakePlayer(),
-                      options,
-                      {{
-                           (screen_width - player_width) / 2.0,
-                           screen_height - kPadOffset,
-                       },
-                       {(screen_width - player_width) / 2.0,
-                        screen_height - kPadOffset - player_height},
-                       {(screen_width + player_width) / 2.0,
-                        screen_height - kPadOffset - player_height},
-                       {(screen_width + player_width) / 2.0,
-                        screen_height - kPadOffset}}),
+      : MovableObject(
+            lib::api::objects::ObjectTypeFactory::MakePlayer(), options,
+            lib::api::FRectangle{
+                .top_left =
+                    {
+                        .x = (screen_width - player_width) / 2.0f,
+                        .y = screen_height - kPadOffset - player_height,
+                    },
+                .width = player_width,
+                .height = player_height}),
         screen_width_(screen_width),
         screen_height_(screen_height),
         player_width_(player_width),

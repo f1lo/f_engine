@@ -6,7 +6,6 @@
 #include "lib/api/common_types.h"
 #include "lib/api/objects/object.h"
 #include "lib/api/objects/object_type.h"
-#include "lib/api/objects/object_utils.h"
 
 namespace lib {
 namespace api {
@@ -50,7 +49,7 @@ ScreenEdgeObject::ScreenEdgeObject(const ObjectType type,
     : Object(type,
              {/*is_hit_box_active*/ true,
               /*should_draw_hitbox=*/should_draw_hit_box},
-             CreateHitBoxOrDie({a, b})) {}
+             FLine({a.ToFPoint(), b.ToFPoint()})) {}
 
 void ScreenEdgeObject::ReAdjustToScreen(const WorldPosition screen_top_left_pos,
                                         const float screen_width,

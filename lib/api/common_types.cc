@@ -5,7 +5,7 @@
 #include "absl/log/check.h"
 #include "absl/strings/substitute.h"
 
-inline constexpr float kEps = 1e-9;
+inline constexpr float kEps = 1e-5;
 
 namespace lib {
 namespace api {
@@ -59,8 +59,12 @@ std::optional<ScreenPosition> ScreenPosition::ToNative(
   return native_position;
 }
 
-ScreenPosition ScreenPosition::ToActual(const ViewPortContext& ctx) {
+ScreenPosition ScreenPosition::ToActual(const ViewPortContext& ctx) const {
   return {x * ctx.scale() + ctx.offset_x(), y * ctx.scale() + ctx.offset_y()};
+}
+
+FPoint ScreenPosition::ToFPoint() const {
+  return {.x = x, .y = y};
 }
 
 bool ScreenPosition::operator==(const ScreenPosition& other) const {
@@ -74,6 +78,10 @@ bool ScreenPosition::operator!=(const ScreenPosition& other) const {
 std::ostream& operator<<(std::ostream& os, const ScreenPosition& pos) {
   os << "ScreenPosition (" << pos.x << ", " << pos.y << ")";
   return os;
+}
+
+FPoint WorldPosition::ToFPoint() const {
+  return {.x = x, .y = y};
 }
 
 bool WorldPosition::operator==(const WorldPosition& other) const {
@@ -100,20 +108,26 @@ std::ostream& operator<<(std::ostream& os, const ColorRGBA& color) {
   return os;
 }
 
+bool FPoint::operator==(const FPoint& other) const {
+  return std::abs(x - other.x) <= kEps && std::abs(y - other.y) <= kEps;
+}
 std::ostream& operator<<(std::ostream& os, const FPoint& point) {
   os << absl::Substitute("FPoint (x: $0, y: $1)", point.x, point.y);
   return os;
 }
+
 std::ostream& operator<<(std::ostream& os, const FLine& line) {
   os << "FLine (a: " << line.a << ", b: " << line.b << ")";
   return os;
 }
+
 std::ostream& operator<<(std::ostream& os, const FRectangle& rectangle) {
   os << "FRectangle (top_left: " << rectangle.top_left
      << ", width: " << rectangle.width << ", height: " << rectangle.height
      << ")";
   return os;
 }
+
 std::ostream& operator<<(std::ostream& os, const FCircle& circle) {
   os << "FCircle (center: " << circle.center << ", radius: " << circle.radius
      << ")";

@@ -23,13 +23,7 @@ class StaticObject : public Object {
   };
 
   StaticObject(
-      ObjectType type, StaticObjectOpts options,
-      const std::vector<std::pair<float, float>>& hit_box_vertices,
-      std::unique_ptr<sprites::SpriteInstance> sprite_instance = nullptr);
-
-  StaticObject(
-      ObjectType type, StaticObjectOpts options,
-      std::pair<float, float> hit_box_center, float hit_box_radius,
+      ObjectType type, StaticObjectOpts options, const HitBoxVariant& hit_box,
       std::unique_ptr<sprites::SpriteInstance> sprite_instance = nullptr);
 
   void Update(const std::list<std::unique_ptr<Object>>& other_objects) override;

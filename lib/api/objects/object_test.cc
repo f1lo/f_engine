@@ -8,7 +8,6 @@
 #include "gtest/gtest.h"
 #include "lib/api/common_types.h"
 #include "lib/api/objects/object_type.h"
-#include "lib/api/objects/object_utils.h"
 #include "lib/internal/hit_box.h"
 
 namespace lib {
@@ -33,26 +32,11 @@ class DummyObject : public Object {
   }
 };
 
-class ObjectTest : public ::testing::Test {};
-
-using ObjectDeathTest = ObjectTest;
-
-TEST(ObjectDeathTest, ObjectCreationFails) {
-  EXPECT_DEATH(
-      DummyObject(
-          /*type=*/ObjectTypeFactory::MakeEnemy(),
-          /*options=*/{.is_hit_box_active = true, .should_draw_hit_box = false},
-          /*hit_box=*/
-          CreateHitBoxOrDie(
-              std::vector<std::pair<float, float>>{{2, 2}, {10, 2}, {10, 8}})),
-      HasSubstr("HitBox::CreateHitBox() failed"));
-}
-
 TEST(ObjectTest, ObjectCreationOk) {
   const DummyObject object = DummyObject(
       /*type=*/ObjectTypeFactory::MakePlayer(),
       /*options=*/{.is_hit_box_active = true, .should_draw_hit_box = false},
-      /*hit_box=*/CreateCircle(/*x=*/1, /*y=*/1, /*radius=*/3));
+      /*hit_box=*/FCircle{.center = {1, 1}, .radius = 3});
 
   EXPECT_TRUE(object.type().IsPlayer());
   EXPECT_EQ(object.center(), WorldPosition(1.0, 1.0));
@@ -64,13 +48,12 @@ TEST(ObjectTest, Collision) {
   const DummyObject circle = DummyObject(
       /*type=*/ObjectTypeFactory::MakePlayer(),
       /*options=*/{.is_hit_box_active = true, .should_draw_hit_box = false},
-      /*hit_box=*/CreateCircle(/*x=*/1, /*y=*/1, /*radius=*/3));
+      /*hit_box=*/FCircle{.center = {1, 1}, .radius = 3});
   const DummyObject rect = DummyObject(
       /*type=*/ObjectTypeFactory::MakeEnemy(),
       /*options=*/{.is_hit_box_active = true, .should_draw_hit_box = false},
       /*hit_box=*/
-      CreateHitBoxOrDie(std::vector<std::pair<float, float>>{
-          {2, 2}, {10, 2}, {10, 8}, {2, 8}}));
+      FRectangle{.top_left = {2, 2}, .width = 8, .height = 6});
 
   EXPECT_TRUE(circle.CollidesWith(rect));
   EXPECT_TRUE(rect.CollidesWith(circle));
@@ -80,13 +63,12 @@ TEST(ObjectTest, NoCollision) {
   const DummyObject circle = DummyObject(
       /*type=*/ObjectTypeFactory::MakePlayer(),
       /*options=*/{.is_hit_box_active = true, .should_draw_hit_box = false},
-      /*hit_box=*/CreateCircle(/*x=*/1, /*y=*/1, /*radius=*/3));
+      /*hit_box=*/FCircle{.center = {1, 1}, .radius = 3});
   const DummyObject rect = DummyObject(
       /*type=*/ObjectTypeFactory::MakeEnemy(),
       /*options=*/{.is_hit_box_active = true, .should_draw_hit_box = false},
       /*hit_box=*/
-      CreateHitBoxOrDie(std::vector<std::pair<float, float>>{
-          {5, 2}, {10, 2}, {10, 8}, {5, 8}}));
+      FRectangle{.top_left = {5, 2}, .width = 5, .height = 6});
 
   EXPECT_FALSE(circle.CollidesWith(rect));
   EXPECT_FALSE(rect.CollidesWith(circle));
@@ -96,13 +78,12 @@ TEST(ObjectTest, HitBoxDisabledNoCollision) {
   const DummyObject circle = DummyObject(
       /*type=*/ObjectTypeFactory::MakePlayer(),
       /*options=*/{.is_hit_box_active = false, .should_draw_hit_box = false},
-      /*hit_box=*/CreateCircle(/*x=*/1, /*y=*/1, /*radius=*/3));
+      /*hit_box=*/FCircle{.center = {1, 1}, .radius = 3});
   const DummyObject rect = DummyObject(
       /*type=*/ObjectTypeFactory::MakeEnemy(),
       /*options=*/{.is_hit_box_active = true, .should_draw_hit_box = false},
       /*hit_box=*/
-      CreateHitBoxOrDie(std::vector<std::pair<float, float>>{
-          {2, 2}, {10, 2}, {10, 8}, {2, 8}}));
+      FRectangle{.top_left = {2, 2}, .width = 8, .height = 6});
 
   EXPECT_FALSE(circle.CollidesWith(rect));
   EXPECT_FALSE(rect.CollidesWith(circle));
@@ -112,13 +93,12 @@ TEST(ObjectTest, ObjectDeletedNoCollision) {
   DummyObject circle = DummyObject(
       /*type=*/ObjectTypeFactory::MakePlayer(),
       /*options=*/{.is_hit_box_active = true, .should_draw_hit_box = false},
-      /*hit_box=*/CreateCircle(/*x=*/1, /*y=*/1, /*radius=*/3));
+      /*hit_box=*/FCircle{.center = {1, 1}, .radius = 3});
   const DummyObject rect = DummyObject(
       /*type=*/ObjectTypeFactory::MakeEnemy(),
       /*options=*/{.is_hit_box_active = true, .should_draw_hit_box = false},
       /*hit_box=*/
-      CreateHitBoxOrDie(std::vector<std::pair<float, float>>{
-          {2, 2}, {10, 2}, {10, 8}, {2, 8}}));
+      FRectangle{.top_left = {2, 2}, .width = 8, .height = 6});
 
   EXPECT_TRUE(circle.CollidesWith(rect));
   EXPECT_TRUE(rect.CollidesWith(circle));
@@ -132,13 +112,12 @@ TEST(ObjectTest, CenterOk) {
       /*type=*/ObjectTypeFactory::MakeEnemy(),
       /*options=*/{.is_hit_box_active = true, .should_draw_hit_box = false},
       /*hit_box=*/
-      CreateHitBoxOrDie(std::vector<std::pair<float, float>>{
-          {2, 2}, {10, 2}, {10, 8}, {2, 8}}));
+      FRectangle{.top_left = {2, 2}, .width = 8, .height = 6});
   const DummyObject line = DummyObject(
       /*type=*/ObjectTypeFactory::MakeEnemy(),
       /*options=*/{.is_hit_box_active = true, .should_draw_hit_box = false},
       /*hit_box=*/
-      CreateHitBoxOrDie(std::vector<std::pair<float, float>>{{0, 0}, {0, 7}}));
+      FLine{{0, 0}, {0, 7}});
 
   EXPECT_EQ(rect.center(), WorldPosition(6.0, 5.0));
   EXPECT_EQ(line.center(), WorldPosition(0.0, 3.5));
@@ -149,12 +128,11 @@ TEST(ObjectTest, ReflectDeletedObjectSameDirection) {
       /*type=*/ObjectTypeFactory::MakeEnemy(),
       /*options=*/{.is_hit_box_active = true, .should_draw_hit_box = false},
       /*hit_box=*/
-      CreateHitBoxOrDie(std::vector<std::pair<float, float>>{
-          {2, 2}, {10, 2}, {10, 8}, {2, 8}}));
+      FRectangle{.top_left = {2, 2}, .width = 8, .height = 6});
   const DummyObject circle = DummyObject(
       /*type=*/ObjectTypeFactory::MakePlayer(),
       /*options=*/{.is_hit_box_active = true, .should_draw_hit_box = false},
-      /*hit_box=*/CreateCircle(/*x=*/1, /*y=*/5, /*radius=*/1));
+      /*hit_box=*/FCircle{.center = {1, 5}, .radius = 1});
   rect.set_deleted(true);
 
   EXPECT_EQ(rect.Reflect(circle, 1, -1), std::make_pair(1.0f, -1.0f));
@@ -165,12 +143,11 @@ TEST(ObjectTest, ReflectHitBoxDisabledSameDirection) {
       /*type=*/ObjectTypeFactory::MakeEnemy(),
       /*options=*/{.is_hit_box_active = false, .should_draw_hit_box = false},
       /*hit_box=*/
-      CreateHitBoxOrDie(std::vector<std::pair<float, float>>{
-          {2, 2}, {10, 2}, {10, 8}, {2, 8}}));
+      FRectangle{.top_left = {2, 2}, .width = 8, .height = 6});
   const DummyObject circle = DummyObject(
       /*type=*/ObjectTypeFactory::MakePlayer(),
       /*options=*/{.is_hit_box_active = true, .should_draw_hit_box = false},
-      /*hit_box=*/CreateCircle(/*x=*/1, /*y=*/5, /*radius=*/1));
+      /*hit_box=*/FCircle{.center = {1, 5}, .radius = 1});
 
   EXPECT_EQ(rect.Reflect(circle, 1, -1), std::make_pair(1.0f, -1.0f));
 }
@@ -180,12 +157,11 @@ TEST(ObjectTest, ReflectOk) {
       /*type=*/ObjectTypeFactory::MakeEnemy(),
       /*options=*/{.is_hit_box_active = true, .should_draw_hit_box = false},
       /*hit_box=*/
-      CreateHitBoxOrDie(std::vector<std::pair<float, float>>{
-          {2, 2}, {10, 2}, {10, 8}, {2, 8}}));
+      FRectangle{.top_left = {2, 2}, .width = 8, .height = 6});
   const DummyObject circle = DummyObject(
       /*type=*/ObjectTypeFactory::MakePlayer(),
       /*options=*/{.is_hit_box_active = true, .should_draw_hit_box = false},
-      /*hit_box=*/CreateCircle(/*x=*/1, /*y=*/5, /*radius=*/1));
+      /*hit_box=*/FCircle{.center = {1, 5}, .radius = 1});
 
   EXPECT_EQ(rect.Reflect(circle, 1, -1), std::make_pair(-1.0f, -1.0f));
 }
@@ -195,8 +171,7 @@ TEST(ObjectTest, YBase) {
       /*type=*/ObjectTypeFactory::MakeEnemy(),
       /*options=*/{.is_hit_box_active = true, .should_draw_hit_box = false},
       /*hit_box=*/
-      CreateHitBoxOrDie(std::vector<std::pair<float, float>>{
-          {2, 2}, {10, 2}, {10, 8}, {2, 8}}));
+      FRectangle{.top_left = {2, 2}, .width = 8, .height = 6});
 
   EXPECT_EQ(rect.YBase(), 5);
 }
@@ -207,8 +182,7 @@ TEST(ObjectTest, UpdateInternalIgnoresSameObject) {
       /*options=*/
       Object::Opts{.is_hit_box_active = true, .should_draw_hit_box = false},
       /*hit_box=*/
-      CreateHitBoxOrDie(std::vector<std::pair<float, float>>{
-          {2, 2}, {10, 2}, {10, 8}, {2, 8}}));
+      FRectangle{.top_left = {2, 2}, .width = 8, .height = 6});
   DummyObject* rect_ptr = rect.get();
   std::list<std::unique_ptr<Object>> same_object;
   same_object.emplace_back(std::move(rect));

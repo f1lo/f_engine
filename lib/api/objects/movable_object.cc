@@ -7,7 +7,6 @@
 #include "absl/container/flat_hash_map.h"
 #include "lib/api/objects/object.h"
 #include "lib/api/objects/object_type.h"
-#include "lib/api/objects/object_utils.h"
 #include "lib/api/sprites/sprite_instance.h"
 #include "lib/internal/geometry/vec.h"
 
@@ -19,24 +18,12 @@ using internal::Vector;
 
 MovableObject::MovableObject(
     const ObjectType type, const MovableObjectOpts& options,
-    const std::vector<std::pair<float, float>>& hit_box_vertices,
+    const HitBoxVariant& hit_box,
     std::unique_ptr<sprites::SpriteInstance> sprite_instance)
     : Object(type,
              {.is_hit_box_active = options.is_hit_box_active,
               .should_draw_hit_box = options.should_draw_hit_box},
-             CreateHitBoxOrDie(hit_box_vertices), std::move(sprite_instance)),
-      velocity_(options.velocity) {}
-
-MovableObject::MovableObject(
-    const ObjectType type, const MovableObjectOpts& options,
-    const std::pair<float, float> hit_box_center, const float hit_box_radius,
-    std::unique_ptr<sprites::SpriteInstance> sprite_instance)
-    : Object(type,
-             {.is_hit_box_active = options.is_hit_box_active,
-              .should_draw_hit_box = options.should_draw_hit_box},
-             CreateCircle(hit_box_center.first, hit_box_center.second,
-                          hit_box_radius),
-             std::move(sprite_instance)),
+             hit_box, std::move(sprite_instance)),
       velocity_(options.velocity) {}
 
 void MovableObject::SetDirectionGlobal(const float x, const float y) {

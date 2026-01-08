@@ -1,6 +1,7 @@
 #ifndef EXAMPLES_BREAKOUT_BALL_H
 #define EXAMPLES_BREAKOUT_BALL_H
 
+#include "lib/api/common_types.h"
 #include "lib/api/objects/movable_object.h"
 #include "lib/api/objects/object_type.h"
 
@@ -9,9 +10,8 @@ namespace breakout {
 class Ball : public lib::api::objects::MovableObject {
  public:
   Ball(const lib::api::objects::ObjectType type,
-       const MovableObjectOpts& options,
-       const std::pair<float, float> hit_box_center, const float hit_box_radius)
-      : MovableObject(type, options, hit_box_center, hit_box_radius),
+       const MovableObjectOpts& options, lib::api::FCircle circle)
+      : MovableObject(type, options, circle),
         ball_starting_velocity_(options.velocity),
         has_touched_bottom_(false) {}
 

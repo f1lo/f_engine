@@ -52,6 +52,7 @@ cc_test(
     deps = [
         ":graphics_mock",
         ":level",
+        "//lib/api:common_types",
         "//lib/api:controls_mock",
         "//lib/api/abilities:ability",
         "//lib/api/objects:object_type",
@@ -84,6 +85,7 @@ cc_test(
     deps = [
         ":level",
         ":title_screen_level",
+        "//lib/api:common_types",
         "//lib/api/abilities:ability",
         "//lib/api/objects:object_type",
         "//lib/api/objects:static_object",

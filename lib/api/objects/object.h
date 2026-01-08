@@ -14,6 +14,8 @@ namespace lib {
 namespace api {
 namespace objects {
 
+typedef std::variant<FPoint, FLine, FRectangle, FCircle> HitBoxVariant;
+
 class Object {
  public:
   struct Opts {
@@ -21,9 +23,8 @@ class Object {
     bool should_draw_hit_box;
   };
 
-  explicit Object(
-      ObjectType type, const Opts& options, internal::HitBox hit_box,
-      std::unique_ptr<sprites::SpriteInstance> sprite_instance = nullptr);
+  Object(ObjectType type, const Opts& options, const HitBoxVariant& hit_box,
+         std::unique_ptr<sprites::SpriteInstance> sprite_instance = nullptr);
 
   virtual ~Object() = default;
 
@@ -65,11 +66,11 @@ class Object {
 
  private:
   ObjectType type_;
-  internal::HitBox hit_box_;
   bool deleted_;
   bool clicked_;
   const bool is_hit_box_active_;
   const bool should_draw_hit_box_;
+  internal::HitBox hit_box_;
   std::unique_ptr<sprites::SpriteInstance> active_sprite_instance_;
 };
 

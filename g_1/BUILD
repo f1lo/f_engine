@@ -23,9 +23,9 @@ cc_library(
     hdrs = ["levels.h"],
     deps = [
         "//g_1:opening_level",
+        "//lib/api:common_types",
         "//lib/api:controls",
         "//lib/api:level",
-        "//lib/api:common_types",
         "//lib/api:title_screen_level",
         "//lib/api/abilities:ability",
         "//lib/api/abilities:move_with_cursor_ability",

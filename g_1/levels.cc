@@ -47,6 +47,7 @@ namespace {
 
 using lib::api::ColorRGBA;
 using lib::api::Controls;
+using lib::api::FRectangle;
 using lib::api::kKeyA;
 using lib::api::kKeyD;
 using lib::api::kKeyS;
@@ -82,12 +83,9 @@ std::unique_ptr<Player> MakePlayer(SpriteFactory& sprite_factory,
                                        .should_draw_hit_box = debug_mode,
                                        .attach_camera = true,
                                        .velocity = kPlayerSpeed},
-      /*hit_box_vertices=*/
-      std::vector<std::pair<float, float>>(
-          {{kPlayerX, kPlayerY},
-           {kPlayerX, kPlayerY + kPlayerHeight},
-           {kPlayerX + kPlayerWidth, kPlayerY},
-           {kPlayerX + kPlayerWidth, kPlayerY + kPlayerHeight}}),
+      FRectangle{.top_left = {kPlayerX, kPlayerY},
+                 .width = kPlayerWidth,
+                 .height = kPlayerHeight},
       std::move(player_instance));
 }
 
@@ -140,27 +138,21 @@ std::vector<std::unique_ptr<StaticObject>> MakeStaticObjects(
       /*type=*/ObjectTypeFactory::MakeButton(),
       StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                      .should_draw_hit_box = debug_mode},
-      /*hit_box_vertices=*/
-      std::vector<std::pair<float, float>>(
-          {{700, -300}, {700, -100}, {800, -100}, {800, -300}}),
+      FRectangle{.top_left = {700, -300}, .width = 100, .height = 200},
       std::move(tree_1)));
 
   static_objects.push_back(std::make_unique<StaticObject>(
       /*type=*/ObjectTypeFactory::MakeButton(),
       StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                      .should_draw_hit_box = debug_mode},
-      /*hit_box_vertices=*/
-      std::vector<std::pair<float, float>>(
-          {{500, -300}, {500, -100}, {600, -100}, {600, -300}}),
+      FRectangle{.top_left = {500, -300}, .width = 100, .height = 200},
       std::move(tree_2)));
 
   static_objects.push_back(std::make_unique<StaticObject>(
       /*type=*/ObjectTypeFactory::MakeButton(),
       StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                      .should_draw_hit_box = debug_mode},
-      /*hit_box_vertices=*/
-      std::vector<std::pair<float, float>>(
-          {{200, 200}, {200, 0}, {300, 0}, {300, 200}}),
+      FRectangle{.top_left = {200, 0}, .width = 100, .height = 200},
       std::move(tree_3)));
   return static_objects;
 }

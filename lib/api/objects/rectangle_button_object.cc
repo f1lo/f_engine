@@ -43,10 +43,7 @@ RectangleButtonObject::RectangleButtonObject(
     const RectangleButtonObjectOpts& options)
     : StaticObject(type,
                    {.is_hit_box_active = true, .should_draw_hit_box = false},
-                   {{top_left.x, top_left.y},
-                    {top_left.x + width, top_left.y},
-                    {top_left.x, top_left.y + height},
-                    {top_left.x + width, top_left.y + height}}),
+                   FRectangle{top_left.ToFPoint(), width, height}),
       text_(text),
       has_round_corners_(options.has_round_corners),
       border_thickness_(options.border_thickness),

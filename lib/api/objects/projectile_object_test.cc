@@ -2,6 +2,7 @@
 
 #include "gmock/gmock-matchers.h"
 #include "gtest/gtest.h"
+#include "lib/api/common_types.h"
 #include "lib/api/objects/object.h"
 #include "lib/api/objects/object_type.h"
 #include "lib/api/objects/static_object.h"
@@ -16,15 +17,14 @@ TEST(ProjectileObjectTest, OnCollisionCallbackDespawns) {
       StaticObject(ObjectTypeFactory::MakePlayer(),
                    StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                                   .should_draw_hit_box = false},
-                   /*hit_box_center=*/std::make_pair(1, 1),
-                   /*hit_box_radius=*/2);
+                   FCircle{.center = {1, 1}, .radius = 2});
   ProjectileObject projectile = ProjectileObject(
       ObjectTypeFactory::MakeProjectilePlayer(),
       ProjectileObject::ProjectileObjectOpts{
           .should_draw_hit_box = false,
           .despawn_outside_screen_area = true,
           .velocity = 1,
-          .hit_box_center = std::make_pair(1, 1),
+          .hit_box_center = {.x = 1, .y = 1},
           .hit_box_radius = 3,
           .despawn_on_colliding_with_these_objects =
               absl::flat_hash_set<ObjectType>{ObjectTypeFactory::MakePlayer()},
@@ -42,14 +42,14 @@ TEST(ProjectileObjectTest, OnCollisionCallbackBottomScreenDespawns) {
       StaticObject(ObjectTypeFactory::MakeScreenBottom(),
                    StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                                   .should_draw_hit_box = false},
-                   std::vector<std::pair<float, float>>{{0, 0}, {10, 0}});
+                   FLine{.a = {0, 0}, .b = {10, 0}});
   ProjectileObject projectile = ProjectileObject(
       ObjectTypeFactory::MakeProjectilePlayer(),
       ProjectileObject::ProjectileObjectOpts{
           .should_draw_hit_box = false,
           .despawn_outside_screen_area = true,
           .velocity = 1,
-          .hit_box_center = std::make_pair(5, 0),
+          .hit_box_center = {.x = 5, .y = 0},
           .hit_box_radius = 3,
           .despawn_on_colliding_with_these_objects =
               absl::flat_hash_set<ObjectType>{},
@@ -67,14 +67,14 @@ TEST(ProjectileObjectTest, OnCollisionCallbackTopScreenDespawns) {
       StaticObject(ObjectTypeFactory::MakeScreenTop(),
                    StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                                   .should_draw_hit_box = false},
-                   std::vector<std::pair<float, float>>{{0, 0}, {10, 0}});
+                   FLine{.a = {0, 0}, .b = {10, 0}});
   ProjectileObject projectile = ProjectileObject(
       ObjectTypeFactory::MakeProjectilePlayer(),
       ProjectileObject::ProjectileObjectOpts{
           .should_draw_hit_box = false,
           .despawn_outside_screen_area = true,
           .velocity = 1,
-          .hit_box_center = std::make_pair(5, 0),
+          .hit_box_center = {.x = 5, .y = 0},
           .hit_box_radius = 3,
           .despawn_on_colliding_with_these_objects =
               absl::flat_hash_set<ObjectType>{},
@@ -92,14 +92,14 @@ TEST(ProjectileObjectTest, OnCollisionCallbackLeftScreenDespawns) {
       StaticObject(ObjectTypeFactory::MakeScreenLeft(),
                    StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                                   .should_draw_hit_box = false},
-                   std::vector<std::pair<float, float>>{{0, 0}, {10, 0}});
+                   FLine{.a = {0, 0}, .b = {10, 0}});
   ProjectileObject projectile = ProjectileObject(
       ObjectTypeFactory::MakeProjectilePlayer(),
       ProjectileObject::ProjectileObjectOpts{
           .should_draw_hit_box = false,
           .despawn_outside_screen_area = true,
           .velocity = 1,
-          .hit_box_center = std::make_pair(5, 0),
+          .hit_box_center = {.x = 5, .y = 0},
           .hit_box_radius = 3,
           .despawn_on_colliding_with_these_objects =
               absl::flat_hash_set<ObjectType>{},
@@ -117,14 +117,14 @@ TEST(ProjectileObjectTest, OnCollisionCallbackRightScreenDespawns) {
       StaticObject(ObjectTypeFactory::MakeScreenRight(),
                    StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                                   .should_draw_hit_box = false},
-                   std::vector<std::pair<float, float>>{{0, 0}, {10, 0}});
+                   FLine{.a = {0, 0}, .b = {10, 0}});
   ProjectileObject projectile = ProjectileObject(
       ObjectTypeFactory::MakeProjectilePlayer(),
       ProjectileObject::ProjectileObjectOpts{
           .should_draw_hit_box = false,
           .despawn_outside_screen_area = true,
           .velocity = 1,
-          .hit_box_center = std::make_pair(5, 0),
+          .hit_box_center = {.x = 5, .y = 0},
           .hit_box_radius = 3,
           .despawn_on_colliding_with_these_objects =
               absl::flat_hash_set<ObjectType>{},
@@ -142,15 +142,14 @@ TEST(ProjectileObjectTest, OnCollisionCallbackReflects) {
       StaticObject(ObjectTypeFactory::MakeEnemy(),
                    StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                                   .should_draw_hit_box = false},
-                   /*hit_box_vertices=*/
-                   std::vector<std::pair<float, float>>{{5, 0}, {5, 10}});
+                   FLine{.a = {5, 0}, .b = {5, 10}});
   ProjectileObject projectile = ProjectileObject(
       ObjectTypeFactory::MakeProjectilePlayer(),
       ProjectileObject::ProjectileObjectOpts{
           .should_draw_hit_box = false,
           .despawn_outside_screen_area = true,
           .velocity = 1,
-          .hit_box_center = std::make_pair(0, 5),
+          .hit_box_center = {.x = 0, .y = 5},
           .hit_box_radius = 3,
           .despawn_on_colliding_with_these_objects =
               absl::flat_hash_set<ObjectType>{},
@@ -170,15 +169,14 @@ TEST(ProjectileObjectTest, OnCollisionCallbackIgnores) {
       StaticObject(ObjectTypeFactory::MakeEnemy(),
                    StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                                   .should_draw_hit_box = false},
-                   /*hit_box_vertices=*/
-                   std::vector<std::pair<float, float>>{{5, 0}, {5, 10}});
+                   FLine{.a = {5, 0}, .b = {5, 10}});
   ProjectileObject projectile = ProjectileObject(
       ObjectTypeFactory::MakeProjectilePlayer(),
       ProjectileObject::ProjectileObjectOpts{
           .should_draw_hit_box = false,
           .despawn_outside_screen_area = true,
           .velocity = 1,
-          .hit_box_center = std::make_pair(0, 5),
+          .hit_box_center = {.x = 0, .y = 5},
           .hit_box_radius = 3,
           .despawn_on_colliding_with_these_objects =
               absl::flat_hash_set<ObjectType>{},

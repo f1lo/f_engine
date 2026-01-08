@@ -30,8 +30,8 @@ std::list<ObjectAndAbilities> MoveWithCursorAbility::Use(
             /*options=*/
             {/*is_hit_box_active=*/true,
              /*should_draw_hit_box=*/false},
-            /*hit_box_vertices=*/
-            {{cursor_last_clicked_pos_->x, cursor_last_clicked_pos_->y}}))) {
+            FPoint{cursor_last_clicked_pos_->x,
+                   cursor_last_clicked_pos_->y}))) {
       cursor_last_clicked_pos_ = std::nullopt;
       movable_user->freeze_until_next_set_direction();
       return {};

@@ -32,18 +32,16 @@ StaticObject MakeSpriteBoundingBox(const Object& object) {
       2.0f;
   const float upper_left_x = object.center().x - half_sprite_width;
   const float upper_left_y = object.center().y - half_sprite_height;
-  const float lower_right_x = object.center().x + half_sprite_width;
-  const float lower_right_y = object.center().y + half_sprite_height;
 
   return StaticObject(
       /*type=*/objects::ObjectTypeFactory::MakeSpriteBoundingBox(),
       StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                      .should_draw_hit_box = false},
-      /*hit_box_vertices=*/
-      std::vector<std::pair<float, float>>({{upper_left_x, upper_left_y},
-                                            {upper_left_x, lower_right_y},
-                                            {lower_right_x, upper_left_y},
-                                            {lower_right_x, lower_right_y}}));
+      FRectangle{.top_left = {upper_left_x, upper_left_y},
+                 .width = static_cast<float>(
+                     object.active_sprite_instance()->SpriteWidth()),
+                 .height = static_cast<float>(
+                     object.active_sprite_instance()->SpriteHeight())});
 }
 
 }  // namespace
@@ -157,8 +155,7 @@ void Level::MaybeClick(const ViewPortContext& ctx) {
       /*type=*/objects::ObjectTypeFactory::MakeMousePointInternaler(),
       /*options=*/
       {.is_hit_box_active = true, .should_draw_hit_box = false},
-      /*hit_box_vertices=*/
-      {{cursor_pos_world->x, cursor_pos_world->y}});
+      cursor_pos_world->ToFPoint());
   for (auto& object : objects_) {
     if (object->CollidesWith(mouse_pointer)) {
       object->set_clicked(true);

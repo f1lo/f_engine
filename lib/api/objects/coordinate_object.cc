@@ -9,7 +9,6 @@
 #include "lib/api/common_types.h"
 #include "lib/api/objects/object.h"
 #include "lib/api/objects/object_type.h"
-#include "lib/api/objects/object_utils.h"
 
 namespace lib {
 namespace api {
@@ -39,7 +38,8 @@ CoordinateObject::CoordinateObject(const ScreenPosition screen_position_start,
     : Object(ObjectTypeFactory::MakeCoordinate(),
              {/*is_hit_box_active*/ false,
               /*should_draw_hitbox=*/true},
-             CreateHitBoxOrDie({screen_position_start, screen_position_end})),
+             FLine{screen_position_start.ToFPoint(),
+                   screen_position_end.ToFPoint()}),
       is_x_axis_(is_x_axis),
       screen_top_left_pos_(WorldPosition{0, 0}),
       screen_width_(screen_width),

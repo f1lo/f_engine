@@ -30,15 +30,14 @@ class MoveWithCursorAbilityTest {};
 
 class DummyMovableObject : public MovableObject {
  public:
-  DummyMovableObject(const float velocity,
-                     const std::pair<float, float> hit_box_center)
+  DummyMovableObject(const float velocity, const FPoint hit_box_center)
       : MovableObject(
             /*type=*/objects::ObjectTypeFactory::MakePlayer(),
             MovableObjectOpts{.is_hit_box_active = false,
                               .should_draw_hit_box = false,
                               .attach_camera = false,
                               .velocity = velocity},
-            hit_box_center, /*hit_box_radius=*/3) {}
+            FCircle{.center = hit_box_center, .radius = 3}) {}
 
   bool OnCollisionCallback(Object& other_object) override { return false; }
 };
@@ -50,7 +49,7 @@ TEST(MoveWithCursorAbilityDeathTest, NonMovableObject) {
       /*type=*/objects::ObjectTypeFactory::MakeEnemy(), /*options=*/
       StaticObject::StaticObjectOpts{.is_hit_box_active = false,
                                      .should_draw_hit_box = false},
-      /*hit_box_center=*/std::make_pair(0, 0), /*hit_box_radius=*/3);
+      FCircle{.center = FPoint{0, 0}, .radius = 3});
   MoveWithCursorAbility ability =
       MoveWithCursorAbility(std::make_unique<ControlsMock>());
 
@@ -67,7 +66,7 @@ TEST(MoveWithCursorAbilityDeathTest, NonMovableObject) {
 
 TEST(MoveWithCursorAbilityTest, MoveNotPressedDirectionNotChanged) {
   DummyMovableObject movable_object = DummyMovableObject(
-      /*velocity=*/5, /*hit_box_center=*/std::make_pair(0, 0));
+      /*velocity=*/5, /*hit_box_center=*/FPoint{0, 0});
   MoveWithCursorAbility ability =
       MoveWithCursorAbility(std::make_unique<ControlsMock>(
           /*is_pressed=*/false, /*is_down=*/false, /*is_primary_pressed=*/false,
@@ -90,7 +89,7 @@ TEST(MoveWithCursorAbilityTest, MoveNotPressedDirectionNotChanged) {
 
 TEST(MoveWithCursorAbilityTest, MovePressedDirectionChanges) {
   DummyMovableObject movable_object = DummyMovableObject(
-      /*velocity=*/5, /*hit_box_center=*/std::make_pair(0, 0));
+      /*velocity=*/5, /*hit_box_center=*/FPoint{0, 0});
   MoveWithCursorAbility ability =
       MoveWithCursorAbility(std::make_unique<ControlsMock>(
           /*is_pressed=*/false, /*is_down=*/false, /*is_primary_pressed=*/false,
@@ -113,7 +112,7 @@ TEST(MoveWithCursorAbilityTest, MovePressedDirectionChanges) {
 TEST(MoveWithCursorAbilityTest,
      MovePressedDirectionChangesDifferentScreenResolution) {
   DummyMovableObject movable_object = DummyMovableObject(
-      /*velocity=*/5, /*hit_box_center=*/std::make_pair(0, 0));
+      /*velocity=*/5, /*hit_box_center=*/FPoint{0, 0});
   MoveWithCursorAbility ability =
       MoveWithCursorAbility(std::make_unique<ControlsMock>(
           /*is_pressed=*/false, /*is_down=*/false, /*is_primary_pressed=*/false,
@@ -134,7 +133,7 @@ TEST(MoveWithCursorAbilityTest,
 
 TEST(MoveWithCursorAbilityTest, MovePressedOutsideScreenDirectionSame) {
   DummyMovableObject movable_object = DummyMovableObject(
-      /*velocity=*/5, /*hit_box_center=*/std::make_pair(0, 0));
+      /*velocity=*/5, /*hit_box_center=*/FPoint{0, 0});
   MoveWithCursorAbility ability =
       MoveWithCursorAbility(std::make_unique<ControlsMock>(
           /*is_pressed=*/false, /*is_down=*/false, /*is_primary_pressed=*/false,

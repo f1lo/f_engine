@@ -2,24 +2,31 @@
 
 #include <list>
 
+#include "lib/api/common_types.h"
 #include "lib/api/objects/object_type.h"
 #include "lib/api/sprites/sprite_instance.h"
+#include "lib/internal/hit_box.h"
 
 namespace lib {
 namespace api {
 namespace objects {
 
+using internal::HitBox;
 using sprites::SpriteInstance;
 
-Object::Object(const ObjectType type, const Opts& options,
-               internal::HitBox hit_box,
-               std::unique_ptr<SpriteInstance> sprite_instance)
+Object::Object(ObjectType type, const Opts& options,
+               const HitBoxVariant& hit_box,
+               std::unique_ptr<sprites::SpriteInstance> sprite_instance)
     : type_(type),
-      hit_box_(std::move(hit_box)),
       deleted_(false),
       clicked_(false),
       is_hit_box_active_(options.is_hit_box_active),
-      should_draw_hit_box_(options.should_draw_hit_box) {
+      should_draw_hit_box_(options.should_draw_hit_box),
+      hit_box_(std::visit(
+          [](auto&& hit_box_variant) -> HitBox {
+            return HitBox::CreateHitBox(hit_box_variant);
+          },
+          hit_box)) {
   if (sprite_instance) {
     active_sprite_instance_ = std::move(sprite_instance);
   }

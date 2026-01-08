@@ -14,89 +14,12 @@
 namespace lib {
 namespace internal {
 
+using api::FCircle;
+using api::FLine;
+using api::FPoint;
+using api::FRectangle;
+
 namespace {
-/*
- * Constructs convex hull from provided vertices.
- * Returns vertices which are necessary to construct a convex hull.
- */
-std::vector<PointInternal> ConstructConvexHull(
-    std::vector<PointInternal>& vertices) {
-  if (vertices.size() == 1)
-    return {vertices[0]};
-
-  std::ranges::sort(vertices,
-                    [](const PointInternal& a, const PointInternal& b) {
-                      return a.x < b.x || (a.x == b.x && a.y < b.y);
-                    });
-  const PointInternal point_1 = vertices[0];
-  const PointInternal point_2 = vertices.back();
-  std::vector<PointInternal> up, down;
-  up.push_back(point_1);
-  down.push_back(point_1);
-  for (size_t i = 1; i < vertices.size(); ++i) {
-    if (i == vertices.size() - 1 || Clockwise(point_1, vertices[i], point_2)) {
-      while (up.size() >= 2 &&
-             !Clockwise(up[up.size() - 2], up[up.size() - 1], vertices[i]))
-        up.pop_back();
-      up.push_back(vertices[i]);
-    }
-    if (i == vertices.size() - 1 ||
-        CounterClockwise(point_1, vertices[i], point_2)) {
-      while (down.size() >= 2 &&
-             !CounterClockwise(down[down.size() - 2], down[down.size() - 1],
-                               vertices[i]))
-        down.pop_back();
-      down.push_back(vertices[i]);
-    }
-  }
-
-  std::vector<PointInternal> hull_vertices;
-  for (const auto& i : up)
-    hull_vertices.push_back(i);
-  for (size_t i = down.size() - 2; i > 0; --i)
-    hull_vertices.push_back(down[i]);
-
-  return hull_vertices;
-}
-
-/*
- * Checks if the given vertices make a rectangle.
- * Assumes clockwise or counterclockwise order.
- * For now only allows rectangles which are aligned to the X, Y axis.
- */
-bool IsAxisAlignedRectangle(const absl::Span<const PointInternal> vertices) {
-  if (vertices.size() != 4) {
-    return false;
-  }
-
-  // Check for dot product between vector of the potential rectangle - if there
-  // is 90-degree angle they should be 0.
-  //              side_2
-  //        |----------------|
-  //        |                |
-  // side_1 |                | side_3
-  //        |----------------|
-  // vertices[0]  side_4
-
-  const LineInternal side_1{vertices[0], vertices[1]};
-  const LineInternal side_4{vertices[0], vertices[3]};
-  const LineInternal side_2{vertices[1], vertices[2]};
-  const LineInternal side_3{vertices[3], vertices[2]};
-
-  // Not a rectangle.
-  if (side_1.MakeVector().DotProduct(side_4.MakeVector()) != 0 ||
-      side_2.MakeVector().DotProduct(side_3.MakeVector()) != 0) {
-    return false;
-  }
-
-  // All the vector coordinates has to be 0 for the rectangle to be axis
-  // aligned.
-  return side_1.MakeVector().IsAxisAligned() &&
-         side_2.MakeVector().IsAxisAligned() &&
-         side_3.MakeVector().IsAxisAligned() &&
-         side_4.MakeVector().IsAxisAligned();
-}
-
 enum class LineOrientation { ON_LINE, DOWN, UP };
 
 LineOrientation PointInternalOrientation(const float x, const float y,
@@ -176,58 +99,29 @@ std::pair<float, float> ReflectFromRectangle(const RectangleInternal& rec,
 
 }  // namespace
 
-absl::StatusOr<HitBox> HitBox::CreateHitBox(
-    std::vector<PointInternal> vertices) {
-  if (vertices.empty()) {
-    return absl::InvalidArgumentError(
-        "empty vertex set while constructing a hit box");
-  }
-  const size_t old_size = vertices.size();
-  const std::vector<PointInternal> normalized_vertices =
-      ConstructConvexHull(vertices);
-  // Some of the vertices have been discarded.
-  if (old_size > normalized_vertices.size()) {
-    return absl::InvalidArgumentError(
-        "hit box construction failed - some of the hit box vertices have been "
-        "discarded. This is due to the fact that vertices where provided in "
-        "the wrong order or do not form a convex hull");
-  }
-  if (old_size < normalized_vertices.size()) {
-    return absl::InternalError(
-        "THIS SHOULD NEVER HAPPEN - vertices added "
-        "while constructing a convex hull.");
-  }
-
-  switch (normalized_vertices.size()) {
-    case 1:
-      return HitBox(std::make_unique<PointInternal>(PointInternal{
-                        normalized_vertices[0].x, normalized_vertices[0].y}),
-                    ShapeType::POINT);
-    case 2:
-      return HitBox(
-          std::make_unique<LineInternal>(LineInternal{
-              PointInternal{normalized_vertices[0].x, normalized_vertices[0].y},
-              PointInternal{normalized_vertices[1].x,
-                            normalized_vertices[1].y}}),
-          ShapeType::LINE);
-    case 4:
-      // Check if it is a rectangle.
-      // TODO(f1lo): Move `IsRectangle` to a rectangle struct and make it a
-      // class.
-      if (IsAxisAlignedRectangle(normalized_vertices)) {
-        return HitBox(
-            std::make_unique<RectangleInternal>(RectangleInternal{
-                {normalized_vertices[1].x, normalized_vertices[1].y},
-                {normalized_vertices[3].x, normalized_vertices[3].y}}),
-            ShapeType::RECTANGLE);
-      }
-      return absl::UnimplementedError(
-          "got 4 vertices but no axis aligned rectangle");
-    default:
-      return absl::UnimplementedError(
-          "only points, lines, rectangles and circles are supported");
-  }
-}  // namespace
+HitBox HitBox::CreateHitBox(api::FPoint point) {
+  return HitBox(
+      std::make_unique<PointInternal>(PointInternal{point.x, point.y}),
+      ShapeType::POINT);
+}
+HitBox HitBox::CreateHitBox(api::FLine line) {
+  return HitBox(std::make_unique<LineInternal>(
+                    LineInternal{PointInternal{line.a.x, line.a.y},
+                                 PointInternal{line.b.x, line.b.y}}),
+                ShapeType::LINE);
+}
+HitBox HitBox::CreateHitBox(api::FRectangle rectangle) {
+  return HitBox(
+      std::make_unique<RectangleInternal>(RectangleInternal{
+          {rectangle.top_left.x, rectangle.top_left.y + rectangle.height},
+          {rectangle.top_left.x + rectangle.width, rectangle.top_left.y}}),
+      ShapeType::RECTANGLE);
+}
+HitBox HitBox::CreateHitBox(api::FCircle circle) {
+  return HitBox(std::make_unique<CircleInternal>(CircleInternal{
+                    {circle.center.x, circle.center.y}, circle.radius}),
+                ShapeType::CIRCLE);
+}
 
 bool HitBox::CollidesWith(const HitBox& other) const {
   switch (other.shape_type_) {
