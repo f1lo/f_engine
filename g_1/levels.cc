@@ -200,8 +200,10 @@ std::unique_ptr<Level> MakeTitleScreenLevel(
       std::make_unique<RectangleButtonObject>(
           /*type=*/
           ObjectTypeFactory::MakeButton(),
-          WorldPosition{.x = kButtonOffsetX, .y = kButtonOffsetY},
-          kButtonLengthX, kButtonLengthY, "Start",
+          FRectangle{.top_left = {kButtonOffsetX, kButtonOffsetY},
+                     .width = kButtonLengthX,
+                     .height = kButtonLengthY},
+          "Start",
           RectangleButtonObject::RectangleButtonObjectOpts{
               .has_round_corners = true,
               .border_thickness = 3.0f,
@@ -213,10 +215,12 @@ std::unique_ptr<Level> MakeTitleScreenLevel(
       std::make_unique<RectangleButtonObject>(
           /*type=*/
           ObjectTypeFactory::MakeButton(),
-          WorldPosition{
-              .x = kButtonOffsetX,
-              .y = kButtonOffsetY + kButtonLengthY + kOffsetBetweenButtons},
-          kButtonLengthX, kButtonLengthY, "Exit",
+          FRectangle{
+              .top_left = {kButtonOffsetX, kButtonOffsetY + kButtonLengthY +
+                                               kOffsetBetweenButtons},
+              .width = kButtonLengthX,
+              .height = kButtonLengthY},
+          "Exit",
           RectangleButtonObject::RectangleButtonObjectOpts{
               .has_round_corners = false,
               .border_thickness = 5.0f,

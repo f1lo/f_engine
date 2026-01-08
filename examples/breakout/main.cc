@@ -89,7 +89,7 @@ int main() {
       .native_screen_height = 1080,
       .screen_width = 2200,
       .screen_height = 1280,
-      .full_screen = false,
+      .full_screen = true,
       .title = "Breakout",
   });
 

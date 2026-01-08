@@ -27,8 +27,8 @@ class RectangleButtonObject : public StaticObject {
     ColorRGBA fill_color;
   };
 
-  RectangleButtonObject(ObjectType type, WorldPosition top_left, float width,
-                        float height, std::string_view text,
+  RectangleButtonObject(ObjectType type, const FRectangle& rectangle,
+                        std::string_view text,
                         const RectangleButtonObjectOpts& options);
 
   void Draw() const override;

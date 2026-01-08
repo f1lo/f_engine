@@ -38,19 +38,20 @@ void RectangleButtonObject::DrawRectangleSharp() const {
 }
 
 RectangleButtonObject::RectangleButtonObject(
-    const ObjectType type, const WorldPosition top_left, const float width,
-    const float height, std::string_view text,
+    const ObjectType type, const FRectangle& rectangle, std::string_view text,
     const RectangleButtonObjectOpts& options)
     : StaticObject(type,
                    {.is_hit_box_active = true, .should_draw_hit_box = false},
-                   FRectangle{top_left.ToFPoint(), width, height}),
+                   rectangle),
       text_(text),
       has_round_corners_(options.has_round_corners),
       border_thickness_(options.border_thickness),
       font_size_(options.font_size),
       spacing_(font_size_ * 0.1f),
-      raylib_rec_(
-          {.x = top_left.x, .y = top_left.y, .width = width, .height = height}),
+      raylib_rec_({.x = rectangle.top_left.x,
+                   .y = rectangle.top_left.y,
+                   .width = rectangle.width,
+                   .height = rectangle.height}),
       raylib_border_color_({.r = options.border_color.r,
                             .g = options.border_color.g,
                             .b = options.border_color.b,
