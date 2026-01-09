@@ -23,7 +23,7 @@ Game::~Game() {
   // * By calling levels_/sprites_ destructor.
   // * By calling CloseWindow().
   levels_.clear();
-  sprite_factory_.sprites_.clear();
+  factories_.sprite.sprites_.clear();
   CloseWindow();
 }
 

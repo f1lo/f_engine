@@ -9,9 +9,9 @@ cc_binary(
         "//examples/breakout:brick",
         "//examples/breakout:level_main",
         "//examples/breakout:player_pad",
+        "//lib/api:common_types",
         "//lib/api:controls",
         "//lib/api:game",
-        "//lib/api:common_types",
         "//lib/api:level",
         "//lib/api/abilities:ability",
         "//lib/api/objects:movable_object",
@@ -66,10 +66,10 @@ cc_library(
     srcs = ["brick.cc"],
     hdrs = ["brick.h"],
     deps = [
+        "//lib/api:common_types",
         "//lib/api/objects:object",
         "//lib/api/objects:object_type",
-        "//lib/api/objects:static_object",        "//lib/api:common_types",
-
+        "//lib/api/objects:static_object",
     ],
 )
 

@@ -9,6 +9,7 @@
 
 #include "absl/container/flat_hash_map.h"
 #include "absl/log/check.h"
+#include "lib/api/factories.h"
 #include "lib/api/level.h"
 #include "lib/api/objects/object.h"
 #include "lib/api/objects/object_type.h"
@@ -74,21 +75,17 @@ class Game {
     levels_[level->id()] = std::move(level);
   }
   void set_debug_mode(const bool debug_mode) { debug_mode_ = debug_mode; }
-  sprites::SpriteFactory& sprite_factory() { return sprite_factory_; }
-  objects::ObjectTypeFactory& object_type_factory() {
-    return object_type_factory_;
-  }
+  Factories& factories() { return factories_; }
 
  private:
   Game(const float native_screen_width, const float native_screen_height)
       : native_screen_width_(native_screen_width),
         native_screen_height_(native_screen_height),
-        sprite_factory_(sprites::SpriteFactory(native_screen_width_,
-                                               native_screen_height_)) {}
+        factories_({sprites::SpriteFactory(native_screen_width_,
+                                           native_screen_height_),
+                    objects::ObjectTypeFactory()}) {}
 
   absl::flat_hash_map<LevelId, std::unique_ptr<Level>> levels_;
-  objects::ObjectTypeFactory object_type_factory_ =
-      objects::ObjectTypeFactory();
   Stats stats_ = Stats();
   bool debug_mode_ = false;
   static inline int screen_width_ = 0;
@@ -96,7 +93,7 @@ class Game {
   const int native_screen_width_;
   const int native_screen_height_;
 
-  sprites::SpriteFactory sprite_factory_;
+  Factories factories_;
 };
 
 }  // namespace api

@@ -63,6 +63,12 @@ class ObjectTypeFactory {
   static ObjectType MakeWorldBorder();
   static ObjectType MakeSpriteBoundingBox();
 
+  ObjectTypeFactory(ObjectTypeFactory&&) = default;
+  ObjectTypeFactory& operator=(ObjectTypeFactory&&) = default;
+  // Delete copy operations.
+  ObjectTypeFactory(const ObjectTypeFactory&) = delete;
+  ObjectTypeFactory& operator=(const ObjectTypeFactory&) = delete;
+
  private:
   friend class lib::api::Game;
   friend class lib::api::TitleScreenLevelTest;

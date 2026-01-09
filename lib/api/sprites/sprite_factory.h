@@ -34,6 +34,12 @@ class SpriteFactory {
       std::string_view resource_path, int frame_count,
       absl::Duration advance_to_next_frame_after);
 
+  SpriteFactory(SpriteFactory&&) = default;
+  SpriteFactory& operator=(SpriteFactory&&) = default;
+  // Delete copy operations.
+  SpriteFactory(const SpriteFactory&) = default;
+  SpriteFactory& operator=(const SpriteFactory&) = default;
+
  private:
   friend class lib::api::Game;
   friend class lib::api::LevelTest;
@@ -44,12 +50,12 @@ class SpriteFactory {
   SpriteFactory(unsigned int id, int texture_width, int texture_height,
                 float native_screen_width, float native_screen_height);
 
-  const bool make_mock_sprites_;
-  const unsigned int id_testing_;
-  const int texture_width_testing_;
-  const int texture_height_testing_;
-  const float native_screen_width_;
-  const float native_screen_height_;
+  bool make_mock_sprites_;
+  unsigned int id_testing_;
+  int texture_width_testing_;
+  int texture_height_testing_;
+  float native_screen_width_;
+  float native_screen_height_;
   absl::flat_hash_map<std::string, std::unique_ptr<Sprite>> sprites_;
 };
 

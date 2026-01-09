@@ -102,7 +102,7 @@ int main() {
   std::unique_ptr<breakout::BallAbility> ability_ball =
       std::make_unique<breakout::BallAbility>(lib::api::kKeySpace);
 
-  const ObjectType ball_type = game.object_type_factory().MakeNewObjectType();
+  const ObjectType ball_type = game.factories().object_type.MakeNewObjectType();
   std::unique_ptr<Object> player = std::make_unique<PlayerPad>(
       game.native_screen_width(), game.native_screen_height(), kPlayerWidth,
       kPlayerHeight, ball_type,

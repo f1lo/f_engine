@@ -25,6 +25,7 @@ cc_library(
         "//g_1:opening_level",
         "//lib/api:common_types",
         "//lib/api:controls",
+        "//lib/api:factories",
         "//lib/api:level",
         "//lib/api:title_screen_level",
         "//lib/api/abilities:ability",

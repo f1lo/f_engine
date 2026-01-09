@@ -9,6 +9,7 @@ cc_library(
     srcs = ["game.cc"],
     hdrs = ["game.h"],
     deps = [
+        ":factories",
         ":stats",
         "//lib/api:level",
         "//lib/api/objects:object",
@@ -186,5 +187,14 @@ cc_library(
     deps = [
         ":controls",
         "//lib/api:common_types",
+    ],
+)
+
+cc_library(
+    name = "factories",
+    hdrs = ["factories.h"],
+    deps = [
+        "//lib/api/objects:object_type",
+        "//lib/api/sprites:sprite_factory",
     ],
 )

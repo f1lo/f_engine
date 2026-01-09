@@ -10,6 +10,7 @@
 #include "lib/api/abilities/projectile_ability.h"
 #include "lib/api/common_types.h"
 #include "lib/api/controls.h"
+#include "lib/api/factories.h"
 #include "lib/api/level.h"
 #include "lib/api/objects/movable_object.h"
 #include "lib/api/objects/object.h"
@@ -47,6 +48,7 @@ namespace {
 
 using lib::api::ColorRGBA;
 using lib::api::Controls;
+using lib::api::Factories;
 using lib::api::FRectangle;
 using lib::api::kKeyA;
 using lib::api::kKeyD;
@@ -159,14 +161,13 @@ std::vector<std::unique_ptr<StaticObject>> MakeStaticObjects(
 
 }  // namespace
 
-std::unique_ptr<Level> MakeOpeningLevel(SpriteFactory& sprite_factory,
-                                        ObjectTypeFactory& object_type_factory,
+std::unique_ptr<Level> MakeOpeningLevel(Factories& factories,
                                         const float native_screen_width,
                                         const float native_screen_height,
                                         const bool debug_mode) {
-  std::unique_ptr<Player> player = MakePlayer(sprite_factory, debug_mode);
+  std::unique_ptr<Player> player = MakePlayer(factories.sprite, debug_mode);
   std::vector<std::unique_ptr<StaticObject>> static_objects =
-      MakeStaticObjects(sprite_factory, debug_mode);
+      MakeStaticObjects(factories.sprite, debug_mode);
 
   OpeningLevelBuilder level_builder = OpeningLevelBuilder(
       lib::api::kFirstLevel, native_screen_width, native_screen_height);
@@ -187,15 +188,15 @@ std::unique_ptr<Level> MakeOpeningLevel(SpriteFactory& sprite_factory,
                                  /*should_draw_hitbox=*/debug_mode);
   level_builder.WithWorldBorderY(kWorldBorderSize,
                                  /*should_draw_hitbox=*/debug_mode);
-  level_builder.AddBackgroundLayer(sprite_factory.MakeBackgroundStaticSprite(
+  level_builder.AddBackgroundLayer(factories.sprite.MakeBackgroundStaticSprite(
       kLayer0, /*parallax_factor=*/0.5));
   return level_builder.Build();
 }
 
-std::unique_ptr<Level> MakeTitleScreenLevel(
-    SpriteFactory& sprite_factory, ObjectTypeFactory& object_type_factory,
-    const float native_screen_width, const float native_screen_height,
-    const bool debug_mode) {
+std::unique_ptr<Level> MakeTitleScreenLevel(Factories& factories,
+                                            const float native_screen_width,
+                                            const float native_screen_height,
+                                            const bool debug_mode) {
   std::unique_ptr<RectangleButtonObject> start_button =
       std::make_unique<RectangleButtonObject>(
           /*type=*/
