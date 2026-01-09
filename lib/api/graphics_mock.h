@@ -20,16 +20,16 @@ class GraphicsMock : public GraphicsInterface {
   void Draw(const Texture2D& texture, const Rectangle& source,
             const Rectangle& dest, const Vector2& origin, float rotation,
             Color tint) override;
-  float NativeScreenWidth() const override;
-  float NativeScreenHeight() const override;
+  [[nodiscard]] float NativeScreenWidth() const override;
+  [[nodiscard]] float NativeScreenHeight() const override;
   void TextureWrap(Texture2D texture, int wrap) const override;
 
-  std::string loaded_texture() const;
-  Rectangle drawn_texture_source() const;
-  Vector2 drawn_texture_origin() const;
-  Texture2D drawn_texture() const;
-  unsigned int unloaded_texture_id() const;
-  float rotation() const;
+  [[nodiscard]] std::string loaded_texture() const;
+  [[nodiscard]] Rectangle drawn_texture_source() const;
+  [[nodiscard]] Vector2 drawn_texture_origin() const;
+  [[nodiscard]] Texture2D drawn_texture() const;
+  [[nodiscard]] unsigned int unloaded_texture_id() const;
+  [[nodiscard]] float rotation() const;
 
  private:
   std::string loaded_texture_;

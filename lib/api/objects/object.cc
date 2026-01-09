@@ -14,7 +14,7 @@ namespace objects {
 using internal::HitBox;
 using sprites::SpriteInstance;
 
-Object::Object(ObjectType type, const Opts& options,
+Object::Object(const ObjectType type, const Opts& options,
                const HitBoxVariant& hit_box,
                std::unique_ptr<sprites::SpriteInstance> sprite_instance)
     : type_(type),

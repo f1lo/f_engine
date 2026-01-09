@@ -12,9 +12,9 @@ namespace text {
 
 namespace {
 
-static const char* kRobotoRegularPath = "lib/api/text/fonts/roboto_regular.ttf";
-static const char* kRobotoItalicPath = "lib/api/text/fonts/roboto_italic.ttf";
-static const char* kRobotoBoldPath = "lib/api/text/fonts/roboto_bold.ttf";
+const char* kRobotoRegularPath = "lib/api/text/fonts/roboto_regular.ttf";
+const char* kRobotoItalicPath = "lib/api/text/fonts/roboto_italic.ttf";
+const char* kRobotoBoldPath = "lib/api/text/fonts/roboto_bold.ttf";
 
 }  // namespace
 

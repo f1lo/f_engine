@@ -2,7 +2,6 @@
 
 #include <list>
 #include <memory>
-#include <vector>
 
 #include "gmock/gmock-matchers.h"
 #include "gtest/gtest.h"

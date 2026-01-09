@@ -33,7 +33,7 @@ class StaticObjectTest : public ::testing::Test {
 };
 
 TEST_F(StaticObjectTest, CircleYBaseWithSprite) {
-  StaticObject static_object = StaticObject(
+  const StaticObject static_object = StaticObject(
       /*type=*/ObjectTypeFactory::MakeEnemy(), /*options=*/
       StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                      .should_draw_hit_box = false},
@@ -44,7 +44,7 @@ TEST_F(StaticObjectTest, CircleYBaseWithSprite) {
 }
 
 TEST_F(StaticObjectTest, RectangleYBaseWithSprite) {
-  StaticObject static_object = StaticObject(
+  const StaticObject static_object = StaticObject(
       /*type=*/ObjectTypeFactory::MakeEnemy(), /*options=*/
       StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                      .should_draw_hit_box = false},

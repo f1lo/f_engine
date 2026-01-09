@@ -139,8 +139,8 @@ void Level::DrawBackgrounds() const {
   }
 }
 
-void Level::MaybeClick(const ViewPortContext& ctx) {
-  // If not clicked or clicked outside of the screen set every object's clicked
+void Level::MaybeClick(const ViewPortContext& ctx) const {
+  // If not clicked or clicked outside the screen set every object's clicked
   // state to false.
   std::optional<const WorldPosition> cursor_pos_world =
       GetMouseWorldPosition(camera_, ctx, *controls_);
@@ -152,7 +152,7 @@ void Level::MaybeClick(const ViewPortContext& ctx) {
   }
 
   const StaticObject mouse_pointer = StaticObject(
-      /*type=*/objects::ObjectTypeFactory::MakeMousePointInternaler(),
+      /*type=*/objects::ObjectTypeFactory::MakeMousePointer(),
       /*options=*/
       {.is_hit_box_active = true, .should_draw_hit_box = false},
       cursor_pos_world->ToFPoint());
@@ -172,11 +172,12 @@ LevelId Level::Run(Stats& stats) {
   // canvas.
   const float screen_width = static_cast<float>(GetScreenWidth());
   const float screen_height = static_cast<float>(GetScreenHeight());
-  ViewPortContext view_port_ctx(screen_width, screen_height,
-                                native_screen_width_, native_screen_height_);
+  const ViewPortContext view_port_ctx(
+      screen_width, screen_height, native_screen_width_, native_screen_height_);
   // `target` is the virtual canvas.
-  RenderTexture2D target =
-      LoadRenderTexture(native_screen_width_, native_screen_height_);
+  const RenderTexture2D target =
+      LoadRenderTexture(static_cast<int>(native_screen_width_),
+                        static_cast<int>(native_screen_height_));
   SetTextureFilter(target.texture, TEXTURE_FILTER_BILINEAR);
   const Rectangle source = {0.0f, 0.0f,
                             static_cast<float>(target.texture.width),

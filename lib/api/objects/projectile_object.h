@@ -15,11 +15,11 @@ namespace objects {
 class ProjectileObject : public MovableObject {
  public:
   struct ProjectileObjectOpts {
-    bool should_draw_hit_box;
-    bool despawn_outside_screen_area;
-    float velocity;
-    FPoint hit_box_center;
-    float hit_box_radius;
+    bool should_draw_hit_box{};
+    bool despawn_outside_screen_area{};
+    float velocity{};
+    FPoint hit_box_center{};
+    float hit_box_radius{};
     absl::flat_hash_set<ObjectType> despawn_on_colliding_with_these_objects;
     absl::flat_hash_set<ObjectType> reflect_on_colliding_with_these_objects;
     absl::flat_hash_set<ObjectType> ignore_these_objects;

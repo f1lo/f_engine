@@ -27,7 +27,7 @@ std::list<ObjectAndAbilities> ProjectileAbility::Use(
     return {};
   }
 
-  last_used_sec_ = GetTime();
+  last_used_sec_ = static_cast<float>(GetTime());
 
   // Always spawn off user.
   projectile_object_opts_.hit_box_center = {user()->center().x,
@@ -62,8 +62,8 @@ std::list<ObjectAndAbilities> ProjectileAbility::Use(
   projectile->SetDirectionGlobal(direction_x, direction_y);
 
   std::list<ObjectAndAbilities> result;
-  result.push_back(ObjectAndAbilities{std::move(projectile),
-                                      std::list<std::unique_ptr<Ability>>{}});
+  result.emplace_back(std::move(projectile),
+                      std::list<std::unique_ptr<Ability>>{});
   return result;
 }
 

@@ -1,12 +1,9 @@
 #ifndef LIB_API_LEVEL_H
 #define LIB_API_LEVEL_H
 
-#include "raylib/include/raylib.h"
-
 #include <list>
 #include <memory>
 #include <optional>
-#include <string_view>
 #include <vector>
 
 #include "absl/container/flat_hash_map.h"
@@ -184,7 +181,7 @@ class Level {
   void UpdateCoordinateAxes() const;
   void Draw() const;
   void DrawBackgrounds() const;
-  void MaybeClick(const ViewPortContext& ctx);
+  void MaybeClick(const ViewPortContext& ctx) const;
 
   LevelId id_;
 

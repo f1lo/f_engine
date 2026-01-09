@@ -17,9 +17,9 @@ class FFont {
   friend class FontFactory;
   friend class Text;
 
-  const Font* GetRaylibFont() const;
+  [[nodiscard]] const Font* GetRaylibFont() const;
 
-  FFont(const std::string_view resource_path);
+  explicit FFont(std::string_view resource_path);
 
   const Font raylib_font_;
 };

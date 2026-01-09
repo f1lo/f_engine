@@ -62,9 +62,10 @@ struct ScreenPosition {
   float x;
   float y;
 
-  std::optional<ScreenPosition> ToNative(const ViewPortContext& ctx);
-  ScreenPosition ToActual(const ViewPortContext& ctx) const;
-  FPoint ToFPoint() const;
+  [[nodiscard]] std::optional<ScreenPosition> ToNative(
+      const ViewPortContext& ctx) const;
+  [[nodiscard]] ScreenPosition ToActual(const ViewPortContext& ctx) const;
+  [[nodiscard]] FPoint ToFPoint() const;
 
   bool operator==(const ScreenPosition& other) const;
   bool operator!=(const ScreenPosition& other) const;
@@ -75,7 +76,7 @@ struct WorldPosition {
   float x;
   float y;
 
-  FPoint ToFPoint() const;
+  [[nodiscard]] FPoint ToFPoint() const;
 
   bool operator==(const WorldPosition& other) const;
   bool operator!=(const WorldPosition& other) const;

@@ -80,11 +80,11 @@ TEST(VecTest, AngleIsCorrect) {
 
 TEST(VecTest, RotateWorks) {
   constexpr Vector v{2, 4};
-  const Vector w{sqrt(20), 0};
-  const Vector opposite{-sqrt(20), 0};
-  const float rotation_angle_clockwise = -atan(2.0);
+  const Vector w{static_cast<float>(sqrt(20)), 0.0f};
+  const Vector opposite{-static_cast<float>(sqrt(20)), 0.0f};
+  const float rotation_angle_clockwise = -atan(2.0f);
   const float rotation_angle_counter_clockwise =
-      atan(2.0) - std::numbers::pi_v<float>;
+      atan(2.0f) - std::numbers::pi_v<float>;
 
   EXPECT_EQ(v.Rotate(rotation_angle_clockwise), w);
   EXPECT_EQ(w.Rotate(-rotation_angle_clockwise), v);

@@ -10,9 +10,11 @@ namespace api {
 namespace text {
 
 FFont::FFont(const std::string_view resource_path)
-    : raylib_font_(LoadFontEx(
-          std::filesystem::path(resource_path).make_preferred().c_str(), 128,
-          NULL, 0)) {}
+    : raylib_font_(LoadFontEx(std::filesystem::path(resource_path)
+                                  .make_preferred()
+                                  .string()
+                                  .c_str(),
+                              128, nullptr, 0)) {}
 
 FFont::~FFont() {
   UnloadFont(raylib_font_);

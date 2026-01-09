@@ -7,8 +7,6 @@
 #include <optional>
 
 #include "absl/log/check.h"
-#include "lib/api/camera.h"
-#include "lib/api/common_types.h"
 #include "lib/api/controls.h"
 #include "lib/api/objects/movable_object.h"
 

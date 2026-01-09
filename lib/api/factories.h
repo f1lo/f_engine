@@ -1,8 +1,6 @@
 #ifndef LIP_API_FACTORIES_H
 #define LIP_API_FACTORIES_H
 
-#include <memory>
-
 #include "lib/api/objects/object_type.h"
 #include "lib/api/sprites/sprite_factory.h"
 #include "lib/api/text/font_factory.h"

@@ -46,18 +46,16 @@ constexpr int kBrickHeight = 30;
 constexpr int kBallVelocity = 9;
 constexpr int kBallRadius = 20;
 
-std::vector<std::unique_ptr<BrickObject>> GenerateBricks(int brick_width,
-                                                         int brick_height,
-                                                         int screen_width,
-                                                         int screen_height,
-                                                         int num_brick_lines) {
+std::vector<std::unique_ptr<BrickObject>> GenerateBricks(
+    const int brick_width, const int brick_height, const int screen_width,
+    const int screen_height, const int num_brick_lines) {
   std::vector<std::unique_ptr<BrickObject>> bricks;
-  int usable_space = screen_width - 2 * kScreenOffset;
-  int brick_offset_close =
+  const int usable_space = screen_width - 2 * kScreenOffset;
+  const int brick_offset_close =
       (usable_space - brick_width * (usable_space / brick_width)) / 2 +
       kScreenOffset;
-  int brick_offset_far = brick_offset_close + brick_width / 2;
-  int right_limit = kScreenOffset + usable_space;
+  const int brick_offset_far = brick_offset_close + brick_width / 2;
+  const int right_limit = kScreenOffset + usable_space;
 
   if (screen_height / 2 < num_brick_lines * brick_height) {
     std::cout << "Too many brick lines!\n";
@@ -65,18 +63,21 @@ std::vector<std::unique_ptr<BrickObject>> GenerateBricks(int brick_width,
   }
 
   for (int i = 0; i < num_brick_lines; i++) {
-    float x = (i % 2 == 0) ? brick_offset_close : brick_offset_far;
-    float y = kScreenOffset + (i + 1) * brick_height;
-    while (x + brick_width <= right_limit) {
+    float x = (i % 2 == 0) ? static_cast<float>(brick_offset_close)
+                           : static_cast<float>(brick_offset_far);
+    const float y = static_cast<float>(kScreenOffset) +
+                    static_cast<float>((i + 1) * brick_height);
+    while (x + static_cast<float>(brick_width) <=
+           static_cast<float>(right_limit)) {
       std::unique_ptr<BrickObject> brick = std::make_unique<BrickObject>(
           ObjectTypeFactory::MakeEnemy(),
           StaticObject::StaticObjectOpts{.is_hit_box_active = true,
                                          .should_draw_hit_box = true},
-          FRectangle{.top_left = {x, y - brick_height},
+          FRectangle{.top_left = {x, y - static_cast<float>(brick_height)},
                      .width = static_cast<float>(brick_width),
                      .height = static_cast<float>(brick_height)});
       bricks.emplace_back(std::move(brick));
-      x += brick_width;
+      x += static_cast<float>(brick_width);
     }
   }
 
@@ -109,7 +110,7 @@ int main() {
       MovableObject::MovableObjectOpts{.is_hit_box_active = true,
                                        .should_draw_hit_box = true,
                                        .attach_camera = false,
-                                       .velocity = 8});
+                                       .velocity = 8.0f});
 
   std::list<std::unique_ptr<Ability>> player_abilities;
   player_abilities.push_back(std::move(ability_move));
@@ -120,11 +121,11 @@ int main() {
                                        .attach_camera = false,
                                        .velocity = kBallVelocity},
 
-      FCircle{
-          .center = {game.native_screen_width() / 2.0f,
-                     game.native_screen_height() - breakout::kPadOffset -
-                         kPlayerHeight - breakout::kBallOffset - kBallRadius},
-          .radius = kBallRadius});
+      FCircle{.center = {static_cast<float>(game.native_screen_width()) / 2.0f,
+                         static_cast<float>(game.native_screen_height()) -
+                             breakout::kPadOffset - kPlayerHeight -
+                             breakout::kBallOffset - kBallRadius},
+              .radius = kBallRadius});
   std::list<std::unique_ptr<Ability>> ball_abilities;
   ball_abilities.push_back(std::move(ability_ball));
   LevelMainBuilder level_builder = LevelMainBuilder(

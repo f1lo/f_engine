@@ -4,7 +4,6 @@
 
 #include <cmath>
 #include <iostream>
-#include <limits>
 
 #include "absl/log/check.h"
 #include "absl/log/log.h"
@@ -39,7 +38,9 @@ void LineInternal::Draw() const {
              /*thick=*/10.0, RED);
 }
 void RectangleInternal::Draw() const {
-  DrawRectangleLines(b.x, b.y, /*width=*/c.x - b.x, /*height*/ a.y - b.y, RED);
+  DrawRectangleLines(static_cast<int>(b.x), static_cast<int>(b.y),
+                     /*width=*/static_cast<int>(c.x - b.x),
+                     /*height*/ static_cast<int>(a.y - b.y), RED);
 }
 void CircleInternal::Draw() const {
   DrawCircleLinesV(Vector2(a.x, a.y), /*radius*/ r, RED);
@@ -56,9 +57,9 @@ Vector LineInternal::Reflect(const Vector& vec) const {
 }
 
 // Move methods.
-void PointInternal::Move(const float x, const float y) {
-  this->x += x;
-  this->y += y;
+void PointInternal::Move(const float xx, const float yy) {
+  this->x += xx;
+  this->y += yy;
 }
 void LineInternal::Move(const float x, const float y) {
   this->a.x += x;

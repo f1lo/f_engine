@@ -1,8 +1,6 @@
 #ifndef LIB_INTERNAL_GEOMETRY_SHAPE_H
 #define LIB_INTERNAL_GEOMETRY_SHAPE_H
 
-#include <cmath>
-#include <memory>
 #include <utility>
 
 #include "absl/log/check.h"
@@ -39,7 +37,7 @@ struct PointInternal final : Shape {
       const RectangleInternal& rectangle) const override;
   [[nodiscard]] bool Collides(const CircleInternal& circle) const override;
   void Draw() const override;
-  void Move(float x, float y) override;
+  void Move(float xx, float yy) override;
 
   [[nodiscard]] float center_x() const override { return x; }
   [[nodiscard]] float center_y() const override { return y; }
@@ -72,10 +70,10 @@ struct LineInternal final : Shape {
   void Move(float x, float y) override;
 
   [[nodiscard]] float center_x() const override {
-    return (this->a.x + this->b.x) / 2.0;
+    return (this->a.x + this->b.x) / 2.0f;
   }
   [[nodiscard]] float center_y() const override {
-    return (this->a.y + this->b.y) / 2.0;
+    return (this->a.y + this->b.y) / 2.0f;
   }
 
   LineInternal(const PointInternal& a, const PointInternal& b) : a(a), b(b) {
@@ -108,8 +106,8 @@ struct RectangleInternal final : Shape {
   void Draw() const override;
   void Move(float x, float y) override;
 
-  [[nodiscard]] float center_x() const override { return (a.x + c.x) / 2.0; }
-  [[nodiscard]] float center_y() const override { return (a.y + c.y) / 2.0; }
+  [[nodiscard]] float center_x() const override { return (a.x + c.x) / 2.0f; }
+  [[nodiscard]] float center_y() const override { return (a.y + c.y) / 2.0f; }
 
   RectangleInternal(const PointInternal& bottom_left,
                     const PointInternal& top_right)

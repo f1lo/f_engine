@@ -14,7 +14,7 @@ namespace text {
 class Text {
 
  public:
-  Text(const FFont* f_font, const std::string_view text, ColorRGBA color,
+  Text(const FFont* f_font, std::string_view text, ColorRGBA color,
        float spacing, float font_size);
 
   void Draw(FPoint top_left) const;

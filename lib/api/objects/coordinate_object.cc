@@ -57,8 +57,10 @@ void CoordinateObject::DrawX() const {
     DrawText(
         std::to_string(static_cast<int>(screen_top_left_pos_.y + increment))
             .c_str(),
-        /*posX=*/screen_top_left_pos_.x - kAxisOffset + kNumbersOffsetY,
-        /*posY=*/screen_top_left_pos_.y + increment,
+        /*posX=*/
+        static_cast<int>(screen_top_left_pos_.x - kAxisOffset +
+                         kNumbersOffsetY),
+        /*posY=*/static_cast<int>(screen_top_left_pos_.y + increment),
         /*fontSize=*/kFontSize,
         /*color=*/BLACK);
     if (increment != 0) {
@@ -79,9 +81,12 @@ void CoordinateObject::DrawY() const {
     DrawText(
         std::to_string(static_cast<int>(screen_top_left_pos_.x + increment))
             .c_str(),
-        /*posX=*/screen_top_left_pos_.x + increment,
-        /*posY=*/screen_top_left_pos_.y - kAxisOffset + kNumbersOffsetX,
-        /*fontSize=*/kFontSize,
+        /*posX=*/static_cast<int>(screen_top_left_pos_.x + increment),
+        /*posY=*/
+        static_cast<int>(screen_top_left_pos_.y - kAxisOffset +
+                         kNumbersOffsetX),
+        /*fontSize=*/
+        kFontSize,
         /*color=*/BLACK);
     if (increment != 0) {
       DrawLineEx(

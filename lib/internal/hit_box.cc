@@ -1,14 +1,11 @@
 #include "lib/internal/hit_box.h"
 
-#include <algorithm>
-#include <cmath>
 #include <memory>
 #include <vector>
 
 #include "absl/log/check.h"
 #include "absl/log/log.h"
 #include "absl/status/statusor.h"
-#include "absl/types/span.h"
 #include "geometry/shape.h"
 
 namespace lib {
@@ -32,11 +29,11 @@ LineOrientation PointInternalOrientation(const float x, const float y,
 }
 
 std::pair<float, float> Build45DegreeLine(const float x, const float y) {
-  return {-1, x + y};
+  return {-1.0f, x + y};
 }
 
 std::pair<float, float> Build135DegreeLine(const float x, const float y) {
-  return {1, y - x};
+  return {1.0f, y - x};
 }
 
 std::pair<float, float> ReflectFromRectangle(const RectangleInternal& rec,
@@ -99,28 +96,28 @@ std::pair<float, float> ReflectFromRectangle(const RectangleInternal& rec,
 
 }  // namespace
 
-HitBox HitBox::CreateHitBox(api::FPoint point) {
-  return HitBox(
+HitBox HitBox::CreateHitBox(const FPoint point) {
+  return HitBox{
       std::make_unique<PointInternal>(PointInternal{point.x, point.y}),
-      ShapeType::POINT);
+      ShapeType::POINT};
 }
-HitBox HitBox::CreateHitBox(api::FLine line) {
-  return HitBox(std::make_unique<LineInternal>(
+HitBox HitBox::CreateHitBox(const FLine line) {
+  return HitBox{std::make_unique<LineInternal>(
                     LineInternal{PointInternal{line.a.x, line.a.y},
                                  PointInternal{line.b.x, line.b.y}}),
-                ShapeType::LINE);
+                ShapeType::LINE};
 }
-HitBox HitBox::CreateHitBox(api::FRectangle rectangle) {
-  return HitBox(
+HitBox HitBox::CreateHitBox(const FRectangle rectangle) {
+  return HitBox{
       std::make_unique<RectangleInternal>(RectangleInternal{
           {rectangle.top_left.x, rectangle.top_left.y + rectangle.height},
           {rectangle.top_left.x + rectangle.width, rectangle.top_left.y}}),
-      ShapeType::RECTANGLE);
+      ShapeType::RECTANGLE};
 }
-HitBox HitBox::CreateHitBox(api::FCircle circle) {
-  return HitBox(std::make_unique<CircleInternal>(CircleInternal{
+HitBox HitBox::CreateHitBox(const FCircle circle) {
+  return HitBox{std::make_unique<CircleInternal>(CircleInternal{
                     {circle.center.x, circle.center.y}, circle.radius}),
-                ShapeType::CIRCLE);
+                ShapeType::CIRCLE};
 }
 
 bool HitBox::CollidesWith(const HitBox& other) const {
@@ -154,8 +151,9 @@ std::pair<float, float> HitBox::Reflect(const HitBox& other, const float x,
   const Vector v = {x, y};
   switch (shape_type_) {
     case ShapeType::LINE: {
-      const auto [x, y] = static_cast<LineInternal*>(shape_.get())->Reflect(v);
-      return {x, y};
+      const auto [xx, yy] =
+          static_cast<LineInternal*>(shape_.get())->Reflect(v);
+      return {xx, yy};
     }
     case ShapeType::RECTANGLE:
       return ReflectFromRectangle(

@@ -2,9 +2,7 @@
 
 #include <list>
 #include <memory>
-#include <vector>
 
-#include "absl/container/flat_hash_map.h"
 #include "lib/api/objects/object.h"
 #include "lib/api/objects/object_type.h"
 #include "lib/api/sprites/sprite_instance.h"

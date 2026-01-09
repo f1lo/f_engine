@@ -1,7 +1,6 @@
 #include "lib/api/common_types.h"
 
 #include <algorithm>
-#include <cmath>
 #include "absl/log/check.h"
 #include "absl/strings/substitute.h"
 
@@ -24,8 +23,8 @@ ViewPortContext::ViewPortContext(const float screen_width,
       << "Bad ViewPortContext, scale is 0."
       << "\nscreen_width: " << screen_width
       << "\nscreen_height: " << screen_height
-      << "\native_screen_width: " << native_screen_width
-      << "\native_screen_height: " << native_screen_height;
+      << "\nnative_screen_width: " << native_screen_width
+      << "\nnative_screen_height: " << native_screen_height;
 }
 
 float ViewPortContext::scale() const {
@@ -45,7 +44,7 @@ float ViewPortContext::native_screen_height() const {
 }
 
 std::optional<ScreenPosition> ScreenPosition::ToNative(
-    const ViewPortContext& ctx) {
+    const ViewPortContext& ctx) const {
   ScreenPosition native_position = {(x - ctx.offset_x()) / ctx.scale(),
                                     (y - ctx.offset_y()) / ctx.scale()};
   if (native_position.x < 0.0f ||
@@ -102,9 +101,8 @@ ColorRGBA ColorRGBA::MakeTransparent() {
 }
 
 std::ostream& operator<<(std::ostream& os, const ColorRGBA& color) {
-  os << absl::Substitute("ColorRGBA (r: $0, g: $1, b: $2, a: $3)",
-                         static_cast<int>(color.r), static_cast<int>(color.g),
-                         static_cast<int>(color.b), static_cast<int>(color.a));
+  os << absl::Substitute("ColorRGBA (r: $0, g: $1, b: $2, a: $3)", color.r,
+                         color.g, color.b, color.a);
   return os;
 }
 

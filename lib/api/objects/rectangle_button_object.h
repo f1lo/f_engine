@@ -3,11 +3,6 @@
 
 #include "raylib/include/raylib.h"
 
-#include <memory>
-#include <optional>
-#include <string>
-#include <string_view>
-
 #include "lib/api/common_types.h"
 #include "lib/api/objects/object_type.h"
 #include "lib/api/objects/static_object.h"

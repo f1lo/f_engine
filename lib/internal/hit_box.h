@@ -2,7 +2,6 @@
 #define LIB_INTERNAL_HIT_BOX_H
 
 #include <memory>
-#include <vector>
 
 #include "absl/status/statusor.h"
 #include "geometry/shape.h"
@@ -24,8 +23,8 @@ class HitBox {
   void Draw() const;
   void Move(const float x, const float y) const { shape_->Move(x, y); }
 
-  float center_x() const { return shape_->center_x(); }
-  float center_y() const { return shape_->center_y(); }
+  [[nodiscard]] float center_x() const { return shape_->center_x(); }
+  [[nodiscard]] float center_y() const { return shape_->center_y(); }
 
  private:
   // TODO(f1lo): Make this type agnostic.

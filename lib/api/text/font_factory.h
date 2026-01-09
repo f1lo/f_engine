@@ -18,7 +18,7 @@ enum class FontStyle { NORMAL, ITALIC, BOLD };
 
 class FontFactory {
  public:
-  const FFont* MakeFFont(const std::string_view resource_path);
+  const FFont* MakeFFont(std::string_view resource_path);
   const FFont* MakeRoboto(FontStyle style);
 
   FontFactory(FontFactory&&) = default;

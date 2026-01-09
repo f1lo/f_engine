@@ -48,8 +48,8 @@ class Object {
   void set_deleted(const bool deleted) { deleted_ = deleted; }
   void set_clicked(const bool clicked) { clicked_ = clicked; }
 
-  absl::Nullable<const sprites::SpriteInstance*> active_sprite_instance()
-      const {
+  [[nodiscard]] absl::Nullable<const sprites::SpriteInstance*>
+  active_sprite_instance() const {
     return active_sprite_instance_.get();
   }
 

@@ -15,11 +15,11 @@ class GraphicsInterface {
   virtual void Draw(const Texture2D& texture, const Rectangle& source,
                     const Rectangle& dest, const Vector2& origin,
                     float rotation, Color tint) = 0;
-  virtual float NativeScreenWidth() const = 0;
-  virtual float NativeScreenHeight() const = 0;
+  [[nodiscard]] virtual float NativeScreenWidth() const = 0;
+  [[nodiscard]] virtual float NativeScreenHeight() const = 0;
   virtual void TextureWrap(Texture2D texture, int wrap) const = 0;
 
-  virtual ~GraphicsInterface() {}
+  virtual ~GraphicsInterface() = default;
 };
 
 class Graphics : public GraphicsInterface {
@@ -33,8 +33,8 @@ class Graphics : public GraphicsInterface {
   void Draw(const Texture2D& texture, const Rectangle& source,
             const Rectangle& dest, const Vector2& origin, float rotation,
             Color tint) override;
-  float NativeScreenWidth() const override;
-  float NativeScreenHeight() const override;
+  [[nodiscard]] float NativeScreenWidth() const override;
+  [[nodiscard]] float NativeScreenHeight() const override;
   void TextureWrap(Texture2D texture, int wrap) const override;
 
  private:

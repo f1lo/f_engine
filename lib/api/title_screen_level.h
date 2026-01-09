@@ -4,7 +4,6 @@
 #include <memory>
 
 #include "absl/log/check.h"
-#include "lib/api/controls.h"
 #include "lib/api/level.h"
 #include "lib/api/objects/static_object.h"
 

@@ -21,7 +21,7 @@ struct Vector {
   [[nodiscard]] bool IsAxisAligned() const;
   [[nodiscard]] float Square() const;
   [[nodiscard]] float Length() const;
-  [[nodiscard]] Vector Multiply(float x) const;
+  [[nodiscard]] Vector Multiply(float xx) const;
   [[nodiscard]] float Angle(const Vector& other) const;
   [[nodiscard]] Vector Rotate(const float& angle) const;
   [[nodiscard]] Vector ToUnitVector() const;

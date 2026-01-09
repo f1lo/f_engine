@@ -3,7 +3,6 @@
 
 #include "raylib/include/raylib.h"
 
-#include <list>
 #include <memory>
 #include <string>
 
@@ -67,8 +66,10 @@ class Game {
 
   int screen_width() { return screen_width_; }
   int screen_height() { return screen_height_; }
-  int native_screen_width() { return native_screen_width_; }
-  int native_screen_height() { return native_screen_height_; }
+  [[nodiscard]] int native_screen_width() const { return native_screen_width_; }
+  [[nodiscard]] int native_screen_height() const {
+    return native_screen_height_;
+  }
   void AddLevel(std::unique_ptr<Level> level) {
     CHECK(levels_.find(level->id()) == levels_.end())
         << "Level " << level->id() << " already exists.";
@@ -78,12 +79,13 @@ class Game {
   Factories& factories() { return factories_; }
 
  private:
-  Game(const float native_screen_width, const float native_screen_height)
+  Game(const int native_screen_width, const int native_screen_height)
       : native_screen_width_(native_screen_width),
         native_screen_height_(native_screen_height),
-        factories_({sprites::SpriteFactory(native_screen_width_,
-                                           native_screen_height_),
-                    objects::ObjectTypeFactory(), text::FontFactory()}) {}
+        factories_(Factories{
+            sprites::SpriteFactory(static_cast<float>(native_screen_width_),
+                                   static_cast<float>(native_screen_height_)),
+            objects::ObjectTypeFactory(), text::FontFactory()}) {}
 
   absl::flat_hash_map<LevelId, std::unique_ptr<Level>> levels_;
   Stats stats_ = Stats();

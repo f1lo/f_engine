@@ -1,7 +1,6 @@
 #include "lib/api/sprites/sprite_factory.h"
 
 #include <memory>
-#include <optional>
 #include <string>
 #include <string_view>
 

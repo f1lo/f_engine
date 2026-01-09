@@ -26,7 +26,7 @@ std::list<ObjectAndAbilities> MoveWithCursorAbility::Use(
   CHECK(movable_user) << "User not movable.";
   if (cursor_last_clicked_pos_.has_value()) {
     if (movable_user->CollidesWith(objects::StaticObject(
-            /*type=*/objects::ObjectTypeFactory::MakeMousePointInternaler(),
+            /*type=*/objects::ObjectTypeFactory::MakeMousePointer(),
             /*options=*/
             {/*is_hit_box_active=*/true,
              /*should_draw_hit_box=*/false},
@@ -40,8 +40,8 @@ std::list<ObjectAndAbilities> MoveWithCursorAbility::Use(
   if (!controls_->IsSecondaryPressed()) {
     return {};
   }
-  std::optional<const WorldPosition> cursor_pos_world =
-      GetMouseWorldPosition(ctx.camera, ctx.view_port_ctx, *controls_.get());
+  const std::optional<const WorldPosition> cursor_pos_world =
+      GetMouseWorldPosition(ctx.camera, ctx.view_port_ctx, *controls_);
   if (!cursor_pos_world.has_value()) {
     return {};
   }

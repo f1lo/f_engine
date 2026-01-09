@@ -46,6 +46,7 @@ cc_library(
         "//lib/api/objects:object",
         "//lib/api/objects:object_type",
         "//lib/api/objects:static_object",
+        "@abseil-cpp//absl/log:check",
     ],
 )
 

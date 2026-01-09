@@ -12,7 +12,7 @@ namespace api {
 std::optional<WorldPosition> GetMouseWorldPosition(
     const Camera& camera, const ViewPortContext& ctx,
     const ControlsInterface& controls) {
-  std::optional<ScreenPosition> native_screen_pos =
+  const std::optional<ScreenPosition> native_screen_pos =
       controls.GetCursorPos().ToNative(ctx);
   if (!native_screen_pos.has_value()) {
     return std::nullopt;

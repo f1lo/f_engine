@@ -31,8 +31,7 @@ TEST(ObjectTypeTest, FactoryMethodsWork) {
   EXPECT_TRUE(ObjectTypeFactory::MakeScreenRight().IsScreenRight());
   EXPECT_TRUE(ObjectTypeFactory::MakeScreenTop().IsScreenTop());
   EXPECT_TRUE(ObjectTypeFactory::MakeScreenBottom().IsScreenBottom());
-  EXPECT_TRUE(
-      ObjectTypeFactory::MakeMousePointInternaler().IsMousePointInternaler());
+  EXPECT_TRUE(ObjectTypeFactory::MakeMousePointer().IsMousePointer());
   EXPECT_TRUE(ObjectTypeFactory::MakeButton().IsButton());
   EXPECT_TRUE(ObjectTypeFactory::MakeProjectilePlayer().IsProjectilePlayer());
   EXPECT_TRUE(ObjectTypeFactory::MakeCoordinate().IsCoordinate());
@@ -45,8 +44,8 @@ TEST(ObjectTypeTest, FactoryMethodsWork) {
   EXPECT_FALSE(ObjectTypeFactory::MakeScreenRight().IsScreenLeft());
   EXPECT_FALSE(ObjectTypeFactory::MakeScreenTop().IsScreenBottom());
   EXPECT_FALSE(ObjectTypeFactory::MakeScreenBottom().IsScreenTop());
-  EXPECT_FALSE(ObjectTypeFactory::MakeMousePointInternaler().IsButton());
-  EXPECT_FALSE(ObjectTypeFactory::MakeButton().IsMousePointInternaler());
+  EXPECT_FALSE(ObjectTypeFactory::MakeMousePointer().IsButton());
+  EXPECT_FALSE(ObjectTypeFactory::MakeButton().IsMousePointer());
   EXPECT_FALSE(ObjectTypeFactory::MakeProjectilePlayer().IsCoordinate());
   EXPECT_FALSE(ObjectTypeFactory::MakeCoordinate().IsProjectilePlayer());
   EXPECT_FALSE(ObjectTypeFactory::MakeWorldBorder().IsSpriteBoundingBox());

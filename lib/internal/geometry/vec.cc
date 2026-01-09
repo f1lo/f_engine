@@ -21,8 +21,8 @@ float Vector::Length() const {
   return std::sqrt(Square());
 }
 
-Vector Vector::Multiply(const float x) const {
-  return {this->x * x, this->y * x};
+Vector Vector::Multiply(const float xx) const {
+  return {this->x * xx, this->y * xx};
 }
 
 // TODO(f1lo): This can divide on 0 in case vector with 0 length is provided.
@@ -54,7 +54,7 @@ Vector Vector::Rotate(const float& angle) const {
 }
 
 Vector Vector::ToUnitVector() const {
-  return Multiply(1.0 / Length());
+  return Multiply(1.0f / Length());
 }
 
 bool Vector::IsZero() const {

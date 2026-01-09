@@ -2,10 +2,6 @@
 
 #include "lib/api/objects/rectangle_button_object.h"
 
-#include <memory>
-#include <optional>
-#include <string_view>
-
 #include "lib/api/common_types.h"
 #include "lib/api/objects/object_type.h"
 #include "lib/api/objects/static_object.h"
@@ -34,8 +30,10 @@ void RectangleButtonObject::DrawRectangleRound() const {
 
 void RectangleButtonObject::DrawRectangleSharp() const {
   // Draw fill/inside color first.
-  DrawRectangle(raylib_rec_.x, raylib_rec_.y, raylib_rec_.width,
-                raylib_rec_.height, raylib_fill_color_);
+  DrawRectangle(static_cast<int>(raylib_rec_.x),
+                static_cast<int>(raylib_rec_.y),
+                static_cast<int>(raylib_rec_.width),
+                static_cast<int>(raylib_rec_.height), raylib_fill_color_);
   // Draw the border.
   DrawRectangleLinesEx(raylib_rec_, border_thickness_, raylib_border_color_);
 }

@@ -1,3 +1,4 @@
+#include <filesystem>
 #include <memory>
 #include <string>
 
@@ -72,7 +73,8 @@ TEST_F(SpriteTest, StaticSpriteDraw) {
   const GraphicsMock* graphics =
       dynamic_cast<const GraphicsMock*>(sprite->GraphicsForTesting());
   ASSERT_NE(graphics, nullptr);
-  EXPECT_EQ(graphics->loaded_texture(), resource_path);
+  EXPECT_EQ(graphics->loaded_texture(),
+            std::filesystem::path(resource_path).make_preferred().string());
   EXPECT_EQ(graphics->drawn_texture_source().x, 0.0f);
   EXPECT_EQ(graphics->drawn_texture_source().y, 0.0f);
   EXPECT_EQ(graphics->drawn_texture_source().width,
@@ -101,7 +103,8 @@ TEST_F(SpriteTest, StaticSpriteRotateAndDraw) {
   const GraphicsMock* graphics =
       dynamic_cast<const GraphicsMock*>(sprite->GraphicsForTesting());
   ASSERT_NE(graphics, nullptr);
-  EXPECT_EQ(graphics->loaded_texture(), resource_path);
+  EXPECT_EQ(graphics->loaded_texture(),
+            std::filesystem::path(resource_path).make_preferred().string());
   EXPECT_EQ(graphics->drawn_texture_source().x, 0.0f);
   EXPECT_EQ(graphics->drawn_texture_source().y, 0.0f);
   EXPECT_EQ(graphics->drawn_texture_source().width,
@@ -132,7 +135,8 @@ TEST_F(SpriteTest, AnimatedSpriteNoFrameChange) {
   const GraphicsMock* graphics =
       dynamic_cast<const GraphicsMock*>(sprite->GraphicsForTesting());
   ASSERT_NE(graphics, nullptr);
-  EXPECT_EQ(graphics->loaded_texture(), resource_path);
+  EXPECT_EQ(graphics->loaded_texture(),
+            std::filesystem::path(resource_path).make_preferred().string());
   EXPECT_EQ(graphics->drawn_texture_source().x, 0.0f);
   EXPECT_EQ(graphics->drawn_texture_source().y, 0.0f);
   EXPECT_EQ(graphics->drawn_texture_source().width,
@@ -164,7 +168,8 @@ TEST_F(SpriteTest, AnimatedSpriteFrameChange) {
   const GraphicsMock* graphics =
       dynamic_cast<const GraphicsMock*>(sprite->GraphicsForTesting());
   ASSERT_NE(graphics, nullptr);
-  EXPECT_EQ(graphics->loaded_texture(), resource_path);
+  EXPECT_EQ(graphics->loaded_texture(),
+            std::filesystem::path(resource_path).make_preferred().string());
   EXPECT_EQ(graphics->drawn_texture_source().x,
             static_cast<float>(kTextureWidth) / frame_count);
   EXPECT_EQ(graphics->drawn_texture_source().y, 0.0f);
@@ -199,7 +204,8 @@ TEST_F(SpriteTest, AnimatedSpriteReset) {
   const GraphicsMock* graphics =
       dynamic_cast<const GraphicsMock*>(sprite->GraphicsForTesting());
   ASSERT_NE(graphics, nullptr);
-  EXPECT_EQ(graphics->loaded_texture(), resource_path);
+  EXPECT_EQ(graphics->loaded_texture(),
+            std::filesystem::path(resource_path).make_preferred().string());
   EXPECT_EQ(graphics->drawn_texture_source().x, 0);
   EXPECT_EQ(graphics->drawn_texture_source().y, 0.0f);
   EXPECT_EQ(graphics->drawn_texture_source().width,
@@ -236,7 +242,8 @@ TEST_F(SpriteTest, AnimatedSpriteLoopsBackToStart) {
   const GraphicsMock* graphics =
       dynamic_cast<const GraphicsMock*>(sprite->GraphicsForTesting());
   ASSERT_NE(graphics, nullptr);
-  EXPECT_EQ(graphics->loaded_texture(), resource_path);
+  EXPECT_EQ(graphics->loaded_texture(),
+            std::filesystem::path(resource_path).make_preferred().string());
   EXPECT_EQ(graphics->drawn_texture_source().x, 0.0f);
   EXPECT_EQ(graphics->drawn_texture_source().y, 0.0f);
   EXPECT_EQ(graphics->drawn_texture_source().width,
@@ -268,7 +275,8 @@ TEST_F(SpriteTest, AnimatedSpriteRotateAndDraw) {
   const GraphicsMock* graphics =
       dynamic_cast<const GraphicsMock*>(sprite->GraphicsForTesting());
   ASSERT_NE(graphics, nullptr);
-  EXPECT_EQ(graphics->loaded_texture(), resource_path);
+  EXPECT_EQ(graphics->loaded_texture(),
+            std::filesystem::path(resource_path).make_preferred().string());
   EXPECT_EQ(graphics->drawn_texture_source().x, 0.0f);
   EXPECT_EQ(graphics->drawn_texture_source().y, 0.0f);
   EXPECT_EQ(graphics->drawn_texture_source().width,
@@ -297,7 +305,8 @@ TEST_F(SpriteTest, SpriteFactoryStaticSpriteAlreadyExists) {
   const GraphicsMock* graphics =
       dynamic_cast<const GraphicsMock*>(sprite->GraphicsForTesting());
   ASSERT_NE(graphics, nullptr);
-  EXPECT_EQ(graphics->loaded_texture(), resource_path);
+  EXPECT_EQ(graphics->loaded_texture(),
+            std::filesystem::path(resource_path).make_preferred().string());
 }
 
 TEST_F(SpriteTest, SpriteFactoryAnimatedSpriteAlreadyExists) {
@@ -315,7 +324,8 @@ TEST_F(SpriteTest, SpriteFactoryAnimatedSpriteAlreadyExists) {
   const GraphicsMock* graphics =
       dynamic_cast<const GraphicsMock*>(sprite->GraphicsForTesting());
   ASSERT_NE(graphics, nullptr);
-  EXPECT_EQ(graphics->loaded_texture(), resource_path);
+  EXPECT_EQ(graphics->loaded_texture(),
+            std::filesystem::path(resource_path).make_preferred().string());
 }
 
 TEST_F(SpriteTest, SpriteFactoryBackgroundStaticSpriteDraw) {
@@ -331,7 +341,8 @@ TEST_F(SpriteTest, SpriteFactoryBackgroundStaticSpriteDraw) {
   const GraphicsMock* graphics =
       dynamic_cast<const GraphicsMock*>(sprite->GraphicsForTesting());
   ASSERT_NE(graphics, nullptr);
-  EXPECT_EQ(graphics->loaded_texture(), resource_path);
+  EXPECT_EQ(graphics->loaded_texture(),
+            std::filesystem::path(resource_path).make_preferred().string());
   EXPECT_FLOAT_EQ(graphics->drawn_texture_source().x,
                   draw_destination.x * parallax_factor);
   EXPECT_FLOAT_EQ(graphics->drawn_texture_source().y,
@@ -362,7 +373,8 @@ TEST_F(SpriteTest, SpriteFactoryBackgroundStaticSpriteAlreadyExists) {
   const GraphicsMock* graphics =
       dynamic_cast<const GraphicsMock*>(sprite->GraphicsForTesting());
   ASSERT_NE(graphics, nullptr);
-  EXPECT_EQ(graphics->loaded_texture(), resource_path);
+  EXPECT_EQ(graphics->loaded_texture(),
+            std::filesystem::path(resource_path).make_preferred().string());
   EXPECT_EQ(graphics->drawn_texture_source().x, draw_destination.x);
   EXPECT_EQ(graphics->drawn_texture_source().y, draw_destination.y);
   EXPECT_FLOAT_EQ(graphics->drawn_texture_source().width,

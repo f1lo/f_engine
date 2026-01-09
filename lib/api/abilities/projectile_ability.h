@@ -8,8 +8,6 @@
 #include "absl/container/flat_hash_set.h"
 #include "lib/api/abilities/ability.h"
 #include "lib/api/controls.h"
-#include "lib/api/objects/movable_object.h"
-#include "lib/api/objects/object.h"
 #include "lib/api/objects/object_type.h"
 #include "lib/api/objects/projectile_object.h"
 

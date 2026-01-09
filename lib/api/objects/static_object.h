@@ -3,9 +3,7 @@
 
 #include <list>
 #include <memory>
-#include <vector>
 
-#include "absl/container/flat_hash_map.h"
 #include "gtest/gtest_prod.h"
 #include "lib/api/objects/object.h"
 #include "lib/api/objects/object_type.h"
@@ -30,7 +28,7 @@ class StaticObject : public Object {
 
  protected:
   FRIEND_TEST(StaticObjectTest, OnCollisionCallbackDoesNothing);
-  virtual bool OnCollisionCallback(Object& other_object) override;
+  bool OnCollisionCallback(Object& other_object) override;
 };
 }  // namespace objects
 }  // namespace api
