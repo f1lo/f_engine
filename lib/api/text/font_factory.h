@@ -2,6 +2,7 @@
 #define LIB_API_TEXT_FONT_FACTORY_H
 
 #include <string>
+#include <string_view>
 
 #include "absl/container/flat_hash_map.h"
 #include "lib/api/text/f_font.h"
@@ -13,8 +14,13 @@ class Game;
 
 namespace text {
 
+enum class FontStyle { NORMAL, ITALIC, BOLD };
+
 class FontFactory {
  public:
+  const FFont* MakeFFont(const std::string_view resource_path);
+  const FFont* MakeRoboto(FontStyle style);
+
   FontFactory(FontFactory&&) = default;
   FontFactory& operator=(FontFactory&&) = default;
   // Delete copy operations.

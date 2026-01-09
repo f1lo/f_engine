@@ -58,6 +58,7 @@ cc_library(
         "//examples/breakout:player_pad",
         "//lib/api:controls",
         "//lib/api/abilities:ability",
+        "@abseil-cpp//absl/log:check",
     ],
 )
 

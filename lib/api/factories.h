@@ -5,6 +5,7 @@
 
 #include "lib/api/objects/object_type.h"
 #include "lib/api/sprites/sprite_factory.h"
+#include "lib/api/text/font_factory.h"
 
 namespace lib {
 namespace api {
@@ -12,9 +13,11 @@ namespace api {
 struct Factories {
   sprites::SpriteFactory sprite;
   objects::ObjectTypeFactory object_type;
+  text::FontFactory font;
 
-  Factories(sprites::SpriteFactory&& s, objects::ObjectTypeFactory&& o)
-      : sprite(std::move(s)), object_type(std::move(o)) {}
+  Factories(sprites::SpriteFactory&& s, objects::ObjectTypeFactory&& o,
+            text::FontFactory f)
+      : sprite(std::move(s)), object_type(std::move(o)), font(std::move(f)) {}
 
   // Delete copy and move operations.
   Factories(const Factories&) = delete;

@@ -20,6 +20,8 @@
 #include "lib/api/objects/static_object.h"
 #include "lib/api/sprites/sprite_factory.h"
 #include "lib/api/sprites/sprite_instance.h"
+#include "lib/api/text/font_factory.h"
+#include "lib/api/text/text.h"
 #include "lib/api/title_screen_level.h"
 
 constexpr int kButtonOffsetX = 300;
@@ -71,6 +73,8 @@ using lib::api::objects::RectangleButtonObject;
 using lib::api::objects::StaticObject;
 using lib::api::sprites::SpriteFactory;
 using lib::api::sprites::SpriteInstance;
+using lib::api::text::FontStyle;
+using lib::api::text::Text;
 using lib::internal::HitBox;
 
 std::unique_ptr<Player> MakePlayer(SpriteFactory& sprite_factory,
@@ -204,13 +208,14 @@ std::unique_ptr<Level> MakeTitleScreenLevel(Factories& factories,
           FRectangle{.top_left = {kButtonOffsetX, kButtonOffsetY},
                      .width = kButtonLengthX,
                      .height = kButtonLengthY},
-          "Start",
+          Text(factories.font.MakeRoboto(FontStyle::NORMAL), "Start",
+               /*color=*/{.r = 100, .g = 0, .b = 30, .a = 255},
+               /*spacing=*/0.0f,
+               /*font_size=*/40.0f),
           RectangleButtonObject::RectangleButtonObjectOpts{
               .has_round_corners = true,
               .border_thickness = 3.0f,
-              .font_size = 1.5f,
               .border_color = {.r = 0, .g = 0, .b = 255, .a = 255},
-              .text_color = {.r = 100, .g = 0, .b = 30, .a = 255},
               .fill_color = ColorRGBA::MakeTransparent()});
   std::unique_ptr<RectangleButtonObject> exit_button =
       std::make_unique<RectangleButtonObject>(
@@ -221,13 +226,14 @@ std::unique_ptr<Level> MakeTitleScreenLevel(Factories& factories,
                                                kOffsetBetweenButtons},
               .width = kButtonLengthX,
               .height = kButtonLengthY},
-          "Exit",
+          Text(factories.font.MakeRoboto(FontStyle::NORMAL), "Exit",
+               /*color=*/{.r = 0, .g = 0, .b = 200, .a = 255},
+               /*spacing=*/0.0f,
+               /*font_size=*/40.0f),
           RectangleButtonObject::RectangleButtonObjectOpts{
               .has_round_corners = false,
               .border_thickness = 5.0f,
-              .font_size = 1.5f,
               .border_color = {.r = 255, .g = 0, .b = 0, .a = 255},
-              .text_color = {.r = 100, .g = 0, .b = 30, .a = 255},
               .fill_color = {.r = 100, .g = 0, .b = 0, .a = 255}});
 
   TitleScreenLevelBuilder level_builder =

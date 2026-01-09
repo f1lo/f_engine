@@ -9,10 +9,13 @@
 #include "lib/api/common_types.h"
 #include "lib/api/objects/object_type.h"
 #include "lib/api/objects/static_object.h"
+#include "lib/api/text/text.h"
 
 namespace lib {
 namespace api {
 namespace objects {
+
+using text::Text;
 
 namespace {
 
@@ -38,7 +41,7 @@ void RectangleButtonObject::DrawRectangleSharp() const {
 }
 
 RectangleButtonObject::RectangleButtonObject(
-    const ObjectType type, const FRectangle& rectangle, std::string_view text,
+    const ObjectType type, const FRectangle& rectangle, const Text& text,
     const RectangleButtonObjectOpts& options)
     : StaticObject(type,
                    {.is_hit_box_active = true, .should_draw_hit_box = false},
@@ -46,8 +49,6 @@ RectangleButtonObject::RectangleButtonObject(
       text_(text),
       has_round_corners_(options.has_round_corners),
       border_thickness_(options.border_thickness),
-      font_size_(options.font_size),
-      spacing_(font_size_ * 0.1f),
       raylib_rec_({.x = rectangle.top_left.x,
                    .y = rectangle.top_left.y,
                    .width = rectangle.width,
@@ -56,10 +57,6 @@ RectangleButtonObject::RectangleButtonObject(
                             .g = options.border_color.g,
                             .b = options.border_color.b,
                             .a = options.border_color.a}),
-      raylib_text_color_({.r = options.text_color.r,
-                          .g = options.text_color.g,
-                          .b = options.text_color.b,
-                          .a = options.text_color.a}),
       raylib_fill_color_({.r = options.fill_color.r,
                           .g = options.fill_color.g,
                           .b = options.fill_color.b,
@@ -71,6 +68,7 @@ void RectangleButtonObject::Draw() const {
   } else {
     DrawRectangleSharp();
   }
+  text_.Draw(center().ToFPoint());
 }
 
 }  // namespace objects

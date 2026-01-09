@@ -3,6 +3,7 @@
 #include <list>
 #include <memory>
 
+#include "absl/log/check.h"
 #include "examples/breakout/ball.h"
 #include "lib/api/controls.h"
 

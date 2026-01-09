@@ -15,6 +15,7 @@ cc_library(
         "//lib/api/objects:object",
         "//lib/api/objects:object_type",
         "//lib/api/sprites:sprite_factory",
+        "//lib/api/text:font_factory",
         "//raylib",
         "@abseil-cpp//absl/container:flat_hash_map",
         "@abseil-cpp//absl/log:check",
@@ -196,5 +197,6 @@ cc_library(
     deps = [
         "//lib/api/objects:object_type",
         "//lib/api/sprites:sprite_factory",
+        "//lib/api/text:font_factory",
     ],
 )

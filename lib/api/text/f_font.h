@@ -3,27 +3,25 @@
 
 #include "raylib/include/raylib.h"
 
-#include <memory>
+#include <string_view>
 
 namespace lib {
 namespace api {
 namespace text {
 
-enum class FontStyle { NORMAL, ITALIC, BOLD };
-
 class FFont {
+ public:
+  ~FFont();
+
  private:
   friend class FontFactory;
+  friend class Text;
 
-  Font GetFontStyle(FontStyle style);
+  const Font* GetRaylibFont() const;
 
-  FFont(std::unique_ptr<Font> raylib_font_normal,
-        std::unique_ptr<Font> raylib_font_italic,
-        std::unique_ptr<Font> raylib_font_bold);
+  FFont(const std::string_view resource_path);
 
-  std::unique_ptr<Font> raylib_font_normal_;
-  std::unique_ptr<Font> raylib_font_italic_;
-  std::unique_ptr<Font> raylib_font_bold_;
+  const Font raylib_font_;
 };
 
 }  // namespace text

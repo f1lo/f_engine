@@ -40,6 +40,8 @@ cc_library(
         "//lib/api/sprites:sprite_factory",
         "//lib/api/sprites:sprite_instance",
         "//lib/api/sprites:static_sprite",
+        "//lib/api/text",
+        "//lib/api/text:font_factory",
     ],
 )
 

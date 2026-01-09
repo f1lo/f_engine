@@ -83,7 +83,7 @@ class Game {
         native_screen_height_(native_screen_height),
         factories_({sprites::SpriteFactory(native_screen_width_,
                                            native_screen_height_),
-                    objects::ObjectTypeFactory()}) {}
+                    objects::ObjectTypeFactory(), text::FontFactory()}) {}
 
   absl::flat_hash_map<LevelId, std::unique_ptr<Level>> levels_;
   Stats stats_ = Stats();

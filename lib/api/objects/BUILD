@@ -138,6 +138,7 @@ cc_library(
         ":object_type",
         ":static_object",
         "//lib/api:common_types",
+        "//lib/api/text",
         "//raylib",
     ],
 )

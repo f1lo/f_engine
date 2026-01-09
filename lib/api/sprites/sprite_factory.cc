@@ -6,6 +6,7 @@
 #include <string_view>
 
 #include "absl/log/check.h"
+#include "absl/memory/memory.h"
 #include "absl/time/time.h"
 #include "lib/api/graphics.h"
 #include "lib/api/graphics_mock.h"

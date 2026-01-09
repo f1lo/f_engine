@@ -24,6 +24,7 @@ Game::~Game() {
   // * By calling CloseWindow().
   levels_.clear();
   factories_.sprite.sprites_.clear();
+  factories_.font.fonts_.clear();
   CloseWindow();
 }
 
