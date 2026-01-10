@@ -18,7 +18,7 @@ class ShaderInternalFactory {
   ShaderInternalFactory(const ShaderInternalFactory&) = delete;
   ShaderInternalFactory& operator=(const ShaderInternalFactory&) = delete;
 
-  static ShaderInternalFactory& Create();
+  static ShaderInternalFactory& GetInstance();
 
   const ShaderInternal* MakeVertexShader(std::string_view resource_path);
   const ShaderInternal* MakeFragmentShader(std::string_view resource_path);

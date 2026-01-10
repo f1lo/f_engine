@@ -5,8 +5,8 @@
 
 ABSL_FLAG(bool, is_debug_mode, false, "Run game in debug mode.");
 ABSL_FLAG(bool, is_full_screen, false, "Run game in full screen.");
-ABSL_FLAG(int, native_screen_width, 1920, "");
-ABSL_FLAG(int, native_screen_height, 1080, "");
+ABSL_FLAG(int, native_screen_width, 2560, "");
+ABSL_FLAG(int, native_screen_height, 1440, "");
 
 int main(const int argc, char** argv) {
   absl::ParseCommandLine(argc, argv);

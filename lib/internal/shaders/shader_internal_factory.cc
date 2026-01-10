@@ -16,7 +16,7 @@ const std::string kFontSDFPath = "lib/internal/shaders/resources/sdf.fs";
 
 }  // namespace
 
-ShaderInternalFactory& ShaderInternalFactory::Create() {
+ShaderInternalFactory& ShaderInternalFactory::GetInstance() {
   static ShaderInternalFactory factory = ShaderInternalFactory();
   return factory;
 }

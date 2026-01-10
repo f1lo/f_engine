@@ -66,7 +66,7 @@ void RectangleButtonObject::Draw() const {
   } else {
     DrawRectangleSharp();
   }
-  text_.Draw(center().ToFPoint());
+  text_.DrawCentered(center().ToFPoint());
 }
 
 }  // namespace objects

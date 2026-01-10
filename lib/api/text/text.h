@@ -20,6 +20,7 @@ class Text {
        float spacing, float font_size);
 
   void Draw(FPoint top_left) const;
+  void DrawCentered(FPoint center) const;
 
  private:
   internal::shaders::ShaderInternalFactory& shader_factory_;

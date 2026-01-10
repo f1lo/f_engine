@@ -26,7 +26,7 @@ TEST(ShaderDeathTest, ShaderIdNothingSpecified) {
 
 TEST(ShaderDeathTest, ShaderNotDeactivated) {
   const ShaderInternal* shader =
-      ShaderInternalFactory::Create().MakeShader("vert.vs", "frag.fs");
+      ShaderInternalFactory::GetInstance().MakeShader("vert.vs", "frag.fs");
   shader->Activate();
 
   EXPECT_DEATH(shader->Activate(),
@@ -49,7 +49,7 @@ TEST(ShaderTest, ShaderIdDefaultSubstitution) {
 
 TEST(ShaderTest, MakeVertexShader) {
   const ShaderInternal* shader =
-      ShaderInternalFactory::Create().MakeVertexShader("vert.vs");
+      ShaderInternalFactory::GetInstance().MakeVertexShader("vert.vs");
 
   std::ostringstream oss;
   oss << *shader;
@@ -59,7 +59,7 @@ TEST(ShaderTest, MakeVertexShader) {
 
 TEST(ShaderTest, MakeFragmentShader) {
   const ShaderInternal* shader =
-      ShaderInternalFactory::Create().MakeFragmentShader("frag.fs");
+      ShaderInternalFactory::GetInstance().MakeFragmentShader("frag.fs");
 
   std::ostringstream oss;
   oss << *shader;
@@ -68,19 +68,19 @@ TEST(ShaderTest, MakeFragmentShader) {
 }
 
 TEST(ShaderTest, MakeSameFragmentShaderTwice) {
-  ShaderInternalFactory::Create().MakeFragmentShader("frag.fs");
+  ShaderInternalFactory::GetInstance().MakeFragmentShader("frag.fs");
 
   std::ostringstream oss;
-  oss << *ShaderInternalFactory::Create().MakeFragmentShader("frag.fs");
+  oss << *ShaderInternalFactory::GetInstance().MakeFragmentShader("frag.fs");
 
   EXPECT_EQ(oss.str(), "Shader: (default, frag.fs)");
 }
 
 TEST(ShaderTest, MakeSameShaderTwice) {
-  ShaderInternalFactory::Create().MakeShader("vert.vs", "frag.fs");
+  ShaderInternalFactory::GetInstance().MakeShader("vert.vs", "frag.fs");
 
   std::ostringstream oss;
-  oss << *ShaderInternalFactory::Create().MakeShader("vert.vs", "frag.fs");
+  oss << *ShaderInternalFactory::GetInstance().MakeShader("vert.vs", "frag.fs");
 
   EXPECT_EQ(oss.str(), "Shader: (vert.vs, frag.fs)");
 }
