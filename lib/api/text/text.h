@@ -6,6 +6,8 @@
 
 #include "lib/api/common_types.h"
 #include "lib/api/text/f_font.h"
+#include "lib/internal/shaders/shader_internal.h"
+#include "lib/internal/shaders/shader_internal_factory.h"
 
 namespace lib {
 namespace api {
@@ -20,11 +22,15 @@ class Text {
   void Draw(FPoint top_left) const;
 
  private:
+  internal::shaders::ShaderInternalFactory& shader_factory_;
+
   const FFont* f_font_;
   const std::string text_;
   const ColorRGBA color_;
   const float spacing_;
   const float font_size_;
+
+  const internal::shaders::ShaderInternal* shader_;
 };
 
 }  // namespace text

@@ -15,11 +15,6 @@ cc_library(
     name = "font_factory",
     srcs = ["font_factory.cc"],
     hdrs = ["font_factory.h"],
-    data = [
-        "//lib/api/text/fonts:roboto_bold.ttf",
-        "//lib/api/text/fonts:roboto_italic.ttf",
-        "//lib/api/text/fonts:roboto_regular.ttf",
-    ],
     deps = [
         ":f_font",
         "@abseil-cpp//absl/container:flat_hash_map",
@@ -32,9 +27,11 @@ cc_library(
     name = "text",
     srcs = ["text.cc"],
     hdrs = ["text.h"],
+    data = glob(["fonts/*.ttf"]),
     deps = [
         ":f_font",
         "//lib/api:common_types",
+        "//lib/internal/shaders:shader_internal_factory",
         "//raylib",
     ],
 )

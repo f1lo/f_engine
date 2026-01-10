@@ -21,7 +21,7 @@ class FFont {
 
   explicit FFont(std::string_view resource_path);
 
-  const Font raylib_font_;
+  Font raylib_font_;
 };
 
 }  // namespace text
