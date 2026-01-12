@@ -45,7 +45,8 @@ using SpriteDeathTest = SpriteTest;
 namespace {
 
 TEST_F(SpriteDeathTest, SpriteFactoryParallaxFactorBellowZero) {
-  const std::string resource_path = "a/b/picture.png";
+  const std::string resource_path =
+      testing::UnitTest::GetInstance()->current_test_info()->name();
   constexpr float parallax_factor = -0.1;
 
   EXPECT_DEATH(sprite_factory_.MakeBackgroundStaticSprite(resource_path,
@@ -54,7 +55,8 @@ TEST_F(SpriteDeathTest, SpriteFactoryParallaxFactorBellowZero) {
 }
 
 TEST_F(SpriteDeathTest, SpriteFactoryParallaxFactorAboveOne) {
-  const std::string resource_path = "a/b/picture.png";
+  const std::string resource_path =
+      testing::UnitTest::GetInstance()->current_test_info()->name();
   constexpr float parallax_factor = 1.1;
 
   EXPECT_DEATH(sprite_factory_.MakeBackgroundStaticSprite(resource_path,
@@ -63,7 +65,8 @@ TEST_F(SpriteDeathTest, SpriteFactoryParallaxFactorAboveOne) {
 }
 
 TEST_F(SpriteTest, StaticSpriteDraw) {
-  const std::string resource_path = "a/b/picture.png";
+  const std::string resource_path =
+      testing::UnitTest::GetInstance()->current_test_info()->name();
   const std::unique_ptr<SpriteInstance> sprite =
       sprite_factory_.MakeStaticSprite(resource_path);
   constexpr WorldPosition draw_destination{.x = 100.0f, .y = 200.0f};
@@ -92,7 +95,8 @@ TEST_F(SpriteTest, StaticSpriteDraw) {
 }
 
 TEST_F(SpriteTest, StaticSpriteRotateAndDraw) {
-  const std::string resource_path = "a/b/picture.png";
+  const std::string resource_path =
+      testing::UnitTest::GetInstance()->current_test_info()->name();
   const std::unique_ptr<SpriteInstance> sprite =
       sprite_factory_.MakeStaticSprite(resource_path);
   constexpr WorldPosition draw_destination{.x = 100.0f, .y = 200.0f};
@@ -122,7 +126,8 @@ TEST_F(SpriteTest, StaticSpriteRotateAndDraw) {
 }
 
 TEST_F(SpriteTest, AnimatedSpriteNoFrameChange) {
-  const std::string resource_path = "a/b/picture.png";
+  const std::string resource_path =
+      testing::UnitTest::GetInstance()->current_test_info()->name();
   constexpr int frame_count = 4;
   const std::unique_ptr<SpriteInstance> sprite =
       sprite_factory_.MakeAnimatedSprite(resource_path, frame_count,
@@ -154,7 +159,8 @@ TEST_F(SpriteTest, AnimatedSpriteNoFrameChange) {
 }
 
 TEST_F(SpriteTest, AnimatedSpriteFrameChange) {
-  const std::string resource_path = "a/b/picture.png";
+  const std::string resource_path =
+      testing::UnitTest::GetInstance()->current_test_info()->name();
   constexpr int frame_count = 4;
   const std::unique_ptr<SpriteInstance> sprite =
       sprite_factory_.MakeAnimatedSprite(resource_path, frame_count,
@@ -188,7 +194,8 @@ TEST_F(SpriteTest, AnimatedSpriteFrameChange) {
 }
 
 TEST_F(SpriteTest, AnimatedSpriteReset) {
-  const std::string resource_path = "a/b/picture.png";
+  const std::string resource_path =
+      testing::UnitTest::GetInstance()->current_test_info()->name();
   constexpr int frame_count = 4;
   const std::unique_ptr<SpriteInstance> sprite =
       sprite_factory_.MakeAnimatedSprite(resource_path, frame_count,
@@ -223,7 +230,8 @@ TEST_F(SpriteTest, AnimatedSpriteReset) {
 }
 
 TEST_F(SpriteTest, AnimatedSpriteLoopsBackToStart) {
-  const std::string resource_path = "a/b/picture.png";
+  const std::string resource_path =
+      testing::UnitTest::GetInstance()->current_test_info()->name();
   constexpr int frame_count = 4;
   std::unique_ptr<SpriteInstance> sprite = sprite_factory_.MakeAnimatedSprite(
       resource_path, frame_count, kAdvanceToNextFrameAfter);
@@ -261,7 +269,8 @@ TEST_F(SpriteTest, AnimatedSpriteLoopsBackToStart) {
 }
 
 TEST_F(SpriteTest, AnimatedSpriteRotateAndDraw) {
-  const std::string resource_path = "a/b/picture.png";
+  const std::string resource_path =
+      testing::UnitTest::GetInstance()->current_test_info()->name();
   constexpr int frame_count = 4;
   const std::unique_ptr<SpriteInstance> sprite =
       sprite_factory_.MakeAnimatedSprite(resource_path, frame_count,
@@ -293,8 +302,79 @@ TEST_F(SpriteTest, AnimatedSpriteRotateAndDraw) {
   EXPECT_EQ(sprite->SpriteHeight(), kTextureHeight);
 }
 
+TEST_F(SpriteTest, RotateAndDrawFitRectangle) {
+  constexpr WorldPosition draw_destination{.x = 100.0f, .y = 200.0f};
+
+  // Static sprite.
+  {
+    const std::string resource_path = "a/b/picture_1.png";
+    const std::unique_ptr<SpriteInstance> sprite =
+        sprite_factory_.MakeStaticSprite(resource_path);
+
+    sprite->RotateAndDrawFitRectangle(draw_destination, /*degree=*/0,
+                                      /*width_to_fit=*/600.0f,
+                                      /*height_to_fit=*/700.0f);
+
+    const GraphicsMock* graphics =
+        dynamic_cast<const GraphicsMock*>(sprite->GraphicsForTesting());
+    ASSERT_NE(graphics, nullptr);
+    EXPECT_FLOAT_EQ(graphics->drawn_texture_destination().x, 100.0f);
+    EXPECT_FLOAT_EQ(graphics->drawn_texture_destination().y, 200.0f);
+    EXPECT_FLOAT_EQ(graphics->drawn_texture_destination().width, 600.0f);
+    EXPECT_FLOAT_EQ(graphics->drawn_texture_destination().height, 700.0f);
+  }
+
+  // Animated sprite.
+  {
+    const std::string resource_path = "a/b/picture_2.png";
+    constexpr int frame_count = 4;
+    const std::unique_ptr<SpriteInstance> sprite =
+        sprite_factory_.MakeAnimatedSprite(resource_path, frame_count,
+                                           kAdvanceToNextFrameAfter);
+    constexpr WorldPosition draw_destination{.x = 100.0f, .y = 200.0f};
+
+    sprite->Draw(draw_destination);
+    absl::SleepFor(kAdvanceToNextFrameAfter + kSmallIncrement);
+    sprite->RotateAndDrawFitRectangle(draw_destination, /*rotation_degree=*/0,
+                                      /*width_to_fit=*/777.0f,
+                                      /*height_to_fit=*/888.0f);
+
+    const GraphicsMock* graphics =
+        dynamic_cast<const GraphicsMock*>(sprite->GraphicsForTesting());
+    EXPECT_FLOAT_EQ(graphics->drawn_texture_destination().x,
+                    draw_destination.x);
+    EXPECT_FLOAT_EQ(graphics->drawn_texture_destination().y,
+                    draw_destination.y);
+    EXPECT_FLOAT_EQ(graphics->drawn_texture_destination().width, 777.0f);
+    EXPECT_FLOAT_EQ(graphics->drawn_texture_destination().height, 888.0f);
+  }
+
+  // Background sprite - nothing should change for it
+  {
+    const std::string resource_path = "a/b/picture_3.png";
+    std::unique_ptr<SpriteInstance> sprite =
+        sprite_factory_.MakeBackgroundStaticSprite(resource_path,
+                                                   /*parallax_factor=*/0.1f);
+    constexpr WorldPosition draw_destination{.x = 100.0f, .y = 200.0f};
+
+    sprite->RotateAndDrawFitRectangle(draw_destination, /*rotation_degree=*/0,
+                                      /*width_to_fit=*/777.0f,
+                                      /*height_to_fit=*/888.0f);
+
+    const GraphicsMock* graphics =
+        dynamic_cast<const GraphicsMock*>(sprite->GraphicsForTesting());
+    EXPECT_FLOAT_EQ(graphics->drawn_texture_destination().x, 100.0f);
+    EXPECT_FLOAT_EQ(graphics->drawn_texture_destination().y, 200.0f);
+    EXPECT_FLOAT_EQ(graphics->drawn_texture_destination().width,
+                    graphics->NativeScreenWidth());
+    EXPECT_FLOAT_EQ(graphics->drawn_texture_destination().height,
+                    graphics->NativeScreenHeight());
+  }
+}
+
 TEST_F(SpriteTest, SpriteFactoryStaticSpriteAlreadyExists) {
-  const std::string resource_path = "a/b/picture.png";
+  const std::string resource_path =
+      testing::UnitTest::GetInstance()->current_test_info()->name();
   std::unique_ptr<SpriteInstance> sprite =
       sprite_factory_.MakeStaticSprite(resource_path);
 
@@ -310,7 +390,8 @@ TEST_F(SpriteTest, SpriteFactoryStaticSpriteAlreadyExists) {
 }
 
 TEST_F(SpriteTest, SpriteFactoryAnimatedSpriteAlreadyExists) {
-  const std::string resource_path = "a/b/picture.png";
+  const std::string resource_path =
+      testing::UnitTest::GetInstance()->current_test_info()->name();
   constexpr int frame_count = 4;
   std::unique_ptr<SpriteInstance> sprite = sprite_factory_.MakeAnimatedSprite(
       resource_path, frame_count, kAdvanceToNextFrameAfter);
@@ -329,7 +410,8 @@ TEST_F(SpriteTest, SpriteFactoryAnimatedSpriteAlreadyExists) {
 }
 
 TEST_F(SpriteTest, SpriteFactoryBackgroundStaticSpriteDraw) {
-  const std::string resource_path = "a/b/picture.png";
+  const std::string resource_path =
+      testing::UnitTest::GetInstance()->current_test_info()->name();
   const float parallax_factor = 0.1f;
   std::unique_ptr<SpriteInstance> sprite =
       sprite_factory_.MakeBackgroundStaticSprite(resource_path,
@@ -361,7 +443,8 @@ TEST_F(SpriteTest, SpriteFactoryBackgroundStaticSpriteDraw) {
 }
 
 TEST_F(SpriteTest, SpriteFactoryBackgroundStaticSpriteAlreadyExists) {
-  const std::string resource_path = "a/b/picture.png";
+  const std::string resource_path =
+      testing::UnitTest::GetInstance()->current_test_info()->name();
   std::unique_ptr<SpriteInstance> sprite =
       sprite_factory_.MakeBackgroundStaticSprite(resource_path);
 

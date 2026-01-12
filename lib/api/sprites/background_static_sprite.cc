@@ -43,6 +43,14 @@ void BackgroundStaticSprite::RotateAndDraw(const WorldPosition draw_destination,
       origin_, /*rotation=*/0.0, WHITE);
 }
 
+// `RotateAndDrawFitRectangle` dooes nothing for `BackgroundStaticSprite`.
+void BackgroundStaticSprite::RotateAndDrawFitRectangle(
+    const WorldPosition draw_destination, const int degree,
+    const float width_to_fit, const float height_to_fit,
+    const int frame_to_draw) const {
+  RotateAndDraw(draw_destination, degree, frame_to_draw);
+}
+
 const GraphicsInterface* BackgroundStaticSprite::GraphicsForTesting() const {
   return graphics_.get();
 }

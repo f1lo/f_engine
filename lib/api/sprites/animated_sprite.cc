@@ -23,7 +23,10 @@ AnimatedSprite::AnimatedSprite(std::unique_ptr<GraphicsInterface> graphics,
       animation_frame_width_(static_cast<float>(texture_.width) /
                              static_cast<float>(frame_count_)),
       origin_({animation_frame_width_ / 2,
-               static_cast<float>(texture_.height) / 2}) {}
+               static_cast<float>(texture_.height) / 2}) {
+  // Consider enabling.
+  // SetTextureFilter(texture_, TEXTURE_FILTER_BILINEAR);
+}
 
 AnimatedSprite::~AnimatedSprite() {
   graphics_->Unload(texture_);
@@ -32,13 +35,20 @@ AnimatedSprite::~AnimatedSprite() {
 void AnimatedSprite::RotateAndDraw(const WorldPosition draw_destination,
                                    const int degree,
                                    const int frame_to_draw) const {
+  RotateAndDrawFitRectangle(draw_destination, degree, animation_frame_width_,
+                            static_cast<float>(texture_.height), frame_to_draw);
+}
+
+void AnimatedSprite::RotateAndDrawFitRectangle(
+    const WorldPosition draw_destination, const int degree,
+    const float width_to_fit, const float height_to_fit,
+    const int frame_to_draw) const {
   graphics_->Draw(
       texture_,
       {static_cast<float>(frame_to_draw % frame_count_) *
            animation_frame_width_,
        0.0f, animation_frame_width_, static_cast<float>(texture_.height)},
-      {draw_destination.x, draw_destination.y, animation_frame_width_,
-       static_cast<float>(texture_.height)},
+      {draw_destination.x, draw_destination.y, width_to_fit, height_to_fit},
       origin_, static_cast<float>(degree), WHITE);
 }
 

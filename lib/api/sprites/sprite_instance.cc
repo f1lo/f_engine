@@ -25,9 +25,12 @@ SpriteInstance::SpriteInstance(const Sprite* sprite,
       is_animation_(sprite_->total_frames() != 1) {}
 
 void SpriteInstance::DrawInternal(const WorldPosition draw_destination,
-                                  const int rotation_degree) {
+                                  const int rotation_degree,
+                                  const float width_to_fit,
+                                  const float height_to_fit) {
   if (!is_animation_) {
-    sprite_->RotateAndDraw(draw_destination, rotation_degree);
+    sprite_->RotateAndDrawFitRectangle(draw_destination, rotation_degree,
+                                       width_to_fit, height_to_fit);
   }
 
   const absl::Time now = absl::Now();
@@ -42,17 +45,29 @@ void SpriteInstance::DrawInternal(const WorldPosition draw_destination,
     first_time_current_frame_was_drawn_ = now;
   }
 
-  sprite_->RotateAndDraw(draw_destination, rotation_degree,
-                         current_frame_to_draw_);
+  sprite_->RotateAndDrawFitRectangle(draw_destination, rotation_degree,
+                                     width_to_fit, height_to_fit,
+                                     current_frame_to_draw_);
 }
 
 void SpriteInstance::Draw(const WorldPosition draw_destination) {
-  DrawInternal(draw_destination, /*rotation_degree=*/0);
+  DrawInternal(draw_destination, /*rotation_degree=*/0,
+               /*width_to_fit=*/sprite_->sprite_width(),
+               /*height_to_fit=*/sprite_->sprite_height());
 }
 
 void SpriteInstance::RotateAndDraw(const WorldPosition draw_destination,
                                    const int rotation_degree) {
-  DrawInternal(draw_destination, rotation_degree);
+  DrawInternal(draw_destination, rotation_degree,
+               /*width_to_fit=*/sprite_->sprite_width(),
+               /*height_to_fit=*/sprite_->sprite_height());
+}
+
+void SpriteInstance::RotateAndDrawFitRectangle(WorldPosition draw_destination,
+                                               const int rotation_degree,
+                                               const float width_to_fit,
+                                               const float height_to_fit) {
+  DrawInternal(draw_destination, rotation_degree, width_to_fit, height_to_fit);
 }
 
 void SpriteInstance::Reset() {

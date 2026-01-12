@@ -22,6 +22,9 @@ class AnimatedSprite : public Sprite {
   ~AnimatedSprite() override;
   void RotateAndDraw(WorldPosition draw_destination, int degree,
                      int frame_to_draw) const override;
+  void RotateAndDrawFitRectangle(WorldPosition draw_destination, int degree,
+                                 float width_to_fit, float height_to_fit,
+                                 int frame_to_draw = 0) const override;
   [[nodiscard]] int total_frames() const override;
   [[nodiscard]] int sprite_width() const override;
   [[nodiscard]] int sprite_height() const override;

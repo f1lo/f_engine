@@ -21,7 +21,10 @@ StaticSprite::StaticSprite(std::unique_ptr<GraphicsInterface> graphics,
       source_({0.0f, 0.0f, static_cast<float>(texture_.width),
                static_cast<float>(texture_.height)}),
       origin_(static_cast<float>(texture_.width) / 2.0f,
-              static_cast<float>(texture_.height) / 2.0f) {}
+              static_cast<float>(texture_.height) / 2.0f) {
+  // Consider enabling.
+  // SetTextureFilter(texture_, TEXTURE_FILTER_BILINEAR);
+}
 
 StaticSprite::~StaticSprite() {
   graphics_->Unload(texture_);
@@ -30,10 +33,18 @@ StaticSprite::~StaticSprite() {
 void StaticSprite::RotateAndDraw(const WorldPosition draw_destination,
                                  const int degree,
                                  const int frame_to_draw) const {
+  RotateAndDrawFitRectangle(draw_destination, degree,
+                            static_cast<float>(texture_.width),
+                            static_cast<float>(texture_.height), frame_to_draw);
+}
+
+void StaticSprite::RotateAndDrawFitRectangle(
+    const WorldPosition draw_destination, const int degree,
+    const float width_to_fit, const float height_to_fit,
+    const int frame_to_draw) const {
   graphics_->Draw(
       texture_, source_,
-      {draw_destination.x, draw_destination.y,
-       static_cast<float>(texture_.width), static_cast<float>(texture_.height)},
+      {draw_destination.x, draw_destination.y, width_to_fit, height_to_fit},
       origin_, static_cast<float>(degree), WHITE);
 }
 

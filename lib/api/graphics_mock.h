@@ -26,6 +26,7 @@ class GraphicsMock : public GraphicsInterface {
 
   [[nodiscard]] std::string loaded_texture() const;
   [[nodiscard]] Rectangle drawn_texture_source() const;
+  [[nodiscard]] Rectangle drawn_texture_destination() const;
   [[nodiscard]] Vector2 drawn_texture_origin() const;
   [[nodiscard]] Texture2D drawn_texture() const;
   [[nodiscard]] unsigned int unloaded_texture_id() const;
@@ -34,6 +35,7 @@ class GraphicsMock : public GraphicsInterface {
  private:
   std::string loaded_texture_;
   Rectangle texture_source_;
+  Rectangle texture_destination_;
   unsigned int unloaded_texture_id_;
   Texture2D texture_to_be_drawn_;
   Vector2 texture_origin_;

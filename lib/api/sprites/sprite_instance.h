@@ -18,6 +18,9 @@ class SpriteInstance {
  public:
   void Draw(WorldPosition draw_destination);
   void RotateAndDraw(WorldPosition draw_destination, int rotation_degree);
+  void RotateAndDrawFitRectangle(WorldPosition draw_destination,
+                                 int rotation_degree, float width_to_fit,
+                                 float height_to_fit);
   void Reset();
   [[nodiscard]] int SpriteWidth() const;
   [[nodiscard]] int SpriteHeight() const;
@@ -30,7 +33,8 @@ class SpriteInstance {
   SpriteInstance(const Sprite* sprite,
                  absl::Duration advance_to_next_frame_after);
 
-  void DrawInternal(WorldPosition draw_destination, int rotation_degree);
+  void DrawInternal(WorldPosition draw_destination, int rotation_degree,
+                    float width_to_fit, float height_to_fit);
 
   const Sprite* sprite_;
   const absl::Duration advance_to_next_frame_after_;

@@ -10,6 +10,7 @@ GraphicsMock::GraphicsMock(const unsigned int id, const int texture_width,
                            const float native_screen_width,
                            const float native_screen_height)
     : texture_source_(Rectangle{}),
+      texture_destination_(Rectangle{}),
       unloaded_texture_id_(0),
       texture_to_be_drawn_({
           .id = id,
@@ -33,6 +34,7 @@ void GraphicsMock::Draw(const Texture2D& texture, const Rectangle& source,
                         const Rectangle& dest, const Vector2& origin,
                         const float rotation, const Color tint) {
   texture_source_ = source;
+  texture_destination_ = dest;
   texture_origin_ = origin;
   drawn_texture_ = texture;
   rotation_ = rotation;
@@ -58,6 +60,10 @@ std::string GraphicsMock::loaded_texture() const {
 
 Rectangle GraphicsMock::drawn_texture_source() const {
   return texture_source_;
+}
+
+Rectangle GraphicsMock::drawn_texture_destination() const {
+  return texture_destination_;
 }
 
 unsigned int GraphicsMock::unloaded_texture_id() const {
