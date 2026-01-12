@@ -44,6 +44,11 @@ constexpr float kWorldBorderSize = 2000;
 static const char* kTreePath = "g_1/resources/sample_tree.png";
 static const char* kPlayerPath = "g_1/resources/sample_player.png";
 static const char* kLayer0 = "g_1/resources/sample_layer_0.png";
+static const char* kTitleStarsBackground =
+    "g_1/resources/title_stars_background.png";
+static const char* kTitlePlanet1 = "g_1/resources/title_planet_1.png";
+static const char* kAsteroid1 = "g_1/resources/asteroid_1.png";
+static const char* kAsteroid2 = "g_1/resources/asteroid_2.png";
 
 namespace g_1 {
 namespace {
@@ -51,6 +56,7 @@ namespace {
 using lib::api::ColorRGBA;
 using lib::api::Controls;
 using lib::api::Factories;
+using lib::api::FCircle;
 using lib::api::FRectangle;
 using lib::api::kKeyA;
 using lib::api::kKeyD;
@@ -208,14 +214,14 @@ std::unique_ptr<Level> MakeTitleScreenLevel(Factories& factories,
           FRectangle{.top_left = {kButtonOffsetX, kButtonOffsetY},
                      .width = kButtonLengthX,
                      .height = kButtonLengthY},
-          Text(factories.font.MakeRoboto(FontStyle::NORMAL), "Start",
-               /*color=*/{.r = 100, .g = 0, .b = 30, .a = 255},
+          Text(factories.font.MakeRoboto(FontStyle::BOLD), "Start",
+               /*color=*/ColorRGBA::MakeWhite(),
                /*spacing=*/0.0f,
-               /*font_size=*/32.0f),
+               /*font_size=*/48.0f),
           RectangleButtonObject::RectangleButtonObjectOpts{
-              .has_round_corners = true,
-              .border_thickness = 3.0f,
-              .border_color = {.r = 0, .g = 0, .b = 255, .a = 255},
+              .has_round_corners = false,
+              .border_thickness = 7.0f,
+              .border_color = ColorRGBA::MakeWhite(),
               .fill_color = ColorRGBA::MakeTransparent()});
   std::unique_ptr<RectangleButtonObject> exit_button =
       std::make_unique<RectangleButtonObject>(
@@ -226,20 +232,47 @@ std::unique_ptr<Level> MakeTitleScreenLevel(Factories& factories,
                                                kOffsetBetweenButtons},
               .width = kButtonLengthX,
               .height = kButtonLengthY},
-          Text(factories.font.MakeRoboto(FontStyle::NORMAL), "Exit",
-               /*color=*/{.r = 0, .g = 0, .b = 200, .a = 255},
+          Text(factories.font.MakeRoboto(FontStyle::BOLD), "Exit",
+               /*color=*/ColorRGBA::MakeWhite(),
                /*spacing=*/0.0f,
-               /*font_size=*/32.0f),
+               /*font_size=*/48.0f),
           RectangleButtonObject::RectangleButtonObjectOpts{
               .has_round_corners = false,
-              .border_thickness = 5.0f,
-              .border_color = {.r = 255, .g = 0, .b = 0, .a = 255},
-              .fill_color = {.r = 100, .g = 0, .b = 0, .a = 255}});
+              .border_thickness = 7.0f,
+              .border_color = ColorRGBA::MakeWhite(),
+              .fill_color = ColorRGBA::MakeTransparent()});
+
+  std::unique_ptr<SpriteInstance> title_planet_1_sprite =
+      factories.sprite.MakeStaticSprite(kTitlePlanet1);
+  std::unique_ptr<SpriteInstance> asteroid_1_sprite =
+      factories.sprite.MakeStaticSprite(kAsteroid1);
+  std::unique_ptr<SpriteInstance> asteroid_2_sprite =
+      factories.sprite.MakeStaticSprite(kAsteroid2);
 
   TitleScreenLevelBuilder level_builder =
       TitleScreenLevelBuilder(native_screen_width, native_screen_height);
   return level_builder.AddStartButton(std::move(start_button))
       .AddExitButton(std::move(exit_button))
+      .AddBackgroundLayer(factories.sprite.MakeBackgroundStaticSprite(
+          kTitleStarsBackground, /*parallax_factor=*/0.0))
+      .AddObject(std::make_unique<StaticObject>(
+          /*type=*/ObjectTypeFactory::MakeEnemy(),
+          StaticObject::StaticObjectOpts{.is_hit_box_active = false,
+                                         .should_draw_hit_box = debug_mode},
+          FCircle{.center = {1700, 800}, .radius = 10},
+          std::move(title_planet_1_sprite)))
+      .AddObject(std::make_unique<StaticObject>(
+          /*type=*/ObjectTypeFactory::MakeEnemy(),
+          StaticObject::StaticObjectOpts{.is_hit_box_active = false,
+                                         .should_draw_hit_box = debug_mode},
+          FCircle{.center = {1200, 200}, .radius = 10},
+          std::move(asteroid_1_sprite)))
+      .AddObject(std::make_unique<StaticObject>(
+          /*type=*/ObjectTypeFactory::MakeEnemy(),
+          StaticObject::StaticObjectOpts{.is_hit_box_active = false,
+                                         .should_draw_hit_box = debug_mode},
+          FCircle{.center = {1000, 300}, .radius = 10},
+          std::move(asteroid_2_sprite)))
       .Build();
 }
 

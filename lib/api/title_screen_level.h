@@ -32,7 +32,7 @@ class TitleScreenLevel : public Level {
         exit_button_(nullptr) {}
 };
 
-class TitleScreenLevelBuilder : LevelBuilder<TitleScreenLevel> {
+class TitleScreenLevelBuilder : public LevelBuilder<TitleScreenLevel> {
  public:
   TitleScreenLevelBuilder(const float native_screen_width,
                           const float native_screen_height)

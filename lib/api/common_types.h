@@ -90,8 +90,10 @@ struct ColorRGBA {
   uint8_t a;
 
   static ColorRGBA MakeTransparent();
+  static ColorRGBA MakeWhite();
 
   friend std::ostream& operator<<(std::ostream& os, const ColorRGBA& color);
+  bool operator==(const ColorRGBA& other) const;
 };
 
 }  // namespace api

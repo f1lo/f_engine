@@ -1,6 +1,7 @@
 #ifndef LIB_API_LEVEL_H
 #define LIB_API_LEVEL_H
 
+#include <algorithm>
 #include <list>
 #include <memory>
 #include <optional>

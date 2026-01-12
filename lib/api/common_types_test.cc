@@ -118,6 +118,10 @@ TEST(CommonTypesTest, ColorRGBAToString) {
   EXPECT_EQ(oss.str(), "ColorRGBA (r: 1, g: 2, b: 3, a: 4)");
 }
 
+TEST(CommonTypesTest, ColorStaticCtors) {
+  EXPECT_EQ(ColorRGBA::MakeTransparent(), ColorRGBA(0, 0, 0, 0));
+}
+
 TEST(CommonTypesTest, FPointToString) {
   constexpr FPoint point = {.x = 1, .y = 2};
 

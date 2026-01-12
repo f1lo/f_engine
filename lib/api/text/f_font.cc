@@ -14,7 +14,7 @@ FFont::FFont(const std::string_view resource_path)
                                   .make_preferred()
                                   .string()
                                   .c_str(),
-                              128, nullptr, 0)) {
+                              64, nullptr, 0)) {
   SetTextureFilter(raylib_font_.texture, TEXTURE_FILTER_BILINEAR);
 }
 

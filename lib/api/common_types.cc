@@ -100,10 +100,17 @@ ColorRGBA ColorRGBA::MakeTransparent() {
   return {.r = 0, .g = 0, .b = 0, .a = 0};
 }
 
+ColorRGBA ColorRGBA::MakeWhite() {
+  return {.r = 255, .g = 255, .b = 255, .a = 255};
+}
+
 std::ostream& operator<<(std::ostream& os, const ColorRGBA& color) {
   os << absl::Substitute("ColorRGBA (r: $0, g: $1, b: $2, a: $3)", color.r,
                          color.g, color.b, color.a);
   return os;
+}
+bool ColorRGBA::operator==(const ColorRGBA& other) const {
+  return r == other.r && g == other.g && b == other.b && a == other.a;
 }
 
 bool FPoint::operator==(const FPoint& other) const {
