@@ -39,13 +39,13 @@ constexpr int kPlayerY = 0;
 constexpr float kPlayerWidth = 50;
 constexpr float kPlayerHeight = 100;
 
-constexpr float kWorldBorderSize = 2000;
+constexpr float kWorldBorderSize = 10000;
 
 static const char* kTreePath = "g_1/resources/sample_tree.png";
 static const char* kPlayerPath = "g_1/resources/sample_player.png";
-static const char* kLayer0 = "g_1/resources/sample_layer_0.png";
 static const char* kTitleStarsBackground =
     "g_1/resources/title_stars_background.png";
+static const char* kOpeningBackground = "g_1/resources/opening_background.png";
 static const char* kTitlePlanet1 = "g_1/resources/title_planet_1.png";
 static const char* kAsteroid1 = "g_1/resources/asteroid_1.png";
 static const char* kAsteroid2 = "g_1/resources/asteroid_2.png";
@@ -199,7 +199,7 @@ std::unique_ptr<Level> MakeOpeningLevel(Factories& factories,
   level_builder.WithWorldBorderY(kWorldBorderSize,
                                  /*should_draw_hitbox=*/debug_mode);
   level_builder.AddBackgroundLayer(factories.sprite.MakeBackgroundStaticSprite(
-      kLayer0, /*parallax_factor=*/0.5));
+      kOpeningBackground, /*parallax_factor=*/0.2f));
   return level_builder.Build();
 }
 

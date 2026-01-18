@@ -14,6 +14,8 @@ namespace lib {
 namespace api {
 namespace sprites {
 
+// Scrolling does not properly work if sprite dimensions exactly match screen
+// dimensions.
 class BackgroundStaticSprite : public Sprite {
  public:
   ~BackgroundStaticSprite() override;

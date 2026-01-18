@@ -62,13 +62,13 @@ void CoordinateObject::DrawX() const {
                          kNumbersOffsetY),
         /*posY=*/static_cast<int>(screen_top_left_pos_.y + increment),
         /*fontSize=*/kFontSize,
-        /*color=*/BLACK);
+        /*color=*/RED);
     if (increment != 0) {
       DrawLineEx(
           Vector2(screen_top_left_pos_.x, screen_top_left_pos_.y + increment),
           Vector2(screen_top_left_pos_.x + screen_width_,
                   screen_top_left_pos_.y + increment),
-          /*thick=*/3.0f, BLACK);
+          /*thick=*/3.0f, RED);
     }
 
     increment += kDistanceBetweenGrid;
@@ -87,13 +87,13 @@ void CoordinateObject::DrawY() const {
                          kNumbersOffsetX),
         /*fontSize=*/
         kFontSize,
-        /*color=*/BLACK);
+        /*color=*/RED);
     if (increment != 0) {
       DrawLineEx(
           Vector2(screen_top_left_pos_.x + increment, screen_top_left_pos_.y),
           Vector2(screen_top_left_pos_.x + increment,
                   screen_top_left_pos_.y + screen_height_),
-          /*thick=*/3.0f, BLACK);
+          /*thick=*/3.0f, RED);
     }
 
     increment += kDistanceBetweenGrid;
